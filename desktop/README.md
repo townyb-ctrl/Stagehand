@@ -1,13 +1,13 @@
 # Stageplot for Mac and Windows
 
-The same Stageplot as the web version (`../index.html`), packaged as an app you install. It opens in its own window, works with no internet connection, and saves your weeks on the computer.
+The same Stageplot as the web version (`index.html` at the top of this repository), packaged as an app you install. It opens in its own window, works with no internet connection, and saves your weeks on the computer.
 
 ## Getting the installers
 
-GitHub builds them on real Mac and Windows machines (workflow `.github/workflows/stageplot-desktop.yml`):
+GitHub builds them on real Mac and Windows machines (workflow `.github/workflows/desktop.yml`):
 
-- **Every push** that changes `stageplot/` builds both. On GitHub, open **Actions → Stageplot desktop → the latest run**. The installers are under **Artifacts**: `Stageplot-mac` and `Stageplot-win`. They download as zip files.
-- **A release**: push a tag such as `stageplot-v1.0.0`. The same files then appear on the repository's **Releases** page, where anyone with access can download them.
+- **Every push** that changes the app (`index.html`, the icons or `desktop/`) builds both. On GitHub, open **Actions → Stageplot desktop → the latest run**. The installers are under **Artifacts**: `Stageplot-mac` and `Stageplot-win`. They download as zip files.
+- **A release**: push a tag such as `v1.0.0`. The same files then appear on the repository's **Releases** page, where anyone with access can download them.
 
 | File | For |
 |---|---|
@@ -39,7 +39,7 @@ The installer isn't code-signed yet, so Windows SmartScreen may show "Windows pr
 You need Node.js 22.
 
 ```sh
-cd stageplot/desktop
+cd desktop
 npm ci
 npm start            # run it without installing
 npm run dist:mac     # on a Mac: dist/Stageplot-…-mac.dmg

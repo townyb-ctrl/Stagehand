@@ -1,0 +1,5 @@
+node_modules/
+desktop/dist/
+desktop/app/
+desktop/build/icon.png
+.DS_Store
