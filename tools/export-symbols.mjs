@@ -34,7 +34,7 @@ ${art}
 }
 writeFileSync(join(outDir, 'README.md'), `# Stage-plot symbols
 
-Top-down symbols used on the Stageplot plot, drawn to real size (feet internally, metres shown).
+Top-down symbols used on the Stagehand plot, drawn to real size (feet internally, metres shown).
 Downstage (toward the audience) is the bottom of each drawing. Regenerate with \`node tools/export-symbols.mjs\`.
 
 | Symbol | Key | Item | Footprint |

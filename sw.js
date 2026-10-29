@@ -1,6 +1,6 @@
-// Stageplot offline support: the app is one page, so caching it (plus the manifest and icons) is enough to run with no signal.
+// Stagehand offline support: the app is one page, so caching it (plus the manifest and icons) is enough to run with no signal.
 // Pages are network-first so a new version always arrives when online; everything else is cache-first.
-const CACHE = 'stageplot-v1';
+const CACHE = 'stageplot-v2';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-512-maskable.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

@@ -1,6 +1,6 @@
 {
-  "name": "Stageplot",
-  "short_name": "Stageplot",
+  "name": "Stagehand",
+  "short_name": "Stagehand",
   "description": "Stage plots, input lists and load-in checklists for church teams.",
   "start_url": "./index.html",
   "scope": "./",

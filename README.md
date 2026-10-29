@@ -1,8 +1,8 @@
-# Stageplot
+# Stagehand
 
 **Stage plots, patching and power for church production teams, in minutes instead of an evening.**
 
-Every week a volunteer tech or worship leader works out who is on stage, where their gear goes, which stage-box input each mic lands on, what plugs into which circuit, and how much cable to pull, usually across a whiteboard, a spreadsheet and memory. Stageplot does it in one place:
+Every week a volunteer tech or worship leader works out who is on stage, where their gear goes, which stage-box input each mic lands on, what plugs into which circuit, and how much cable to pull, usually across a whiteboard, a spreadsheet and memory. Stagehand does it in one place:
 
 1. **Add the team.** Import who's scheduled from Planning Center, paste a list, or type names.
 2. **Build the stage.** One click places everyone's gear by position on your real stage shape: kit, guitars and basses on stands, amps, pedals, keys, mics, wedges or in-ears, with jack leads run from each instrument through its pedals to its amp or DI.
@@ -77,8 +77,8 @@ Open `index.html` in a modern browser to run it.
 - **Side view** (`E`, or Layers): the stage seen from the house with heights in metres: risers, people, mic heights, speakers on stands, flown hangs, the ceiling and every overhead run.
 - **Before and after**: in *Changes since last week*, the *Before / After* slider wipes between last week's plot and this week's, in the same place.
 - **Present on a screen** (`F`, ⋯ menu or Ctrl K): full screen, no toolbars, bigger names, with the church, date and service name on top. `Esc` leaves.
-- **Install and offline**: served from its own address, Stageplot is an installable app (manifest, icons, service worker). Once opened it runs with no signal; pages are fetched fresh when online so updates always arrive. Home → Preferences shows an *Install* button where the browser offers one, and the Add to Home Screen hint on iPhone and iPad.
-- **Opening the app**: Stageplot always opens on Home → Library. The first time, a welcome offers *Draw my stage* or *Explore an example first*, a simple four-piece band (worship leader on acoustic and vocals, electric guitar, bass, drums) with one stage box, one distro, in-ears, mains and FOH, fully patched and powered; both go straight to the plot.
+- **Install and offline**: served from its own address, Stagehand is an installable app (manifest, icons, service worker). Once opened it runs with no signal; pages are fetched fresh when online so updates always arrive. Home → Preferences shows an *Install* button where the browser offers one, and the Add to Home Screen hint on iPhone and iPad.
+- **Opening the app**: Stagehand always opens on Home → Library. The first time, a welcome offers *Draw my stage* or *Explore an example first*, a simple four-piece band (worship leader on acoustic and vocals, electric guitar, bass, drums) with one stage box, one distro, in-ears, mains and FOH, fully patched and powered; both go straight to the plot.
 - **Home** (the logo, *Home* in the header, or *Home: library & settings* in the ⋯ menu): one place for everything that isn't a single week. Sections on the left (a strip of chips on phones):
   - **Library**: the next service up front (status, Open the plot, Paperwork), then every saved week grouped by month, newest first, with its team, gear, inputs and cables and a status (Ready, checks to look at, No team yet, Empty); the open week is outlined. No stat boxes, just the weeks: search by name or date, open a week, copy it to the following free service day, or delete it (click twice; Undo in the notice). *New week* starts a fresh week from your stage defaults on the next free service day; *Copy latest* copies the most recent week.
   - **Setups**: every saved stage layout, with *Use on this week*, *Make default* (new weeks start from it) and delete; save the open week as a setup.
@@ -106,7 +106,7 @@ Every gear item is drawn as a real top-down symbol (drum kit with shells and cym
 - **Print or PDF** (top right of the paperwork, or Ctrl+P from anywhere): every sheet prints on its own page with no app chrome, tables keep their headings across pages, and colours print true. Choose *Save as PDF* in the print dialog for a file.
 - Outputs list box by box, port by port.
 - **Download sheets** saves every sheet as one self-contained web page (stage plot included) that opens, shares and prints anywhere without the app. *Download .json* in Backup & restore saves all weeks. Inside Claude both ask you to confirm the save; elsewhere they're ordinary downloads.
-- **About Stageplot** (⋯ menu): version, where your data lives (this browser only), and what the optional Planning Center link reads (service types, plans and who's scheduled; read-only).
+- **About Stagehand** (⋯ menu): version, where your data lives (this browser only), and what the optional Planning Center link reads (service types, plans and who's scheduled; read-only).
 
 ## Reliability and accessibility
 
@@ -116,7 +116,7 @@ Every gear item is drawn as a real top-down symbol (drum kit with shells and cym
 
 ## Mac and Windows app
 
-`desktop/` packages Stageplot as an installable app for Mac (`.dmg`) and Windows (`.exe` installer). GitHub Actions builds both on every push that changes the app; push a tag like `v1.0.0` to publish a release. The app runs offline, saves weeks on the computer, and says so in Home and About. Planning Center import is the one thing that needs Claude, so it isn't in the desktop app. Install steps, first-open warnings for unsigned builds and data locations are in [desktop/README.md](desktop/README.md).
+`desktop/` packages Stagehand as an installable app for Mac (`.dmg`) and Windows (`.exe` installer). GitHub Actions builds both on every push that changes the app; push a tag like `v1.0.0` to publish a release. The app runs offline, saves weeks on the computer, and says so in Home and About. Planning Center import is the one thing that needs Claude, so it isn't in the desktop app. Install steps, first-open warnings for unsigned builds and data locations are in [desktop/README.md](desktop/README.md).
 
 ## Saving
 
@@ -129,7 +129,7 @@ Weeks auto-save in the browser (localStorage). Use **Save / load** to copy or do
 - **Show mode** (`F`, or ⋯ → Present on a screen): the plot full screen with bigger, bolder labels and nothing popping up over it. Tap a person and a large card shows where they stand, their channels and their monitor; tapping never moves anything. Esc closes the card, then show mode.
 - **Hover card**: the size only shows for risers and speakers, where it matters.
 - **Batteries** (first group on the Load-in checklist): every wireless mic, headset and in-ear pack to fit with fresh batteries, and the total to grab (e.g. *8 × AA needed*). Set what each pack takes once, in the group heading; it applies to every week.
-- **Past weeks are locked**: a week whose date has gone opens read-only, with a *Locked* chip in the header. Edits and drags are refused with an *Edit anyway* button; the chip unlocks it until you close Stageplot. A week you start or copy this session stays editable. Turn it off in Home → Preferences.
+- **Past weeks are locked**: a week whose date has gone opens read-only, with a *Locked* chip in the header. Edits and drags are refused with an *Edit anyway* button; the chip unlocks it until you close Stagehand. A week you start or copy this session stays editable. Turn it off in Home → Preferences.
 - **Switch-on order** (Load-in checklist): the powered gear this week in the order to switch it on (desks and computers, stage box and racks, instruments and amps, wedges, main speakers and subs last) and the reverse for switching off, so nothing pops through a live system.
 - **Wireless** (Paperwork tab, shown when there are wireless mics, headsets or in-ear packs): type each pack's channel or frequency. Two on the same one are flagged on the sheet and in *to check*. A pack's channel carries to the next week for the same person, even when the stage is rebuilt. The hover card shows it too.
 - **Changed since you printed**: printing (or downloading the sheets) remembers what the paper copy says. If the week changes after that, the paperwork shows a banner such as *3 changes since you printed at 9:14 AM: Sam Lee joined · +1 Wedge · moved: Casey Kit*, with *Print again*; the × hides it when the paper copy is still fine. The banner never prints.
@@ -138,7 +138,7 @@ Weeks auto-save in the browser (localStorage). Use **Save / load** to copy or do
 - **Choose Planning Center teams**: after *Get roster*, tick the teams to pull from (e.g. *Worship Team* and *AV*); *All teams* shows everyone. Only the chosen teams' positions decide where someone stands, so a vocalist who also ushers stays a vocalist. The choice is remembered for each service type.
 - **Hide teams you never use**: hover a team (on touch the × is always there) and click its × to hide it from every Planning Center import, for every service type, so Communion or Info Desk never show up again. *N hidden* above the chips lists them with a + to bring one back; the toast after hiding has Undo.
 - **Planning Center changes**: a week imported from Planning Center checks it again when you open it (today or later, at most every 10 minutes). If someone declined or dropped off, or someone new was scheduled on your chosen teams, the Team tab says so (e.g. *− Ben Keys declined · + Sam Sing added · Vocalist*) with *Update the stage*, which takes them off or places them with their gear. *Not now* hides that set of changes.
-- **Photos from Planning Center**: people with a photo in Planning Center show it in the team list and on their My spot card. People without one (Planning Center's initials placeholder) keep Stageplot's own initials, and so does anyone whose photo can't load.
+- **Photos from Planning Center**: people with a photo in Planning Center show it in the team list and on their My spot card. People without one (Planning Center's initials placeholder) keep Stagehand's own initials, and so does anyone whose photo can't load.
 - **Recently added gear**: the top of the Gear tab shows the last six things you added, with their names.
 - **Undo says what it undoes**: hover Undo or Redo to see the step, e.g. *Undo: Moved Taylor Pedals*.
 - **Choose sheets to print** (the ▾ beside *Print or PDF*): tick the sheets that go to paper, with *All* and *None*. Kept per browser; Ctrl+P follows it too.
@@ -187,7 +187,7 @@ Weeks auto-save in the browser (localStorage). Use **Save / load** to copy or do
 - **Empty sheets explain themselves**: an empty input list, outputs, monitor mixes, cable pull list or team sheet says why and offers the one button that fills it (hidden when printed).
 - **Pinch to zoom on touch screens**: two fingers zoom the plot on iPads and phones instead of zooming the whole page; one finger still scrolls and drags gear.
 - **Lift while dragging**: gear in hand rises a touch off the deck with a deeper shadow, and settles with a small bounce when you let go (no motion with reduced motion).
-- **When printing is blocked**: some places that embed Stageplot (the Claude preview among them) don't allow the print dialog. If it doesn't open, a note offers the sheets as a file instead (just the rider, or just the My spot cards, when that's what you were printing); open it and use its *Print or save as PDF* button, which doesn't appear on paper.
+- **When printing is blocked**: some places that embed Stagehand (the Claude preview among them) don't allow the print dialog. If it doesn't open, a note offers the sheets as a file instead (just the rider, or just the My spot cards, when that's what you were printing); open it and use its *Print or save as PDF* button, which doesn't appear on paper.
 - **Sheet tabs**: one quiet row of words (Overview, Rider, My spot · Inputs, Outputs, Monitor mixes, Cables, Power, Racks · Team, Load-in · Everything), the open sheet underlined in the accent colour; Overview shows a small amber dot when there are things to check. *Print or PDF* sits at the end of the row; under it, a quiet line holds **View: Pages | Scroll** (wide screens) and **Download all sheets**. On narrow screens the row scrolls with a soft fade at the edge.
 - **Paperwork as pages**: on a wide screen the sheets show as white A4 pages on a grey desk, numbered, so you see what will print, in dark mode too. **View: Scroll** under the tabs turns it off (remembered in this browser).
 - **Library trends**: each week in the Library has a tiny line for its inputs (solid) and team size (dashed) over up to six weeks ending with that week; hover it for the numbers.

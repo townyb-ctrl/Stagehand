@@ -1,4 +1,4 @@
-name: Stageplot desktop
+name: Stagehand desktop
 
 # Builds the Mac (.dmg) and Windows (.exe) installers on real Mac and Windows machines.
 # Every push that changes the app leaves the installers on the run's page (Artifacts);
@@ -42,7 +42,7 @@ jobs:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       - uses: actions/upload-artifact@v4
         with:
-          name: Stageplot-${{ matrix.target }}
+          name: Stagehand-${{ matrix.target }}
           path: |
             desktop/dist/*.dmg
             desktop/dist/*-mac.zip
@@ -65,8 +65,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           cat > notes.md <<'NOTES'
-          Mac: open the .dmg and drag Stageplot to Applications.
-          Windows: run Stageplot-Setup (x64 for most PCs, arm64 for Snapdragon / Copilot+ PCs).
+          Mac: open the .dmg and drag Stagehand to Applications.
+          Windows: run Stagehand-Setup (x64 for most PCs, arm64 for Snapdragon / Copilot+ PCs).
           First-open steps for unsigned builds are in desktop/README.md.
           NOTES
-          gh release create "$GITHUB_REF_NAME" out/* --repo "$GITHUB_REPOSITORY" --title "Stageplot ${GITHUB_REF_NAME#v}" --notes-file notes.md
+          gh release create "$GITHUB_REF_NAME" out/* --repo "$GITHUB_REPOSITORY" --title "Stagehand ${GITHUB_REF_NAME#v}" --notes-file notes.md
