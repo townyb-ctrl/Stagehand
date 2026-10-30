@@ -556,6 +556,7 @@ svg text { font-family: var(--f-ui); }
 .c-audio { fill: #2e6a99; } .c-inst { fill: #6b51a3; } .c-power { fill: #b85a22; } .c-infra { fill: #44535e; }
 .c-video { fill: #a3426b; } .c-light { fill: #8a6f2c; }
 .beams { pointer-events: none; }
+.room-wall { fill: none; stroke: var(--line-2); stroke-width: calc(var(--labs) * .5); stroke-dasharray: calc(var(--labs) * 3) calc(var(--labs) * 2); pointer-events: none; }
 .dmxh { font-size: 14px; margin: 16px 0 8px; }
 .dmxfoot { justify-content: space-between; gap: 10px; margin-top: 10px; } .dmxfoot .hint { margin: 0; }
 .dmxchains { display: grid; gap: 10px; }
@@ -579,6 +580,45 @@ svg text { font-family: var(--f-ui); }
 .fader { display: grid; grid-template-columns: 54px 1fr 40px; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-2); }
 .fader output { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
 .fader input { width: 100%; } .f-r input { accent-color: #e5484d; } .f-g input { accent-color: #30a46c; } .f-b input { accent-color: #3e63dd; } .f-w input { accent-color: #c9b98f; } .f-d input { accent-color: var(--accent); }
+.bigsw { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--line-2); flex: none; background-image: none; }
+.ldesk { width: min(1180px, 100%); height: min(780px, 100%); background: var(--surface); border-radius: var(--r-lg); border: 1px solid var(--line); box-shadow: var(--shadow-3); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
+.ld-head h2 { display: flex; align-items: center; gap: 8px; white-space: nowrap; } .ld-head h2 .ic { color: #d4a72c; }
+.ld-head input { width: 170px; }
+.ld-looks { display: flex; gap: 6px; overflow-x: auto; min-width: 0; padding: 2px; }
+.ld-look { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink-2); border-radius: 10px; padding: 7px 14px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
+.ld-look[aria-selected="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); } .ld-look.add { border-style: dashed; font-weight: 500; color: var(--muted); background: none; }
+.ld-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; min-height: 0; }
+.ld-stage { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 10px; padding: 14px 16px; min-height: 0; background: var(--surface-2); }
+.ld-stage .hint { margin: 0; text-align: center; }
+.ld-groups { display: flex; flex-wrap: wrap; gap: 6px; }
+.lookchip[data-dgrp][aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.ld-mapwrap { min-height: 0; border-radius: 14px; overflow: hidden; background: #0f1218; }
+.ld-map { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
+.ld-room { fill: #151922; stroke: rgba(255,255,255,.14); stroke-width: .12; } .ld-deck { fill: #232838; stroke: rgba(255,255,255,.2); stroke-width: .1; }
+.ld-mount { stroke: rgba(210,218,226,.4); stroke-width: .35; stroke-linecap: round; }
+.ld-fx { cursor: pointer; } .ld-fx text { fill: rgba(255,255,255,.7); font-family: inherit; pointer-events: none; }
+.ld-dot { stroke: rgba(0,0,0,.6); } .ld-dot.dark { stroke: rgba(255,255,255,.5); stroke-dasharray: .25 .2; }
+.ld-ring { fill: none; stroke: transparent; } .ld-fx.on .ld-ring { stroke: #fff; } .ld-fx.on text { fill: #fff; font-weight: 700; }
+.ld-fx:focus-visible { outline: none; } .ld-fx:focus-visible .ld-ring { stroke: var(--accent); }
+.ld-box { fill: rgba(109, 94, 252, .15); stroke: #8f84ff; stroke-width: .1; stroke-dasharray: .4 .25; }
+.ld-colour { border-left: 1px solid var(--line); padding: 16px; display: grid; align-content: start; gap: 16px; overflow-y: auto; }
+.ld-pickinfo { display: flex; gap: 12px; align-items: center; } .ld-pickinfo div { display: grid; } .ld-pickinfo small { color: var(--muted); }
+.ld-wheelrow { display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: center; }
+.ld-wheel { position: relative; width: 150px; aspect-ratio: 1; border-radius: 50%; cursor: crosshair; touch-action: none;
+  background: radial-gradient(circle closest-side, #fff, rgba(255,255,255,0)), conic-gradient(from 90deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.ld-wheel.off { filter: grayscale(1) opacity(.35); cursor: default; } .ld-wheel:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.ld-mark { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.35); pointer-events: none; }
+.ld-faders { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; justify-items: center; }
+.ld-fader { display: grid; justify-items: center; gap: 4px; font-size: 12px; color: var(--muted); }
+.ld-fader output { font-variant-numeric: tabular-nums; font-size: 11.5px; color: var(--ink-2); min-width: 3ch; text-align: center; }
+.ld-fader input { writing-mode: vertical-lr; direction: rtl; width: 26px; height: 120px; margin: 0; }
+.ld-fader span { font-weight: 600; }
+.ld-colour .lpresets { grid-template-columns: repeat(4, 1fr); }
+.ld-colour .pswatch { aspect-ratio: auto; height: 46px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 3px; }
+.ld-colour .pswatch span { font-size: 10.5px; font-weight: 600; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.7); }
+.ld-colour .pswatch.off span, .ld-colour .pswatch.lt span { color: #1d2129; text-shadow: none; }
+.ld-foot { border-top: 1px solid var(--line); padding: 10px 18px; }
+@media (max-width: 820px) { .ld-body { grid-template-columns: 1fr; grid-template-rows: minmax(260px, 1fr) auto; overflow-y: auto; } .ld-colour { border-left: 0; border-top: 1px solid var(--line); } .ld-head input { width: 120px; } }
 .lookrows { display: grid; gap: 8px; } .lookrow { display: grid; grid-template-columns: 140px 1fr; gap: 10px; font-size: 13px; padding: 6px 0; border-top: 1px solid var(--line); }
 .lookfx { display: flex; flex-wrap: wrap; gap: 4px 14px; } .lookfx span { display: inline-flex; align-items: center; gap: 6px; }
 .dmxlines { display: grid; gap: 6px; margin-bottom: 8px; } .dmxlines div { display: grid; } .dmxlines small { color: var(--muted); font-size: 12px; }
@@ -1233,7 +1273,7 @@ tr.flag .ch { background: var(--bad-soft); color: var(--bad); }
 @page { margin: 12mm; }   /* the printer’s paper size: A4 or Letter */
 @media print {
   html, body { height: auto !important; overflow: visible !important; display: block !important; background: #fff !important; }
-  header.top, #plotView, .overlay, .toast, .docnav, .printbar, [data-copy], #lightReaddr, .hovercard, #glyphMeasure, .sr-only { display: none !important; }
+  header.top, #plotView, .overlay, .toast, .docnav, .printbar, [data-copy], #lightReaddr, [data-opendesk], .hovercard, #glyphMeasure, .sr-only { display: none !important; }
   .paper { display: block !important; overflow: visible !important; padding: 0 !important; flex: none !important; }
   .paper-inner { display: block !important; max-width: none !important; }
   .sheetgrid, .sheets2 { display: block !important; }
@@ -1740,6 +1780,9 @@ body.presenting .toast { display: none; }   /* nothing pops up over the plot on 
       <button class="btn primary" id="rkDone">Done</button></header>
     <div class="rk-body"><aside class="rk-lib" id="rkLib"></aside><div class="rk-center"><div id="rkRack"></div></div><aside class="rk-side" id="rkSide"></aside></div>
   </div>
+</div>
+<div class="overlay designer" id="deskDlg" hidden>
+  <div class="ldesk" role="dialog" aria-modal="true" aria-labelledby="ldTitle" id="ldBody"></div>
 </div>
 <div class="hovercard" id="hoverCard" hidden></div>
 <div class="ctxmenu" id="ctxMenu" role="menu" hidden></div>
@@ -2721,30 +2764,133 @@ function assignDmx(all = false) {
 const DESK_PRESETS = [['Warm white', { r: 0, g: 0, b: 0, w: 255 }], ['Cool white', { r: 110, g: 150, b: 255, w: 180 }], ['Red', { r: 255, g: 0, b: 0, w: 0 }], ['Amber', { r: 255, g: 110, b: 0, w: 0 }],
   ['Yellow', { r: 255, g: 200, b: 0, w: 0 }], ['Green', { r: 0, g: 255, b: 40, w: 0 }], ['Cyan', { r: 0, g: 210, b: 255, w: 0 }], ['Blue', { r: 0, g: 40, b: 255, w: 0 }],
   ['Congo', { r: 80, g: 0, b: 255, w: 0 }], ['Magenta', { r: 255, g: 0, b: 180, w: 0 }], ['Pink', { r: 255, g: 50, b: 110, w: 40 }]];
-let deskSel = null, fxSnap = null;   // the lights picked on the desk (null: all of them); the state before a fader drag
+let deskSel = null, fxSnap = null;   // the lights picked on the desk (null: all of them); the state before a fader or wheel drag
 const deskLights = () => plan.items.filter(isFixture);
-function deskTargets() { const s = sel?.kind === 'item' && itemById(sel.id); if (s && isFixture(s)) return [s]; const all = deskLights(); return deskSel ? all.filter(i => deskSel.has(i.id)) : all; }
 const fxName = (f, it) => { if (!f.d) return 'Off'; if (it && !cat(it).rgbw) return `White${f.d < 100 ? ` ${f.d}%` : ''}`; const p = DESK_PRESETS.find(([, c]) => ['r', 'g', 'b', 'w'].every(k => c[k] === f[k])); return `${p ? p[0] : `R${f.r} G${f.g} B${f.b} W${f.w}`}${f.d < 100 ? ` ${f.d}%` : ''}`; };
 const fxSwatch = (f, it) => { const c = fxRGB(f, it); return c ? `rgb(${c.join(',')})` : 'transparent'; };
 function ensureLook() { if (!plan.looks?.length) { plan.looks = [{ id: uid(), name: 'Look 1', fx: {} }]; plan.lookId = plan.looks[0].id; } return curLook(); }
 function setFx(list, patch) { const L = ensureLook(); for (const it of list) L.fx[it.id] = { ...fxOf(it), ...patch }; }
-function deskControls(ts) {
-  const f = ts.length ? fxOf(ts[0]) : FX_DEF, white = ts.length && ts.every(i => !cat(i).rgbw);
-  return `<div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${white && n !== 'Warm white' ? ' disabled' : ''}></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off"></button></div>
-    <div class="faders">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].map(([k, l]) => `<label class="fader f-${k}"><span>${l}</span><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${white && 'rgb'.includes(k) ? 'disabled' : ''} aria-label="${l}"><output>${f[k]}${k === 'd' ? '%' : ''}</output></label>`).join('')}</div>
-    <p class="hint">${ts.length > 1 ? `Sets ${plural(ts.length, 'light')} together. ` : ''}${white ? 'White-only lights take the dimmer only.' : 'The beams on the plot show the mix.'}</p>`;
-}
-function deskHtml() {
-  const looks = plan.looks || [], cur = curLook(), all = deskLights(), ts = deskTargets(), picked = new Set(ts.map(i => i.id));
-  const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : [])];
+// on the console's details: the looks at a glance and the way into the desk
+function deskLaunch() {
+  const looks = plan.looks || [], cur = curLook(), n = deskLights().length;
   return `<section class="isec desk"><h3>Looks <span>${looks.length ? esc(cur.name) : 'none yet'}</span></h3>
-    <div class="looks">${looks.map(l => `<button class="lookchip" data-look="${l.id}" aria-pressed="${l.id === cur?.id}">${esc(l.name)}</button>`).join('')}<button class="lookchip add" data-looknew>${ic('plus', 'sm')}New look</button></div>
-    ${cur ? `<div class="row lookedit"><input id="iLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"><button class="btn quiet" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button></div>` : '<p class="hint">Set colours below and they become your first look. Make one look per moment: worship, prayer, preaching.</p>'}
-    </section><section class="isec desk"><h3>Lights <span>${picked.size} of ${all.length}</span></h3>
-    ${all.length ? `<div class="deskgrp" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="lookchip" data-dgrp="${k}">${esc(n)}</button>`).join('')}</div>
-    <div class="deskfx">${all.map(i => `<button class="fxchip" data-dfx="${i.id}" aria-pressed="${picked.has(i.id)}" title="${esc(fxName(fxOf(i), i))}"><i style="background:${fxSwatch(fxOf(i), i)}"></i>${esc(itemName(i))}</button>`).join('')}</div>
-    ${deskControls(ts)}` : '<p class="hint">Add lights and they can be set here.</p>'}</section>`;
+    ${looks.length ? `<div class="looks">${looks.map(l => `<button class="lookchip" data-look="${l.id}" aria-pressed="${l.id === cur?.id}">${esc(l.name)}</button>`).join('')}</div>` : `<p class="hint">${n ? 'Set colours in the desk and they become your first look.' : 'Add lights, then set their colours here.'}</p>`}
+    <button class="btn primary block" data-opendesk ${n ? '' : 'disabled'}>${ic('sun', 'sm')}Open the lighting desk</button></section>`;
 }
+/* The lighting desk: a window of its own. Looks across the top; the stage on the left, where you pick lights and see their
+   beams; colour on the right: a wheel, presets, and RGBW and dimmer faders. */
+const desk = { open: false, drag: null, box: null };
+function openDesk(onlyId) {
+  if (!deskLights().length) { toast('Add lights first (Add gear → Lighting)'); return; }
+  if (onlyId) deskSel = new Set([onlyId]);
+  desk.open = true; $('deskDlg').hidden = false; renderDesk(); setTimeout(() => $('ldDone')?.focus(), 30);
+}
+function closeDesk() { desk.open = false; $('deskDlg').hidden = true; renderAll(); }
+const deskPicked = () => { const all = deskLights(); return deskSel ? all.filter(i => deskSel.has(i.id)) : all; };
+const rgb2hsv = (r, g, b) => { const M = Math.max(r, g, b), m = Math.min(r, g, b), d = M - m; let h = 0; if (d) h = M === r ? ((g - b) / d) % 6 : M === g ? (b - r) / d + 2 : (r - g) / d + 4; return [(h * 60 + 360) % 360, M ? d / M : 0, M / 255]; };
+const hsv2rgb = (h, s, v) => { const f = n => { const k = (n + h / 60) % 6; return Math.round(255 * v * (1 - s * Math.max(0, Math.min(k, 4 - k, 1)))); }; return [f(5), f(3), f(1)]; };
+function deskMapSvg() {
+  // framed on the stage, the lights and where they land, not the whole empty room
+  const R = roomRect(), pts = [...stagePoly(), ...deskLights().flatMap(i => { const g = beamGeom(i); return [[i.x, i.y], [g.cx - g.r, g.cy - g.r], [g.cx + g.r, g.cy + g.r]]; })];
+  const fx0 = Math.max(R.x0, Math.min(...pts.map(q => q[0])) - 2.5), fx1 = Math.min(R.x1, Math.max(...pts.map(q => q[0])) + 2.5), fy0 = Math.max(R.y0 - 1, Math.min(...pts.map(q => q[1])) - 2.5), fy1 = Math.min(R.y1, Math.max(...pts.map(q => q[1])) + 3);
+  const vb = `${f3(fx0)} ${f3(fy0)} ${f3(fx1 - fx0)} ${f3(fy1 - fy0)}`, picked = new Set(deskPicked().map(i => i.id)), U = Math.max(fx1 - fx0, (fy1 - fy0) * 1.6) / 100;   // one hundredth of the view: dots and names keep their size
+  const ms = mounts().map(m => { const r = (m.rot || 0) * Math.PI / 180, hw = Number(prop(m, 'w')) / 2, dx = Math.cos(r) * hw, dy = Math.sin(r) * hw; return `<line class="ld-mount" x1="${f3(m.x - dx)}" y1="${f3(m.y - dy)}" x2="${f3(m.x + dx)}" y2="${f3(m.y + dy)}"/>`; }).join('');
+  const dots = deskLights().map(i => { const f = fxOf(i), sw = fxSwatch(f, i), rr = U * 1.2;
+    return `<g class="ld-fx${picked.has(i.id) ? ' on' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${picked.has(i.id)}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .7)}" style="stroke-width:${f3(U * .45)}"/><circle class="ld-dot${sw === 'transparent' ? ' dark' : ''}" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr)}" style="fill:${sw === 'transparent' ? 'var(--surface)' : sw};stroke-width:${f3(U * .2)}"/><text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px">${esc(itemName(i))}</text></g>`; }).join('');
+  return `<svg class="ld-map" id="ldMap" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
+    <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/>${ms}${beamsSvg(new Set(), 'lbm', 2.2)}${dots}</svg>`;
+}
+function deskColourHtml() {
+  const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, white = ts.length > 0 && ts.every(i => !cat(i).rgbw), [h, sat] = rgb2hsv(f.r, f.g, f.b), on = f.r + f.g + f.b > 0;
+  const mx = 50 + Math.cos(h * Math.PI / 180) * sat * 50, my = 50 + Math.sin(h * Math.PI / 180) * sat * 50;
+  return `<div class="ld-pickinfo"><span class="bigsw" style="background:${ts.length ? fxSwatch(f, ts[0]) : 'transparent'}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'No lights picked'}</b><small>${ts.length ? esc(fxName(f, ts[0])) : 'Pick lights on the stage'}</small></div></div>
+    <div class="ld-wheelrow"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div>
+      <div class="ld-faders">${[['r', 'R'], ['g', 'G'], ['b', 'B'], ['w', 'W'], ['d', 'Dim']].map(([k, l]) => `<label class="ld-fader f-${k}"><output>${f[k]}</output><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${({ r: 'Red', g: 'Green', b: 'Blue', w: 'White', d: 'Dimmer' })[k]}"><span>${l}</span></label>`).join('')}</div></div>
+    <div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch${lum('#' + fxRGB({ ...c, d: 100 }).map(v => v.toString(16).padStart(2, '0')).join('')) > .62 ? ' lt' : ''}" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><span>${n}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><span>Off</span></button></div>
+    ${white ? '<p class="hint">White-only lights take the dimmer only.</p>' : ''}`;
+}
+function renderDesk() {
+  if (!desk.open) return;
+  const looks = plan.looks || [], cur = curLook(), all = deskLights(), picked = deskPicked();
+  const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : []), ['none', 'None']];
+  const gOn = k => { const ids = k === 'all' ? all : k === 'none' ? [] : all.filter(i => k === 'floor' ? !mountOf(i) : mountOf(i)?.id === k.slice(2)); return ids.length === picked.length && ids.every(i => picked.includes(i)); };
+  $('ldBody').innerHTML = `<header class="dsg-head ld-head"><div class="row" style="gap:14px;min-width:0"><h2 id="ldTitle">${ic('sun')}Lighting desk</h2>
+      <div class="ld-looks" role="tablist" aria-label="Looks">${looks.map(l => `<button class="ld-look" role="tab" data-look="${l.id}" aria-selected="${l.id === cur?.id}">${esc(l.name)}</button>`).join('')}<button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button></div></div>
+      <div class="row" style="gap:8px">${cur ? `<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"><button class="btn quiet" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="btn primary" id="ldDone">Done</button></div></header>
+    <div class="ld-body"><section class="ld-stage"><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="lookchip" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
+      <div class="ld-mapwrap" id="ldMapWrap">${deskMapSvg()}</div><p class="hint">Click a light to pick it · Shift-click to add · drag across the stage to pick several</p></section>
+      <aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside></div>
+    <footer class="ld-foot"><span class="hint">${cur ? `Changes save to <b>${esc(cur.name)}</b>.` : 'Your first change starts Look 1.'} Planning only: nothing is sent to real lights.</span></footer>`;
+}
+// while a fader or the wheel moves: the map and readouts follow, the control in your hand stays put
+function deskLive() {
+  if (!desk.open) return;
+  $('ldMapWrap').innerHTML = deskMapSvg();
+  const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, info = document.querySelector('.ld-pickinfo');
+  if (info) { info.querySelector('.bigsw').style.background = ts.length ? fxSwatch(f, ts[0]) : 'transparent'; info.querySelector('small').textContent = ts.length ? fxName(f, ts[0]) : ''; }
+  for (const el of document.querySelectorAll('#ldColour [data-fx]')) { if (el !== document.activeElement) el.value = f[el.dataset.fx]; el.previousElementSibling.textContent = f[el.dataset.fx]; }
+  const [h, sat] = rgb2hsv(f.r, f.g, f.b), mk = document.querySelector('.ld-mark'); if (mk) { mk.style.display = f.r + f.g + f.b ? '' : 'none'; mk.style.left = `${50 + Math.cos(h * Math.PI / 180) * sat * 50}%`; mk.style.top = `${50 + Math.sin(h * Math.PI / 180) * sat * 50}%`; }
+  renderPlot();
+}
+function deskCommit(msg = 'Light colour changed') { if (!fxSnap) return; const before = fxSnap; fxSnap = null; pushUndo(before, stepLabel(msg, before)); recordRev(msg, before); save(); renderAll(); renderDesk(); }
+function deskSet(patch, live) {
+  if (weekLocked()) { lockedNote(); return; }
+  const ts = deskPicked(); if (!ts.length) return;
+  if (!fxSnap) fxSnap = snapState();
+  setFx(ts, patch);
+  if (live) deskLive(); else deskCommit();
+}
+const deskMapPt = e => { const svgEl = $('ldMap'), pt = svgEl.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const q = pt.matrixTransform(svgEl.getScreenCTM().inverse()); return { x: q.x, y: q.y }; };
+$('deskDlg').addEventListener('click', e => {
+  if (e.target === $('deskDlg')) { closeDesk(); return; }
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'ldDone') { closeDesk(); return; }
+  if (t.dataset.preset) { const c = DESK_PRESETS.find(p => p[0] === t.dataset.preset)?.[1], ts = deskPicked(); if (ts.length) deskSet(c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); return; }
+  if (t.dataset.dgrp) { const k = t.dataset.dgrp, all = deskLights(); deskSel = k === 'all' ? null : new Set(k === 'none' ? [] : all.filter(i => k === 'floor' ? !mountOf(i) : mountOf(i)?.id === k.slice(2)).map(i => i.id)); renderDesk(); return; }
+  if (t.dataset.look) { mutate(() => { plan.lookId = t.dataset.look; }); renderDesk(); return; }
+  if (t.hasAttribute('data-looknew')) { mutate(() => { const cur = ensureLook(); if (plan.looks.length === 1 && !Object.keys(cur.fx).length) return; const L = { id: uid(), name: `Look ${plan.looks.length + 1}`, fx: JSON.parse(JSON.stringify(cur.fx)) }; plan.looks.push(L); plan.lookId = L.id; }); renderDesk(); setTimeout(() => $('ldLookName')?.select(), 30); return; }
+  if (t.hasAttribute('data-lookdel')) { const cur = curLook(); if (cur) { mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; }, `Deleted ${cur.name}`); renderDesk(); } return; }
+});
+$('deskDlg').addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'ldLookName') { const cur = curLook(); if (cur && t.value.trim()) { mutate(() => { cur.name = t.value.trim().slice(0, 40); }); renderDesk(); } return; }
+  if (t.dataset.fx) deskCommit();
+});
+$('deskDlg').addEventListener('input', e => { const k = e.target.dataset?.fx; if (k) { e.target.previousElementSibling.textContent = e.target.value; deskSet({ [k]: Number(e.target.value) }, true); } });
+$('deskDlg').addEventListener('keydown', e => {
+  const g = e.target.closest?.('[data-ldfx]'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pickDeskFx(g.dataset.ldfx, e.shiftKey); }
+  if (e.target.id === 'ldWheel' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {   // turn the hue with the arrows, more or less colour up and down
+    e.preventDefault(); const ts = deskPicked(); if (!ts.length) return; const f = fxOf(ts[0]); let [h, sat] = rgb2hsv(f.r, f.g, f.b); if (!(f.r + f.g + f.b)) sat = 1;
+    if (e.key === 'ArrowLeft') h -= 10; if (e.key === 'ArrowRight') h += 10; if (e.key === 'ArrowUp') sat = Math.min(1, sat + .1); if (e.key === 'ArrowDown') sat = Math.max(0, sat - .1);
+    const [r, g2, b] = hsv2rgb((h + 360) % 360, sat, 1); deskSet({ r, g: g2, b });
+  }
+  if (e.key === 'Enter' && e.target.id === 'ldLookName') e.target.blur();
+});
+function pickDeskFx(id, add) { if (add) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.has(id) ? deskSel.delete(id) : deskSel.add(id); } else deskSel = new Set([id]); renderDesk(); }
+$('deskDlg').addEventListener('pointerdown', e => {
+  const wheel = e.target.closest('#ldWheel');
+  if (wheel && !wheel.classList.contains('off')) {
+    const apply = ev => { const r = wheel.getBoundingClientRect(), dx = ev.clientX - (r.left + r.width / 2), dy = ev.clientY - (r.top + r.height / 2), sat = Math.min(1, Math.hypot(dx, dy) / (r.width / 2)), h = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360, [R, G, B] = hsv2rgb(h, sat, 1); deskSet({ r: R, g: G, b: B }, true); };
+    apply(e); desk.drag = 'wheel'; wheel.setPointerCapture(e.pointerId);
+    wheel.onpointermove = ev => { if (desk.drag === 'wheel') apply(ev); };
+    wheel.onpointerup = () => { desk.drag = null; wheel.onpointermove = null; deskCommit(); };
+    e.preventDefault(); return;
+  }
+  const map = e.target.closest('#ldMap'); if (!map) return;
+  const g = e.target.closest('[data-ldfx]'); if (g) { pickDeskFx(g.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
+  const p0 = deskMapPt(e); desk.box = { x0: p0.x, y0: p0.y, x1: p0.x, y1: p0.y, add: e.shiftKey };
+  const move = ev => {   // only the box is redrawn, so the drag isn't lost
+    if (!desk.box) return; const p = deskMapPt(ev); desk.box.x1 = p.x; desk.box.y1 = p.y;
+    let r = $('ldMap').querySelector('.ld-box'); if (!r) { r = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); r.setAttribute('class', 'ld-box'); $('ldMap').append(r); }
+    const b = desk.box; r.setAttribute('x', Math.min(b.x0, b.x1)); r.setAttribute('y', Math.min(b.y0, b.y1)); r.setAttribute('width', Math.abs(b.x1 - b.x0)); r.setAttribute('height', Math.abs(b.y1 - b.y0));
+  };
+  window.addEventListener('pointermove', move);
+  const end = () => { window.removeEventListener('pointermove', move); const b = desk.box; desk.box = null; if (!b) return; const x0 = Math.min(b.x0, b.x1), x1 = Math.max(b.x0, b.x1), y0 = Math.min(b.y0, b.y1), y1 = Math.max(b.y0, b.y1);
+    if (x1 - x0 < .5 && y1 - y0 < .5) { renderDesk(); return; }   // a click on empty stage keeps what's picked
+    const hit = deskLights().filter(i => i.x >= x0 && i.x <= x1 && i.y >= y0 && i.y <= y1).map(i => i.id);
+    deskSel = new Set([...(b.add ? deskPicked().map(i => i.id) : []), ...hit]); renderDesk(); };
+  window.addEventListener('pointerup', end, { once: true });
+});
 function looksSheetHtml() {
   const looks = plan.looks || [], all = deskLights(); if (!looks.length || !all.length) return '';
   const row = L => { const by = new Map(); for (const it of all) { const f = { ...FX_DEF, ...(L.fx[it.id] || {}) }, k = fxName(f, it); (by.get(k) || by.set(k, { f, it, l: [] }).get(k)).l.push(itemName(it)); }
@@ -2763,7 +2909,7 @@ function lightingInsp(it) {
     const L = dmxLines();
     return `<section class="isec"><h3>DMX lines <span>${L.length}</span></h3>${L.length ? `<div class="dmxlines">${L.map(l => `<div><b>Line ${l.name}</b><small>${esc(l.from)} · universe ${l.universe} · ${plural(l.items.length, 'light')}</small></div>`).join('')}</div>` : '<p class="hint">No lights connected yet.</p>'}
       <button class="btn quiet block" id="iReaddr">${ic('wand', 'sm')}Re-address every light</button>
-      <label class="row" for="iPowerLink" style="gap:8px;flex-wrap:nowrap;margin-top:10px"><input type="checkbox" id="iPowerLink" ${plan.settings.powerLink !== false ? 'checked' : ''} style="accent-color:var(--accent)"><span>Pass power light to light<small class="hint" style="display:block">Lights with power out are linked along their line</small></span></label></section>${deskHtml()}`;
+      <label class="row" for="iPowerLink" style="gap:8px;flex-wrap:nowrap;margin-top:10px"><input type="checkbox" id="iPowerLink" ${plan.settings.powerLink !== false ? 'checked' : ''} style="accent-color:var(--accent)"><span>Pass power light to light<small class="hint" style="display:block">Lights with power out are linked along their line</small></span></label></section>${deskLaunch()}`;
   }
   const w = dmxWhere().get(it.id), n = dmxCh(it), hang = mountOf(it);
   const where = w ? `Universe ${w.line.universe} · line ${w.line.name}${it.dmxA ? ` · ${it.dmxA}–${it.dmxA + n - 1}` : ''}` : 'Not on a DMX line';
@@ -2771,7 +2917,8 @@ function lightingInsp(it) {
     ${isFixture(it) && !hang ? `<label class="row" for="iUp" style="gap:8px;flex-wrap:nowrap;margin-top:8px"><input type="checkbox" id="iUp" ${isUp(it) ? 'checked' : ''} style="accent-color:var(--accent)"><span>Shines upward<small class="hint" style="display:block">Up a wall, the set or a backdrop</small></span></label>` : ''}
     ${isFixture(it) ? `<div class="grid2" style="margin-top:8px">${field('iThrow', 'Throw', mVal(throwOf(it)), 'number', 'step=".1" min=".5"', 'm')}<div class="field"><span>Hangs on</span><p class="hint" style="margin:6px 0 0">${hang ? esc(itemName(hang)) : 'Floor or stand'}</p></div></div>
     <p class="hint">Drag the yellow dot on the plot to aim it.</p>` : ''}</section>
-    ${isFixture(it) ? `<section class="isec desk"><h3>Colour <span>${esc(curLook()?.name || 'before any look')}</span></h3>${deskControls([it])}</section>` : ''}`;
+    ${isFixture(it) ? `<section class="isec desk"><h3>Colour <span>${esc(curLook()?.name || 'before any look')}</span></h3><div class="row" style="gap:10px;flex-wrap:nowrap;margin-bottom:10px"><span class="bigsw" style="background:${fxSwatch(fxOf(it), it)}"></span><b>${esc(fxName(fxOf(it), it))}</b></div>
+      <button class="btn primary block" data-opendesk="${it.id}">${ic('sun', 'sm')}Open the lighting desk</button></section>` : ''}`;
 }
 // the lighting patch: every light by universe and address, with where it hangs, its line and its power
 const dmxAddr = r => r.u && r.a ? `${r.u}.${String(r.a).padStart(3, '0')}` : '—';
@@ -2789,7 +2936,7 @@ function lightingSheetHtml(rows, head) {
   const chain = L => `<div class="dmxchain"><span class="dmxsrc"><b>Line ${L.name}</b><small>${esc(L.from)} · universe ${L.universe}</small></span>${L.items.map(it => `<span class="dmxarr" aria-hidden="true">→</span><span class="dmxdev${bad.has(it.id) ? ' flag' : ''}"><b>${esc(itemName(it))}</b><small>${it.dmxA ? `${it.dmxA}–${it.dmxA + dmxCh(it) - 1}` : 'no address'}</small></span>`).join('')}</div>`;
   return `<section class="sheet" id="sec-lighting" data-sheet="lighting">${head('Lighting patch', 'lighting', `${plural(rows.length, 'light')} · ${plural(lines.length, 'DMX line')} · ${(watts / 1000).toFixed(1)} kW. Set each light to its address and channel mode before focus.`)}
     <div class="tablewrap"><table class="lighttbl"><thead><tr>${LIGHT_COLS.map(c => `<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr class="${bad.has(r.it.id) ? 'flag' : ''}"><td class="mono">${dmxAddr(r)}</td><td><b>${esc(r.name)}</b></td><td>${esc(r.type)}</td><td class="num">${r.ch}</td><td>${esc(r.hang)}</td><td>${esc(r.line)}</td><td>${esc(r.power)}</td></tr>`).join('')}</tbody></table></div>
-    ${lines.length ? `<h3 class="dmxh">DMX lines</h3><div class="dmxchains">${lines.map(chain).join('')}</div><div class="row dmxfoot"><p class="hint">Each line runs light to light in this order. End every line with a DMX terminator.</p><button class="btn quiet" id="lightReaddr" title="Number every light in the order its line runs">${ic('wand', 'sm')}Re-address in line order</button></div>${looksSheetHtml()}` : '<p class="hint">Add a lighting console and the lights are chained into DMX lines here.</p>'}</section>`;
+    ${lines.length ? `<h3 class="dmxh">DMX lines</h3><div class="dmxchains">${lines.map(chain).join('')}</div><div class="row dmxfoot"><p class="hint">Each line runs light to light in this order. End every line with a DMX terminator.</p><span class="row" style="gap:6px"><button class="btn quiet" data-opendesk>${ic('sun', 'sm')}Lighting desk</button><button class="btn quiet" id="lightReaddr" title="Number every light in the order its line runs">${ic('wand', 'sm')}Re-address in line order</button></span></div>${looksSheetHtml()}` : '<p class="hint">Add a lighting console and the lights are chained into DMX lines here.</p>'}</section>`;
 }
 function dmxIssues() {
   const out = [], lights = plan.items.filter(isDmx); if (!lights.length) return out;
@@ -4571,7 +4718,7 @@ function renderPlot() {
 
   if (!layersBypass) s += overlaySvg(deckD);
   const selItem = sel?.kind === 'item' ? sel.id : null, selSet = new Set(selIds()), solo = selSet.size === 1;
-  if (!layerOff('beams') && plan.items.some(isFixture)) s += beamsSvg(selSet);
+  if (!layerOff('beams') && plan.items.some(isFixture)) { const R = roomRect(); s += `<rect class="room-wall" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/>` + beamsSvg(selSet); }
   const lifted = drag?.kind === 'item' && drag.moved ? new Set([drag.id, ...(drag.others || []).map(o => o.id)]) : null;   // gear in hand rises off the deck
   const tr = tracing && selItem === tracing && !layersBypass ? traceSets(tracing) : null;   // signal trace runs while its source stays picked
   svg.classList.toggle('tracing', !!tr);
@@ -6401,6 +6548,7 @@ function closePops() { $('weekPop').hidden = true; $('weekBtn').setAttribute('ar
 document.addEventListener('keydown', e => {
   if (!$('histDlg').hidden) { if (e.key === 'Escape') $('histDlg').hidden = true; return; }
   if (!$('cmdk').hidden) return;
+  if (!$('deskDlg').hidden) { if (e.key === 'Escape') closeDesk(); return; }
   if (!$('rackDlg').hidden) {
     const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
     if (e.key === 'Escape') closeRack();
@@ -6681,15 +6829,6 @@ function setStageD(m) { if (!(m > 0)) { toast(Number.isFinite(m) ? 'Stage depth 
 
 /* inspector */
 $('inspector').addEventListener('keydown', e => { if (e.target.matches?.('input[type=text], input[type=number], #iLabel') && e.key === 'Enter') { e.preventDefault(); e.target.blur(); } if (e.target.id === 'iLabel' && e.key === 'Escape') { e.target.value = itemById(sel.id)?.label || ''; e.target.blur(); } });
-// faders: the plot follows while you drag; letting go makes it one undo step
-$('inspector').addEventListener('input', e => {
-  const t = e.target, k = t.dataset?.fx; if (!k) return;
-  if (weekLocked()) { lockedNote(); return; }
-  if (!fxSnap) fxSnap = snapState();
-  setFx(deskTargets(), { [k]: Number(t.value) });
-  if (t.nextElementSibling) t.nextElementSibling.textContent = t.value + (k === 'd' ? '%' : '');
-  renderPlot();
-});
 $('inspector').addEventListener('change', e => {
   const t = e.target;
   const it = sel?.kind === 'item' ? itemById(sel.id) : null;
@@ -6698,8 +6837,6 @@ $('inspector').addEventListener('change', e => {
   if (t.id === 'isw') { mutate(() => setStageW(mIn(t.value))); return; }
   if (t.id === 'isd') { mutate(() => setStageD(mIn(t.value))); return; }
   if (t.id === 'iSnap') { ui.snap = Number(t.value); try { localStorage.setItem('stageplot.snap', String(ui.snap)); } catch { /* memory only */ } toast(ui.snap ? `Gear snaps to ${snapOpts().find(([v]) => v === ui.snap)?.[1].replace(' grid', '') || uSmall(fromM(ui.snap))} as you move it · hold Alt to place freely` : 'Snapping off'); return; }
-  if (t.id === 'iLookName') { const cur = curLook(); if (cur && t.value.trim()) mutate(() => { cur.name = t.value.trim().slice(0, 40); }); return; }
-  if (t.dataset.fx) { if (fxSnap) { const before = fxSnap; fxSnap = null; pushUndo(before, stepLabel('Light colour changed', before)); recordRev('Light colour changed', before); save(); renderAll(); } return; }
   if (t.id === 'iPowerLink') { mutate(() => { plan.settings.powerLink = t.checked; autoCable(); }, t.checked ? 'Lights pass power light to light' : 'Every light plugs in on its own'); return; }
   if (t.id === 'gPerson') { if (t.value !== '*') mutate(() => { for (const i of selIds().map(itemById)) i.personId = t.value || undefined; }); return; }
   if (it) mutate(() => {
@@ -6743,12 +6880,8 @@ $('inspector').addEventListener('click', e => {
   if (t.dataset.selitem) { if (itemById(t.dataset.selitem)) { sel = { kind: 'item', id: t.dataset.selitem }; group = null; focusItem(t.dataset.selitem); renderPlot(); renderInspector(); } return; }
   if (t.dataset.selc) { sel = { kind: 'cable', id: t.dataset.selc }; renderPlot(); renderInspector(); return; }
   if (t.id === 'iReaddr') { mutate(() => assignDmx(true), 'Every light re-addressed'); return; }
-  if (t.dataset.preset) { const ts = deskTargets(), c = DESK_PRESETS.find(p => p[0] === t.dataset.preset)?.[1]; if (ts.length) mutate(() => setFx(ts, c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 })); return; }
   if (t.dataset.look) { mutate(() => { plan.lookId = t.dataset.look; }); return; }
-  if (t.hasAttribute('data-looknew')) { mutate(() => { const cur = ensureLook(), L = { id: uid(), name: `Look ${plan.looks.length + 1}`, fx: JSON.parse(JSON.stringify(cur.fx)) }; plan.looks.push(L); plan.lookId = L.id; }, 'New look, copied from the one before'); setTimeout(() => $('iLookName')?.select(), 30); return; }
-  if (t.hasAttribute('data-lookdel')) { const cur = curLook(); if (cur) mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; }, `Deleted ${cur.name}`); return; }
-  if (t.dataset.dgrp) { const k = t.dataset.dgrp, all = deskLights(); deskSel = k === 'all' ? null : new Set(all.filter(i => k === 'floor' ? !mountOf(i) : mountOf(i)?.id === k.slice(2)).map(i => i.id)); renderInspector(); return; }
-  if (t.dataset.dfx) { const id = t.dataset.dfx; if (e.shiftKey || e.ctrlKey || e.metaKey) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.has(id) ? deskSel.delete(id) : deskSel.add(id); } else deskSel = new Set([id]); renderInspector(); return; }
+  if (t.hasAttribute('data-opendesk')) { openDesk(t.dataset.opendesk || null); return; }
   if (t.dataset.level) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.level = t.dataset.level === 'ceiling' ? 'ceiling' : undefined; c.auto = false; }); return; }
   if (t.dataset.route) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.route = t.dataset.route === 'direct' ? 'direct' : undefined; }); return; }
   if (t.dataset.gmodel) {
@@ -6823,6 +6956,7 @@ $('paperInner').addEventListener('click', e => {
   if (e.target.closest('#printAgain')) { printNow(); return; }
   if (e.target.closest('#printDiffX')) { markPrinted(); renderPaper(); return; }
   const pv = e.target.closest('[data-pageview]'); if (pv) { pageView = pv.dataset.pageview === '1'; try { localStorage.setItem('stageplot.pages', pageView ? '1' : '0'); } catch { /* ignore */ } renderPaper(); return; }
+  if (e.target.closest('[data-opendesk]')) { openDesk(); return; }
   if (e.target.closest('#lightReaddr')) { mutate(() => assignDmx(true), 'Every light re-addressed in line order'); return; }
   if (e.target.closest('#printRider')) { document.body.classList.add('print-rider'); const done = () => { document.body.classList.remove('print-rider'); removeEventListener('afterprint', done); }; addEventListener('afterprint', done); printNow('print-rider', 'rider'); setTimeout(done, 1500); return; }
   { const lt = e.target.closest('[data-line], [data-lineflag]'); if (lt) { const k = lt.dataset.line || lt.dataset.lineflag, want = lt.dataset.line ? 'ok' : 'issue', st = lineState(); if (st[k] === want) delete st[k]; else st[k] = want;
@@ -7157,15 +7291,23 @@ const LAYERS = [['people', 'People', 'users'], ['gear', 'Gear', 'box'], ['beams'
 const OVERLAYS = [['owners', 'Whose gear', 'users', 'A colour halo around each person’s gear'],
   ['sight', 'Sightlines from FOH', 'eye', 'What the desk can’t see past'], ['heat', 'Sound coverage', 'zap', 'Loudest red, quietest blue']];
 const overOn = k => !layersBypass && !!cableView.over?.has(k);
-function beamsSvg(selSet) {
+// the room's walls: the back of the stage, the sides of the house (or the stage, if it's wider) and the back of the house
+function roomRect() { const { w, d, house, houseW } = plan.stage, hw = Math.max(w, houseW); return { x0: Math.min(0, (w - hw) / 2), x1: Math.max(w, (w + hw) / 2), y0: 0, y1: d + house }; }
+function wallDist(x, y, ux, uy) {   // how far from (x, y) along (ux, uy) to the nearest wall
+  const R = roomRect(); let t = Infinity;
+  if (ux > 1e-6) t = Math.min(t, (R.x1 - x) / ux); else if (ux < -1e-6) t = Math.min(t, (R.x0 - x) / ux);
+  if (uy > 1e-6) t = Math.min(t, (R.y1 - y) / uy); else if (uy < -1e-6) t = Math.min(t, (R.y0 - y) / uy);
+  return Math.max(.2, t);
+}
+function beamsSvg(selSet, pre = 'lbp', k = 1) {   // k: how much brighter to draw (the desk's dark map)
   let s = '';
   for (const it of plan.items) {
     if (!isFixture(it) || !itemShown(it)) continue;
     const on = selSet.has(it.id), f = fxOf(it), col = fxRGB(f, it), { cx, cy, r, ux, uy } = beamGeom(it), px = -uy, py = ux;
     if (!col) { if (on) s += `<circle class="lb-off" cx="${f3(cx)}" cy="${f3(cy)}" r="${f3(r)}"/>`; continue; }   // off in this look: picked, it shows where it would land
-    const a = Math.max(.3, f.d / 100), c = col.join(','), gid = `lbp-${it.id}`, hung = !!mountOf(it);
+    const a = Math.min(2.4, Math.max(.3, f.d / 100) * k), c = col.join(','), gid = `${pre}-${it.id}`, hung = !!mountOf(it);
     if (isUp(it)) {   // thrown up a wall or the set: a short, wide fan, brightest where it lands
-      const T = throwOf(it), hw = Number(prop(it, 'w')) / 2, sp = hw + T * Math.tan(cat(it).beam / 2 * Math.PI / 180), ex = it.x + ux * T, ey = it.y + uy * T;
+      const T = Math.min(throwOf(it), wallDist(it.x, it.y, ux, uy)), hw = Number(prop(it, 'w')) / 2, sp = hw + T * Math.tan(cat(it).beam / 2 * Math.PI / 180), ex = it.x + ux * T, ey = it.y + uy * T;
       s += `<linearGradient id="${gid}" gradientUnits="userSpaceOnUse" x1="${f3(it.x)}" y1="${f3(it.y)}" x2="${f3(ex)}" y2="${f3(ey)}"><stop offset="0" stop-color="rgb(${c})" stop-opacity="${f3(.06 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="${f3((on ? .55 : .4) * a)}"/></linearGradient>` +
         `<path class="lb-up${on ? ' on' : ''}" fill="url(#${gid})" d="M${f3(it.x - px * hw)} ${f3(it.y - py * hw)}L${f3(it.x + px * hw)} ${f3(it.y + py * hw)}L${f3(ex + px * sp)} ${f3(ey + py * sp)}L${f3(ex - px * sp)} ${f3(ey - py * sp)}Z"/>` +
         `<path class="lb-wall" style="stroke:rgba(${c},${f3(.75 * a)})" d="M${f3(ex - px * sp)} ${f3(ey - py * sp)}L${f3(ex + px * sp)} ${f3(ey + py * sp)}"/>`;
@@ -7176,7 +7318,8 @@ function beamsSvg(selSet) {
       `<path class="lb-cone${cls}" style="fill:rgba(${c},${f3(ca)})" d="M${f3(it.x)} ${f3(it.y)}L${f3(cx + px * r * lift)} ${f3(cy + py * r * lift)}L${f3(cx - px * r * lift)} ${f3(cy - py * r * lift)}Z"/>` +
       `<ellipse class="lb-pool${cls}" fill="url(#${gid})" style="--lc:rgba(${c},.75)" cx="${f3(cx)}" cy="${f3(cy)}" rx="${f3(hung ? r : r * 1.25)}" ry="${f3(r)}" transform="rotate(${f3(Math.atan2(uy, ux) * 180 / Math.PI)} ${f3(cx)} ${f3(cy)})"/>`;
   }
-  return `<g class="beams" aria-hidden="true">${s}</g>`;
+  const R = roomRect();   // light stops at the walls
+  return `<g class="beams" aria-hidden="true"><clipPath id="${pre}-room"><rect x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/></clipPath><g clip-path="url(#${pre}-room)">${s}</g></g>`;
 }
 const PERSON_HUES = ['#f472b6', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#fb7185', '#22d3ee', '#fb923c'];
 const personHue = pid => { const i = plan.team.findIndex(p => p.id === pid); return i < 0 ? null : PERSON_HUES[i % PERSON_HUES.length]; };
@@ -7958,6 +8101,7 @@ function cmdItems() {
     ['Add a custom rack', 'box', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } addGear('rack', snapTo(plan.stage.w - fromM(1)), snapTo(fromM(1))); }],
     [cableView.all ? 'Hide all cables' : 'Show cables', 'eye', () => setCableView(() => { cableView.all = !cableView.all; })],
     ['Open paperwork', 'sheet', () => openPaper()],
+    ...(plan.items.some(isFixture) ? [['Open the lighting desk', 'sun', () => openDesk()]] : []),
     ['Draw or edit stage shape', 'pen', () => openDesigner(false)],
     ['Import team from Planning Center', 'calendar', () => { railTab = 'team'; togglePanel('rail', true); setTimeout(() => $('pcoStart')?.click(), 60); }],
     ['Add a person to the team', 'users', () => { railTab = 'team'; togglePanel('rail', true); setTimeout(() => $('addPerson')?.click(), 60); }],
