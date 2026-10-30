@@ -556,6 +556,8 @@ svg text { font-family: var(--f-ui); }
 .c-audio { fill: #2e6a99; } .c-inst { fill: #6b51a3; } .c-power { fill: #b85a22; } .c-infra { fill: #44535e; }
 .c-video { fill: #a3426b; } .c-light { fill: #8a6f2c; }
 .beams { pointer-events: none; }
+.lb-fadein { animation: lbIn .7s cubic-bezier(.4, 0, .2, 1) both; } .lb-fadeout { animation: lbOut .7s cubic-bezier(.4, 0, .2, 1) both; pointer-events: none; }
+@keyframes lbIn { from { opacity: 0; } } @keyframes lbOut { to { opacity: 0; } }
 .room-wall { fill: none; stroke: var(--line-2); stroke-width: calc(var(--labs) * .5); stroke-dasharray: calc(var(--labs) * 3) calc(var(--labs) * 2); pointer-events: none; }
 .dmxh { font-size: 14px; margin: 16px 0 8px; }
 .dmxfoot { justify-content: space-between; gap: 10px; margin-top: 10px; } .dmxfoot .hint { margin: 0; }
@@ -581,44 +583,97 @@ svg text { font-family: var(--f-ui); }
 .fader output { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
 .fader input { width: 100%; } .f-r input { accent-color: #e5484d; } .f-g input { accent-color: #30a46c; } .f-b input { accent-color: #3e63dd; } .f-w input { accent-color: #c9b98f; } .f-d input { accent-color: var(--accent); }
 .bigsw { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--line-2); flex: none; background-image: none; }
-.ldesk { width: min(1180px, 100%); height: min(780px, 100%); background: var(--surface); border-radius: var(--r-lg); border: 1px solid var(--line); box-shadow: var(--shadow-3); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
-.ld-head h2 { display: flex; align-items: center; gap: 8px; white-space: nowrap; } .ld-head h2 .ic { color: #d4a72c; }
-.ld-head input { width: 170px; }
-.ld-looks { display: flex; gap: 6px; overflow-x: auto; min-width: 0; padding: 2px; }
-.ld-look { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink-2); border-radius: 10px; padding: 7px 14px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
-.ld-tabs { display: flex; gap: 6px; } .ld-look[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); } .ld-look.add { border-style: dashed; font-weight: 500; color: var(--muted); background: none; }
-.ld-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; min-height: 0; }
-.ld-stage { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 10px; padding: 14px 16px; min-height: 0; background: var(--surface-2); }
-.ld-stage .hint { margin: 0; text-align: center; }
-.ld-groups { display: flex; flex-wrap: wrap; gap: 6px; }
-.lookchip[data-dgrp][aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface); }
-.ld-mapwrap { min-height: 0; border-radius: 14px; overflow: hidden; background: #0f1218; }
+/* the lighting desk: a dark console whatever the app's theme, so colour reads true */
+.ldesk { --ld-bg: #0e1116; --ld-panel: #151a21; --ld-card: #1a2029; --ld-line: rgba(255,255,255,.07); --ld-line2: rgba(255,255,255,.12); --ld-ink: #eef1f5; --ld-ink2: #c3c9d3; --ld-mute: #8e97a6; --ld-acc: #8f84ff;
+  width: min(1200px, 100%); height: min(800px, 100%); background: var(--ld-bg); color: var(--ld-ink); border-radius: 20px; border: 1px solid var(--ld-line2); box-shadow: 0 30px 80px rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.4);
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; color-scheme: dark; }
+.ldesk .ic { stroke: currentColor; }
+.ld-top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 14px 18px; background: linear-gradient(180deg, #171c24, #12161c); border-bottom: 1px solid var(--ld-line); }
+.ld-brand { display: flex; align-items: center; gap: 11px; } .ld-brand h2 { font-size: 16px; font-weight: 700; letter-spacing: -.01em; color: var(--ld-ink); }
+.ld-brand small { display: block; font-size: 12px; color: var(--ld-mute); margin-top: 1px; }
+.ld-logo { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; color: #ffcf5a; background: radial-gradient(circle at 50% 40%, rgba(255,207,90,.28), rgba(255,207,90,.06) 70%); box-shadow: inset 0 0 0 1px rgba(255,207,90,.25); }
+.ld-looks { display: flex; align-items: center; gap: 8px; min-width: 0; overflow-x: auto; padding: 3px; scrollbar-width: thin; }
+.ld-tabs { display: flex; gap: 8px; }
+.ld-look { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 9px; row-gap: 5px; align-items: center; text-align: left; min-width: 118px; padding: 8px 12px 9px; border-radius: 12px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink2); font: inherit; cursor: pointer; transition: border-color .2s, background .2s, box-shadow .2s; }
+.ld-look:hover { border-color: rgba(255,255,255,.22); background: #1f2631; }
+.ld-look[aria-pressed="true"] { background: #232a36; border-color: var(--ld-acc); color: var(--ld-ink); box-shadow: 0 0 0 3px rgba(143,132,255,.18), 0 6px 18px rgba(0,0,0,.35); }
+.ld-cueno { grid-row: span 2; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; background: rgba(255,255,255,.07); color: var(--ld-mute); font-variant-numeric: tabular-nums; }
+.ld-look[aria-pressed="true"] .ld-cueno { background: var(--ld-acc); color: #0e1116; }
+.ld-cuename { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+.ld-pal { display: flex; gap: 3px; } .ld-pal i { width: 16px; height: 4px; border-radius: 2px; box-shadow: 0 0 6px currentColor; } .ld-pal i.dark { background: rgba(255,255,255,.12); box-shadow: none; }
+.ld-look.add { display: inline-flex; min-width: 0; align-self: stretch; align-items: center; gap: 6px; border-style: dashed; background: transparent; color: var(--ld-mute); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.ld-look.add:hover { color: var(--ld-ink); border-color: rgba(255,255,255,.3); }
+.ld-actions { display: flex; align-items: center; gap: 8px; }
+.ld-rename { display: flex; align-items: center; gap: 7px; height: 36px; padding: 0 10px; border-radius: 10px; background: var(--ld-card); border: 1px solid var(--ld-line2); color: var(--ld-mute); }
+.ld-rename:focus-within { border-color: var(--ld-acc); }
+.ld-rename input { width: 140px; border: 0; outline: 0; background: none; color: var(--ld-ink); font: inherit; font-size: 13.5px; font-weight: 600; padding: 0; box-shadow: none; }
+.ld-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-mute); cursor: pointer; }
+.ld-icon:hover { color: #ff8a8a; border-color: rgba(255,138,138,.4); }
+.ld-done { height: 36px; padding: 0 18px; border-radius: 10px; border: 0; background: var(--ld-ink); color: #0e1116; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
+.ld-done:hover { background: #fff; }
+.ldesk button:focus-visible, .ldesk input:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 2px; }
+.ld-body { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0; }
+.ld-stage { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; padding: 16px 18px; min-height: 0; }
+.ld-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.ld-label { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ld-mute); }
+.ld-groups { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 11px; background: var(--ld-card); border: 1px solid var(--ld-line); }
+.ld-seg { border: 0; background: none; color: var(--ld-ink2); font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+.ld-seg:hover { color: var(--ld-ink); background: rgba(255,255,255,.05); }
+.ld-seg[aria-pressed="true"] { background: #2b3342; color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.08); }
+.ld-mapwrap { min-height: 0; border-radius: 16px; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #121722, #07090d); box-shadow: inset 0 0 0 1px var(--ld-line), inset 0 20px 60px rgba(0,0,0,.45); }
 .ld-map { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
-.ld-room { fill: #151922; stroke: rgba(255,255,255,.14); stroke-width: .12; } .ld-deck { fill: #232838; stroke: rgba(255,255,255,.2); stroke-width: .1; }
-.ld-mount { stroke: rgba(210,218,226,.4); stroke-width: .35; stroke-linecap: round; }
-.ld-fx { cursor: pointer; } .ld-fx text { fill: rgba(255,255,255,.7); font-family: inherit; pointer-events: none; }
-.ld-dot { stroke: rgba(0,0,0,.6); } .ld-dot.dark { stroke: rgba(255,255,255,.5); stroke-dasharray: .25 .2; }
-.ld-ring { fill: none; stroke: transparent; } .ld-fx.on .ld-ring { stroke: #fff; } .ld-fx.on text { fill: #fff; font-weight: 700; }
-.ld-fx:focus-visible { outline: none; } .ld-fx:focus-visible .ld-ring { stroke: var(--accent); }
-.ld-box { fill: rgba(109, 94, 252, .15); stroke: #8f84ff; stroke-width: .1; stroke-dasharray: .4 .25; }
-.ld-colour { border-left: 1px solid var(--line); padding: 16px; display: grid; align-content: start; gap: 16px; overflow-y: auto; }
-.ld-pickinfo { display: flex; gap: 12px; align-items: center; } .ld-pickinfo div { display: grid; } .ld-pickinfo small { color: var(--muted); }
-.ld-wheelrow { display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: center; }
-.ld-wheel { position: relative; width: 150px; aspect-ratio: 1; border-radius: 50%; cursor: crosshair; touch-action: none;
-  background: radial-gradient(circle closest-side, #fff, rgba(255,255,255,0)), conic-gradient(from 90deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
-.ld-wheel.off { filter: grayscale(1) opacity(.35); cursor: default; } .ld-wheel:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.ld-mark { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.35); pointer-events: none; }
-.ld-faders { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; justify-items: center; }
-.ld-fader { display: grid; justify-items: center; gap: 4px; font-size: 12px; color: var(--muted); }
-.ld-fader output { font-variant-numeric: tabular-nums; font-size: 11.5px; color: var(--ink-2); min-width: 3ch; text-align: center; }
-.ld-fader input { writing-mode: vertical-lr; direction: rtl; width: 26px; height: 120px; margin: 0; }
-.ld-fader span { font-weight: 600; }
-.ld-colour .lpresets { grid-template-columns: repeat(4, 1fr); }
-.ld-colour .pswatch { aspect-ratio: auto; height: 46px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 3px; }
-.ld-colour .pswatch span { font-size: 10.5px; font-weight: 600; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.7); }
-.ld-colour .pswatch.off span, .ld-colour .pswatch.lt span { color: #1d2129; text-shadow: none; }
-.ld-foot { border-top: 1px solid var(--line); padding: 10px 18px; }
-@media (max-width: 820px) { .ld-body { grid-template-columns: 1fr; grid-template-rows: minmax(260px, 1fr) auto; overflow-y: auto; } .ld-colour { border-left: 0; border-top: 1px solid var(--line); } .ld-head input { width: 120px; } }
+.ld-room { fill: rgba(255,255,255,.012); stroke: rgba(255,255,255,.1); stroke-width: .1; stroke-dasharray: .5 .35; }
+.ld-deck { fill: #1b202b; stroke: rgba(255,255,255,.16); stroke-width: .08; }
+.ld-mount { stroke: rgba(200,210,222,.32); stroke-width: .3; stroke-linecap: round; }
+.ld-fx { cursor: pointer; } .ld-fx text { fill: rgba(225,231,240,.62); font-weight: 600; pointer-events: none; letter-spacing: .01em; }
+.ld-dot { stroke: rgba(0,0,0,.55); filter: drop-shadow(0 0 .45px currentColor); } .ld-dot.dark { stroke: rgba(255,255,255,.45); stroke-dasharray: .25 .2; }
+.ld-ring { fill: none; stroke: transparent; } .ld-fx.on .ld-ring { stroke: #fff; } .ld-fx.on text { fill: #fff; }
+.ld-fx:focus-visible { outline: none; } .ld-fx:focus-visible .ld-ring { stroke: var(--ld-acc); }
+.ld-box { fill: rgba(143,132,255,.14); stroke: #a79fff; stroke-width: .1; stroke-dasharray: .4 .25; }
+.ld-tip { margin: 0; text-align: center; font-size: 12px; color: var(--ld-mute); } .ld-tip span { opacity: .5; margin: 0 4px; }
+.ld-colour { background: var(--ld-panel); border-left: 1px solid var(--ld-line); padding: 14px; display: grid; align-content: start; gap: 10px; overflow-y: auto; scrollbar-width: thin; }
+.ld-card { background: var(--ld-card); border: 1px solid var(--ld-line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 10px; }
+.ld-pickinfo { grid-template-columns: auto 1fr; align-items: center; gap: 13px; } .ld-pickinfo div { display: grid; gap: 2px; min-width: 0; }
+.ld-pickinfo b { font-size: 14.5px; } .ld-pickinfo small { color: var(--ld-mute); font-size: 12.5px; }
+.ld-pickinfo .bigsw { width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,.18); background: var(--c); box-shadow: 0 0 22px -2px var(--c); }
+.ld-pickinfo .bigsw.none { background: repeating-linear-gradient(135deg, #222832 0 5px, #1a1f27 5px 10px); box-shadow: none; }
+.ld-wheelwrap { display: grid; place-items: center; padding: 4px 0; }
+.ld-wheel { position: relative; width: 148px; aspect-ratio: 1; border-radius: 50%; cursor: crosshair; touch-action: none;
+  background: radial-gradient(circle closest-side, #fff, rgba(255,255,255,0)), conic-gradient(from 90deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+  box-shadow: 0 0 0 5px #11151b, 0 0 0 6px var(--ld-line2), 0 10px 30px rgba(0,0,0,.45); }
+.ld-wheel.off { filter: grayscale(1) brightness(.5); cursor: default; } .ld-wheel:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 8px; }
+.ld-mark { position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.5); pointer-events: none; }
+.ldesk .lpresets { grid-template-columns: repeat(6, 1fr); gap: 6px 4px; margin: 0; }
+.ldesk .pswatch { aspect-ratio: auto; height: auto; background: none; border: 0; display: grid; justify-items: center; gap: 5px; padding: 2px 0; cursor: pointer; transform: none; }
+.ldesk .pswatch i { width: 26px; height: 26px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2), 0 0 14px -4px var(--sw); transition: transform .15s; }
+.ldesk .pswatch span { font-size: 10.5px; font-weight: 600; color: var(--ld-mute); text-shadow: none; }
+.ldesk .pswatch:hover:not(:disabled) i { transform: scale(1.1); } .ldesk .pswatch:hover:not(:disabled) span { color: var(--ld-ink); }
+.ldesk .pswatch.off i { background: repeating-linear-gradient(135deg, #2a313c 0 4px, #1c2129 4px 8px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); }
+.ldesk .pswatch:disabled { opacity: .3; cursor: default; }
+.ld-note { margin: 0; font-size: 12px; color: var(--ld-mute); }
+.ld-faders { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; justify-items: center; }
+.ld-fader { display: grid; justify-items: center; gap: 8px; }
+.ld-fader output { font-size: 11.5px; font-weight: 600; color: var(--ld-ink2); font-variant-numeric: tabular-nums; min-width: 4ch; text-align: center; padding: 3px 0; border-radius: 6px; background: #12161c; border: 1px solid var(--ld-line); }
+.ld-groove { position: relative; width: 34px; height: 128px; display: block; }
+.ld-groove::before { content: ''; position: absolute; left: 50%; top: 9px; bottom: 9px; width: 6px; margin-left: -3px; border-radius: 3px; background: #0b0e12; box-shadow: inset 0 1px 2px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.05); }
+.ld-groove::after { content: ''; position: absolute; left: 50%; bottom: 9px; width: 6px; margin-left: -3px; border-radius: 3px; height: calc((100% - 18px) * var(--v)); background: var(--fc); box-shadow: 0 0 10px var(--fc); opacity: .9; pointer-events: none; }
+.ld-groove input { -webkit-appearance: none; appearance: none; writing-mode: vertical-lr; direction: rtl; position: relative; z-index: 1; width: 34px; height: 128px; margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; cursor: ns-resize; }
+.ld-groove input::-webkit-slider-runnable-track { background: transparent; border: 0; }
+.ld-groove input::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 18px; border-radius: 5px; background: linear-gradient(180deg, #f4f6f9, #b8c0cb); border: 1px solid #0b0e12; box-shadow: 0 3px 6px rgba(0,0,0,.55), inset 0 -2px 0 rgba(0,0,0,.18), inset 0 8px 0 -7px #4a5361; }
+.ld-groove input::-moz-range-track { background: transparent; border: 0; }
+.ld-groove input::-moz-range-thumb { width: 28px; height: 16px; border-radius: 5px; background: linear-gradient(180deg, #f4f6f9, #b8c0cb); border: 1px solid #0b0e12; box-shadow: 0 3px 6px rgba(0,0,0,.55); }
+.ld-groove input:disabled { cursor: default; } .ld-fader:has(input:disabled) { opacity: .32; }
+.ld-groove input:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 2px; border-radius: 6px; }
+.ld-fname { font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--ld-mute); } .f-d .ld-fname { color: var(--ld-ink2); }
+.ld-foot { display: flex; align-items: center; gap: 14px; padding: 10px 18px; border-top: 1px solid var(--ld-line); background: #0c0f13; font-size: 12.5px; color: var(--ld-mute); }
+.ld-foot b { color: var(--ld-ink2); }
+.ld-live { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #8fe0a8; }
+.ld-live i { width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 8px #3ddc84; animation: ldPulse 2.4s ease-in-out infinite; }
+@keyframes ldPulse { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .ld-live i { animation: none; } }
+@media (max-width: 900px) { .ld-top { grid-template-columns: minmax(0, 1fr) auto; } .ld-looks { grid-column: 1 / -1; grid-row: 2; } .ld-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(280px, 1fr) auto; overflow-y: auto; } .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; } .ld-rename input { width: 100px; } .ld-brand small { display: none; } }
+@media (max-width: 600px) { .ldesk { border-radius: 16px; } .ld-top { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 12px; } .ld-actions { grid-row: 3; } .ld-rename { flex: 1; min-width: 0; } .ld-rename input { width: 100%; min-width: 0; }
+  .ld-stage { padding: 12px; } .ld-bar { display: grid; gap: 8px; } .ld-groups { display: flex; flex-wrap: wrap; } .ld-colour { padding: 12px; } .ld-foot { flex-wrap: wrap; gap: 4px 12px; padding: 8px 12px; } }
 .lookrows { display: grid; gap: 8px; } .lookrow { display: grid; grid-template-columns: 140px 1fr; gap: 10px; font-size: 13px; padding: 6px 0; border-top: 1px solid var(--line); }
 .lookfx { display: flex; flex-wrap: wrap; gap: 4px 14px; } .lookfx span { display: inline-flex; align-items: center; gap: 6px; }
 .dmxlines { display: grid; gap: 6px; margin-bottom: 8px; } .dmxlines div { display: grid; } .dmxlines small { color: var(--muted); font-size: 12px; }
@@ -2798,38 +2853,68 @@ function deskMapSvg() {
   const dots = deskLights().map(i => { const f = fxOf(i), sw = fxSwatch(f, i), rr = U * 1.2;
     return `<g class="ld-fx${picked.has(i.id) ? ' on' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${picked.has(i.id)}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .7)}" style="stroke-width:${f3(U * .45)}"/><circle class="ld-dot${sw === 'transparent' ? ' dark' : ''}" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr)}" style="fill:${sw === 'transparent' ? 'var(--surface)' : sw};stroke-width:${f3(U * .2)}"/><text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px">${esc(itemName(i))}</text></g>`; }).join('');
   return `<svg class="ld-map" id="ldMap" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
-    <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/>${ms}${beamsSvg(new Set(), 'lbm', 2.2)}${dots}</svg>`;
+    <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${dots}</svg>`;
+}
+/* Changing looks: the beams as they were fade out over the new ones (both on the plot and in the desk), about 0.7 s. */
+let lookFade = null;
+const LOOK_FADE_MS = 700;
+function fadeLooksFrom() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !deskLights().length) return;
+  lookFade = { t: performance.now(), plot: beamsSvg(new Set(selIds()), 'lbo'), map: desk.open ? beamsSvg(new Set(), 'lbmo', 2.2) : '' };
+  setTimeout(() => { if (lookFade && performance.now() - lookFade.t >= LOOK_FADE_MS - 20) lookFade = null; }, LOOK_FADE_MS + 30);
+}
+// new beams fade in under the old ones fading out; drawn again mid-fade, they pick up where they were
+function fadedBeams(fresh, key) {
+  const el = lookFade && performance.now() - lookFade.t;
+  if (!lookFade || el >= LOOK_FADE_MS || !lookFade[key]) return fresh;
+  const d = `animation-delay:-${Math.round(el)}ms`;
+  return `<g class="lb-fadein" style="${d}">${fresh}</g><g class="lb-fadeout" style="${d}">${lookFade[key]}</g>`;
+}
+const FADER_COL = { r: '#ff4d57', g: '#3ddc84', b: '#4c7dff', w: '#f3e3bf', d: '#c9ceda' };
+const faderPct = (k, v) => f3(v / (k === 'd' ? 100 : 255));   // how full the groove is, 0–1
+// a look's colours at a glance: its most used colours, most first
+function lookPalette(L) {
+  const n = new Map();
+  for (const it of deskLights()) { const f = { ...FX_DEF, ...(L.fx[it.id] || {}) }, c = fxSwatch(f, it); if (c !== 'transparent') n.set(c, (n.get(c) || 0) + 1); }
+  return [...n].sort((a, b) => b[1] - a[1]).slice(0, 4).map(x => x[0]);
 }
 function deskColourHtml() {
   const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, white = ts.length > 0 && ts.every(i => !cat(i).rgbw), [h, sat] = rgb2hsv(f.r, f.g, f.b), on = f.r + f.g + f.b > 0;
-  const mx = 50 + Math.cos(h * Math.PI / 180) * sat * 50, my = 50 + Math.sin(h * Math.PI / 180) * sat * 50;
-  return `<div class="ld-pickinfo"><span class="bigsw" style="background:${ts.length ? fxSwatch(f, ts[0]) : 'transparent'}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'No lights picked'}</b><small>${ts.length ? esc(fxName(f, ts[0])) : 'Pick lights on the stage'}</small></div></div>
-    <div class="ld-wheelrow"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div>
-      <div class="ld-faders">${[['r', 'R'], ['g', 'G'], ['b', 'B'], ['w', 'W'], ['d', 'Dim']].map(([k, l]) => `<label class="ld-fader f-${k}"><output>${f[k]}</output><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${({ r: 'Red', g: 'Green', b: 'Blue', w: 'White', d: 'Dimmer' })[k]}"><span>${l}</span></label>`).join('')}</div></div>
-    <div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch${lum('#' + fxRGB({ ...c, d: 100 }).map(v => v.toString(16).padStart(2, '0')).join('')) > .45 ? ' lt' : ''}" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><span>${n}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><span>Off</span></button></div>
-    ${white ? '<p class="hint">White-only lights take the dimmer only.</p>' : ''}`;
+  const mx = 50 + Math.cos(h * Math.PI / 180) * sat * 50, my = 50 + Math.sin(h * Math.PI / 180) * sat * 50, sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent';
+  return `<div class="ld-card ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'No lights picked'}</b><small>${ts.length ? esc(fxName(f, ts[0])) : 'Pick lights on the stage'}</small></div></div>
+    <div class="ld-card"><div class="ld-label">Colour</div>
+      <div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div>
+      <div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><i></i><span>${n.replace(' white', '')}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><i></i><span>Off</span></button></div>
+      ${white ? '<p class="ld-note">White-only lights take the dimmer only.</p>' : ''}</div>
+    <div class="ld-card"><div class="ld-label">Levels</div>
+      <div class="ld-faders">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}</div></div>`;
 }
 function renderDesk() {
   if (!desk.open) return;
   const looks = plan.looks || [], cur = curLook(), all = deskLights(), picked = deskPicked();
   const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : []), ['none', 'None']];
   const gOn = k => { const ids = k === 'all' ? all : k === 'none' ? [] : all.filter(i => k === 'floor' ? !mountOf(i) : mountOf(i)?.id === k.slice(2)); return ids.length === picked.length && ids.every(i => picked.includes(i)); };
-  $('ldBody').innerHTML = `<div class="dsg-head ld-head"><div class="row" style="gap:14px;min-width:0"><h2 id="ldTitle">${ic('sun')}Lighting desk</h2>
-      <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(l => `<button class="ld-look" data-look="${l.id}" aria-pressed="${l.id === cur?.id}">${esc(l.name)}</button>`).join('')}</div><button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button></div></div>
-      <div class="row" style="gap:8px">${cur ? `<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"><button class="btn quiet" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="btn primary" id="ldDone">Done</button></div></div>
-    <div class="ld-body"><section class="ld-stage"><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="lookchip" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
-      <div class="ld-mapwrap" id="ldMapWrap">${deskMapSvg()}</div><p class="hint">Click a light to pick it · Shift-click to add · drag across the stage to pick several</p></section>
+  const cue = (l, k) => { const pal = lookPalette(l); return `<button class="ld-look" data-look="${l.id}" aria-pressed="${l.id === cur?.id}"><span class="ld-cueno">${k + 1}</span><span class="ld-cuename">${esc(l.name)}</span><span class="ld-pal" aria-hidden="true">${pal.length ? pal.map(c => `<i style="background:${c}"></i>`).join('') : '<i class="dark"></i>'}</span></button>`; };
+  $('ldBody').innerHTML = `<div class="ld-top">
+      <div class="ld-brand"><span class="ld-logo">${ic('sun')}</span><div><h2 id="ldTitle">Lighting desk</h2><small>${plural(all.length, 'light')} · ${esc(longDate(plan.date))}</small></div></div>
+      <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button></div>
+      <div class="ld-actions">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="ld-done" id="ldDone">Done</button></div></div>
+    <div class="ld-body"><section class="ld-stage" aria-label="Stage">
+      <div class="ld-bar"><span class="ld-label">Stage</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div></div>
+      <div class="ld-mapwrap" id="ldMapWrap">${deskMapSvg()}</div>
+      <p class="ld-tip">Click a light to pick it <span>·</span> Shift-click to add <span>·</span> drag across the stage to pick several</p></section>
       <aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside></div>
-    <div class="ld-foot"><span class="hint">${cur ? `Changes save to <b>${esc(cur.name)}</b>.` : 'Your first change starts Look 1.'} Planning only: nothing is sent to real lights.</span></div>`;
+    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span></div>`;
 }
 // while a fader or the wheel moves: the map and readouts follow, the control in your hand stays put
 function deskLive() {
   if (!desk.open) return;
   $('ldMapWrap').innerHTML = deskMapSvg();
   const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, info = document.querySelector('.ld-pickinfo');
-  if (info) { info.querySelector('.bigsw').style.background = ts.length ? fxSwatch(f, ts[0]) : 'transparent'; info.querySelector('small').textContent = ts.length ? fxName(f, ts[0]) : ''; }
-  for (const el of document.querySelectorAll('#ldColour [data-fx]')) { if (el !== document.activeElement) el.value = f[el.dataset.fx]; el.previousElementSibling.textContent = f[el.dataset.fx]; }
+  if (info) { const sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent', b = info.querySelector('.bigsw'); b.style.setProperty('--c', sw); b.classList.toggle('none', sw === 'transparent'); info.querySelector('small').textContent = ts.length ? fxName(f, ts[0]) : ''; }
+  for (const el of document.querySelectorAll('#ldColour [data-fx]')) { const k = el.dataset.fx; if (el !== document.activeElement) el.value = f[k]; const lab = el.closest('.ld-fader'); lab.style.setProperty('--v', faderPct(k, f[k])); lab.querySelector('output').textContent = f[k] + (k === 'd' ? '%' : ''); }
   const [h, sat] = rgb2hsv(f.r, f.g, f.b), mk = document.querySelector('.ld-mark'); if (mk) { mk.style.display = f.r + f.g + f.b ? '' : 'none'; mk.style.left = `${50 + Math.cos(h * Math.PI / 180) * sat * 50}%`; mk.style.top = `${50 + Math.sin(h * Math.PI / 180) * sat * 50}%`; }
+  const L = curLook(); if (L) for (const b of document.querySelectorAll('.ld-look[aria-pressed="true"] .ld-pal')) b.innerHTML = lookPalette(L).map(c => `<i style="background:${c}"></i>`).join('');
   renderPlot();
 }
 function deskCommit(msg = 'Light colour changed') { if (!fxSnap) return; const before = fxSnap; fxSnap = null; pushUndo(before, stepLabel(msg, before)); recordRev(msg, before); save(); renderAll(); renderDesk(); }
@@ -2847,16 +2932,16 @@ $('deskDlg').addEventListener('click', e => {
   if (t.id === 'ldDone') { closeDesk(); return; }
   if (t.dataset.preset) { const c = DESK_PRESETS.find(p => p[0] === t.dataset.preset)?.[1], ts = deskPicked(); if (ts.length) deskSet(c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); return; }
   if (t.dataset.dgrp) { const k = t.dataset.dgrp, all = deskLights(); deskSel = k === 'all' ? null : new Set(k === 'none' ? [] : all.filter(i => k === 'floor' ? !mountOf(i) : mountOf(i)?.id === k.slice(2)).map(i => i.id)); renderDesk(); return; }
-  if (t.dataset.look) { mutate(() => { plan.lookId = t.dataset.look; }); renderDesk(); return; }
+  if (t.dataset.look) { if (t.dataset.look !== curLook()?.id) { fadeLooksFrom(); mutate(() => { plan.lookId = t.dataset.look; }); renderDesk(); } return; }
   if (t.hasAttribute('data-looknew')) { mutate(() => { const cur = ensureLook(); if (plan.looks.length === 1 && !Object.keys(cur.fx).length) return; const L = { id: uid(), name: `Look ${plan.looks.length + 1}`, fx: JSON.parse(JSON.stringify(cur.fx)) }; plan.looks.push(L); plan.lookId = L.id; }); renderDesk(); setTimeout(() => $('ldLookName')?.select(), 30); return; }
-  if (t.hasAttribute('data-lookdel')) { const cur = curLook(); if (cur) { mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; }, `Deleted ${cur.name}`); renderDesk(); } return; }
+  if (t.hasAttribute('data-lookdel')) { const cur = curLook(); if (cur) { fadeLooksFrom(); mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; }, `Deleted ${cur.name}`); renderDesk(); } return; }
 });
 $('deskDlg').addEventListener('change', e => {
   const t = e.target;
   if (t.id === 'ldLookName') { const cur = curLook(); if (cur && t.value.trim()) { mutate(() => { cur.name = t.value.trim().slice(0, 40); }); renderDesk(); } return; }
   if (t.dataset.fx) deskCommit();
 });
-$('deskDlg').addEventListener('input', e => { const k = e.target.dataset?.fx; if (k) { e.target.previousElementSibling.textContent = e.target.value; deskSet({ [k]: Number(e.target.value) }, true); } });
+$('deskDlg').addEventListener('input', e => { const k = e.target.dataset?.fx; if (k) deskSet({ [k]: Number(e.target.value) }, true); });
 $('deskDlg').addEventListener('keydown', e => {
   const g = e.target.closest?.('[data-ldfx]'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pickDeskFx(g.dataset.ldfx, e.shiftKey); }
   if (e.target.id === 'ldWheel' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {   // turn the hue with the arrows, more or less colour up and down
@@ -4718,7 +4803,7 @@ function renderPlot() {
 
   if (!layersBypass) s += overlaySvg(deckD);
   const selItem = sel?.kind === 'item' ? sel.id : null, selSet = new Set(selIds()), solo = selSet.size === 1;
-  if (!layerOff('beams') && plan.items.some(isFixture)) { const R = roomRect(); s += `<rect class="room-wall" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/>` + beamsSvg(selSet); }
+  if (!layerOff('beams') && plan.items.some(isFixture)) { const R = roomRect(); s += `<rect class="room-wall" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/>` + fadedBeams(beamsSvg(selSet), 'plot'); }
   const lifted = drag?.kind === 'item' && drag.moved ? new Set([drag.id, ...(drag.others || []).map(o => o.id)]) : null;   // gear in hand rises off the deck
   const tr = tracing && selItem === tracing && !layersBypass ? traceSets(tracing) : null;   // signal trace runs while its source stays picked
   svg.classList.toggle('tracing', !!tr);
@@ -6880,7 +6965,7 @@ $('inspector').addEventListener('click', e => {
   if (t.dataset.selitem) { if (itemById(t.dataset.selitem)) { sel = { kind: 'item', id: t.dataset.selitem }; group = null; focusItem(t.dataset.selitem); renderPlot(); renderInspector(); } return; }
   if (t.dataset.selc) { sel = { kind: 'cable', id: t.dataset.selc }; renderPlot(); renderInspector(); return; }
   if (t.id === 'iReaddr') { mutate(() => assignDmx(true), 'Every light re-addressed'); return; }
-  if (t.dataset.look) { mutate(() => { plan.lookId = t.dataset.look; }); return; }
+  if (t.dataset.look) { if (t.dataset.look !== curLook()?.id) { fadeLooksFrom(); mutate(() => { plan.lookId = t.dataset.look; }); } return; }
   if (t.hasAttribute('data-opendesk')) { openDesk(t.dataset.opendesk || null); return; }
   if (t.dataset.level) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.level = t.dataset.level === 'ceiling' ? 'ceiling' : undefined; c.auto = false; }); return; }
   if (t.dataset.route) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.route = t.dataset.route === 'direct' ? 'direct' : undefined; }); return; }
