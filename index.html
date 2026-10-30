@@ -556,6 +556,8 @@ svg text { font-family: var(--f-ui); }
 .c-audio { fill: #2e6a99; } .c-inst { fill: #6b51a3; } .c-power { fill: #b85a22; } .c-infra { fill: #44535e; }
 .c-video { fill: #a3426b; } .c-light { fill: #8a6f2c; }
 .beams { pointer-events: none; }
+.sv-mount line { stroke: var(--ink-2); stroke-width: .05; } .sv-mount rect { fill: none; stroke: var(--ink-2); stroke-width: .08; } .sv-light rect { fill: var(--ink-2); } .sv-light circle { stroke: rgba(0,0,0,.4); stroke-width: .04; }
+.ov-bright { pointer-events: none; } .ov-bright rect { fill: #05070a; }
 .lb-fadein { animation: lbIn .7s cubic-bezier(.4, 0, .2, 1) both; } .lb-fadeout { animation: lbOut .7s cubic-bezier(.4, 0, .2, 1) both; pointer-events: none; }
 @keyframes lbIn { from { opacity: 0; } } @keyframes lbOut { to { opacity: 0; } }
 .room-wall { fill: none; stroke: var(--line-2); stroke-width: calc(var(--labs) * .5); stroke-dasharray: calc(var(--labs) * 3) calc(var(--labs) * 2); pointer-events: none; }
@@ -633,11 +635,19 @@ svg text { font-family: var(--f-ui); }
 .ld-fx:focus-visible { outline: none; } .ld-fx:focus-visible .ld-ring { stroke: var(--ld-acc); }
 .ld-box { fill: rgba(143,132,255,.14); stroke: #a79fff; stroke-width: .1; stroke-dasharray: .4 .25; }
 .ld-face circle { fill: rgba(255,255,255,.08); stroke: rgba(255,255,255,.55); } .ld-face text { fill: rgba(255,255,255,.85); font-weight: 700; pointer-events: none; }
-.ld-face.deep circle { stroke: #f5b544; stroke-dasharray: .5 .3; } .ld-face.dark circle { fill: rgba(0,0,0,.35); stroke: #ff7a7a; stroke-dasharray: .5 .3; } .ld-face.dark text { fill: #ffb4b4; }
+.ld-face.deep circle, .ld-face.side circle { stroke: #f5b544; stroke-dasharray: .5 .3; } .ld-face.side circle { stroke-dasharray: .2 .25; } .ld-face.dark circle { fill: rgba(0,0,0,.35); stroke: #ff7a7a; stroke-dasharray: .5 .3; } .ld-face.dark text { fill: #ffb4b4; }
 .ld-face { pointer-events: none; }
 .ld-faces { display: inline-flex; gap: 6px; margin-right: auto; margin-left: 4px; }
 .ld-fchip { font-size: 11.5px; font-weight: 650; padding: 3px 9px; border-radius: 999px; background: var(--ok-soft); color: var(--ok-ink); }
 .ld-fchip.deep { background: var(--warn-soft); color: var(--warn-ink); } .ld-fchip.dark { background: var(--bad-soft); color: var(--bad-ink); }
+.ld-cardhead { display: flex; align-items: center; justify-content: space-between; }
+.ld-clip { display: inline-flex; gap: 4px; }
+.ld-mini { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 9px; border-radius: 7px; border: 1px solid var(--ld-line2); background: var(--ld-panel); color: var(--ld-ink2); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ld-mini:hover:not(:disabled) { color: var(--ld-ink); border-color: var(--ld-mute); } .ld-mini:disabled { opacity: .4; cursor: default; }
+.ld-mini i { width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
+.ld-keys { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.ld-keys kbd { font: 600 10.5px var(--f-mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--ld-line2); background: var(--ld-bg); color: var(--ld-ink2); margin-left: 6px; } .ld-keys kbd + kbd { margin-left: 0; }
+@media (max-width: 900px) { .ld-keys { display: none; } }
 .ld-tip { margin: 0; text-align: center; font-size: 12px; color: var(--ld-mute); } .ld-tip span { opacity: .5; margin: 0 4px; }
 .ld-colour { background: var(--ld-panel); border-left: 1px solid var(--ld-line); padding: 14px; display: grid; align-content: start; gap: 10px; overflow-y: auto; scrollbar-width: thin; }
 .ld-card { background: var(--ld-card); border: 1px solid var(--ld-line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 10px; }
@@ -2824,10 +2834,25 @@ function assignDmx(all = false) {
   }
 }
 /* The desk: picked on the lighting console, it sets colours for the open look; picked on one light, just that light. */
+const LIGHT_TYPES = () => GEAR_GROUPS.find(g => g[0] === 'Lighting')[1].filter(t => CAT[t].beam);
+// a matching light on the other side of the stage: same type, aim mirrored, same throw and the same colour in every look
+function mirrorLight(id) {
+  const it = itemById(id); if (!it) return;
+  const sp = stagePoly(), cx = (Math.min(...sp.map(q => q[0])) + Math.max(...sp.map(q => q[0]))) / 2, nx = r2(2 * cx - it.x);
+  if (Math.abs(nx - it.x) < .5) { toast(`${itemName(it)} is on the centre line, so it has no other side`); return; }
+  if (plan.items.some(i => i.type === it.type && Math.abs(i.x - nx) < .5 && Math.abs(i.y - it.y) < .5)) { toast('There’s already a matching light there'); return; }
+  mutate(() => {
+    const n = plan.items.filter(i => i.type === it.type).length, m = addItem(it.type, nx, it.y);
+    m.rot = (360 - (it.rot || 0)) % 360; for (const k of ['throw', 'up', 'dmxCh']) if (it[k] != null) m[k] = it[k];
+    m.label = `${CAT[it.type].short} ${n + 1}`;
+    for (const L of plan.looks || []) if (L.fx[it.id]) L.fx[m.id] = { ...L.fx[it.id] };
+    autoPatch(); sel = { kind: 'item', id: m.id };
+  }, `${itemName(it)} mirrored to stage ${nx > cx ? 'left' : 'right'}`);
+}
 const DESK_PRESETS = [['Warm white', { r: 0, g: 0, b: 0, w: 255 }], ['Cool white', { r: 110, g: 150, b: 255, w: 180 }], ['Red', { r: 255, g: 0, b: 0, w: 0 }], ['Amber', { r: 255, g: 110, b: 0, w: 0 }],
   ['Yellow', { r: 255, g: 200, b: 0, w: 0 }], ['Green', { r: 0, g: 255, b: 40, w: 0 }], ['Cyan', { r: 0, g: 210, b: 255, w: 0 }], ['Blue', { r: 0, g: 40, b: 255, w: 0 }],
   ['Congo', { r: 80, g: 0, b: 255, w: 0 }], ['Magenta', { r: 255, g: 0, b: 180, w: 0 }], ['Pink', { r: 255, g: 50, b: 110, w: 40 }]];
-let deskSel = null, fxSnap = null;   // the lights picked on the desk (null: all of them); the state before a fader or wheel drag
+let deskSel = null, fxSnap = null, deskClip = null;   // the lights picked on the desk (null: all of them); the state before a fader or wheel drag
 const deskLights = () => plan.items.filter(isFixture);
 const fxName = (f, it) => { if (!f.d) return 'Off'; if (it && !cat(it).rgbw) return `White${f.d < 100 ? ` ${f.d}%` : ''}`; const p = DESK_PRESETS.find(([, c]) => ['r', 'g', 'b', 'w'].every(k => c[k] === f[k])); return `${p ? p[0] : `R${f.r} G${f.g} B${f.b} W${f.w}`}${f.d < 100 ? ` ${f.d}%` : ''}`; };
 const fxSwatch = (f, it) => { const c = fxRGB(f, it); return c ? `rgb(${c.join(',')})` : 'transparent'; };
@@ -2861,7 +2886,7 @@ function deskMapSvg() {
   const dots = deskLights().map(i => { const f = fxOf(i), sw = fxSwatch(f, i), rr = U * 1.2;
     return `<g class="ld-fx${picked.has(i.id) ? ' on' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${picked.has(i.id)}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .7)}" style="stroke-width:${f3(U * .45)}"/><circle class="ld-dot${sw === 'transparent' ? ' dark' : ''}" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr)}" style="fill:${sw === 'transparent' ? 'var(--surface)' : sw};stroke-width:${f3(U * .2)}"/><text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px">${esc(itemName(i))}</text></g>`; }).join('');
   const L = curLook(), faces = stagePeople().map(p => { const st = faceState(p, L), nm = personById(p.personId)?.name || itemName(p);
-    return `<g class="ld-face ${st}"><title>${esc(nm)}: ${st === 'lit' ? 'face lit' : st === 'deep' ? 'lit only in deep colour' : 'in the dark'}</title><circle cx="${f3(p.x)}" cy="${f3(p.y)}" r="${f3(U * 1.5)}" style="stroke-width:${f3(U * .28)}"/><text x="${f3(p.x)}" y="${f3(p.y + U * .5)}" text-anchor="middle" style="font-size:${f3(U * 1.3)}px">${esc(initials(nm))}</text></g>`; }).join('');
+    return `<g class="ld-face ${st}"><title>${esc(nm)}: ${st === 'lit' ? 'face lit' : st === 'deep' ? 'lit only in deep colour' : st === 'side' ? 'lit from one side only' : 'in the dark'}</title><circle cx="${f3(p.x)}" cy="${f3(p.y)}" r="${f3(U * 1.5)}" style="stroke-width:${f3(U * .28)}"/><text x="${f3(p.x)}" y="${f3(p.y + U * .5)}" text-anchor="middle" style="font-size:${f3(U * 1.3)}px">${esc(initials(nm))}</text></g>`; }).join('');
   return `<svg class="ld-map" id="ldMap" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
     <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${faces}${dots}</svg>`;
 }
@@ -2892,7 +2917,7 @@ function deskColourHtml() {
   const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, white = ts.length > 0 && ts.every(i => !cat(i).rgbw), [h, sat] = rgb2hsv(f.r, f.g, f.b), on = f.r + f.g + f.b > 0;
   const mx = 50 + Math.cos(h * Math.PI / 180) * sat * 50, my = 50 + Math.sin(h * Math.PI / 180) * sat * 50, sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent';
   return `<div class="ld-card ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'No lights picked'}</b><small>${ts.length ? esc(fxName(f, ts[0])) : 'Pick lights on the stage'}</small></div></div>
-    <div class="ld-card"><div class="ld-label">Colour</div>
+    <div class="ld-card"><div class="ld-cardhead"><span class="ld-label">Colour</span><span class="ld-clip"><button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button></span></div>
       <div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div>
       <div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><i></i><span>${n.replace(' white', '')}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><i></i><span>Off</span></button></div>
       ${white ? '<p class="ld-note">White-only lights take the dimmer only.</p>' : ''}</div>
@@ -2914,13 +2939,13 @@ function renderDesk() {
       <div class="ld-mapwrap" id="ldMapWrap">${deskMapSvg()}</div>
       <p class="ld-tip">Click a light to pick it <span>·</span> Shift-click to add <span>·</span> drag across the stage to pick several</p></section>
       <aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside></div>
-    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span></div>`;
+    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span><span class="ld-keys" aria-label="Keys: 1 to 9 looks, up and down dimmer, A all lights, C copy, V paste"><kbd>1–9</kbd> looks <kbd>↑</kbd><kbd>↓</kbd> dimmer <kbd>A</kbd> all <kbd>C</kbd><kbd>V</kbd> copy, paste</span></div>`;
 }
 // how many faces the open look lights, for the desk's stage bar
 function facesSummary() {
   const ps = stagePeople(); if (!ps.length) return '';
-  const L = curLook(), n = { lit: 0, deep: 0, dark: 0 }; for (const p of ps) n[faceState(p, L)]++;
-  return `<span class="ld-fchip lit" title="Faces lit from the front">${n.lit} lit</span>${n.deep ? `<span class="ld-fchip deep" title="Lit only in deep colour">${n.deep} deep colour</span>` : ''}${n.dark ? `<span class="ld-fchip dark" title="No light on their face">${n.dark} in the dark</span>` : ''}`;
+  const L = curLook(), n = { lit: 0, deep: 0, side: 0, dark: 0 }; for (const p of ps) n[faceState(p, L)]++;
+  return `<span class="ld-fchip lit" title="Faces lit from the front">${n.lit} lit</span>${n.deep ? `<span class="ld-fchip deep" title="Lit only in deep colour">${n.deep} deep colour</span>` : ''}${n.side ? `<span class="ld-fchip deep" title="Lit from one side only">${n.side} one side</span>` : ''}${n.dark ? `<span class="ld-fchip dark" title="No light on their face">${n.dark} in the dark</span>` : ''}`;
 }
 // while a fader or the wheel moves: the map and readouts follow, the control in your hand stays put
 function deskLive() {
@@ -2947,6 +2972,8 @@ $('deskDlg').addEventListener('click', e => {
   if (e.target === $('deskDlg')) { closeDesk(); return; }
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'ldDone') { closeDesk(); return; }
+  if (t.hasAttribute('data-fxcopy')) { deskCopy(); return; }
+  if (t.hasAttribute('data-fxpaste')) { deskPaste(); return; }
   if (t.dataset.preset) { const c = DESK_PRESETS.find(p => p[0] === t.dataset.preset)?.[1], ts = deskPicked(); if (ts.length) deskSet(c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); return; }
   if (t.dataset.dgrp) { const k = t.dataset.dgrp, all = deskLights(); deskSel = k === 'all' ? null : new Set(k === 'none' ? [] : all.filter(i => k === 'floor' ? !mountOf(i) : mountOf(i)?.id === k.slice(2)).map(i => i.id)); renderDesk(); return; }
   if (t.dataset.look) { if (t.dataset.look !== curLook()?.id) { fadeLooksFrom(); mutate(() => { plan.lookId = t.dataset.look; }); renderDesk(); } return; }
@@ -2968,6 +2995,19 @@ $('deskDlg').addEventListener('keydown', e => {
   }
   if (e.key === 'Enter' && e.target.id === 'ldLookName') e.target.blur();
 });
+function deskCopy() { const ts = deskPicked(); if (!ts.length) return; const f = fxOf(ts[0]); deskClip = { r: f.r, g: f.g, b: f.b, w: f.w, d: f.d }; toast(`Copied ${fxName(f, ts[0])}`); renderDesk(); }
+function deskPaste() { if (deskClip && deskPicked().length) deskSet({ ...deskClip }); }
+// the desk's keys: 1–9 looks, ↑ ↓ dimmer (Shift for big steps), A all lights, C copy and V paste a colour
+function deskKey(e) {
+  if (e.target.matches?.('input[type=text], input[type=range]') || e.ctrlKey || e.metaKey || e.altKey) return false;
+  const looks = plan.looks || [];
+  if (/^[1-9]$/.test(e.key) && looks[+e.key - 1]) { const L = looks[+e.key - 1]; if (L.id !== curLook()?.id) { fadeLooksFrom(); mutate(() => { plan.lookId = L.id; }); renderDesk(); } return true; }
+  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.target.id !== 'ldWheel') { const ts = deskPicked(); if (!ts.length) return true; const d = clamp(fxOf(ts[0]).d + (e.key === 'ArrowUp' ? 1 : -1) * (e.shiftKey ? 25 : 5), 0, 100); deskSet({ d }); return true; }
+  if (e.key.toLowerCase() === 'a') { deskSel = null; renderDesk(); return true; }
+  if (e.key.toLowerCase() === 'c') { deskCopy(); return true; }
+  if (e.key.toLowerCase() === 'v') { deskPaste(); return true; }
+  return false;
+}
 function pickDeskFx(id, add) { if (add) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.has(id) ? deskSel.delete(id) : deskSel.add(id); } else deskSel = new Set([id]); renderDesk(); }
 $('deskDlg').addEventListener('pointerdown', e => {
   const wheel = e.target.closest('#ldWheel');
@@ -3004,7 +3044,7 @@ function lightingInsp(it) {
   const C = cat(it);
   if (C.mount) {
     const n = plan.items.filter(i => mountOf(i) === it).length;
-    return `<section class="isec"><h3>Hanging position <span>${plural(n, 'light')}</span></h3>${field('iLen', 'Length', mVal(prop(it, 'w')), 'number', 'step=".1" min=".5"', 'm')}
+    return `<section class="isec"><h3>Hanging position <span>${plural(n, 'light')}</span></h3><div class="grid2">${field('iLen', 'Length', mVal(prop(it, 'w')), 'number', 'step=".1" min=".5"', 'm')}${field('iMountH', 'Height', mVal(mountH(it)), 'number', 'step=".1" min="1"', 'm')}</div>
       <p class="hint">Lights placed on it hang from it, and its lights share a DMX line.</p></section>`;
   }
   if (C.ldesk) {
@@ -3016,11 +3056,14 @@ function lightingInsp(it) {
   const w = dmxWhere().get(it.id), n = dmxCh(it), hang = mountOf(it);
   const where = w ? `Universe ${w.line.universe} · line ${w.line.name}${it.dmxA ? ` · ${it.dmxA}–${it.dmxA + n - 1}` : ''}` : 'Not on a DMX line';
   return `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><div class="grid2">${field('iDmxA', 'Start address', it.dmxA || '', 'number', 'min="1" max="512" step="1"')}${field('iDmxCh', 'Channels (mode)', n, 'number', 'min="1" max="64" step="1"')}</div>
+    ${isFixture(it) ? `<div class="field" style="margin-top:8px"><label for="iLType">Light type</label><select id="iLType">${LIGHT_TYPES().map(t => `<option value="${t}" ${t === it.type ? 'selected' : ''}>${esc(CAT[t].name)}</option>`).join('')}</select></div>` : ''}
+    ${(() => { const a = frontAngle(it); return a == null ? '' : `<p class="hint" style="margin:8px 0 0">${hang ? `Hangs at ${uLen(fixtureH(it))}. ` : ''}Hits faces at <b>${Math.round(a)}°</b>${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ', a good angle'} (30–50° is best).</p>`; })()}
     ${isFixture(it) && !hang ? `<label class="row" for="iUp" style="gap:8px;flex-wrap:nowrap;margin-top:8px"><input type="checkbox" id="iUp" ${isUp(it) ? 'checked' : ''} style="accent-color:var(--accent)"><span>Shines upward<small class="hint" style="display:block">Up a wall, the set or a backdrop</small></span></label>` : ''}
     ${isFixture(it) ? `<div class="grid2" style="margin-top:8px">${field('iThrow', 'Throw', mVal(throwOf(it)), 'number', 'step=".1" min=".5"', 'm')}<div class="field"><span>Hangs on</span><p class="hint" style="margin:6px 0 0">${hang ? esc(itemName(hang)) : 'Floor or stand'}</p></div></div>
     <p class="hint">Drag the yellow dot on the plot to aim it.</p>` : ''}</section>
     ${isFixture(it) ? `<section class="isec desk"><h3>Colour <span>${esc(curLook()?.name || 'before any look')}</span></h3><div class="row" style="gap:10px;flex-wrap:nowrap;margin-bottom:10px"><span class="bigsw" style="background:${fxSwatch(fxOf(it), it)}"></span><b>${esc(fxName(fxOf(it), it))}</b></div>
-      <button class="btn primary block" data-opendesk="${it.id}">${ic('sun', 'sm')}Open the lighting desk</button></section>` : ''}`;
+      <button class="btn primary block" data-opendesk="${it.id}">${ic('sun', 'sm')}Open the lighting desk</button>
+      <button class="btn quiet block" data-mirror="${it.id}" style="margin-top:6px" title="Place a matching light on the other side of the stage, aimed the same way">${ic('copy', 'sm')}Mirror to the other side</button></section>` : ''}`;
 }
 // the lighting patch: every light by universe and address, with where it hangs, its line and its power
 const dmxAddr = r => r.u && r.a ? `${r.u}.${String(r.a).padStart(3, '0')}` : '—';
@@ -3040,22 +3083,46 @@ function lightingSheetHtml(rows, head) {
     <div class="tablewrap"><table class="lighttbl"><thead><tr>${LIGHT_COLS.map(c => `<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr class="${bad.has(r.it.id) ? 'flag' : ''}"><td class="mono">${dmxAddr(r)}</td><td><b>${esc(r.name)}</b></td><td>${esc(r.type)}</td><td class="num">${r.ch}</td><td>${esc(r.hang)}</td><td>${esc(r.line)}</td><td>${esc(r.power)}</td></tr>`).join('')}</tbody></table></div>
     ${lines.length ? `<h3 class="dmxh">DMX lines</h3><div class="dmxchains">${lines.map(chain).join('')}</div><div class="row dmxfoot"><p class="hint">Each line runs light to light in this order. End every line with a DMX terminator.</p><span class="row" style="gap:6px"><button class="btn quiet" data-opendesk>${ic('sun', 'sm')}Lighting desk</button><button class="btn quiet" id="lightReaddr" title="Number every light in the order its line runs">${ic('wand', 'sm')}Re-address in line order</button></span></div>${looksSheetHtml()}` : '<p class="hint">Add a lighting console and the lights are chained into DMX lines here.</p>'}</section>`;
 }
+/* Heights: trusses, pipes and bars hang at a trim height (set in their details; under the ceiling by default). A front light
+   reads best on faces from about 30–50° above them: flatter glares and throws shadows on the back wall, steeper leaves eyes dark. */
+const MOUNT_H = { truss: 5, light_pipe: 5, foh_bar: 6 };   // metres
+const ceilH = () => plan.settings.ceilH ?? fromM(4.5);
+const mountH = m => m.h ?? Math.min(fromM(MOUNT_H[m.type] || 5), ceilH() - fromM(.3));
+const fixtureH = it => { const m = mountOf(it); return m ? mountH(m) - fromM(.35) : it.type === 'light_stand' ? fromM(2.5) : fromM(.3); };
+const FACE_H = fromM(1.6);
+// the angle a front light comes down at onto faces where it lands, or null for lights that aren't front light
+function frontAngle(it) {
+  if (!isFixture(it) || isUp(it) || !mountOf(it) && it.type !== 'light_stand') return null;
+  const g = beamGeom(it); if (g.uy > -.2 || !inPoly(g.cx, g.cy, stagePoly())) return null;   // aimed upstage onto the stage: light from the house side
+  return Math.atan2(fixtureH(it) - FACE_H, throwOf(it)) * 180 / Math.PI;
+}
+function angleIssues() {
+  const out = [];
+  for (const it of plan.items) {
+    const a = frontAngle(it); if (a == null) continue;
+    if (a < 25) out.push({ lvl: 'warn', id: it.id, msg: `${itemName(it)} hits faces at ${Math.round(a)}°: too flat. It will glare in people's eyes and throw shadows on the back wall. Hang it higher or aim it closer.` });
+    else if (a > 60) out.push({ lvl: 'warn', id: it.id, msg: `${itemName(it)} comes down at ${Math.round(a)}°: too steep. Eyes will be in shadow. Hang it further out front or aim it further.` });
+  }
+  return out;
+}
 /* Faces: is each person on stage lit from the front? A light counts when its pool reaches where they stand and it's in front of
    them or about overhead (light from behind lights hair, not faces; uplighting lights the set). Deep colour on its own (blue,
    congo, red) reads as dark on camera, so white in the mix is measured too. */
 const fxIn = (it, L) => ({ ...FX_DEF, ...(L?.fx?.[it.id] || {}) });
 function faceLight(p, L) {
-  let face = 0, white = 0;
+  let face = 0, white = 0, left = 0, right = 0, mid = 0;
   for (const it of plan.items) {
     if (!isFixture(it) || isUp(it) || it.y < p.y - fromM(.5)) continue;
     const f = fxIn(it, L), col = fxRGB(f, it); if (!col) continue;
     const { cx, cy, r, ux, uy } = beamGeom(it), dx = p.x - cx, dy = p.y - cy, along = dx * ux + dy * uy, across = -dx * uy + dy * ux;
     const q2 = (along / (mountOf(it) ? r : r * 1.25)) ** 2 + (across / r) ** 2; if (q2 > 1) continue;
     const c = f.d / 100 * (1 - .6 * q2); face += c; white += c * Math.min(...col) / 255;
+    const dx2 = it.x - p.x; if (Math.abs(dx2) < fromM(1)) mid += c; else if (dx2 < 0) left += c; else right += c;   // which side of them it comes from
   }
-  return { face, white };
+  return { face, white, left, right, mid };
 }
-const faceState = (p, L) => { const { face, white } = faceLight(p, L); return face < .3 ? 'dark' : white < .2 ? 'deep' : 'lit'; };
+// dark, lit only in deep colour, lit from one side only (a hard shadow down the other side of the face), or lit
+const faceState = (p, L) => { const { face, white, left, right, mid } = faceLight(p, L); return face < .3 ? 'dark' : white < .2 ? 'deep' : mid < .15 && Math.min(left, right) < .1 ? 'side' : 'lit'; };
 const stagePeople = () => plan.items.filter(i => cat(i).shape === 'person' && inPoly(i.x, i.y, stagePoly()));
 function faceIssues() {
   const people = stagePeople(), lights = plan.items.filter(i => isFixture(i) && !isUp(i));
@@ -3067,9 +3134,10 @@ function faceIssues() {
   const named = list => plan.looks?.length ? ` in ${list.map(([L]) => L.name).join(', ').replace(/, ([^,]*)$/, ' and $1')}` : '';
   const who = p => personById(p.personId)?.name || itemName(p), out = [];
   for (const { p, s: v } of st) {
-    const dark = v.filter(([, x]) => x === 'dark'), deep = v.filter(([, x]) => x === 'deep');
+    const dark = v.filter(([, x]) => x === 'dark'), deep = v.filter(([, x]) => x === 'deep'), side = v.filter(([, x]) => x === 'side');
     if (dark.length) out.push({ lvl: 'warn', id: p.id, msg: `${who(p)} is in the dark${named(dark)}: no light reaches their face from the front.` });
     if (deep.length) out.push({ lvl: 'warn', id: p.id, msg: `${who(p)} is lit only in deep colour${named(deep)}, so their face may look dark on camera. Add some white.` });
+    if (side.length) out.push({ lvl: 'warn', id: p.id, msg: `${who(p)} is lit from one side only${named(side)}, so half their face will be in shadow on camera. Add a front light from the other side.` });
   }
   return out;
 }
@@ -3384,6 +3452,7 @@ function warnings() {
   for (const x of placementIssues()) out.push(x);
   for (const x of dmxIssues()) out.push(x);
   for (const x of faceIssues()) out.push(x);
+  for (const x of angleIssues()) out.push(x);
   return out;
 }
 
@@ -6684,7 +6753,7 @@ function closePops() { $('weekPop').hidden = true; $('weekBtn').setAttribute('ar
 document.addEventListener('keydown', e => {
   if (!$('histDlg').hidden) { if (e.key === 'Escape') $('histDlg').hidden = true; return; }
   if (!$('cmdk').hidden) return;
-  if (!$('deskDlg').hidden) { if (e.key === 'Escape') closeDesk(); return; }
+  if (!$('deskDlg').hidden) { if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
   if (!$('rackDlg').hidden) {
     const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
     if (e.key === 'Escape') closeRack();
@@ -6994,6 +7063,12 @@ $('inspector').addEventListener('change', e => {
       case 'iDmxCh': if (n > 0) it.dmxCh = clamp(Math.round(n), 1, 64); break;
       case 'iThrow': if (n > 0) it.throw = r2(fromM(mIn(n))); break;
       case 'iLen': if (n > 0) it.w = fromM(mIn(n)); break;
+      case 'iMountH': if (n > 0) it.h = r2(fromM(mIn(n))); break;
+      case 'iLType': if (CAT[t.value]?.beam && t.value !== it.type) {   // same place, aim, address and colours; a new name if it had the old one's
+        const was = it.type; it.type = t.value; delete it.dmxCh; delete it.watts;
+        if (!it.labelEdited && (!it.label || it.label.startsWith(CAT[was].short + ' '))) { const nums = plan.items.filter(i => i.type === it.type && i !== it).map(i => +(/ (\d+)$/.exec(i.label || '')?.[1] || 0)); it.label = `${CAT[it.type].short} ${Math.max(0, ...nums) + 1}`; }
+        if (!cat(it).rgbw) for (const L of plan.looks || []) if (L.fx[it.id]) L.fx[it.id] = { ...FX_DEF, d: L.fx[it.id].d };
+      } break;
       case 'iBoxes': if (n > 0) { it.boxes = clamp(Math.round(n), 1, LA_BOXES[it.type]?.max || 24); delete it.watts; } break;
       case 'iOutlets': it.outlets = clamp(n, 1, 12); break;
       case 'iCirc': it.circuits = Math.max(1, n); break; case 'iAmps': it.amps = Math.max(1, n); break; case 'iVolts': it.volts = Math.max(1, n); break;
@@ -7018,6 +7093,7 @@ $('inspector').addEventListener('click', e => {
   if (t.id === 'iReaddr') { mutate(() => assignDmx(true), 'Every light re-addressed'); return; }
   if (t.dataset.look) { if (t.dataset.look !== curLook()?.id) { fadeLooksFrom(); mutate(() => { plan.lookId = t.dataset.look; }); } return; }
   if (t.hasAttribute('data-opendesk')) { openDesk(t.dataset.opendesk || null); return; }
+  if (t.dataset.mirror) { mirrorLight(t.dataset.mirror); return; }
   if (t.dataset.level) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.level = t.dataset.level === 'ceiling' ? 'ceiling' : undefined; c.auto = false; }); return; }
   if (t.dataset.route) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.route = t.dataset.route === 'direct' ? 'direct' : undefined; }); return; }
   if (t.dataset.gmodel) {
@@ -7424,7 +7500,7 @@ const LAYERS = [['people', 'People', 'users'], ['gear', 'Gear', 'box'], ['beams'
 /* ===================================================================
    Views: overlays you switch on in Layers (never saved into the week, never printed)
    =================================================================== */
-const OVERLAYS = [['owners', 'Whose gear', 'users', 'A colour halo around each person’s gear'],
+const OVERLAYS = [['owners', 'Whose gear', 'users', 'A colour halo around each person’s gear'], ['bright', 'Brightness', 'sun', 'Where the open look is bright or dim'],
   ['sight', 'Sightlines from FOH', 'eye', 'What the desk can’t see past'], ['heat', 'Sound coverage', 'zap', 'Loudest red, quietest blue']];
 const overOn = k => !layersBypass && !!cableView.over?.has(k);
 // the room's walls: the back of the stage, the sides of the house (or the stage, if it's wider) and the back of the house
@@ -7467,6 +7543,7 @@ const LOUD = { main_spk: [104, 1, 'wide'], la_main: [108, 1, 'wide'], sub: [100,
 function overlaySvg(deckD) {
   let s = '';
   if (overOn('heat')) s += heatSvg();
+  if (overOn('bright')) s += brightSvg();
   if (overOn('sight')) s += sightSvg(deckD);
   if (overOn('owners')) s += ownersSvg();
   return s;
@@ -7489,6 +7566,20 @@ function sightSvg(deckD) {
     if (hid) s += `<g class="ov-hidden" transform="translate(${f3(p.x - .9)} ${f3(p.y - .9)})"><title>${esc(itemName(p))} is hidden from FOH by ${esc(itemName(hid.o))}</title><circle r=".42"/><path d="M-.22 0Q0 -.2 .22 0Q0 .2 -.22 0ZM-.26 .22L.26 -.22"/></g>`;
   }
   return s;
+}
+// brightness: the stage veiled darker wherever the open look's light is weak (uplighting lights the set, so it doesn't count)
+function brightSvg() {
+  const lights = plan.items.filter(i => isFixture(i) && !isUp(i)); if (!lights.length) return '';
+  const sp = stagePoly(), xs = sp.map(q => q[0]), ys = sp.map(q => q[1]), step = Math.max(.6, (Math.max(...xs) - Math.min(...xs)) / 40), L = curLook();
+  const geo = lights.map(it => { const f = fxIn(it, L), col = fxRGB(f, it); return col && { ...beamGeom(it), hung: !!mountOf(it), k: f.d / 100 * Math.max(.25, (.2126 * col[0] + .7152 * col[1] + .0722 * col[2]) / 255) }; }).filter(Boolean);
+  let s = `<filter id="brBlur" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="${f3(step * .8)}"/></filter><g class="ov-bright" clip-path="url(#deckclip)"><g filter="url(#brBlur)">`;
+  for (let y = Math.min(...ys) + step / 2; y < Math.max(...ys); y += step) for (let x = Math.min(...xs) + step / 2; x < Math.max(...xs); x += step) {
+    let I = 0;
+    for (const g of geo) { const dx = x - g.cx, dy = y - g.cy, a = dx * g.ux + dy * g.uy, c = -dx * g.uy + dy * g.ux, q2 = (a / (g.hung ? g.r : g.r * 1.25)) ** 2 + (c / g.r) ** 2; if (q2 < 1.3) I += g.k * Math.max(0, 1 - .75 * q2); }
+    const v = Math.max(0, .62 * (1 - Math.min(1, I)));
+    if (v > .02) s += `<rect x="${f3(x - step / 2)}" y="${f3(y - step / 2)}" width="${f3(step + .02)}" height="${f3(step + .02)}" style="fill-opacity:${f3(v)}"/>`;
+  }
+  return s + '</g></g>';
 }
 function heatSvg() {
   const src = plan.items.filter(i => LOUD[i.type]); if (!src.length) return '';
@@ -7609,7 +7700,7 @@ function sideSvg() {
   s += `<rect class="sv-deck" x="0" y="0" width="${W}" height=".7"/>`;
   const tk = imperial() ? 3 : fromM(1);   // a tick every metre, or every 3 ft
   for (let m = 1; m * tk < ceil; m++) s += `<line class="sv-tick" x1="${x0}" x2="${x0 + .5}" y1="${f3(-m * tk)}" y2="${f3(-m * tk)}"/><text class="sv-cap" x="${x0 + .7}" y="${f3(-m * tk + .25)}">${imperial() ? `${m * 3} ft` : `${m} m`}</text>`;
-  const items = plan.items.filter(i => itemShown(i) && !CAT[i.type]?.walk && inPoly(i.x, i.y, [[-6, -6], [W + 6, -6], [W + 6, st.d + 2], [-6, st.d + 2]])).sort((a, b) => a.y - b.y);   // upstage first, so the front row draws over it
+  const items = plan.items.filter(i => itemShown(i) && !CAT[i.type]?.walk && !cat(i).mount && !mountOf(i) && inPoly(i.x, i.y, [[-6, -6], [W + 6, -6], [W + 6, st.d + 2], [-6, st.d + 2]])).sort((a, b) => a.y - b.y);   // upstage first, so the front row draws over it
   for (const r of items.filter(i => cat(i).shape === 'platform')) { const hw = Number(prop(r, 'w')) / 2, h = r.h ?? fromM(.4);
     s += `<rect class="sv-riser" x="${f3(r.x - hw)}" y="${f3(-h)}" width="${f3(hw * 2)}" height="${f3(h)}"><title>${esc(itemName(r))} · ${uLen(h)}</title></rect>`; }
   for (const it of items.filter(i => cat(i).shape !== 'platform')) {
@@ -7621,6 +7712,12 @@ function sideSvg() {
       s += `<g class="sv-gear${type === 'main_spk' ? ' sv-spk' : ''}">${tip}<line x1="${it.x}" x2="${it.x}" y1="${f3(-base)}" y2="${f3(-base - h + box)}"/><rect x="${f3(it.x - hw * .6)}" y="${f3(-base - h)}" width="${f3(hw * 1.2)}" height="${f3(box)}" rx=".12"/></g>`; }
     else if (type === 'la_main') { const hang = fromM(2); s += `<g class="sv-gear sv-spk">${tip}<line class="sv-rig" x1="${it.x}" x2="${it.x}" y1="${f3(-ceil)}" y2="${f3(-ceil + .6)}"/><rect x="${f3(it.x - hw)}" y="${f3(-ceil + .6)}" width="${f3(hw * 2)}" height="${f3(hang)}" rx=".1"/></g>`; }
     else s += `<rect class="sv-gear-b" style="opacity:${fade}" x="${f3(it.x - hw)}" y="${f3(-base - h)}" width="${f3(hw * 2)}" height="${f3(h)}" rx=".12">${tip}</rect>`;
+  }
+  for (const m of plan.items.filter(i => cat(i).mount && i.y < st.d + 2 && itemShown(i))) {   // trusses and pipes at their height, their lights hanging below
+    const hw = Number(prop(m, 'w')) / 2, h = mountH(m);
+    s += `<g class="sv-mount">${'<title>' + esc(itemName(m)) + ' · ' + uLen(h) + ' up</title>'}<line class="sv-rig" x1="${f3(m.x - hw * .6)}" x2="${f3(m.x - hw * .6)}" y1="${f3(-ceil)}" y2="${f3(-h)}"/><line class="sv-rig" x1="${f3(m.x + hw * .6)}" x2="${f3(m.x + hw * .6)}" y1="${f3(-ceil)}" y2="${f3(-h)}"/><rect x="${f3(m.x - hw)}" y="${f3(-h - (cat(m).shape === 'truss' ? .5 : .15))}" width="${f3(hw * 2)}" height="${cat(m).shape === 'truss' ? '.8' : '.3'}" rx=".1"/></g>`;
+    for (const f of plan.items.filter(i => mountOf(i) === m)) { const c = fxSwatch(fxOf(f), f);
+      s += `<g class="sv-light"><title>${esc(itemName(f))} · ${uLen(fixtureH(f))} up</title><rect x="${f3(f.x - .3)}" y="${f3(-h + .3)}" width=".6" height=".7" rx=".12"/><circle cx="${f3(f.x)}" cy="${f3(-h + 1.05)}" r=".2" style="fill:${c === 'transparent' ? 'var(--surface)' : c}"/></g>`; }
   }
   for (const c of plan.cables.filter(c => c.level === 'ceiling')) {   // overhead runs: up, across under the ceiling, back down
     const a = itemById(c.from), z = itemById(c.to); if (!a || !z) continue; const y = -ceil + .25;
