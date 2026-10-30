@@ -630,6 +630,12 @@ svg text { font-family: var(--f-ui); }
 .ld-ring { fill: none; stroke: transparent; } .ld-fx.on .ld-ring { stroke: #fff; } .ld-fx.on text { fill: #fff; }
 .ld-fx:focus-visible { outline: none; } .ld-fx:focus-visible .ld-ring { stroke: var(--ld-acc); }
 .ld-box { fill: rgba(143,132,255,.14); stroke: #a79fff; stroke-width: .1; stroke-dasharray: .4 .25; }
+.ld-face circle { fill: rgba(255,255,255,.08); stroke: rgba(255,255,255,.55); } .ld-face text { fill: rgba(255,255,255,.85); font-weight: 700; pointer-events: none; }
+.ld-face.deep circle { stroke: #f5b544; stroke-dasharray: .5 .3; } .ld-face.dark circle { fill: rgba(0,0,0,.35); stroke: #ff7a7a; stroke-dasharray: .5 .3; } .ld-face.dark text { fill: #ffb4b4; }
+.ld-face { pointer-events: none; }
+.ld-faces { display: inline-flex; gap: 6px; margin-right: auto; margin-left: 4px; }
+.ld-fchip { font-size: 11.5px; font-weight: 650; padding: 3px 9px; border-radius: 999px; background: rgba(61,220,132,.12); color: #8fe0a8; border: 1px solid rgba(61,220,132,.25); }
+.ld-fchip.deep { background: rgba(245,181,68,.12); color: #f5c76e; border-color: rgba(245,181,68,.3); } .ld-fchip.dark { background: rgba(255,122,122,.12); color: #ffa3a3; border-color: rgba(255,122,122,.3); }
 .ld-tip { margin: 0; text-align: center; font-size: 12px; color: var(--ld-mute); } .ld-tip span { opacity: .5; margin: 0 4px; }
 .ld-colour { background: var(--ld-panel); border-left: 1px solid var(--ld-line); padding: 14px; display: grid; align-content: start; gap: 10px; overflow-y: auto; scrollbar-width: thin; }
 .ld-card { background: var(--ld-card); border: 1px solid var(--ld-line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 10px; }
@@ -2852,8 +2858,10 @@ function deskMapSvg() {
   const ms = mounts().map(m => { const r = (m.rot || 0) * Math.PI / 180, hw = Number(prop(m, 'w')) / 2, dx = Math.cos(r) * hw, dy = Math.sin(r) * hw; return `<line class="ld-mount" x1="${f3(m.x - dx)}" y1="${f3(m.y - dy)}" x2="${f3(m.x + dx)}" y2="${f3(m.y + dy)}"/>`; }).join('');
   const dots = deskLights().map(i => { const f = fxOf(i), sw = fxSwatch(f, i), rr = U * 1.2;
     return `<g class="ld-fx${picked.has(i.id) ? ' on' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${picked.has(i.id)}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .7)}" style="stroke-width:${f3(U * .45)}"/><circle class="ld-dot${sw === 'transparent' ? ' dark' : ''}" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr)}" style="fill:${sw === 'transparent' ? 'var(--surface)' : sw};stroke-width:${f3(U * .2)}"/><text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px">${esc(itemName(i))}</text></g>`; }).join('');
+  const L = curLook(), faces = stagePeople().map(p => { const st = faceState(p, L), nm = personById(p.personId)?.name || itemName(p);
+    return `<g class="ld-face ${st}"><title>${esc(nm)}: ${st === 'lit' ? 'face lit' : st === 'deep' ? 'lit only in deep colour' : 'in the dark'}</title><circle cx="${f3(p.x)}" cy="${f3(p.y)}" r="${f3(U * 1.5)}" style="stroke-width:${f3(U * .28)}"/><text x="${f3(p.x)}" y="${f3(p.y + U * .5)}" text-anchor="middle" style="font-size:${f3(U * 1.3)}px">${esc(initials(nm))}</text></g>`; }).join('');
   return `<svg class="ld-map" id="ldMap" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
-    <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${dots}</svg>`;
+    <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${faces}${dots}</svg>`;
 }
 /* Changing looks: the beams as they were fade out over the new ones (both on the plot and in the desk), about 0.7 s. */
 let lookFade = null;
@@ -2900,16 +2908,23 @@ function renderDesk() {
       <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button></div>
       <div class="ld-actions">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="ld-done" id="ldDone">Done</button></div></div>
     <div class="ld-body"><section class="ld-stage" aria-label="Stage">
-      <div class="ld-bar"><span class="ld-label">Stage</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div></div>
+      <div class="ld-bar"><span class="ld-label">Stage</span><span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div></div>
       <div class="ld-mapwrap" id="ldMapWrap">${deskMapSvg()}</div>
       <p class="ld-tip">Click a light to pick it <span>·</span> Shift-click to add <span>·</span> drag across the stage to pick several</p></section>
       <aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside></div>
     <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span></div>`;
 }
+// how many faces the open look lights, for the desk's stage bar
+function facesSummary() {
+  const ps = stagePeople(); if (!ps.length) return '';
+  const L = curLook(), n = { lit: 0, deep: 0, dark: 0 }; for (const p of ps) n[faceState(p, L)]++;
+  return `<span class="ld-fchip lit" title="Faces lit from the front">${n.lit} lit</span>${n.deep ? `<span class="ld-fchip deep" title="Lit only in deep colour">${n.deep} deep colour</span>` : ''}${n.dark ? `<span class="ld-fchip dark" title="No light on their face">${n.dark} in the dark</span>` : ''}`;
+}
 // while a fader or the wheel moves: the map and readouts follow, the control in your hand stays put
 function deskLive() {
   if (!desk.open) return;
   $('ldMapWrap').innerHTML = deskMapSvg();
+  if ($('ldFaces')) $('ldFaces').innerHTML = facesSummary();
   const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, info = document.querySelector('.ld-pickinfo');
   if (info) { const sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent', b = info.querySelector('.bigsw'); b.style.setProperty('--c', sw); b.classList.toggle('none', sw === 'transparent'); info.querySelector('small').textContent = ts.length ? fxName(f, ts[0]) : ''; }
   for (const el of document.querySelectorAll('#ldColour [data-fx]')) { const k = el.dataset.fx; if (el !== document.activeElement) el.value = f[k]; const lab = el.closest('.ld-fader'); lab.style.setProperty('--v', faderPct(k, f[k])); lab.querySelector('output').textContent = f[k] + (k === 'd' ? '%' : ''); }
@@ -3022,6 +3037,39 @@ function lightingSheetHtml(rows, head) {
   return `<section class="sheet" id="sec-lighting" data-sheet="lighting">${head('Lighting patch', 'lighting', `${plural(rows.length, 'light')} · ${plural(lines.length, 'DMX line')} · ${(watts / 1000).toFixed(1)} kW. Set each light to its address and channel mode before focus.`)}
     <div class="tablewrap"><table class="lighttbl"><thead><tr>${LIGHT_COLS.map(c => `<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr class="${bad.has(r.it.id) ? 'flag' : ''}"><td class="mono">${dmxAddr(r)}</td><td><b>${esc(r.name)}</b></td><td>${esc(r.type)}</td><td class="num">${r.ch}</td><td>${esc(r.hang)}</td><td>${esc(r.line)}</td><td>${esc(r.power)}</td></tr>`).join('')}</tbody></table></div>
     ${lines.length ? `<h3 class="dmxh">DMX lines</h3><div class="dmxchains">${lines.map(chain).join('')}</div><div class="row dmxfoot"><p class="hint">Each line runs light to light in this order. End every line with a DMX terminator.</p><span class="row" style="gap:6px"><button class="btn quiet" data-opendesk>${ic('sun', 'sm')}Lighting desk</button><button class="btn quiet" id="lightReaddr" title="Number every light in the order its line runs">${ic('wand', 'sm')}Re-address in line order</button></span></div>${looksSheetHtml()}` : '<p class="hint">Add a lighting console and the lights are chained into DMX lines here.</p>'}</section>`;
+}
+/* Faces: is each person on stage lit from the front? A light counts when its pool reaches where they stand and it's in front of
+   them or about overhead (light from behind lights hair, not faces; uplighting lights the set). Deep colour on its own (blue,
+   congo, red) reads as dark on camera, so white in the mix is measured too. */
+const fxIn = (it, L) => ({ ...FX_DEF, ...(L?.fx?.[it.id] || {}) });
+function faceLight(p, L) {
+  let face = 0, white = 0;
+  for (const it of plan.items) {
+    if (!isFixture(it) || isUp(it) || it.y < p.y - fromM(.5)) continue;
+    const f = fxIn(it, L), col = fxRGB(f, it); if (!col) continue;
+    const { cx, cy, r, ux, uy } = beamGeom(it), dx = p.x - cx, dy = p.y - cy, along = dx * ux + dy * uy, across = -dx * uy + dy * ux;
+    const q2 = (along / (mountOf(it) ? r : r * 1.25)) ** 2 + (across / r) ** 2; if (q2 > 1) continue;
+    const c = f.d / 100 * (1 - .6 * q2); face += c; white += c * Math.min(...col) / 255;
+  }
+  return { face, white };
+}
+const faceState = (p, L) => { const { face, white } = faceLight(p, L); return face < .3 ? 'dark' : white < .2 ? 'deep' : 'lit'; };
+const stagePeople = () => plan.items.filter(i => cat(i).shape === 'person' && inPoly(i.x, i.y, stagePoly()));
+function faceIssues() {
+  const people = stagePeople(), lights = plan.items.filter(i => isFixture(i) && !isUp(i));
+  if (!people.length || !lights.length) return [];
+  const live = (plan.looks?.length ? plan.looks : [null]).filter(L => lights.some(i => fxIn(i, L).d > 0));   // an all-off look is a blackout on purpose
+  if (!live.length) return [];
+  const st = people.map(p => ({ p, s: live.map(L => [L, faceState(p, L)]) }));
+  if (st.every(x => x.s.every(([, v]) => v === 'dark'))) return [{ lvl: 'warn', id: null, msg: 'No light reaches anyone’s face from the front. Add front light: lights on a front-of-house bar or on stands out front, aimed at the stage.' }];
+  const named = list => plan.looks?.length ? ` in ${list.map(([L]) => L.name).join(', ').replace(/, ([^,]*)$/, ' and $1')}` : '';
+  const who = p => personById(p.personId)?.name || itemName(p), out = [];
+  for (const { p, s: v } of st) {
+    const dark = v.filter(([, x]) => x === 'dark'), deep = v.filter(([, x]) => x === 'deep');
+    if (dark.length) out.push({ lvl: 'warn', id: p.id, msg: `${who(p)} is in the dark${named(dark)}: no light reaches their face from the front.` });
+    if (deep.length) out.push({ lvl: 'warn', id: p.id, msg: `${who(p)} is lit only in deep colour${named(deep)}, so their face may look dark on camera. Add some white.` });
+  }
+  return out;
 }
 function dmxIssues() {
   const out = [], lights = plan.items.filter(isDmx); if (!lights.length) return out;
@@ -3333,6 +3381,7 @@ function warnings() {
   for (const x of cableShort()) out.push({ lvl: 'warn', id: null, msg: `${x.short} more ${CABLES[x.type].name} ${fmtStock(x.len)} needed than you own (need ${x.need}, own ${x.own}). Borrow some or change the runs.` });
   for (const x of placementIssues()) out.push(x);
   for (const x of dmxIssues()) out.push(x);
+  for (const x of faceIssues()) out.push(x);
   return out;
 }
 
