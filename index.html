@@ -586,12 +586,12 @@ svg text { font-family: var(--f-ui); }
 .ld-head input { width: 170px; }
 .ld-looks { display: flex; gap: 6px; overflow-x: auto; min-width: 0; padding: 2px; }
 .ld-look { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink-2); border-radius: 10px; padding: 7px 14px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
-.ld-look[aria-selected="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); } .ld-look.add { border-style: dashed; font-weight: 500; color: var(--muted); background: none; }
+.ld-tabs { display: flex; gap: 6px; } .ld-look[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); } .ld-look.add { border-style: dashed; font-weight: 500; color: var(--muted); background: none; }
 .ld-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; min-height: 0; }
 .ld-stage { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 10px; padding: 14px 16px; min-height: 0; background: var(--surface-2); }
 .ld-stage .hint { margin: 0; text-align: center; }
 .ld-groups { display: flex; flex-wrap: wrap; gap: 6px; }
-.lookchip[data-dgrp][aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.lookchip[data-dgrp][aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface); }
 .ld-mapwrap { min-height: 0; border-radius: 14px; overflow: hidden; background: #0f1218; }
 .ld-map { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
 .ld-room { fill: #151922; stroke: rgba(255,255,255,.14); stroke-width: .12; } .ld-deck { fill: #232838; stroke: rgba(255,255,255,.2); stroke-width: .1; }
@@ -2806,7 +2806,7 @@ function deskColourHtml() {
   return `<div class="ld-pickinfo"><span class="bigsw" style="background:${ts.length ? fxSwatch(f, ts[0]) : 'transparent'}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'No lights picked'}</b><small>${ts.length ? esc(fxName(f, ts[0])) : 'Pick lights on the stage'}</small></div></div>
     <div class="ld-wheelrow"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div>
       <div class="ld-faders">${[['r', 'R'], ['g', 'G'], ['b', 'B'], ['w', 'W'], ['d', 'Dim']].map(([k, l]) => `<label class="ld-fader f-${k}"><output>${f[k]}</output><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${({ r: 'Red', g: 'Green', b: 'Blue', w: 'White', d: 'Dimmer' })[k]}"><span>${l}</span></label>`).join('')}</div></div>
-    <div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch${lum('#' + fxRGB({ ...c, d: 100 }).map(v => v.toString(16).padStart(2, '0')).join('')) > .62 ? ' lt' : ''}" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><span>${n}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><span>Off</span></button></div>
+    <div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch${lum('#' + fxRGB({ ...c, d: 100 }).map(v => v.toString(16).padStart(2, '0')).join('')) > .45 ? ' lt' : ''}" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><span>${n}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><span>Off</span></button></div>
     ${white ? '<p class="hint">White-only lights take the dimmer only.</p>' : ''}`;
 }
 function renderDesk() {
@@ -2814,13 +2814,13 @@ function renderDesk() {
   const looks = plan.looks || [], cur = curLook(), all = deskLights(), picked = deskPicked();
   const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : []), ['none', 'None']];
   const gOn = k => { const ids = k === 'all' ? all : k === 'none' ? [] : all.filter(i => k === 'floor' ? !mountOf(i) : mountOf(i)?.id === k.slice(2)); return ids.length === picked.length && ids.every(i => picked.includes(i)); };
-  $('ldBody').innerHTML = `<header class="dsg-head ld-head"><div class="row" style="gap:14px;min-width:0"><h2 id="ldTitle">${ic('sun')}Lighting desk</h2>
-      <div class="ld-looks" role="tablist" aria-label="Looks">${looks.map(l => `<button class="ld-look" role="tab" data-look="${l.id}" aria-selected="${l.id === cur?.id}">${esc(l.name)}</button>`).join('')}<button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button></div></div>
-      <div class="row" style="gap:8px">${cur ? `<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"><button class="btn quiet" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="btn primary" id="ldDone">Done</button></div></header>
+  $('ldBody').innerHTML = `<div class="dsg-head ld-head"><div class="row" style="gap:14px;min-width:0"><h2 id="ldTitle">${ic('sun')}Lighting desk</h2>
+      <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(l => `<button class="ld-look" data-look="${l.id}" aria-pressed="${l.id === cur?.id}">${esc(l.name)}</button>`).join('')}</div><button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button></div></div>
+      <div class="row" style="gap:8px">${cur ? `<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"><button class="btn quiet" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="btn primary" id="ldDone">Done</button></div></div>
     <div class="ld-body"><section class="ld-stage"><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="lookchip" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
       <div class="ld-mapwrap" id="ldMapWrap">${deskMapSvg()}</div><p class="hint">Click a light to pick it · Shift-click to add · drag across the stage to pick several</p></section>
       <aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside></div>
-    <footer class="ld-foot"><span class="hint">${cur ? `Changes save to <b>${esc(cur.name)}</b>.` : 'Your first change starts Look 1.'} Planning only: nothing is sent to real lights.</span></footer>`;
+    <div class="ld-foot"><span class="hint">${cur ? `Changes save to <b>${esc(cur.name)}</b>.` : 'Your first change starts Look 1.'} Planning only: nothing is sent to real lights.</span></div>`;
 }
 // while a fader or the wheel moves: the map and readouts follow, the control in your hand stays put
 function deskLive() {
