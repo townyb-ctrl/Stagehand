@@ -592,12 +592,14 @@ svg text { font-family: var(--f-ui); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ldesk { --ld-card: #1a2029; --ld-raise: #232a36; --ld-groove: #0b0e12; } }
 :root[data-theme="dark"] .ldesk { --ld-card: #1a2029; --ld-raise: #232a36; --ld-groove: #0b0e12; }
 .ldesk .ic { stroke: currentColor; }
-.ld-top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 14px 18px; background: var(--ld-bg); border-bottom: 1px solid var(--ld-line); }
+.ld-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 18px; padding: 12px 18px; background: var(--ld-bg); border-bottom: 1px solid var(--ld-line); }
+.ld-top .ld-looks { grid-column: 1 / -1; grid-row: 2; }
+.ld-lookacts { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding-left: 10px; }
 .ld-brand { display: flex; align-items: center; gap: 11px; } .ld-brand h2 { font-size: 16px; font-weight: 700; letter-spacing: -.01em; color: var(--ld-ink); }
 .ld-brand small { display: block; font-size: 12px; color: var(--ld-mute); margin-top: 1px; }
 .ld-logo { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; color: #b7860b; background: radial-gradient(circle at 50% 40%, rgba(240,180,41,.3), rgba(240,180,41,.08) 70%); box-shadow: inset 0 0 0 1px rgba(240,180,41,.35); }
 .ld-looks { display: flex; align-items: center; gap: 8px; min-width: 0; overflow-x: auto; padding: 3px; scrollbar-width: thin; }
-.ld-tabs { display: flex; gap: 8px; }
+.ld-tabs { display: flex; gap: 8px; } .ld-looks { position: relative; }
 .ld-look { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 9px; row-gap: 5px; align-items: center; text-align: left; min-width: 118px; padding: 8px 12px 9px; border-radius: 12px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink2); font: inherit; cursor: pointer; transition: border-color .2s, background .2s, box-shadow .2s; }
 .ld-look:hover { border-color: var(--ld-mute); background: var(--ld-raise); }
 .ld-look[aria-pressed="true"] { background: var(--ld-raise); border-color: var(--ld-acc); color: var(--ld-ink); box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-1); }
@@ -605,7 +607,7 @@ svg text { font-family: var(--f-ui); }
 .ld-look[aria-pressed="true"] .ld-cueno { background: var(--ld-acc); color: var(--accent-ink); box-shadow: none; }
 .ld-cuename { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
 .ld-pal { display: flex; gap: 3px; } .ld-pal i { width: 16px; height: 4px; border-radius: 2px; box-shadow: 0 0 6px currentColor; } .ld-pal i.dark { background: var(--ld-line2); box-shadow: none; }
-.ld-look.add { display: inline-flex; min-width: 0; align-self: stretch; align-items: center; gap: 6px; border-style: dashed; background: transparent; color: var(--ld-mute); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.ld-look.add { display: inline-flex; min-width: max-content; flex: none; align-self: stretch; align-items: center; gap: 6px; border-style: dashed; background: transparent; color: var(--ld-mute); font-size: 13px; font-weight: 600; white-space: nowrap; }
 .ld-look.add:hover { color: var(--ld-ink); border-color: var(--ld-mute); }
 .ld-actions { display: flex; align-items: center; gap: 8px; }
 .ld-rename { display: flex; align-items: center; gap: 7px; height: 36px; padding: 0 10px; border-radius: 10px; background: var(--ld-card); border: 1px solid var(--ld-line2); color: var(--ld-mute); }
@@ -616,7 +618,7 @@ svg text { font-family: var(--f-ui); }
 .ld-done { height: 36px; padding: 0 18px; border-radius: 10px; border: 0; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
 .ld-done:hover { filter: brightness(1.08); }
 .ldesk button:focus-visible, .ldesk input:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 2px; }
-.ld-body { display: grid; grid-template-columns: minmax(0, 1fr) 372px; min-height: 0; }
+.ld-body { display: grid; grid-template-columns: minmax(0, 1fr) 452px; min-height: 0; }
 .ld-stage { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; padding: 16px 18px; min-height: 0; }
 .ld-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .ld-label { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ld-mute); }
@@ -627,12 +629,12 @@ svg text { font-family: var(--f-ui); }
 .ld-gtools, .ld-gname { display: inline-flex; gap: 6px; align-items: center; } .ld-gname input { height: 28px; width: 210px; font-size: 13px; }
 .ld-moodwrap { display: inline-flex; align-self: stretch; }
 .ldesk { position: relative; }
-.ld-moods { position: absolute; z-index: 5; top: 74px; left: 50%; transform: translateX(-50%); display: grid; gap: 2px; padding: 6px; min-width: 220px; border-radius: 12px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
+.ld-moods { position: absolute; z-index: 5; top: 128px; left: 50%; transform: translateX(-50%); display: grid; gap: 2px; padding: 6px; min-width: 220px; border-radius: 12px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
 .ld-moods button { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--ld-ink); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left; }
 .ld-libmenu { left: auto; right: 220px; transform: none; min-width: 250px; }
 .ld-librow { display: flex; align-items: center; } .ld-librow > button:first-child { flex: 1; }
 .ld-moods .ld-libx { padding: 6px; color: var(--ld-mute); } .ld-moods .ld-libx:hover { color: var(--bad-ink); }
-.ldesk.big { width: 100%; height: 100%; grid-template-rows: auto auto minmax(0, 1fr); }
+.ldesk.big { width: 100%; height: 100%; grid-template-rows: auto auto auto minmax(0, 1fr); }
 .ld-bigtop { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--ld-line); }
 .ld-bigtop h2 { display: flex; align-items: center; gap: 8px; font-size: 18px; margin-right: auto; } .ld-bigtop .ld-faces { margin: 0; }
 .ld-bigtop .ld-done { display: inline-flex; align-items: center; gap: 6px; }
@@ -647,7 +649,31 @@ svg text { font-family: var(--f-ui); }
 .ld-big[aria-pressed="true"] .ld-bigno { background: var(--ld-acc); color: var(--accent-ink); }
 .ldesk.big .ld-map { cursor: default; }
 @media (max-width: 600px) { .ld-bigs { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; } .ld-bigmap { height: 30vh; } .ld-big { min-height: 84px; padding: 12px; } .ld-big b { font-size: 16px; } .ld-bigmap { margin: 10px 12px 0; } .ld-bigtop .ld-faces { display: none; } }
-.ld-moods button:hover { background: var(--ld-raise); } .ld-moods .ld-pal i { width: 12px; } .ld-moods small { padding: 4px 10px 2px; color: var(--ld-mute); font-size: 11.5px; }
+.ld-moods button:hover { background: var(--ld-raise); }
+.ld-thumb { grid-column: 2; display: block; width: 96px; height: 34px; border-radius: 6px; overflow: hidden; background: #0b0e13; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+.ld-thumbsvg { width: 100%; height: 100%; display: block; } .ld-thumbsvg .ld-deck { fill: #1b202b; stroke: none; }
+.ld-look.dropb { box-shadow: -3px 0 0 var(--ld-acc); } .ld-look[draggable="true"] { cursor: pointer; }
+.ld-bigthumb { grid-column: 2; display: block; height: 54px; border-radius: 10px; overflow: hidden; background: #0b0e13; }
+.ld-bigmaster { display: flex; align-items: center; gap: 12px; margin: 12px 18px 0; padding: 10px 14px; border-radius: 12px; background: var(--ld-panel); border: 1px solid var(--ld-line); font-weight: 650; font-size: 14px; }
+.ld-bigmaster input { flex: 1; accent-color: var(--ld-acc); } .ld-bigmaster output { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; color: var(--ld-ink2); }
+.ldesk .ld-faders { grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(0, 1.2fr); gap: 0; } .ld-master { border-left: 1px solid var(--ld-line); padding-left: 6px; } .ld-master .ld-fname { color: var(--ld-acc); }
+.ld-card.ld-pickinfo { grid-template-columns: auto minmax(0, 1fr) auto; padding: 10px 12px; } .ld-card.ld-pickinfo .bigsw { width: 34px; height: 34px; border-radius: 10px; }
+.ld-recent { display: flex; align-items: center; gap: 6px; } .ld-recent .ld-label { margin-right: 4px; }
+.ld-rsw { width: 22px; height: 22px; border-radius: 50%; border: 0; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); cursor: pointer; } .ld-rsw:disabled { opacity: .3; cursor: default; } .ld-rsw:hover:not(:disabled) { transform: scale(1.12); }
+.ld-recentrow { display: flex; align-items: center; gap: 10px; } .ld-hex { flex: 1; display: flex; min-width: 90px; } .ld-hex input { flex: 1; min-width: 0; height: 30px; font-family: var(--f-mono); font-size: 13px; text-transform: lowercase; }
+.ld-map.hl .lb:not(.hl) { opacity: .22; } .ld-map .lb { transition: opacity .15s; }
+.lb.flash { animation: lbFlash .5s ease-in-out 3 alternate; } @keyframes lbFlash { from { opacity: 1; filter: none; } to { opacity: .2; } }
+.ld-fx.flashing .ld-ring { stroke: #ffd66e; animation: lbFlash .5s ease-in-out 3 alternate; }
+@media (prefers-reduced-motion: reduce) { .lb.flash, .ld-fx.flashing .ld-ring { animation: none; } }
+.ld-stage { position: relative; }
+.ld-mapwrap.peeking { box-shadow: inset 0 0 0 2px var(--ld-acc); }
+.ld-peekpill { position: absolute; top: 64px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 999px; background: var(--ld-acc); color: var(--accent-ink); font-size: 13px; font-weight: 600; box-shadow: var(--shadow-2); pointer-events: none; }
+.ld-ctx { position: absolute; z-index: 6; width: 210px; display: grid; gap: 2px; padding: 8px; border-radius: 12px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
+.ld-ctxhead { font-size: 12px; font-weight: 700; color: var(--ld-mute); padding: 2px 6px 6px; }
+.ld-ctxsw { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; padding: 0 2px 6px; border-bottom: 1px solid var(--ld-line); margin-bottom: 4px; }
+.ld-ctxsw button { aspect-ratio: 1; border-radius: 50%; border: 0; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); cursor: pointer; padding: 0; } .ld-ctxsw button:disabled { opacity: .25; }
+.ld-ctxsw button.off { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 3px, var(--ld-line2) 3px 6px); }
+.ld-ctx > button { display: flex; align-items: center; gap: 7px; padding: 7px 8px; border: 0; border-radius: 7px; background: none; color: var(--ld-ink); font: inherit; font-size: 13px; text-align: left; cursor: pointer; } .ld-ctx > button:hover, .ld-ctx > button:focus-visible { background: var(--ld-raise); } .ld-moods .ld-pal i { width: 12px; } .ld-moods small { padding: 4px 10px 2px; color: var(--ld-mute); font-size: 11.5px; }
 .ld-seg[aria-pressed="true"] { background: var(--ld-bg); color: var(--ld-ink); box-shadow: var(--shadow-1), inset 0 0 0 1px var(--ld-line2); }
 .ld-mapwrap { min-height: 0; border-radius: 16px; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #121722, #07090d); box-shadow: inset 0 0 0 1px var(--ld-line), inset 0 20px 60px rgba(0,0,0,.45); }
 .ld-map { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
@@ -681,14 +707,15 @@ svg text { font-family: var(--f-ui); }
 .ld-pickinfo .bigsw { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--ld-line2); background: var(--c); box-shadow: 0 0 22px -2px var(--c); }
 .ld-pickinfo .bigsw.none { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 5px, var(--ld-line) 5px 10px); box-shadow: none; }
 .ld-wheelwrap { display: grid; place-items: center; padding: 4px 0; }
-.ld-wheel { position: relative; width: 148px; aspect-ratio: 1; border-radius: 50%; cursor: crosshair; touch-action: none;
+.ld-mixrow { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; }
+.ld-wheel { position: relative; width: 136px; aspect-ratio: 1; border-radius: 50%; cursor: crosshair; touch-action: none;
   background: radial-gradient(circle closest-side, #fff, rgba(255,255,255,0)), conic-gradient(from 90deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
   box-shadow: 0 0 0 5px var(--ld-card), 0 0 0 6px var(--ld-line2), var(--shadow-2); }
 .ld-wheel.off { filter: grayscale(1) opacity(.35); cursor: default; } .ld-wheel:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 8px; }
 .ld-mark { position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.5); pointer-events: none; }
 .ldesk .lpresets { grid-template-columns: repeat(6, 1fr); gap: 6px 4px; margin: 0; }
 .ldesk .pswatch { aspect-ratio: auto; height: auto; background: none; border: 0; display: grid; justify-items: center; gap: 5px; padding: 2px 0; cursor: pointer; transform: none; }
-.ldesk .pswatch i { width: 26px; height: 26px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.12), 0 0 14px -4px var(--sw); transition: transform .15s; }
+.ldesk .pswatch i { width: 24px; height: 24px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.12), 0 0 14px -4px var(--sw); transition: transform .15s; }
 .ldesk .pswatch span { font-size: 10.5px; font-weight: 600; color: var(--ld-mute); text-shadow: none; }
 .ldesk .pswatch:hover:not(:disabled) i { transform: scale(1.1); } .ldesk .pswatch:hover:not(:disabled) span { color: var(--ld-ink); }
 .ldesk .pswatch.off i { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 4px, var(--ld-line2) 4px 8px); box-shadow: inset 0 0 0 1px var(--ld-line2); }
@@ -697,14 +724,14 @@ svg text { font-family: var(--f-ui); }
 .ld-faders { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; justify-items: center; }
 .ld-fader { display: grid; justify-items: center; gap: 8px; }
 .ld-fader output { font-size: 11.5px; font-weight: 600; color: var(--ld-ink2); font-variant-numeric: tabular-nums; min-width: 4ch; text-align: center; padding: 3px 0; border-radius: 6px; background: var(--ld-panel); border: 1px solid var(--ld-line); }
-.ld-groove { position: relative; width: 34px; height: 128px; display: block; }
+.ld-groove { position: relative; width: 30px; height: 132px; display: block; }
 .ld-groove::before { content: ''; position: absolute; left: 50%; top: 9px; bottom: 9px; width: 6px; margin-left: -3px; border-radius: 3px; background: var(--ld-groove); box-shadow: inset 0 1px 2px rgba(0,0,0,.35), 0 0 0 1px var(--ld-line); }
 .ld-groove::after { content: ''; position: absolute; left: 50%; bottom: 9px; width: 6px; margin-left: -3px; border-radius: 3px; height: calc((100% - 18px) * var(--v)); background: var(--fc); box-shadow: 0 0 8px var(--fc); pointer-events: none; }
-.ld-groove input { -webkit-appearance: none; appearance: none; writing-mode: vertical-lr; direction: rtl; position: relative; z-index: 1; width: 34px; height: 128px; margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; cursor: ns-resize; }
+.ld-groove input { -webkit-appearance: none; appearance: none; writing-mode: vertical-lr; direction: rtl; position: relative; z-index: 1; width: 30px; height: 132px; margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; cursor: ns-resize; }
 .ld-groove input::-webkit-slider-runnable-track { background: transparent; border: 0; }
-.ld-groove input::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 18px; border-radius: 5px; background: linear-gradient(180deg, #f4f6f9, #b8c0cb); border: 1px solid #0b0e12; box-shadow: 0 3px 6px rgba(0,0,0,.55), inset 0 -2px 0 rgba(0,0,0,.18), inset 0 8px 0 -7px #4a5361; }
+.ld-groove input::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 18px; border-radius: 5px; background: linear-gradient(180deg, #f4f6f9, #b8c0cb); border: 1px solid #0b0e12; box-shadow: 0 3px 6px rgba(0,0,0,.55), inset 0 -2px 0 rgba(0,0,0,.18), inset 0 8px 0 -7px #4a5361; }
 .ld-groove input::-moz-range-track { background: transparent; border: 0; }
-.ld-groove input::-moz-range-thumb { width: 28px; height: 16px; border-radius: 5px; background: linear-gradient(180deg, #f4f6f9, #b8c0cb); border: 1px solid #0b0e12; box-shadow: 0 3px 6px rgba(0,0,0,.55); }
+.ld-groove input::-moz-range-thumb { width: 24px; height: 16px; border-radius: 5px; background: linear-gradient(180deg, #f4f6f9, #b8c0cb); border: 1px solid #0b0e12; box-shadow: 0 3px 6px rgba(0,0,0,.55); }
 .ld-groove input:disabled { cursor: default; } .ld-fader:has(input:disabled) { opacity: .32; }
 .ld-groove input:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 2px; border-radius: 6px; }
 .ld-fname { font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--ld-mute); } .f-d .ld-fname { color: var(--ld-ink2); }
@@ -714,9 +741,9 @@ svg text { font-family: var(--f-ui); }
 .ld-live i { width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 8px #3ddc84; animation: ldPulse 2.4s ease-in-out infinite; }
 @keyframes ldPulse { 50% { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .ld-live i { animation: none; } }
-@media (max-width: 900px) { .ld-top { grid-template-columns: minmax(0, 1fr) auto; } .ld-looks { grid-column: 1 / -1; grid-row: 2; } .ld-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(280px, 1fr) auto; overflow-y: auto; } .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; } .ld-rename input { width: 100px; } .ld-brand small { display: none; } }
-@media (max-width: 600px) { .ldesk { border-radius: 16px; } .ld-top { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 12px; } .ld-actions { grid-row: 3; } .ld-rename { flex: 1; min-width: 0; } .ld-rename input { width: 100%; min-width: 0; }
-  .ld-stage { padding: 12px; } .ld-bar { display: grid; gap: 8px; } .ld-groups { display: flex; flex-wrap: wrap; } .ld-colour { padding: 12px; } .ld-foot { flex-wrap: wrap; gap: 4px 12px; padding: 8px 12px; } }
+@media (max-width: 900px) { .ld-lookacts { padding-left: 4px; } .ld-body { display: block; overflow-y: auto; } .ld-stage { grid-template-rows: auto minmax(240px, 46vh) auto; } .ld-body > .ld-colour { overflow: visible; } .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; } .ld-rename input { width: 100px; } .ld-brand small { display: none; } }
+@media (max-width: 600px) { .ldesk { border-radius: 16px; } .ld-top { gap: 10px; padding: 12px; } .ld-actions { gap: 4px; } .ld-actions .ld-icon { width: 32px; height: 32px; } .ld-rename { flex: 1; min-width: 0; } .ld-rename input { width: 100%; min-width: 0; }
+  .ld-stage { padding: 12px; } .ld-bar { display: grid; gap: 8px; } .ld-mapwrap { min-height: 220px; } .ld-mixrow { grid-template-columns: 1fr; justify-items: center; } .ldesk .ld-faders { width: 100%; } .ld-groups { display: flex; flex-wrap: wrap; } .ld-colour { padding: 12px; } .ld-foot { flex-wrap: wrap; gap: 4px 12px; padding: 8px 12px; } }
 .lookrows { display: grid; gap: 8px; } .lookrow { display: grid; grid-template-columns: 140px 1fr; gap: 10px; font-size: 13px; padding: 6px 0; border-top: 1px solid var(--line); }
 .lookfx { display: flex; flex-wrap: wrap; gap: 4px 14px; } .lookfx span { display: inline-flex; align-items: center; gap: 6px; }
 .dmxlines { display: grid; gap: 6px; margin-bottom: 8px; } .dmxlines div { display: grid; } .dmxlines small { color: var(--muted); font-size: 12px; }
@@ -2818,7 +2845,11 @@ const throwOf = it => it.throw ?? (isUp(it) ? fromM(1.2) : it.type === 'uplight'
 /* Looks: each remembers every light's colour (red, green, blue and white, 0–255) and dimmer (0–100 %). Lights a look doesn't
    mention, and every light before the first look, are warm white at full. */
 const FX_DEF = { r: 0, g: 0, b: 0, w: 255, d: 100 };
-const curLook = () => (plan.looks || []).find(l => l.id === plan.lookId) || plan.looks?.[0] || null;
+let lookPeek = null;   // a look shown for a moment while Space is held in the desk; nothing can be changed in it
+const curLook = () => (lookPeek && plan.looks?.find(l => l.id === lookPeek)) || (plan.looks || []).find(l => l.id === plan.lookId) || plan.looks?.[0] || null;
+// a look's master scales every light in it, so the whole stage can come down for prayer without touching each light
+const lookMaster = L => L?.master ?? 100;
+const fxEff = (it, L) => { const f = { ...FX_DEF, ...(L?.fx?.[it.id] || {}) }; f.d = Math.round(f.d * lookMaster(L) / 100); return f; };
 const fxOf = it => ({ ...FX_DEF, ...(curLook()?.fx?.[it.id] || {}) });
 // what a beam looks like: the emitters mixed and scaled so the strongest is full (the dimmer sets the strength); null when dark.
 // White-only lights (profiles, fresnels) stay warm white whatever colour is asked of them.
@@ -2900,7 +2931,7 @@ function openDesk(onlyId) {
   if (onlyId) deskSel = new Set([onlyId]);
   desk.open = true; $('deskDlg').hidden = false; renderDesk(); setTimeout(() => $('ldDone')?.focus(), 30);
 }
-function closeDesk() { desk.naming = false; desk.moods = false; desk.lib = false; desk.big = false; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
+function closeDesk() { desk.naming = false; desk.moods = false; desk.lib = false; desk.big = false; desk.ctx = null; lookPeek = null; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
 // your own named groups of lights (Front wash, Band backlight…), saved with the week
 const lgroups = () => (plan.lgroups || []).map(g => ({ ...g, ids: g.ids.filter(id => isFixture(itemById(id))) })).filter(g => g.ids.length);
 function deskGroupIds(k) {
@@ -2917,14 +2948,18 @@ function saveDeskGroup() {
 const deskPicked = () => { const all = deskLights(); return deskSel ? all.filter(i => deskSel.has(i.id)) : all; };
 const rgb2hsv = (r, g, b) => { const M = Math.max(r, g, b), m = Math.min(r, g, b), d = M - m; let h = 0; if (d) h = M === r ? ((g - b) / d) % 6 : M === g ? (b - r) / d + 2 : (r - g) / d + 4; return [(h * 60 + 360) % 360, M ? d / M : 0, M / 255]; };
 const hsv2rgb = (h, s, v) => { const f = n => { const k = (n + h / 60) % 6; return Math.round(255 * v * (1 - s * Math.max(0, Math.min(k, 4 - k, 1)))); }; return [f(5), f(3), f(1)]; };
-function deskMapSvg() {
-  // framed on the stage, the lights and where they land, not the whole empty room
+function deskFrame() {   // the desk's view: framed on the stage, the lights and where they land, not the whole empty room
   const R = roomRect(), pts = [...stagePoly(), ...deskLights().flatMap(i => { const g = beamGeom(i); return [[i.x, i.y], [g.cx - g.r, g.cy - g.r], [g.cx + g.r, g.cy + g.r]]; })];
   const fx0 = Math.max(R.x0, Math.min(...pts.map(q => q[0])) - 2.5), fx1 = Math.min(R.x1, Math.max(...pts.map(q => q[0])) + 2.5), fy0 = Math.max(R.y0 - 1, Math.min(...pts.map(q => q[1])) - 2.5), fy1 = Math.min(R.y1, Math.max(...pts.map(q => q[1])) + 3);
-  const vb = `${f3(fx0)} ${f3(fy0)} ${f3(fx1 - fx0)} ${f3(fy1 - fy0)}`, picked = new Set(deskPicked().map(i => i.id)), U = Math.max(fx1 - fx0, (fy1 - fy0) * 1.6) / 100;   // one hundredth of the view: dots and names keep their size
+  return { R, vb: `${f3(fx0)} ${f3(fy0)} ${f3(fx1 - fx0)} ${f3(fy1 - fy0)}`, U: Math.max(fx1 - fx0, (fy1 - fy0) * 1.6) / 100 };   // U: one hundredth of the view, so dots and names keep their size
+}
+// a look as a tiny stage: deck and beams only, for the look buttons
+function lookThumb(L, k) { const { vb } = deskFrame(); return `<svg class="ld-thumbsvg" viewBox="${vb}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path class="ld-deck" d="${polyPath(stagePoly())}"/>${beamsSvg(new Set(), 'lt' + k, 2.4, L)}</svg>`; }
+function deskMapSvg() {
+  const { R, vb, U } = deskFrame(), picked = new Set(deskPicked().map(i => i.id));
   const ms = mounts().map(m => { const r = (m.rot || 0) * Math.PI / 180, hw = Number(prop(m, 'w')) / 2, dx = Math.cos(r) * hw, dy = Math.sin(r) * hw; return `<line class="ld-mount" x1="${f3(m.x - dx)}" y1="${f3(m.y - dy)}" x2="${f3(m.x + dx)}" y2="${f3(m.y + dy)}"/>`; }).join('');
   const dots = deskLights().map(i => { const f = fxOf(i), sw = fxSwatch(f, i), rr = U * 1.2;
-    return `<g class="ld-fx${picked.has(i.id) ? ' on' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${picked.has(i.id)}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .7)}" style="stroke-width:${f3(U * .45)}"/><circle class="ld-dot${sw === 'transparent' ? ' dark' : ''}" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr)}" style="fill:${sw === 'transparent' ? 'var(--surface)' : sw};stroke-width:${f3(U * .2)}"/><text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px">${esc(itemName(i))}</text></g>`; }).join('');
+    return `<g class="ld-fx${picked.has(i.id) ? ' on' : ''}${desk.flash?.has(i.id) ? ' flashing' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${picked.has(i.id)}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .7)}" style="stroke-width:${f3(U * .45)}"/><circle class="ld-dot${sw === 'transparent' ? ' dark' : ''}" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr)}" style="fill:${sw === 'transparent' ? 'var(--surface)' : sw};stroke-width:${f3(U * .2)}"/><text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px">${esc(itemName(i))}</text></g>`; }).join('');
   const L = curLook(), faces = stagePeople().map(p => { const st = faceState(p, L), nm = personById(p.personId)?.name || itemName(p);
     return `<g class="ld-face ${st}"><title>${esc(nm)}: ${st === 'lit' ? 'face lit' : st === 'deep' ? 'lit only in deep colour' : st === 'side' ? 'lit from one side only' : 'in the dark'}</title><circle cx="${f3(p.x)}" cy="${f3(p.y)}" r="${f3(U * 1.5)}" style="stroke-width:${f3(U * .28)}"/><text x="${f3(p.x)}" y="${f3(p.y + U * .5)}" text-anchor="middle" style="font-size:${f3(U * 1.3)}px">${esc(initials(nm))}</text></g>`; }).join('');
   return `<svg class="ld-map" id="ldMap" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
@@ -2956,7 +2991,7 @@ function moodLook(m) {
   const [name, frontD, cols, d] = MOODS.find(x => x[0] === m), others = deskLights().filter(i => !isFrontLight(i)).sort((a, b) => a.x - b.x), fx = {};
   for (const it of deskLights()) if (isFrontLight(it)) fx[it.id] = { ...DESK_PRESETS[0][1], d: frontD };
   others.forEach((it, k) => { fx[it.id] = { ...DESK_PRESETS.find(p => p[0] === cols[k % cols.length])[1], d }; });
-  fadeLooksFrom(); desk.moods = false;
+  fadeLooksFrom(); desk.moods = false; desk.prevLook = curLook()?.id;
   mutate(() => { plan.looks ||= []; const n = plan.looks.filter(l => l.name === name || l.name.startsWith(name + ' ')).length, L = { id: uid(), name: n ? `${name} ${n + 1}` : name, fx }; plan.looks.push(L); plan.lookId = L.id; }, `${name} look added: front light stays warm white`);
   renderDesk();
 }
@@ -2984,7 +3019,7 @@ function libUse(id) {
     }
     fx[it.id] = { ...best.fx };
   }
-  fadeLooksFrom(); desk.lib = false;
+  fadeLooksFrom(); desk.lib = false; desk.prevLook = curLook()?.id;
   mutate(() => { plan.looks ||= []; const n = plan.looks.filter(l => l.name === e.name || l.name.startsWith(e.name + ' ')).length, L = { id: uid(), name: n ? `${e.name} ${n + 1}` : e.name, fx }; plan.looks.push(L); plan.lookId = L.id; }, `“${e.name}” from the library, fitted to this week's lights`);
   renderDesk();
 }
@@ -2993,8 +3028,8 @@ const libPalette = e => { const n = new Map(); for (const l of e.lights) { const
 function renderBig() {
   const looks = plan.looks || [], cur = curLook();
   $('ldBody').innerHTML = `<div class="ld-bigtop"><h2 id="ldTitle">${ic('sun')}Looks</h2><span class="ld-faces" id="ldFaces">${facesSummary()}</span><button class="ld-done" id="ldBigExit">${ic('sliders', 'sm')}Full desk</button><button class="ld-icon" id="ldDone" aria-label="Close" title="Close">${ic('x', 'sm')}</button></div>
-    <div class="ld-bigmap" id="ldMapWrap">${deskMapSvg()}</div>
-    <div class="ld-bigs" role="group" aria-label="Looks">${looks.length ? looks.map((l, k) => { const pal = lookPalette(l); return `<button class="ld-big" data-look="${l.id}" aria-pressed="${l.id === cur?.id}"><span class="ld-bigno">${k + 1}</span><b>${esc(l.name)}</b><span class="ld-bigpal">${(pal.length ? pal : ['transparent']).map(c => `<i style="background:${c}"></i>`).join('')}</span></button>`; }).join('') : '<p class="ld-note">No looks yet. Open the full desk to make some.</p>'}</div>`;
+    <div class="ld-bigmap" id="ldMapWrap">${deskMapSvg()}</div>${looks.length ? `<label class="ld-bigmaster"><span>Look level</span><input type="range" data-master min="0" max="100" value="${lookMaster(cur)}" aria-label="Look master"><output>${lookMaster(cur)}%</output></label>` : ''}
+    <div class="ld-bigs" role="group" aria-label="Looks">${looks.length ? looks.map((l, k) => { const pal = lookPalette(l); return `<button class="ld-big" data-look="${l.id}" aria-pressed="${l.id === cur?.id}"><span class="ld-bigno">${k + 1}</span><b>${esc(l.name)}</b><span class="ld-bigthumb">${lookThumb(l, 'b' + k)}</span></button>`; }).join('') : '<p class="ld-note">No looks yet. Open the full desk to make some.</p>'}</div>`;
 }
 const FADER_COL = { r: '#ff4d57', g: '#2fbf71', b: '#4c7dff', w: '#e0c88f', d: '#8f84ff' };
 const faderPct = (k, v) => f3(v / (k === 'd' ? 100 : 255));   // how full the groove is, 0–1
@@ -3007,13 +3042,15 @@ function lookPalette(L) {
 function deskColourHtml() {
   const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, white = ts.length > 0 && ts.every(i => !cat(i).rgbw), [h, sat] = rgb2hsv(f.r, f.g, f.b), on = f.r + f.g + f.b > 0;
   const mx = 50 + Math.cos(h * Math.PI / 180) * sat * 50, my = 50 + Math.sin(h * Math.PI / 180) * sat * 50, sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent';
-  return `<div class="ld-card ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'No lights picked'}</b><small>${ts.length ? esc(fxName(f, ts[0])) : 'Pick lights on the stage'}</small></div></div>
-    <div class="ld-card"><div class="ld-cardhead"><span class="ld-label">Colour</span><span class="ld-clip"><button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button></span></div>
-      <div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div>
+  const hex = f.r + f.g + f.b ? '#' + [f.r, f.g, f.b].map(v => v.toString(16).padStart(2, '0')).join('') : '', rec = deskRecent(), L = curLook(), mst = lookMaster(L);
+  return `<div class="ld-card ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'No lights picked'}</b><small>${ts.length ? esc(fxName(f, ts[0])) : 'Pick lights on the stage'}</small></div>${ts.length ? `<button class="ld-mini" data-flash title="Make the picked lights pulse on the stage, to find them">${ic('zap', 'sm')}Flash</button>` : ''}</div>
+    <div class="ld-card"><div class="ld-cardhead"><span class="ld-label">Colour &amp; levels</span><span class="ld-clip"><button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button></span></div>
+      <div class="ld-mixrow"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--ld-acc)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
       <div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><i></i><span>${n.replace(' white', '')}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><i></i><span>Off</span></button></div>
+      <div class="ld-recentrow">${rec.length ? `<div class="ld-recent" title="Recent colours">${rec.map((c, i) => `<button class="ld-rsw" data-recent="${i}" style="--sw:${fxSwatch({ ...c, d: 100 })}" aria-label="Recent colour ${esc(fxName({ ...c, d: 100 }))}" title="${esc(fxName({ ...c, d: 100 }))}" ${!ts.length || white ? 'disabled' : ''}></button>`).join('')}</div>` : ''}
+      <label class="ld-hex"><span class="sr-only">Colour code</span><input id="ldHex" type="text" value="${hex}" placeholder="#1f6bff" maxlength="7" spellcheck="false" aria-label="Colour code, like #1f6bff" ${!ts.length || white ? 'disabled' : ''}></label></div>
       ${white ? '<p class="ld-note">White-only lights take the dimmer only.</p>' : ''}</div>
-    <div class="ld-card"><div class="ld-label">Levels</div>
-      <div class="ld-faders">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}</div></div>`;
+`;
 }
 function renderDesk() {
   if (!desk.open) return;
@@ -3023,19 +3060,19 @@ function renderDesk() {
   const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : []), ...lgroups().map(g => ['g:' + g.id, g.name]), ['none', 'None']];
   const gOn = k => { const ids = deskGroupIds(k); return ids.length === picked.length && ids.every(i => picked.includes(i)); };
   const myG = lgroups().find(g => gOn('g:' + g.id) && picked.length);
-  const cue = (l, k) => { const pal = lookPalette(l); return `<button class="ld-look" data-look="${l.id}" aria-pressed="${l.id === cur?.id}"><span class="ld-cueno">${k + 1}</span><span class="ld-cuename">${esc(l.name)}</span><span class="ld-pal" aria-hidden="true">${pal.length ? pal.map(c => `<i style="background:${c}"></i>`).join('') : '<i class="dark"></i>'}</span></button>`; };
+  const cue = (l, k) => `<button class="ld-look" data-look="${l.id}" draggable="true" aria-pressed="${l.id === cur?.id}" title="${esc(l.name)}: drag to reorder (or Alt + ← →)"><span class="ld-cueno">${k + 1}</span><span class="ld-cuename">${esc(l.name)}</span><span class="ld-thumb">${lookThumb(l, k)}</span></button>`;
   $('ldBody').innerHTML = `<div class="ld-top">
       <div class="ld-brand"><span class="ld-logo">${ic('sun')}</span><div><h2 id="ldTitle">Lighting desk</h2><small>${plural(all.length, 'light')} · ${esc(longDate(plan.date))}</small></div></div>
-      <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button><span class="ld-moodwrap"><button class="ld-look add" data-moods aria-expanded="${!!desk.moods}">${ic('sun', 'sm')}Mood</button></span><span class="ld-moodwrap"><button class="ld-look add" data-lib aria-expanded="${!!desk.lib}">${ic('layers', 'sm')}Library</button></span></div>${desk.lib ? `<div class="ld-moods ld-libmenu" role="group" aria-label="Looks in the library">${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') + '<small>Fitted to this week’s lights by group, kind and place</small>' : '<small>Nothing saved yet. Open a look and press <b>Save to library</b>.</small>'}</div>` : ''}${desk.moods ? `<div class="ld-moods" role="menu" aria-label="Start a look from a mood">${MOODS.map(([n, , cols]) => `<button role="menuitem" data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}<small>Front light stays warm white</small></div>` : ''}
-      <div class="ld-actions">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-libsave title="Save this look to the library, to use in any week" aria-label="Save ${esc(cur.name)} to the library">${ic('save', 'sm')}</button><button class="ld-icon" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
+      <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button><span class="ld-moodwrap"><button class="ld-look add" data-moods aria-expanded="${!!desk.moods}">${ic('sun', 'sm')}Mood</button></span><span class="ld-moodwrap"><button class="ld-look add" data-lib aria-expanded="${!!desk.lib}">${ic('layers', 'sm')}Library</button></span><span class="ld-lookacts">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-libsave title="Save this look to the library, to use in any week" aria-label="Save ${esc(cur.name)} to the library">${ic('save', 'sm')}</button><button class="ld-icon" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="ld-icon" id="ldPeek" title="Hold to see the look before (or hold Space)" aria-label="Hold to peek at the previous look" ${desk.prevLook && desk.prevLook !== curLook()?.id ? '' : 'disabled'}>${ic('eye', 'sm')}</button></span></div>${desk.lib ? `<div class="ld-moods ld-libmenu" role="group" aria-label="Looks in the library">${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') + '<small>Fitted to this week’s lights by group, kind and place</small>' : '<small>Nothing saved yet. Open a look and press <b>Save to library</b>.</small>'}</div>` : ''}${desk.moods ? `<div class="ld-moods" role="menu" aria-label="Start a look from a mood">${MOODS.map(([n, , cols]) => `<button role="menuitem" data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}<small>Front light stays warm white</small></div>` : ''}
+      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
     <div class="ld-body"><section class="ld-stage" aria-label="Stage">
       <div class="ld-bar"><span class="ld-label">Stage</span><span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
           : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
-      <div class="ld-mapwrap" id="ldMapWrap">${deskMapSvg()}</div>
+      <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}" id="ldMapWrap">${deskMapSvg()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
       <p class="ld-tip">Click a light to pick it <span>·</span> Shift-click to add <span>·</span> drag across the stage to pick several</p></section>
       <aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside></div>
-    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span><span class="ld-keys" aria-label="Keys: 1 to 9 looks, up and down dimmer, A all lights, C copy, V paste"><kbd>1–9</kbd> looks <kbd>↑</kbd><kbd>↓</kbd> dimmer <kbd>A</kbd> all <kbd>C</kbd><kbd>V</kbd> copy, paste</span></div>`;
+    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span><span class="ld-keys" aria-label="Keys: 1 to 9 looks, up and down dimmer, A all lights, C copy, V paste, hold Space to peek, Ctrl Z undo"><kbd>1–9</kbd> looks <kbd>↑</kbd><kbd>↓</kbd> dimmer <kbd>A</kbd> all <kbd>C</kbd><kbd>V</kbd> copy, paste <kbd>Space</kbd> peek <kbd>Ctrl Z</kbd> undo</span></div>`;
 }
 // how many faces the open look lights, for the desk's stage bar
 function facesSummary() {
@@ -3053,12 +3090,21 @@ function deskLive() {
   if (info) { const sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent', b = info.querySelector('.bigsw'); b.style.setProperty('--c', sw); b.classList.toggle('none', sw === 'transparent'); info.querySelector('small').textContent = ts.length ? fxName(f, ts[0]) : ''; }
   for (const el of document.querySelectorAll('#ldColour [data-fx]')) { const k = el.dataset.fx; if (el !== document.activeElement) el.value = f[k]; const lab = el.closest('.ld-fader'); lab.style.setProperty('--v', faderPct(k, f[k])); lab.querySelector('output').textContent = f[k] + (k === 'd' ? '%' : ''); }
   const [h, sat] = rgb2hsv(f.r, f.g, f.b), mk = document.querySelector('.ld-mark'); if (mk) { mk.style.display = f.r + f.g + f.b ? '' : 'none'; mk.style.left = `${50 + Math.cos(h * Math.PI / 180) * sat * 50}%`; mk.style.top = `${50 + Math.sin(h * Math.PI / 180) * sat * 50}%`; }
-  const L = curLook(); if (L) for (const b of document.querySelectorAll('.ld-look[aria-pressed="true"] .ld-pal')) b.innerHTML = lookPalette(L).map(c => `<i style="background:${c}"></i>`).join('');
+  const L = curLook(); if (L) { const th = document.querySelector('.ld-look[aria-pressed="true"] .ld-thumb'); if (th) th.innerHTML = lookThumb(L, 'live'); }
+  for (const el of document.querySelectorAll('[data-master]')) { const m = lookMaster(L); if (el !== document.activeElement) el.value = m; const lab = el.closest('label'); lab.style.setProperty('--v', faderPct('d', m)); const o = lab.querySelector('output'); if (o) o.textContent = m + '%'; }
   renderPlot();
 }
-function deskCommit(msg = 'Light colour changed') { if (!fxSnap) return; const before = fxSnap; fxSnap = null; pushUndo(before, stepLabel(msg, before)); recordRev(msg, before); save(); renderAll(); renderDesk(); }
+function switchLook(id) {
+  const cur = curLook(); if (!id || id === cur?.id || lookPeek) return;
+  fadeLooksFrom(); desk.prevLook = cur?.id; mutate(() => { plan.lookId = id; }); if (desk.open) renderDesk();
+}
+// the last colours you used, newest first, kept on this device
+const deskRecent = () => (db.deskRecent ||= []);
+function pushRecent(f) { if (!f || f.r + f.g + f.b + f.w === 0) return; const c = { r: f.r, g: f.g, b: f.b, w: f.w }, k = JSON.stringify(c); db.deskRecent = [c, ...deskRecent().filter(x => JSON.stringify(x) !== k)].slice(0, 6); }
+function deskCommit(msg = 'Light colour changed') { if (!fxSnap) return; const ts = deskPicked(); if (ts.length) pushRecent(fxOf(ts[0])); const before = fxSnap; fxSnap = null; pushUndo(before, stepLabel(msg, before)); recordRev(msg, before); save(); renderAll(); renderDesk(); }
 function deskSet(patch, live) {
   if (weekLocked()) { lockedNote(); return; }
+  if (lookPeek) return;
   const ts = deskPicked(); if (!ts.length) return;
   if (!fxSnap) fxSnap = snapState();
   setFx(ts, patch);
@@ -3071,6 +3117,16 @@ $('deskDlg').addEventListener('click', e => {
   if (desk.moods && !e.target.closest('[data-moods], [data-mood]')) { desk.moods = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the mood menu
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'ldDone') { closeDesk(); return; }
+  if (desk.ctx && !t.closest('.ld-ctx')) { desk.ctx = null; renderDesk(); return; }
+  if (t.dataset.ctxpre) { const ts = deskCtxTargets(), c = DESK_PRESETS.find(p => p[0] === t.dataset.ctxpre)?.[1]; desk.ctx = null; if (ts.length && !lookPeek) { fxSnap = snapState(); setFx(ts, c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); deskSel = new Set(ts.map(i => i.id)); deskCommit(); } else renderDesk(); return; }
+  if (t.hasAttribute('data-ctxonly')) { deskSel = new Set([desk.ctx.id]); desk.ctx = null; renderDesk(); return; }
+  if (t.hasAttribute('data-ctxtype')) { const ty = itemById(desk.ctx.id)?.type; deskSel = new Set(deskLights().filter(i => i.type === ty).map(i => i.id)); desk.ctx = null; renderDesk(); return; }
+  if (t.hasAttribute('data-ctxmount')) { const m = mountOf(itemById(desk.ctx.id)); deskSel = new Set(deskLights().filter(i => mountOf(i) === m).map(i => i.id)); desk.ctx = null; renderDesk(); return; }
+  if (t.hasAttribute('data-ctxflash')) { const ids = deskCtxTargets().map(i => i.id); desk.ctx = null; renderDesk(); flashLights(ids); return; }
+  if (t.hasAttribute('data-flash')) { flashLights(deskPicked().map(i => i.id)); return; }
+  if (t.dataset.recent) { const c = deskRecent()[+t.dataset.recent]; if (c) deskSet({ ...c }); return; }
+  if (t.id === 'ldUndo') { undo(); renderDesk(); return; }
+  if (t.id === 'ldRedo') { redo(); renderDesk(); return; }
   if (t.hasAttribute('data-fxcopy')) { deskCopy(); return; }
   if (t.hasAttribute('data-moods')) { desk.moods = !desk.moods; desk.lib = false; renderDesk(); return; }
   if (t.hasAttribute('data-lib')) { desk.lib = !desk.lib; desk.moods = false; renderDesk(); return; }
@@ -3087,17 +3143,41 @@ $('deskDlg').addEventListener('click', e => {
   if (t.hasAttribute('data-gsave')) { saveDeskGroup(); return; }
   if (t.hasAttribute('data-gcancel')) { desk.naming = false; renderDesk(); return; }
   if (t.dataset.gdel) { const g = lgroups().find(x => x.id === t.dataset.gdel); if (g) { mutate(() => { plan.lgroups = plan.lgroups.filter(x => x.id !== g.id); }, `Group “${g.name}” deleted`); renderDesk(); } return; }
-  if (t.dataset.look) { if (t.dataset.look !== curLook()?.id) { fadeLooksFrom(); mutate(() => { plan.lookId = t.dataset.look; }); renderDesk(); } return; }
+  if (t.dataset.look) { switchLook(t.dataset.look); return; }
   if (t.hasAttribute('data-looknew')) { mutate(() => { const cur = ensureLook(); if (plan.looks.length === 1 && !Object.keys(cur.fx).length) return; const L = { id: uid(), name: `Look ${plan.looks.length + 1}`, fx: JSON.parse(JSON.stringify(cur.fx)) }; plan.looks.push(L); plan.lookId = L.id; }); renderDesk(); setTimeout(() => $('ldLookName')?.select(), 30); return; }
   if (t.hasAttribute('data-lookdel')) { const cur = curLook(); if (cur) { fadeLooksFrom(); mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; }, `Deleted ${cur.name}`); renderDesk(); } return; }
 });
 $('deskDlg').addEventListener('change', e => {
   const t = e.target;
+  if (t.hasAttribute?.('data-master')) { deskCommit('Look master changed'); return; }
+  if (t.id === 'ldHex') { const m = /^#?([0-9a-f]{6})$/i.exec(t.value.trim()); if (!m) { toast('Type a colour code like #1f6bff'); renderDesk(); return; } const n = parseInt(m[1], 16); deskSet({ r: n >> 16 & 255, g: n >> 8 & 255, b: n & 255, w: 0 }); return; }
   if (t.id === 'ldGName') return;
   if (t.id === 'ldLookName') { const cur = curLook(); if (cur && t.value.trim()) { mutate(() => { cur.name = t.value.trim().slice(0, 40); }); renderDesk(); } return; }
   if (t.dataset.fx) deskCommit();
 });
-$('deskDlg').addEventListener('input', e => { const k = e.target.dataset?.fx; if (k) deskSet({ [k]: Number(e.target.value) }, true); });
+$('deskDlg').addEventListener('input', e => {
+  const k = e.target.dataset?.fx; if (k) { deskSet({ [k]: Number(e.target.value) }, true); return; }
+  if (e.target.hasAttribute?.('data-master')) { if (lookPeek || weekLocked()) return; if (!fxSnap) fxSnap = snapState(); ensureLook().master = Number(e.target.value); deskLive(); }
+});
+$('deskDlg').addEventListener('contextmenu', e => { const g = e.target.closest('[data-ldfx]'); if (!g) return; e.preventDefault(); openDeskCtx(g.dataset.ldfx, e.clientX, e.clientY); });
+// hover a light on the desk's stage: its beam comes forward, the others step back
+$('deskDlg').addEventListener('pointerover', e => { const g = e.target.closest('[data-ldfx]'), map = $('ldMap'); if (!map) return; map.classList.toggle('hl', !!g); map.querySelectorAll('.lb.hl').forEach(b => b.classList.remove('hl')); if (g) map.querySelector(`.lb[data-b="${g.dataset.ldfx}"]`)?.classList.add('hl'); });
+$('deskDlg').addEventListener('pointerout', e => { if (!e.relatedTarget?.closest?.('[data-ldfx]')) $('ldMap')?.classList.remove('hl'); });
+// reorder looks by dragging their buttons
+$('deskDlg').addEventListener('dragstart', e => { const b = e.target.closest?.('.ld-look[data-look]'); if (!b) return; desk.dragLook = b.dataset.look; e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', 'look'); } catch { /* ok */ } });
+$('deskDlg').addEventListener('dragover', e => { const b = e.target.closest?.('.ld-look[data-look]'); if (!b || !desk.dragLook) return; e.preventDefault(); document.querySelectorAll('.ld-look.dropb').forEach(x => x.classList.remove('dropb')); b.classList.add('dropb'); });
+$('deskDlg').addEventListener('drop', e => { const b = e.target.closest?.('.ld-look[data-look]'), from = desk.dragLook; desk.dragLook = null; if (!b || !from || b.dataset.look === from) { renderDesk(); return; } e.preventDefault(); moveLook(from, b.dataset.look); });
+$('deskDlg').addEventListener('dragend', () => { desk.dragLook = null; document.querySelectorAll('.ld-look.dropb').forEach(x => x.classList.remove('dropb')); });
+function moveLook(id, beforeId, dir = 0) {
+  const ls = plan.looks || [], i = ls.findIndex(l => l.id === id); if (i < 0) return;
+  let j = dir ? clamp(i + dir, 0, ls.length - 1) : ls.findIndex(l => l.id === beforeId); if (j < 0 || j === i) return;
+  mutate(() => { const [L] = plan.looks.splice(i, 1); plan.looks.splice(j, 0, L); }, `${ls[i].name} moved to number ${j + 1}`); renderDesk();
+}
+// hold to peek at the previous look (the button, or Space)
+function peekStart() { const prev = desk.prevLook && plan.looks?.find(l => l.id === desk.prevLook && l.id !== plan.lookId); if (!prev || lookPeek) return; lookPeek = prev.id; renderDesk(); renderPlot(); }
+function peekEnd() { if (!lookPeek) return; lookPeek = null; renderDesk(); renderPlot(); }
+document.addEventListener('keyup', e => { if (e.key === ' ' && lookPeek) peekEnd(); });
+$('deskDlg').addEventListener('pointerup', () => { if (lookPeek && desk.peekBtn) { desk.peekBtn = false; peekEnd(); } });
 $('deskDlg').addEventListener('keydown', e => {
   const g = e.target.closest?.('[data-ldfx]'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pickDeskFx(g.dataset.ldfx, e.shiftKey); }
   if (e.target.id === 'ldWheel' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {   // turn the hue with the arrows, more or less colour up and down
@@ -3108,13 +3188,30 @@ $('deskDlg').addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.id === 'ldLookName') e.target.blur();
   if (e.target.id === 'ldGName' && e.key === 'Enter') { e.preventDefault(); saveDeskGroup(); }
 });
+// right-click (or long-press) a light on the desk's stage: quick colours and picking, for that light, or for all picked if it's one of them
+const CTX_PRESETS = ['Warm white', 'Red', 'Amber', 'Green', 'Blue', 'Congo', 'Magenta'];
+function deskCtxTargets() { const id = desk.ctx?.id, picked = deskPicked(); return picked.some(i => i.id === id) ? picked : [itemById(id)].filter(Boolean); }
+function deskCtxHtml() {
+  const c = desk.ctx, it = c && itemById(c.id); if (!it) return '';
+  const ts = deskCtxTargets(), m = mountOf(it), white = ts.every(i => !cat(i).rgbw);
+  return `<div class="ld-ctx" role="menu" aria-label="${esc(itemName(it))}" style="left:${c.x}px;top:${c.y}px"><div class="ld-ctxhead">${ts.length > 1 ? plural(ts.length, 'light') : esc(itemName(it))}</div>
+    <div class="ld-ctxsw">${CTX_PRESETS.map(n => `<button role="menuitem" data-ctxpre="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === n)[1], d: 100 })}" ${white && n !== 'Warm white' ? 'disabled' : ''}></button>`).join('')}<button role="menuitem" class="off" data-ctxpre="Off" title="Off" aria-label="Off"></button></div>
+    <button role="menuitem" data-ctxonly>Only this one</button><button role="menuitem" data-ctxtype>Every ${esc(cat(it).short.toLowerCase())}</button><button role="menuitem" data-ctxmount>${m ? `Everything on ${esc(itemName(m))}` : 'Every floor light'}</button><button role="menuitem" data-ctxflash>${ic('zap', 'sm')}Flash</button></div>`;
+}
+function openDeskCtx(id, cx, cy) { const r = $('ldBody').getBoundingClientRect(); desk.ctx = { id, x: Math.round(Math.min(cx - r.left, r.width - 220)), y: Math.round(Math.min(cy - r.top, r.height - 230)) }; renderDesk(); setTimeout(() => document.querySelector('.ld-ctx button')?.focus(), 20); }
+function flashLights(ids) { desk.flash = new Set(ids); renderPlot(); if (desk.open) $('ldMapWrap').innerHTML = deskMapSvg(); clearTimeout(desk.flashT); desk.flashT = setTimeout(() => { desk.flash = null; renderPlot(); if (desk.open && $('ldMapWrap')) $('ldMapWrap').innerHTML = deskMapSvg(); }, 1700); }
 function deskCopy() { const ts = deskPicked(); if (!ts.length) return; const f = fxOf(ts[0]); deskClip = { r: f.r, g: f.g, b: f.b, w: f.w, d: f.d }; toast(`Copied ${fxName(f, ts[0])}`); renderDesk(); }
 function deskPaste() { if (deskClip && deskPicked().length) deskSet({ ...deskClip }); }
 // the desk's keys: 1–9 looks, ↑ ↓ dimmer (Shift for big steps), A all lights, C copy and V paste a colour
 function deskKey(e) {
+  const typing = e.target.matches?.('input[type=text]');
+  if ((e.ctrlKey || e.metaKey) && !typing && e.key.toLowerCase() === 'z') { e.shiftKey ? redo() : undo(); renderDesk(); return true; }
+  if ((e.ctrlKey || e.metaKey) && !typing && e.key.toLowerCase() === 'y') { redo(); renderDesk(); return true; }
+  if (e.altKey && !typing && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) { const L = curLook(); if (L) moveLook(L.id, null, e.key === 'ArrowLeft' ? -1 : 1); return true; }
+  if (e.key === ' ' && !typing && !e.target.matches?.('button')) { if (!e.repeat) peekStart(); return true; }
   if (e.target.matches?.('input[type=text], input[type=range]') || e.ctrlKey || e.metaKey || e.altKey) return false;
   const looks = plan.looks || [];
-  if (/^[1-9]$/.test(e.key) && looks[+e.key - 1]) { const L = looks[+e.key - 1]; if (L.id !== curLook()?.id) { fadeLooksFrom(); mutate(() => { plan.lookId = L.id; }); renderDesk(); } return true; }
+  if (/^[1-9]$/.test(e.key) && looks[+e.key - 1]) { switchLook(looks[+e.key - 1].id); return true; }
   if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.target.id !== 'ldWheel') { const ts = deskPicked(); if (!ts.length) return true; const d = clamp(fxOf(ts[0]).d + (e.key === 'ArrowUp' ? 1 : -1) * (e.shiftKey ? 25 : 5), 0, 100); deskSet({ d }); return true; }
   if (e.key.toLowerCase() === 'a') { deskSel = null; renderDesk(); return true; }
   if (e.key.toLowerCase() === 'c') { deskCopy(); return true; }
@@ -3123,6 +3220,16 @@ function deskKey(e) {
 }
 function pickDeskFx(id, add) { if (add) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.has(id) ? deskSel.delete(id) : deskSel.add(id); } else deskSel = new Set([id]); renderDesk(); }
 $('deskDlg').addEventListener('pointerdown', e => {
+  if (e.button === 2) return;   // a right-click opens the quick menu (contextmenu), it doesn't pick
+  if (desk.ctx && !e.target.closest('.ld-ctx')) { desk.ctx = null; renderDesk(); return; }   // a press anywhere else closes the quick menu
+  if (e.target.closest('#ldPeek') && !e.target.closest('#ldPeek').disabled) { desk.peekBtn = true; peekStart(); e.preventDefault(); return; }
+  const lp = e.target.closest('[data-ldfx]');
+  if (lp && e.pointerType === 'touch') {   // a long press opens the light's quick menu; a short tap picks it
+    const id = lp.dataset.ldfx, x = e.clientX, y = e.clientY; clearTimeout(desk.lp);
+    desk.lp = setTimeout(() => { desk.lp = null; openDeskCtx(id, x, y); }, 500);
+    lp.addEventListener('pointerup', () => { if (desk.lp) { clearTimeout(desk.lp); desk.lp = null; pickDeskFx(id, false); } }, { once: true });
+    e.preventDefault(); return;
+  }
   const wheel = e.target.closest('#ldWheel');
   if (wheel && !wheel.classList.contains('off')) {
     const apply = ev => { const r = wheel.getBoundingClientRect(), dx = ev.clientX - (r.left + r.width / 2), dy = ev.clientY - (r.top + r.height / 2), sat = Math.min(1, Math.hypot(dx, dy) / (r.width / 2)), h = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360, [R, G, B] = hsv2rgb(h, sat, 1); deskSet({ r: R, g: G, b: B }, true); };
@@ -3149,7 +3256,7 @@ $('deskDlg').addEventListener('pointerdown', e => {
 function looksSheetHtml() {
   const looks = plan.looks || [], all = deskLights(); if (!looks.length || !all.length) return '';
   const row = L => { const by = new Map(); for (const it of all) { const f = { ...FX_DEF, ...(L.fx[it.id] || {}) }, k = fxName(f, it); (by.get(k) || by.set(k, { f, it, l: [] }).get(k)).l.push(itemName(it)); }
-    return `<div class="lookrow"><b>${esc(L.name)}</b><div class="lookfx">${[...by].map(([k, g]) => `<span><i style="background:${fxSwatch(g.f, g.it)}"></i>${esc(k)}: ${esc(g.l.join(', '))}</span>`).join('')}</div></div>`; };
+    return `<div class="lookrow"><b>${esc(L.name)}${lookMaster(L) < 100 ? ` <small class="hint">master ${lookMaster(L)}%</small>` : ''}</b><div class="lookfx">${[...by].map(([k, g]) => `<span><i style="background:${fxSwatch(g.f, g.it)}"></i>${esc(k)}: ${esc(g.l.join(', '))}</span>`).join('')}</div></div>`; };
   return `<h3 class="dmxh">Looks</h3><div class="lookrows">${looks.map(row).join('')}</div>`;
 }
 function groupsSheetHtml() {
@@ -3230,7 +3337,7 @@ function faceLight(p, L) {
   let face = 0, white = 0, left = 0, right = 0, mid = 0;
   for (const it of plan.items) {
     if (!isFixture(it) || isUp(it) || it.y < p.y - fromM(.5)) continue;
-    const f = fxIn(it, L), col = fxRGB(f, it); if (!col) continue;
+    const f = fxEff(it, L), col = fxRGB(f, it); if (!col) continue;
     const { cx, cy, r, ux, uy } = beamGeom(it), dx = p.x - cx, dy = p.y - cy, along = dx * ux + dy * uy, across = -dx * uy + dy * ux;
     const q2 = (along / (mountOf(it) ? r : r * 1.25)) ** 2 + (across / r) ** 2; if (q2 > 1) continue;
     const c = f.d / 100 * (1 - .6 * q2); face += c; white += c * Math.min(...col) / 255;
@@ -6884,7 +6991,7 @@ function closePops() { $('weekPop').hidden = true; $('weekBtn').setAttribute('ar
 document.addEventListener('keydown', e => {
   if (!$('histDlg').hidden) { if (e.key === 'Escape') $('histDlg').hidden = true; return; }
   if (!$('cmdk').hidden) return;
-  if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.moods || desk.naming || desk.lib)) { desk.moods = desk.naming = desk.lib = false; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
+  if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.moods || desk.naming || desk.lib || desk.ctx)) { desk.moods = desk.naming = desk.lib = false; desk.ctx = null; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
   if (!$('rackDlg').hidden) {
     const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
     if (e.key === 'Escape') closeRack();
@@ -7223,7 +7330,7 @@ $('inspector').addEventListener('click', e => {
   if (t.dataset.selitem) { if (itemById(t.dataset.selitem)) { sel = { kind: 'item', id: t.dataset.selitem }; group = null; focusItem(t.dataset.selitem); renderPlot(); renderInspector(); } return; }
   if (t.dataset.selc) { sel = { kind: 'cable', id: t.dataset.selc }; renderPlot(); renderInspector(); return; }
   if (t.id === 'iReaddr') { mutate(() => assignDmx(true), 'Every light re-addressed'); return; }
-  if (t.dataset.look) { if (t.dataset.look !== curLook()?.id) { fadeLooksFrom(); mutate(() => { plan.lookId = t.dataset.look; }); } return; }
+  if (t.dataset.look) { switchLook(t.dataset.look); return; }
   if (t.hasAttribute('data-opendesk')) { openDesk(t.dataset.opendesk || null); return; }
   if (t.dataset.mirror) { mirrorLight(t.dataset.mirror); return; }
   if (t.dataset.level) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.level = t.dataset.level === 'ceiling' ? 'ceiling' : undefined; c.auto = false; }); return; }
@@ -7643,24 +7750,28 @@ function wallDist(x, y, ux, uy) {   // how far from (x, y) along (ux, uy) to the
   if (uy > 1e-6) t = Math.min(t, (R.y1 - y) / uy); else if (uy < -1e-6) t = Math.min(t, (R.y0 - y) / uy);
   return Math.max(.2, t);
 }
-function beamsSvg(selSet, pre = 'lbp', k = 1) {   // k: how much brighter to draw (the desk's dark map)
+function beamsSvg(selSet, pre = 'lbp', k = 1, L = curLook()) {   // k: how much brighter to draw (the desk's dark map); L: which look
   let s = '';
   for (const it of plan.items) {
     if (!isFixture(it) || !itemShown(it)) continue;
-    const on = selSet.has(it.id), f = fxOf(it), col = fxRGB(f, it), { cx, cy, r, ux, uy } = beamGeom(it), px = -uy, py = ux;
-    if (!col) { if (on) s += `<circle class="lb-off" cx="${f3(cx)}" cy="${f3(cy)}" r="${f3(r)}"/>`; continue; }   // off in this look: picked, it shows where it would land
-    const a = Math.min(2.4, Math.max(.3, f.d / 100) * k), c = col.join(','), gid = `${pre}-${it.id}`, hung = !!mountOf(it);
-    if (isUp(it)) {   // thrown up a wall or the set: a short, wide fan, brightest where it lands
-      const T = Math.min(throwOf(it), wallDist(it.x, it.y, ux, uy)), hw = Number(prop(it, 'w')) / 2, sp = hw + T * Math.tan(beamOf(it) / 2 * Math.PI / 180), ex = it.x + ux * T, ey = it.y + uy * T;
-      s += `<linearGradient id="${gid}" gradientUnits="userSpaceOnUse" x1="${f3(it.x)}" y1="${f3(it.y)}" x2="${f3(ex)}" y2="${f3(ey)}"><stop offset="0" stop-color="rgb(${c})" stop-opacity="${f3(.06 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="${f3((on ? .55 : .4) * a)}"/></linearGradient>` +
-        `<path class="lb-up${on ? ' on' : ''}" fill="url(#${gid})" d="M${f3(it.x - px * hw)} ${f3(it.y - py * hw)}L${f3(it.x + px * hw)} ${f3(it.y + py * hw)}L${f3(ex + px * sp)} ${f3(ey + py * sp)}L${f3(ex - px * sp)} ${f3(ey - py * sp)}Z"/>` +
-        `<path class="lb-wall" style="stroke:rgba(${c},${f3(.75 * a)})" d="M${f3(ex - px * sp)} ${f3(ey - py * sp)}L${f3(ex + px * sp)} ${f3(ey + py * sp)}"/>`;
-      continue;
+    const on = selSet.has(it.id), f = fxEff(it, L), col = fxRGB(f, it), { cx, cy, r, ux, uy } = beamGeom(it), px = -uy, py = ux;
+    let one = '';
+    if (!col) { if (on) one = `<circle class="lb-off" cx="${f3(cx)}" cy="${f3(cy)}" r="${f3(r)}"/>`; }   // off in this look: picked, it shows where it would land
+    else {
+      const a = Math.min(2.4, Math.max(.3, f.d / 100) * k), c = col.join(','), gid = `${pre}-${it.id}`, hung = !!mountOf(it);
+      if (isUp(it)) {   // thrown up a wall or the set: a short, wide fan, brightest where it lands
+        const T = Math.min(throwOf(it), wallDist(it.x, it.y, ux, uy)), hw = Number(prop(it, 'w')) / 2, sp = hw + T * Math.tan(beamOf(it) / 2 * Math.PI / 180), ex = it.x + ux * T, ey = it.y + uy * T;
+        one = `<linearGradient id="${gid}" gradientUnits="userSpaceOnUse" x1="${f3(it.x)}" y1="${f3(it.y)}" x2="${f3(ex)}" y2="${f3(ey)}"><stop offset="0" stop-color="rgb(${c})" stop-opacity="${f3(.06 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="${f3((on ? .55 : .4) * a)}"/></linearGradient>` +
+          `<path class="lb-up${on ? ' on' : ''}" fill="url(#${gid})" d="M${f3(it.x - px * hw)} ${f3(it.y - py * hw)}L${f3(it.x + px * hw)} ${f3(it.y + py * hw)}L${f3(ex + px * sp)} ${f3(ey + py * sp)}L${f3(ex - px * sp)} ${f3(ey - py * sp)}Z"/>` +
+          `<path class="lb-wall" style="stroke:rgba(${c},${f3(.75 * a)})" d="M${f3(ex - px * sp)} ${f3(ey - py * sp)}L${f3(ex + px * sp)} ${f3(ey + py * sp)}"/>`;
+      } else {
+        const lift = hung ? .7 : 1, ca = (on ? .16 : hung ? .04 : .07) * a, cls = `${hung ? ' hung' : ''}${on ? ' on' : ''}${cat(it).mover ? ' mover' : ''}`;
+        one = `<radialGradient id="${gid}"><stop offset="0" stop-color="rgb(${c})" stop-opacity="${f3(.36 * a)}"/><stop offset=".6" stop-color="rgb(${c})" stop-opacity="${f3(.15 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="0"/></radialGradient>` +
+          `<path class="lb-cone${cls}" style="fill:rgba(${c},${f3(ca)})" d="M${f3(it.x)} ${f3(it.y)}L${f3(cx + px * r * lift)} ${f3(cy + py * r * lift)}L${f3(cx - px * r * lift)} ${f3(cy - py * r * lift)}Z"/>` +
+          `<ellipse class="lb-pool${cls}" fill="url(#${gid})" style="--lc:rgba(${c},.75)" cx="${f3(cx)}" cy="${f3(cy)}" rx="${f3(hung ? r : r * 1.25)}" ry="${f3(r)}" transform="rotate(${f3(Math.atan2(uy, ux) * 180 / Math.PI)} ${f3(cx)} ${f3(cy)})"/>`;
+      }
     }
-    const lift = hung ? .7 : 1, ca = (on ? .16 : hung ? .04 : .07) * a, cls = `${hung ? ' hung' : ''}${on ? ' on' : ''}${cat(it).mover ? ' mover' : ''}`;
-    s += `<radialGradient id="${gid}"><stop offset="0" stop-color="rgb(${c})" stop-opacity="${f3(.36 * a)}"/><stop offset=".6" stop-color="rgb(${c})" stop-opacity="${f3(.15 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="0"/></radialGradient>` +
-      `<path class="lb-cone${cls}" style="fill:rgba(${c},${f3(ca)})" d="M${f3(it.x)} ${f3(it.y)}L${f3(cx + px * r * lift)} ${f3(cy + py * r * lift)}L${f3(cx - px * r * lift)} ${f3(cy - py * r * lift)}Z"/>` +
-      `<ellipse class="lb-pool${cls}" fill="url(#${gid})" style="--lc:rgba(${c},.75)" cx="${f3(cx)}" cy="${f3(cy)}" rx="${f3(hung ? r : r * 1.25)}" ry="${f3(r)}" transform="rotate(${f3(Math.atan2(uy, ux) * 180 / Math.PI)} ${f3(cx)} ${f3(cy)})"/>`;
+    if (one) s += `<g class="lb${desk.flash?.has(it.id) ? ' flash' : ''}" data-b="${it.id}">${one}</g>`;
   }
   const R = roomRect();   // light stops at the walls
   return `<g class="beams" aria-hidden="true"><clipPath id="${pre}-room"><rect x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/></clipPath><g clip-path="url(#${pre}-room)">${s}</g></g>`;
@@ -7703,7 +7814,7 @@ function sightSvg(deckD) {
 function brightSvg() {
   const lights = plan.items.filter(i => isFixture(i) && !isUp(i)); if (!lights.length) return '';
   const sp = stagePoly(), xs = sp.map(q => q[0]), ys = sp.map(q => q[1]), step = Math.max(.6, (Math.max(...xs) - Math.min(...xs)) / 40), L = curLook();
-  const geo = lights.map(it => { const f = fxIn(it, L), col = fxRGB(f, it); return col && { ...beamGeom(it), hung: !!mountOf(it), k: f.d / 100 * Math.max(.25, (.2126 * col[0] + .7152 * col[1] + .0722 * col[2]) / 255) }; }).filter(Boolean);
+  const geo = lights.map(it => { const f = fxEff(it, L), col = fxRGB(f, it); return col && { ...beamGeom(it), hung: !!mountOf(it), k: f.d / 100 * Math.max(.25, (.2126 * col[0] + .7152 * col[1] + .0722 * col[2]) / 255) }; }).filter(Boolean);
   let s = `<filter id="brBlur" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="${f3(step * .8)}"/></filter><g class="ov-bright" clip-path="url(#deckclip)"><g filter="url(#brBlur)">`;
   for (let y = Math.min(...ys) + step / 2; y < Math.max(...ys); y += step) for (let x = Math.min(...xs) + step / 2; x < Math.max(...xs); x += step) {
     let I = 0;
