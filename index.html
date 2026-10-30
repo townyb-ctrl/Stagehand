@@ -629,6 +629,24 @@ svg text { font-family: var(--f-ui); }
 .ldesk { position: relative; }
 .ld-moods { position: absolute; z-index: 5; top: 74px; left: 50%; transform: translateX(-50%); display: grid; gap: 2px; padding: 6px; min-width: 220px; border-radius: 12px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
 .ld-moods button { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--ld-ink); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left; }
+.ld-libmenu { left: auto; right: 220px; transform: none; min-width: 250px; }
+.ld-librow { display: flex; align-items: center; } .ld-librow > button:first-child { flex: 1; }
+.ld-moods .ld-libx { padding: 6px; color: var(--ld-mute); } .ld-moods .ld-libx:hover { color: var(--bad-ink); }
+.ldesk.big { width: 100%; height: 100%; grid-template-rows: auto auto minmax(0, 1fr); }
+.ld-bigtop { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--ld-line); }
+.ld-bigtop h2 { display: flex; align-items: center; gap: 8px; font-size: 18px; margin-right: auto; } .ld-bigtop .ld-faces { margin: 0; }
+.ld-bigtop .ld-done { display: inline-flex; align-items: center; gap: 6px; }
+.ld-bigmap { height: min(42vh, 420px); margin: 14px 18px 0; border-radius: 16px; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #121722, #07090d); }
+.ld-bigs { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; padding: 16px 18px 20px; overflow-y: auto; align-content: start; }
+.ld-big { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 12px; row-gap: 10px; min-height: 96px; padding: 16px; border-radius: 18px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink); font: inherit; text-align: left; cursor: pointer; transition: transform .12s, border-color .2s, box-shadow .2s; }
+.ld-big:active { transform: scale(.98); }
+.ld-big b { font-size: 19px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ld-bigno { grid-row: span 2; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: 17px; background: var(--ld-panel); color: var(--ld-mute); box-shadow: inset 0 0 0 1px var(--ld-line); }
+.ld-bigpal { display: flex; gap: 5px; } .ld-bigpal i { flex: 1; max-width: 46px; height: 8px; border-radius: 4px; box-shadow: 0 0 10px -2px currentColor; }
+.ld-big[aria-pressed="true"] { border-color: var(--ld-acc); box-shadow: 0 0 0 4px var(--accent-soft), var(--shadow-2); }
+.ld-big[aria-pressed="true"] .ld-bigno { background: var(--ld-acc); color: var(--accent-ink); }
+.ldesk.big .ld-map { cursor: default; }
+@media (max-width: 600px) { .ld-bigs { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; } .ld-bigmap { height: 30vh; } .ld-big { min-height: 84px; padding: 12px; } .ld-big b { font-size: 16px; } .ld-bigmap { margin: 10px 12px 0; } .ld-bigtop .ld-faces { display: none; } }
 .ld-moods button:hover { background: var(--ld-raise); } .ld-moods .ld-pal i { width: 12px; } .ld-moods small { padding: 4px 10px 2px; color: var(--ld-mute); font-size: 11.5px; }
 .ld-seg[aria-pressed="true"] { background: var(--ld-bg); color: var(--ld-ink); box-shadow: var(--shadow-1), inset 0 0 0 1px var(--ld-line2); }
 .ld-mapwrap { min-height: 0; border-radius: 16px; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #121722, #07090d); box-shadow: inset 0 0 0 1px var(--ld-line), inset 0 20px 60px rgba(0,0,0,.45); }
@@ -2882,7 +2900,7 @@ function openDesk(onlyId) {
   if (onlyId) deskSel = new Set([onlyId]);
   desk.open = true; $('deskDlg').hidden = false; renderDesk(); setTimeout(() => $('ldDone')?.focus(), 30);
 }
-function closeDesk() { desk.naming = false; desk.moods = false; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
+function closeDesk() { desk.naming = false; desk.moods = false; desk.lib = false; desk.big = false; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
 // your own named groups of lights (Front wash, Band backlight…), saved with the week
 const lgroups = () => (plan.lgroups || []).map(g => ({ ...g, ids: g.ids.filter(id => isFixture(itemById(id))) })).filter(g => g.ids.length);
 function deskGroupIds(k) {
@@ -2942,6 +2960,42 @@ function moodLook(m) {
   mutate(() => { plan.looks ||= []; const n = plan.looks.filter(l => l.name === name || l.name.startsWith(name + ' ')).length, L = { id: uid(), name: n ? `${name} ${n + 1}` : name, fx }; plan.looks.push(L); plan.lookId = L.id; }, `${name} look added: front light stays warm white`);
   renderDesk();
 }
+/* Look library: looks saved once and reused in any week or venue. Each light's colour is kept with where it was (across
+   and back on the stage, as fractions), its type, whether it hung, whether it was front light and its group's name; a week
+   takes a saved look by giving each of its lights the colour of the saved light most like it. */
+const lookLib = () => (db.lookLib ||= []);
+function libSave() {
+  const L = curLook(); if (!L) return;
+  const sp = stagePoly(), W = Math.max(...sp.map(q => q[0])) || 1, D = Math.max(...sp.map(q => q[1])) || 1, gs = lgroups();
+  const lights = deskLights().map(it => ({ type: it.type, x: it.x / W, y: it.y / D, hung: !!mountOf(it), front: isFrontLight(it), up: isUp(it), group: gs.find(g => g.ids.includes(it.id))?.name || '', fx: fxIn(it, L) }));
+  const name = L.name, lib = lookLib(), had = lib.findIndex(x => x.name.toLowerCase() === name.toLowerCase()), entry = { id: had >= 0 ? lib[had].id : uid(), name, lights, saved: localISO() };
+  if (had >= 0) lib[had] = entry; else lib.push(entry);
+  save(); toast(had >= 0 ? `Library look “${name}” updated` : `“${name}” saved to the library: use it in any week`); renderDesk();
+}
+function libUse(id) {
+  const e = lookLib().find(x => x.id === id); if (!e?.lights.length) return;
+  const sp = stagePoly(), W = Math.max(...sp.map(q => q[0])) || 1, D = Math.max(...sp.map(q => q[1])) || 1, gs = lgroups(), fx = {};
+  for (const it of deskLights()) {
+    const me = { x: it.x / W, y: it.y / D, hung: !!mountOf(it), front: isFrontLight(it), up: isUp(it), group: gs.find(g => g.ids.includes(it.id))?.name || '' };
+    let best = null, bc = Infinity;
+    for (const l of e.lights) {   // same group first, then the same kind of light, then the nearest place
+      const c = (me.group && l.group === me.group ? 0 : 3) + (l.front !== me.front ? 2 : 0) + (l.up !== me.up ? 1.5 : 0) + (l.hung !== me.hung ? 1 : 0) + (l.type !== it.type ? .4 : 0) + Math.hypot(l.x - me.x, (l.y - me.y) * .6);
+      if (c < bc) { bc = c; best = l; }
+    }
+    fx[it.id] = { ...best.fx };
+  }
+  fadeLooksFrom(); desk.lib = false;
+  mutate(() => { plan.looks ||= []; const n = plan.looks.filter(l => l.name === e.name || l.name.startsWith(e.name + ' ')).length, L = { id: uid(), name: n ? `${e.name} ${n + 1}` : e.name, fx }; plan.looks.push(L); plan.lookId = L.id; }, `“${e.name}” from the library, fitted to this week's lights`);
+  renderDesk();
+}
+const libPalette = e => { const n = new Map(); for (const l of e.lights) { const c = fxSwatch(l.fx, { type: l.type }); if (c !== 'transparent') n.set(c, (n.get(c) || 0) + 1); } return [...n].sort((a, b) => b[1] - a[1]).slice(0, 4).map(x => x[0]); };
+/* Big buttons: the looks as large buttons for a phone or tablet at rehearsal, with the stage above showing the open look */
+function renderBig() {
+  const looks = plan.looks || [], cur = curLook();
+  $('ldBody').innerHTML = `<div class="ld-bigtop"><h2 id="ldTitle">${ic('sun')}Looks</h2><span class="ld-faces" id="ldFaces">${facesSummary()}</span><button class="ld-done" id="ldBigExit">${ic('sliders', 'sm')}Full desk</button><button class="ld-icon" id="ldDone" aria-label="Close" title="Close">${ic('x', 'sm')}</button></div>
+    <div class="ld-bigmap" id="ldMapWrap">${deskMapSvg()}</div>
+    <div class="ld-bigs" role="group" aria-label="Looks">${looks.length ? looks.map((l, k) => { const pal = lookPalette(l); return `<button class="ld-big" data-look="${l.id}" aria-pressed="${l.id === cur?.id}"><span class="ld-bigno">${k + 1}</span><b>${esc(l.name)}</b><span class="ld-bigpal">${(pal.length ? pal : ['transparent']).map(c => `<i style="background:${c}"></i>`).join('')}</span></button>`; }).join('') : '<p class="ld-note">No looks yet. Open the full desk to make some.</p>'}</div>`;
+}
 const FADER_COL = { r: '#ff4d57', g: '#2fbf71', b: '#4c7dff', w: '#e0c88f', d: '#8f84ff' };
 const faderPct = (k, v) => f3(v / (k === 'd' ? 100 : 255));   // how full the groove is, 0–1
 // a look's colours at a glance: its most used colours, most first
@@ -2963,6 +3017,8 @@ function deskColourHtml() {
 }
 function renderDesk() {
   if (!desk.open) return;
+  $('ldBody').classList.toggle('big', !!desk.big);
+  if (desk.big) { renderBig(); return; }
   const looks = plan.looks || [], cur = curLook(), all = deskLights(), picked = deskPicked();
   const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : []), ...lgroups().map(g => ['g:' + g.id, g.name]), ['none', 'None']];
   const gOn = k => { const ids = deskGroupIds(k); return ids.length === picked.length && ids.every(i => picked.includes(i)); };
@@ -2970,8 +3026,8 @@ function renderDesk() {
   const cue = (l, k) => { const pal = lookPalette(l); return `<button class="ld-look" data-look="${l.id}" aria-pressed="${l.id === cur?.id}"><span class="ld-cueno">${k + 1}</span><span class="ld-cuename">${esc(l.name)}</span><span class="ld-pal" aria-hidden="true">${pal.length ? pal.map(c => `<i style="background:${c}"></i>`).join('') : '<i class="dark"></i>'}</span></button>`; };
   $('ldBody').innerHTML = `<div class="ld-top">
       <div class="ld-brand"><span class="ld-logo">${ic('sun')}</span><div><h2 id="ldTitle">Lighting desk</h2><small>${plural(all.length, 'light')} · ${esc(longDate(plan.date))}</small></div></div>
-      <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button><span class="ld-moodwrap"><button class="ld-look add" data-moods aria-expanded="${!!desk.moods}">${ic('sun', 'sm')}Mood</button></span></div>${desk.moods ? `<div class="ld-moods" role="menu" aria-label="Start a look from a mood">${MOODS.map(([n, , cols]) => `<button role="menuitem" data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}<small>Front light stays warm white</small></div>` : ''}
-      <div class="ld-actions">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="ld-done" id="ldDone">Done</button></div></div>
+      <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button><span class="ld-moodwrap"><button class="ld-look add" data-moods aria-expanded="${!!desk.moods}">${ic('sun', 'sm')}Mood</button></span><span class="ld-moodwrap"><button class="ld-look add" data-lib aria-expanded="${!!desk.lib}">${ic('layers', 'sm')}Library</button></span></div>${desk.lib ? `<div class="ld-moods ld-libmenu" role="group" aria-label="Looks in the library">${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') + '<small>Fitted to this week’s lights by group, kind and place</small>' : '<small>Nothing saved yet. Open a look and press <b>Save to library</b>.</small>'}</div>` : ''}${desk.moods ? `<div class="ld-moods" role="menu" aria-label="Start a look from a mood">${MOODS.map(([n, , cols]) => `<button role="menuitem" data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}<small>Front light stays warm white</small></div>` : ''}
+      <div class="ld-actions">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-libsave title="Save this look to the library, to use in any week" aria-label="Save ${esc(cur.name)} to the library">${ic('save', 'sm')}</button><button class="ld-icon" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
     <div class="ld-body"><section class="ld-stage" aria-label="Stage">
       <div class="ld-bar"><span class="ld-label">Stage</span><span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
@@ -2990,6 +3046,7 @@ function facesSummary() {
 // while a fader or the wheel moves: the map and readouts follow, the control in your hand stays put
 function deskLive() {
   if (!desk.open) return;
+  if (desk.big) { $('ldMapWrap').innerHTML = deskMapSvg(); if ($('ldFaces')) $('ldFaces').innerHTML = facesSummary(); renderPlot(); return; }
   $('ldMapWrap').innerHTML = deskMapSvg();
   if ($('ldFaces')) $('ldFaces').innerHTML = facesSummary();
   const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, info = document.querySelector('.ld-pickinfo');
@@ -3010,11 +3067,18 @@ function deskSet(patch, live) {
 const deskMapPt = e => { const svgEl = $('ldMap'), pt = svgEl.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const q = pt.matrixTransform(svgEl.getScreenCTM().inverse()); return { x: q.x, y: q.y }; };
 $('deskDlg').addEventListener('click', e => {
   if (e.target === $('deskDlg')) { closeDesk(); return; }
+  if (desk.lib && !e.target.closest('[data-lib], [data-libuse], [data-libdel]')) { desk.lib = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }
   if (desk.moods && !e.target.closest('[data-moods], [data-mood]')) { desk.moods = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the mood menu
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'ldDone') { closeDesk(); return; }
   if (t.hasAttribute('data-fxcopy')) { deskCopy(); return; }
-  if (t.hasAttribute('data-moods')) { desk.moods = !desk.moods; renderDesk(); return; }
+  if (t.hasAttribute('data-moods')) { desk.moods = !desk.moods; desk.lib = false; renderDesk(); return; }
+  if (t.hasAttribute('data-lib')) { desk.lib = !desk.lib; desk.moods = false; renderDesk(); return; }
+  if (t.dataset.libuse) { libUse(t.dataset.libuse); return; }
+  if (t.dataset.libdel) { const e = lookLib().find(x => x.id === t.dataset.libdel); if (e) { db.lookLib = lookLib().filter(x => x !== e); save(); toast(`“${e.name}” removed from the library`); renderDesk(); } return; }
+  if (t.hasAttribute('data-libsave')) { libSave(); return; }
+  if (t.id === 'ldBigGo') { desk.big = true; desk.moods = desk.lib = false; renderDesk(); return; }
+  if (t.id === 'ldBigExit') { desk.big = false; renderDesk(); return; }
   if (t.dataset.mood) { moodLook(t.dataset.mood); return; }
   if (t.hasAttribute('data-fxpaste')) { deskPaste(); return; }
   if (t.dataset.preset) { const c = DESK_PRESETS.find(p => p[0] === t.dataset.preset)?.[1], ts = deskPicked(); if (ts.length) deskSet(c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); return; }
@@ -6820,7 +6884,7 @@ function closePops() { $('weekPop').hidden = true; $('weekBtn').setAttribute('ar
 document.addEventListener('keydown', e => {
   if (!$('histDlg').hidden) { if (e.key === 'Escape') $('histDlg').hidden = true; return; }
   if (!$('cmdk').hidden) return;
-  if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.moods || desk.naming)) { desk.moods = desk.naming = false; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
+  if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.moods || desk.naming || desk.lib)) { desk.moods = desk.naming = desk.lib = false; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
   if (!$('rackDlg').hidden) {
     const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
     if (e.key === 'Escape') closeRack();
@@ -8402,7 +8466,7 @@ function cmdItems() {
     ['Add a custom rack', 'box', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } addGear('rack', snapTo(plan.stage.w - fromM(1)), snapTo(fromM(1))); }],
     [cableView.all ? 'Hide all cables' : 'Show cables', 'eye', () => setCableView(() => { cableView.all = !cableView.all; })],
     ['Open paperwork', 'sheet', () => openPaper()],
-    ...(plan.items.some(isFixture) ? [['Open the lighting desk', 'sun', () => openDesk()]] : []),
+    ...(plan.items.some(isFixture) ? [['Open the lighting desk', 'sun', () => openDesk()], ['Looks as big buttons', 'fit', () => { openDesk(); desk.big = true; renderDesk(); }]] : []),
     ['Draw or edit stage shape', 'pen', () => openDesigner(false)],
     ['Import team from Planning Center', 'calendar', () => { railTab = 'team'; togglePanel('rail', true); setTimeout(() => $('pcoStart')?.click(), 60); }],
     ['Add a person to the team', 'users', () => { railTab = 'team'; togglePanel('rail', true); setTimeout(() => $('addPerson')?.click(), 60); }],
