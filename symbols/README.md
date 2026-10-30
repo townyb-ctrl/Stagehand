@@ -56,3 +56,14 @@ Downstage (toward the audience) is the bottom of each drawing. Regenerate with `
 | ![Camera on tripod](camera.svg) | `camera` | Camera on tripod | 0.61 × 0.61 m |
 | ![Confidence monitor](conf_mon.svg) | `conf_mon` | Confidence monitor | 1.07 × 0.30 m |
 | ![Light on stand](light_stand.svg) | `light_stand` | Light on stand | 0.46 × 0.46 m |
+| ![LED par](par_led.svg) | `par_led` | LED par | 0.30 × 0.34 m |
+| ![LED wash](wash_led.svg) | `wash_led` | LED wash | 0.40 × 0.40 m |
+| ![LED light bar](bar_led.svg) | `bar_led` | LED light bar | 1.01 × 0.18 m |
+| ![Moving head (spot)](spot_mh.svg) | `spot_mh` | Moving head (spot) | 0.40 × 0.40 m |
+| ![Moving head (wash)](wash_mh.svg) | `wash_mh` | Moving head (wash) | 0.40 × 0.40 m |
+| ![Profile / ellipsoidal](profile.svg) | `profile` | Profile / ellipsoidal | 0.27 × 0.67 m |
+| ![Fresnel](fresnel.svg) | `fresnel` | Fresnel | 0.37 × 0.43 m |
+| ![LED uplight](uplight.svg) | `uplight` | LED uplight | 0.21 × 0.21 m |
+| ![Hazer](hazer.svg) | `hazer` | Hazer | 0.49 × 0.30 m |
+| ![Lighting console](light_desk.svg) | `light_desk` | Lighting console | 1.07 × 0.61 m |
+| ![DMX splitter (4 lines)](dmx_split.svg) | `dmx_split` | DMX splitter (4 lines) | 0.49 × 0.21 m |

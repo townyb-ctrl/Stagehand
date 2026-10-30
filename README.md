@@ -92,6 +92,16 @@ Open `index.html` in a modern browser to run it.
 - **Reset to default** (Home → Data & backup): type RESET to confirm. It clears every week, setup and preference in this browser and starts again from the example week. *Back up first* saves a backup file, and a safety copy is always kept: *Restore* in the notice after the reset, or *Restore before reset* in the Library, brings everything back.
 - **Weeks**: every week saved separately. *Next week (copy)* clones everything; *Next week (stage only)* keeps the room and infrastructure and clears the team.
 
+## Lighting
+
+- **Lights** (Add gear → Lighting): LED par, LED wash, LED light bar, moving heads (spot and wash), profile / ellipsoidal, fresnel, LED uplight, light on stand and hazer, plus a lighting console and a 4-way DMX splitter. Each one has its usual DMX channel count and power draw.
+- **Where lights hang**: a truss, a lighting pipe or a front-of-house bar (out over the seats). They draw as outlines so gear underneath shows through; set the length in the details panel. A light placed on one hangs from it; anything else is on the floor or a stand.
+- **Beams**: every light throws a soft beam and a pool of light where it lands (hung lights fainter, moving heads with a dashed pool). Pick a light and drag the yellow dot to aim it: direction and throw, in 5° steps (Alt for free). Layers → *Light beams* hides them.
+- **DMX lines**: with a lighting console on the plot, lights are chained automatically. The console feeds the splitter if there is one; each truss, pipe or bar is its own line and the floor lights make one more, light to light from the nearest. With no free splitter output a line carries on from the end of the one before. DMX cables are counted in the cable pull list, and runs to hung lights go along the ceiling.
+- **Addresses**: every light gets the lowest free start address in its universe (one universe per console output; a splitter copies its universe to each line) and keeps it as other lights come and go. Set an address or channel count by hand in the details panel; *Re-address in line order* (Lighting sheet, or the console's details) numbers them all again.
+- **Checks**: lights with no console, a light not on a line, overlapping addresses, a light running past channel 512, and a line with more than 32 lights.
+- **Lighting patch** (Paperwork → Lighting): every light by universe and address (*1.001*) with type, channel count, where it hangs, its line and its power circuit, then each DMX line drawn as a chain from the console or splitter output. *Copy* gives a tab-separated table for a spreadsheet.
+
 ## Stage-plot symbols
 
 Every gear item is drawn as a real top-down symbol (drum kit with shells and cymbals, mic stands with booms, consoles with fader strips, stage boxes with XLR ports, distros with sockets, etc.). They live in `index.html` and are also exported as standalone files in [`symbols/`](symbols/README.md). After editing a symbol, run `node tools/export-symbols.mjs` to refresh the files.
