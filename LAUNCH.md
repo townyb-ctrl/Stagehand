@@ -62,7 +62,7 @@ Status of Stagehand for a public launch. Facts only: what has been checked, how,
 - **Safari and Firefox**: still not run on a real device (only Chromium can run here). A code audit found no JavaScript newer than Safari 15; the CSS needs Safari 16.2+ / Firefox 113+ for colour mixing (older browsers now get a one-time notice). Touch: pinch-to-zoom and dragging were tested with simulated touches in Chromium; check both on a real iPad.
 - **Hosting**: the app is one static HTML file; it needs a home (any static host) and a domain.
 - **Storage is per browser**: there are no accounts or sync. Teams share plans by exporting files. Accounts and team sharing would be the next major step.
-- **Planning Center outside Claude**: the import works when the app runs inside Claude with the Planning Center connector. A standalone site would need its own Planning Center OAuth app.
+- **Planning Center outside Claude**: the desktop app connects with a Personal Access Token and calls the Services API itself (tested against a mock that answers in the API's own format: C/U/D statuses, offset paging; not yet run against the live API). The browser version on its own site would still need a small server and a Planning Center OAuth app.
 - **No analytics or error reporting**: nothing leaves the browser today, by design. Add an opt-in only if needed.
 
 ## Run the checks

@@ -30,7 +30,7 @@ The installer isn't code-signed yet, so Windows SmartScreen may show "Windows pr
 
 ## What works differently
 
-- **Planning Center import** only works inside Claude (it uses your Claude connector). In the desktop app, add the team by hand or paste a list.
+- **Planning Center**: connect once with your church's Personal Access Token. In Planning Center, open [the developer page](https://api.planningcenteronline.com/oauth/applications), choose **New Personal Access Token**, then paste its Application ID and Secret into Stagehand under **Home → Planning Center** and click **Connect**. The key is saved encrypted on this computer (Keychain on Mac, Windows' own protection on Windows) and is only used to read Services. **Disconnect** removes it.
 - Everything else is the same, including printing, PDFs, file downloads (a normal Save dialog), show mode and offline use.
 - Links to websites open in your normal browser.
 

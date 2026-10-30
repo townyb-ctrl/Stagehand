@@ -988,6 +988,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .hswitch input:checked + span::after { transform: translateX(16px); }
 .hswitch input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
 .pcostatus { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 14px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); }
+.pcosteps { margin: 10px 0 4px; padding-left: 20px; display: grid; gap: 4px; }
 .pcostatus > div { flex: 1; min-width: 180px; display: grid; gap: 1px; } .pcostatus small { color: var(--muted); font-size: 12.5px; }
 .pcostatus .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex: none; }
 .pcostatus.s-ok .dot { background: #22c55e; box-shadow: 0 0 0 4px rgba(34,197,94,.18); } .pcostatus.s-bad .dot { background: #ef4444; } .pcostatus.s-ready .dot { background: var(--accent); } .pcostatus.s-wait .dot { background: #f59e0b; }
@@ -2856,7 +2857,7 @@ function warnings() {
 }
 
 /* ===================================================================
-   Planning Center import (runs through the viewer's claude.ai connector)
+   Planning Center import: inside Claude through the viewer's connector; in the desktop app through the church's own key
    =================================================================== */
 const PCO = 'Planning Center';
 const pco = { mcp: undefined, busy: '', err: '', types: [], typeId: '', plans: [], planId: '', roster: null, picked: new Set(), replace: true };
@@ -2877,9 +2878,27 @@ function pcoErrText(e) {
     case 'cancelled': return 'Stopped. Try again when you’re ready.';
     case 'bad_request': case 'transform_error': return 'Stagehand sent Planning Center a request it didn’t accept. Try again; if it keeps happening, tell whoever looks after Stagehand.';
     case 'user_changed': return 'You signed in as someone else. The page will reload.';
+    case 'bad_key': return 'Planning Center didn’t accept that key. Check the Application ID and Secret, then try again.';
+    case 'no_access': return 'That Planning Center login can’t see Services. Make the key with a login that can.';
+    case 'no_key': return 'Connect Planning Center first: Home → Planning Center.';
     default: return `Couldn’t reach Planning Center (${e?.message || 'unknown error'}).`;
   }
 }
+// the desktop app's stand-in for the connector: same three reads, same answers, straight from the Planning Center API
+const pcoQs = o => Object.entries(o).filter(([, v]) => v !== undefined && v !== '').map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+const pcoDesk = { async callTool(_server, tool, i) {
+  const st = encodeURIComponent(i.service_type_id || ''), url =
+    tool === 'services_service_types' ? `/services/v2/service_types?${pcoQs({ per_page: i.per_page, order: i.order_by })}`
+    : tool === 'services_plans' ? `/services/v2/service_types/${st}/plans?${pcoQs({ filter: i.filter, order: i.order_by, per_page: i.per_page, include: (i.include || []).join(',') })}`
+    : tool === 'services_plan_people' ? `/services/v2/service_types/${st}/plans/${encodeURIComponent(i.plan_id)}/team_members?${pcoQs({ per_page: i.per_page, include: (i.include || []).join(','), filter: (i.filter || []).join(','), offset: i.page_after })}`
+    : '';
+  const r = await DESKTOP_PCO.get(url);
+  if (r.error) throw r.error;
+  const j = r.json || {};
+  for (const d of j.data || []) { const a = d.attributes; if (a && /^[CUD]$/.test(a.status || '')) a.status = { C: 'confirmed', U: 'unconfirmed', D: 'declined' }[a.status]; }   // the API answers C/U/D; the connector spells them out
+  const next = j.meta?.next?.offset;
+  return { payload: { ...j, has_more: next != null, next_page_token: next != null ? String(next) : '' } };
+} };
 async function pcoCall(tool, input) {
   try { return (await pco.mcp.callTool(PCO, tool, input)).payload; }
   catch (e) {
@@ -3043,7 +3062,7 @@ function pcoChangesHtml() {
 }
 // one click from this week to the next Planning Center plan: start (or open) that week with this stage, then pull its team and times
 async function nextFromPco() {
-  if (!pco.mcp) { toast('Planning Center works when Stagehand is open in Claude, with Planning Center connected'); return; }
+  if (!pco.mcp) { toast(DESKTOP_PCO ? 'Connect Planning Center first: Home → Planning Center' : 'Planning Center works when Stagehand is open in Claude, with Planning Center connected'); return; }
   const from = plan.date, want = plan.pco?.typeId;
   toast('Finding the next plan in Planning Center…');
   await pcoLoadTypes(); if (pco.err) { toast(pco.err); return; }
@@ -4676,7 +4695,7 @@ function renderRail() {
     const pcoBusy = pco.types.length || pco.busy || pco.err;
     pane.innerHTML = `
       ${pcoChangesHtml()}
-      ${plan.team.length && !pcoBusy ? (window.claude?.use && pco.mcp ? `<button class="pcoline" id="pcoStart">${ic('calendar', 'sm')}Update the team from Planning Center</button>` : '') : pcoHtml()}
+      ${plan.team.length && !pcoBusy ? (pcoAvail() && pco.mcp ? `<button class="pcoline" id="pcoStart">${ic('calendar', 'sm')}Update the team from Planning Center</button>` : '') : pcoHtml()}
       <div class="sechead"><h2>This week's team</h2></div>
       ${plan.team.length ? `<div class="people">${teamGroups().map(([g, list]) => `${plan.team.length > 1 ? `<h3 class="pgroup">${esc(g)} <span>${list.length}</span></h3>` : ''}${list.map(p => `
         <div class="person" data-pid="${p.id}">
@@ -4687,7 +4706,7 @@ function renderRail() {
           </div>
           <button class="iconbtn" data-sing="${p.id}" aria-pressed="${!!p.sings}" title="${p.sings ? 'Sings: has a vocal mic' : 'Also sings? Add a vocal mic'}" aria-label="Also sings">${ic('mic', 'sm')}</button>
           <button class="iconbtn del" data-del="${p.id}" aria-label="Remove ${esc(p.name)}" title="Remove">${ic('x', 'sm')}</button>
-        </div>`).join('')}`).join('')}</div>` : `<div class="empty-state">${ic('users')}<strong>No one scheduled yet</strong><span>${window.claude?.use ? 'Import from Planning Center, add people one by one, or paste a list.' : 'Add people one by one, or paste a list.'}</span></div>${presetChips()}`}
+        </div>`).join('')}`).join('')}</div>` : `<div class="empty-state">${ic('users')}<strong>No one scheduled yet</strong><span>${pcoAvail() ? 'Import from Planning Center, add people one by one, or paste a list.' : 'Add people one by one, or paste a list.'}</span></div>${presetChips()}`}
       <datalist id="pastPeople">${pastPeople().map(x => `<option value="${esc(x.name)}">${esc(x.role || '')}</option>`).join('')}</datalist>
       <button class="addrow" id="addPerson"><span class="avatar">${ic('plus', 'sm')}</span>Add person</button>
       <details class="paste"><summary>${ic('clip', 'sm')}Paste a list instead ${ic('chevD', 'sm')}</summary><div>
@@ -5467,9 +5486,10 @@ function pcoBusyHtml() {
 }
 function pcoHtml() {
   const head = (sub) => `<div class="card-head"><span class="badge">${ic('calendar', 'sm')}</span><div><h2>Planning Center</h2><p>${sub}</p></div></div>`;
-  if (!window.claude?.use) return '';   // no connector here: the paste and add-person options below say it all
+  if (!pcoAvail()) return '';   // no connector here: the paste and add-person options below say it all
   if (pco.mcp === undefined) return `<div class="card soft">${head('Checking your connection…')}</div>`;
   if (!navigator.onLine) return `<div class="card soft">${head('You’re offline. Planning Center comes back when the internet does; adding people by hand or pasting a list works now.')}</div>`;
+  if (pco.mcp === null && DESKTOP_PCO) return `<div class="card soft">${head('Connect Planning Center once with your church’s key, then import the team here.')}<button class="btn primary block" id="pcoSetup">${ic('calendar', 'sm')}Connect Planning Center</button></div>`;
   if (pco.mcp === null) return `<div class="card soft">${head('Planning Center can’t connect in this view. Open Stagehand on claude.ai (web or the Claude desktop app), check Planning Center is connected in Settings → Connectors, then reload. Or paste a list below.')}<button class="btn block" id="pcoReload">${ic('undo', 'sm')}Reload the page</button></div>`;
   const busy = pcoBusyHtml();
   const err = pco.err ? `<p class="err" role="alert">${esc(pco.err)}</p>${pco.types.length ? `<button class="btn quiet" id="pcoRetry">${ic('undo', 'sm')}Try again</button>` : ''}` : '';
@@ -6192,7 +6212,7 @@ function showOnline() { const c = $('offChip'); if (!c) return; const off = !nav
 addEventListener('offline', () => { showOnline(); renderRail(); toast('You’re offline. Your changes still save on this device'); });
 addEventListener('online', () => { showOnline(); renderRail(); toast('Back online'); if (typeof pcoCheck === 'function') pcoCheck(true); });
 setTimeout(showOnline, 0);
-const DESKTOP = window.stageplotDesktop || null, SAVED_WHERE = DESKTOP ? 'on this computer' : 'in this browser';
+const DESKTOP = window.stageplotDesktop || null, DESKTOP_PCO = DESKTOP?.pco || null, pcoAvail = () => !!(window.claude?.use || DESKTOP_PCO), SAVED_WHERE = DESKTOP ? 'on this computer' : 'in this browser';
 function openAbout() { document.querySelectorAll('.savedWhere').forEach(x => { x.textContent = SAVED_WHERE; }); $('aboutVer').textContent = `Version ${APP_VERSION}${DESKTOP ? ` · ${DESKTOP.platform === 'darwin' ? 'Mac' : DESKTOP.platform === 'win32' ? 'Windows' : 'desktop'} app ${DESKTOP.version}` : ''} · ${Object.keys(db.plans).length} saved ${Object.keys(db.plans).length === 1 ? 'week' : 'weeks'}`; $('aboutClose').innerHTML = ic('x'); $('aboutDlg').hidden = false; }
 $('aboutClose').onclick = () => { $('aboutDlg').hidden = true; };
 $('histClose').innerHTML = ic('x'); $('histClose').onclick = () => { $('histDlg').hidden = true; };
@@ -6271,6 +6291,7 @@ $('railPane').addEventListener('click', e => {
   if (t.dataset.pcoteam !== undefined) { pcoSetTeams(t.dataset.pcoteam); return; }
   if (t.id === 'pcoRetry') { pco.types = []; pcoLoadTypes(); return; }
   if (t.id === 'pcoReload') { location.reload(); return; }
+  if (t.id === 'pcoSetup') { goHome('pco'); return; }
   if (t.dataset.teampreset) { applyPreset(t.dataset.teampreset); return; }
   if (t.id === 'pcoRoster') { pcoLoadRoster(); return; }
   if (t.id === 'pcoApply') { pcoApply(); return; }
@@ -8018,7 +8039,7 @@ function venuePic(v) {   // the venue's stage outline in its own colour, front e
 }
 let venueDelArmed = '';
 function venueSvcHtml(v) {   // which Planning Center service types happen in this venue
-  const linked = v.svc || [], avail = window.claude?.use && pco.mcp;
+  const linked = v.svc || [], avail = pcoAvail() && pco.mcp;
   const chips = linked.map(t => `<span class="svcchip">${ic('calendar', 'sm')}${esc(t.name)}<button class="svcx" data-svcunlink="${esc(v.id)}|${esc(t.id)}" aria-label="Unlink ${esc(t.name)} from ${esc(v.name)}" title="Unlink">${ic('x', 'sm')}</button></span>`).join('');
   const pick = pco.types.length ? `<select data-svclink="${v.id}" aria-label="Link a Planning Center service type to ${esc(v.name)}"><option value="">${linked.length ? 'Link another service type…' : 'Link a Planning Center service type…'}</option>${pco.types.filter(t => !linked.some(x => x.id === t.id)).map(t => { const o = venueForSvc(t.id); return `<option value="${esc(t.id)}">${esc(t.name)}${o ? ` (now ${esc(o.name)})` : ''}</option>`; }).join('')}</select>`
     : avail ? `<button class="btn quiet svcload" data-svcload ${pco.busy ? 'disabled' : ''}>${ic('calendar', 'sm')}Load Planning Center service types</button>` : '';
@@ -8174,8 +8195,9 @@ function removeGear(t) {
 /* ----- Planning Center ----- */
 const pcoPrefs = () => (db.pcoPrefs ||= { typeId: '', typeName: '', replace: true, unconfirmed: true, usePlan: true, map: {}, seen: [] });
 function homePco() {
-  const P = pcoPrefs(), avail = !!window.claude?.use, conn = pco.mcp;
-  const status = !avail ? ['off', 'Not available here', 'Importing works when Stagehand is opened inside Claude. Here, add people by hand or paste a list.']
+  const P = pcoPrefs(), avail = pcoAvail(), conn = pco.mcp;
+  const status = !avail ? ['off', 'Not available here', 'Importing works in the Stagehand desktop app or when Stagehand is opened inside Claude. Here, add people by hand or paste a list.']
+    : DESKTOP_PCO && conn === null ? ['ready', 'Not connected yet', 'Add your church’s Planning Center key below. You only do this once on this computer.']
     : conn === undefined ? ['wait', 'Checking…', 'Looking for your Planning Center connection.']
     : conn === null ? ['off', 'Connectors are off in this view', 'Open Stagehand in Claude with Planning Center connected to import teams.']
     : pco.err ? ['bad', 'Couldn’t reach Planning Center', pco.err]
@@ -8187,6 +8209,7 @@ function homePco() {
   const seen = [...new Set([...(P.seen || []), ...Object.keys(P.map || {})])].sort((a, b) => a.localeCompare(b));
   return hsec('Connection', '', `<div class="pcostatus s-${status[0]}"><span class="dot"></span><div><b>${status[1]}</b><small>${esc(status[2])}</small></div>
       ${avail && conn ? `<button class="btn" id="hp-test" ${pco.busy ? 'disabled' : ''}>${ic('calendar', 'sm')}${pco.types.length ? 'Reload service types' : 'Load service types'}</button>` : ''}</div>${busy}
+      ${DESKTOP_PCO ? pcoKeyHtml(conn) : ''}
       <p class="hint">Read-only: Stagehand only reads service types, plans and who’s scheduled. It never changes anything in Planning Center.</p>`) +
     hsec('Importing a team', '', `<div class="field"><label for="hp-type">Default service type</label>${typeSel}</div>
       ${hcheck('hp-replace', 'Replace the week’s team when importing', P.replace !== false, 'Off: imported people are added to whoever is already there')}
@@ -8195,6 +8218,29 @@ function homePco() {
     hsec('Positions', 'How each Planning Center position lands on stage. Automatic reads the name (“Keys”, “BGV”, “Acoustic” and so on). Positions appear here after your first import.',
       seen.length ? `<div class="hlist">${seen.map(pos => `<div class="hlist-row"><span class="hmain"><b>${esc(pos)}</b><small>Automatic: ${esc(autoRole(pos) || 'not on stage')}</small></span><select data-posmap="${esc(pos)}" aria-label="Stage role for ${esc(pos)}">${roleOpts(P.map?.[pos])}</select></div>`).join('')}</div>`
         : '<p class="hint">No positions yet.</p>');
+}
+// desktop app: connect with a Personal Access Token (Application ID + Secret); the secret stays with the app, never in your weeks or backups
+function pcoKeyHtml(conn) {
+  if (conn) return `<div class="row" style="gap:6px"><button class="btn quiet" id="hp-disconnect">${ic('x', 'sm')}Disconnect Planning Center</button></div>`;
+  return `<ol class="hint pcosteps"><li>Open <a href="https://api.planningcenteronline.com/oauth/applications" target="_blank" rel="noopener">Planning Center’s developer page</a> and sign in.</li><li>Under <b>Personal Access Tokens</b>, choose <b>New Personal Access Token</b> and give it a name like “Stagehand”.</li><li>Copy the <b>Application ID</b> and <b>Secret</b> into the boxes here.</li></ol>
+    <div class="field"><label for="hp-keyid">Application ID</label><input id="hp-keyid" type="text" autocomplete="off" spellcheck="false"></div>
+    <div class="field"><label for="hp-keysecret">Secret</label><input id="hp-keysecret" type="password" autocomplete="off" spellcheck="false"></div>
+    ${pco.keyErr ? `<p class="err" role="alert">${esc(pco.keyErr)}</p>` : ''}
+    <button class="btn primary" id="hp-connect" ${pco.busy ? 'disabled' : ''}>${ic('calendar', 'sm')}Connect</button>`;
+}
+async function pcoConnectKey() {
+  const id = $('hp-keyid')?.value || '', secret = $('hp-keysecret')?.value || '';
+  if (!id.trim() || !secret.trim()) { pco.keyErr = 'Paste both the Application ID and the Secret.'; renderHome(); return; }
+  pco.busy = 'Checking the key…'; pco.keyErr = ''; renderHome();
+  const r = await DESKTOP_PCO.connect(id, secret);
+  pco.busy = '';
+  if (r?.error) { pco.keyErr = pcoErrText(r.error); renderHome(); return; }
+  pco.mcp = pcoDesk; pco.err = ''; toast('Planning Center connected'); renderRail(); pcoLoadTypes();
+}
+async function pcoDisconnect() {
+  await DESKTOP_PCO.disconnect();
+  Object.assign(pco, { mcp: null, types: [], plans: [], typeId: '', planId: '', roster: null, raw: null, err: '', changes: null });
+  toast('Planning Center disconnected'); renderRail(); renderHome();
 }
 const autoRole = pos => matchRole(pos.split(' · ')[0]) || matchRole(pos.split(' · ')[1] || '');
 function posRole(pos, team) { const m = db?.pcoPrefs?.map || {}, k = [pos, team].filter(Boolean).join(' · '); if (m[k] === '-' ) return ''; if (m[k]) return m[k]; return null; }
@@ -8272,6 +8318,8 @@ $('homeView').addEventListener('click', e => {
   if (t.id === 'homeGearUnused') { const on = new Set(plan.items.map(i => i.type)); const g = gearPrefs(), before = [...g.hidden]; g.hidden = GEAR_GROUPS.flatMap(([, ts]) => ts).filter(x => !on.has(x)); save(); renderHome(); renderRail(); toast('Your library now has only what’s on this week’s plot', { label: 'Undo', fn: () => { g.hidden = before; save(); renderHome(); renderRail(); } }); return; }
   if (t.id === 'homeOwnClear') { gearPrefs().owned = {}; save(); renderHome(); return; }
   if (t.id === 'hp-test') { pcoLoadTypes(); return; }
+  if (t.id === 'hp-connect') { pcoConnectKey(); return; }
+  if (t.id === 'hp-disconnect') { pcoDisconnect(); return; }
   if (t.id === 'hp-install' && installPrompt) { installPrompt.prompt(); installPrompt.userChoice.finally(() => { installPrompt = null; renderHome(); }); return; }
   if (t.dataset.pref === 'textsize') { setTextSize(t.dataset.v === 'n' ? '' : t.dataset.v); renderHome(); return; }
   if (t.dataset.pref === 'theme') { setTheme(t.dataset.v); renderHome(); return; }
@@ -8366,7 +8414,8 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
 }
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt = e; renderHome(); });
 window.addEventListener('appinstalled', () => { installPrompt = null; toast('Stagehand is installed'); renderHome(); });
-if (window.claude?.use) window.claude.use('mcp').then(m => { pco.mcp = m; renderRail(); renderHome(); pcoCheck(); }, () => { pco.mcp = null; renderRail(); renderHome(); });
+if (DESKTOP_PCO) DESKTOP_PCO.status().then(r => { pco.mcp = r?.connected ? pcoDesk : null; renderRail(); renderHome(); if (pco.mcp) pcoCheck(); }, () => { pco.mcp = null; renderRail(); renderHome(); });
+else if (window.claude?.use) window.claude.use('mcp').then(m => { pco.mcp = m; renderRail(); renderHome(); pcoCheck(); }, () => { pco.mcp = null; renderRail(); renderHome(); });
 </script>
 </body>
 </html>
