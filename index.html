@@ -563,10 +563,28 @@ svg text { font-family: var(--f-ui); }
 .dmxsrc, .dmxdev { display: grid; padding: 5px 9px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface-2); font-size: 13px; line-height: 1.25; }
 .dmxsrc { border-color: var(--k-dmx); } .dmxdev.flag { border-color: var(--bad, #dc2626); }
 .dmxsrc small, .dmxdev small { color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; } .dmxarr { color: var(--muted); }
+.looks, .deskgrp { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.lookchip { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.lookchip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; } .lookchip.add { border-style: dashed; color: var(--muted); }
+.lookedit { gap: 6px; flex-wrap: nowrap; margin-bottom: 4px; } .lookedit input { flex: 1; min-width: 0; }
+.deskfx { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.fxchip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink-2); border-radius: 8px; padding: 3px 8px; font: inherit; font-size: 12.5px; cursor: pointer; }
+.fxchip[aria-pressed="true"] { border-color: var(--accent); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent); }
+.fxchip i, .lookfx i { width: 11px; height: 11px; border-radius: 50%; border: 1px solid rgba(127,127,127,.5); flex: none; display: inline-block; }
+.lpresets { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 10px; }
+.pswatch { aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--line-2); background: var(--sw); cursor: pointer; padding: 0; }
+.pswatch:hover:not(:disabled) { transform: scale(1.06); } .pswatch:disabled { opacity: .25; cursor: default; }
+.pswatch.off { background: repeating-linear-gradient(135deg, var(--surface-2) 0 5px, var(--line) 5px 6px); }
+.faders { display: grid; gap: 4px; }
+.fader { display: grid; grid-template-columns: 54px 1fr 40px; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-2); }
+.fader output { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.fader input { width: 100%; } .f-r input { accent-color: #e5484d; } .f-g input { accent-color: #30a46c; } .f-b input { accent-color: #3e63dd; } .f-w input { accent-color: #c9b98f; } .f-d input { accent-color: var(--accent); }
+.lookrows { display: grid; gap: 8px; } .lookrow { display: grid; grid-template-columns: 140px 1fr; gap: 10px; font-size: 13px; padding: 6px 0; border-top: 1px solid var(--line); }
+.lookfx { display: flex; flex-wrap: wrap; gap: 4px 14px; } .lookfx span { display: inline-flex; align-items: center; gap: 6px; }
 .dmxlines { display: grid; gap: 6px; margin-bottom: 8px; } .dmxlines div { display: grid; } .dmxlines small { color: var(--muted); font-size: 12px; }
-.lb-cone { fill: rgba(255, 220, 140, .06); } .lb-cone.hung { fill: rgba(255, 220, 140, .035); } .lb-cone.on { fill: rgba(255, 220, 140, .16); }
-.lb-pool { fill: url(#lbPool); } .lb-pool.on { stroke: rgba(255, 214, 110, .7); stroke-width: .05; } .lb-pool.mover { stroke: rgba(255, 214, 110, .45); stroke-width: .04; stroke-dasharray: .25 .18; }
-.light-deck .lb-cone { fill: rgba(200, 140, 20, .07); } .light-deck .lb-cone.on { fill: rgba(200, 140, 20, .16); }
+.lb-pool.on { stroke: var(--lc); stroke-width: .05; } .lb-pool.mover { stroke: var(--lc); stroke-opacity: .6; stroke-width: .04; stroke-dasharray: .25 .18; }
+.lb-wall { stroke-width: .12; stroke-linecap: round; fill: none; } .lb-up.on { stroke: rgba(255, 214, 110, .5); stroke-width: .03; }
+.lb-off { fill: none; stroke: rgba(160, 170, 180, .55); stroke-width: .04; stroke-dasharray: .2 .15; }
 .aimh { fill: #ffd66e; stroke: #3a2c05; stroke-width: calc(var(--labs) * .6); cursor: grab; } .c-staging { fill: rgba(255,255,255,.05); stroke: rgba(255,255,255,.42) !important; stroke-dasharray: .3 .2; stroke-width: .07 !important; }
 .c-person { fill: #d4d4dc; stroke: rgba(255,255,255,.92) !important; stroke-width: .07 !important; paint-order: stroke; }   /* white ring lifts people off instruments and cables */
 /* people take their role's colour, the same family as the team list: voices rose, band sky, speakers mint, tech slate */
@@ -1861,14 +1879,15 @@ const CAT = {
   conf_mon:    { name: 'Confidence monitor', short: 'Confidence', cat: 'video', w: 3.5, d: 1, shape: 'rect', watts: 150 },
   light_stand: { name: 'Light on stand', short: 'Light', cat: 'video', w: 1.5, d: 1.5, shape: 'round', watts: 250, beam: 34 },
   // Lighting: dmx = channels in its usual mode, beam = beam angle in degrees
-  par_led:     { name: 'LED par', short: 'Par', alias: 'parcan can', cat: 'light', w: 1, d: 1.1, shape: 'round', watts: 120, dmx: 7, beam: 25 },
-  wash_led:    { name: 'LED wash', short: 'Wash', alias: 'flood', cat: 'light', w: 1.3, d: 1.3, shape: 'round', watts: 200, dmx: 10, beam: 40 },
-  bar_led:     { name: 'LED light bar', short: 'Light bar', alias: 'batten strip', cat: 'light', w: 3.3, d: .6, shape: 'rect', watts: 100, dmx: 8, beam: 35 },
-  spot_mh:     { name: 'Moving head (spot)', short: 'Spot', alias: 'mover intelligent', cat: 'light', w: 1.3, d: 1.3, shape: 'round', watts: 250, dmx: 16, beam: 18, mover: true },
-  wash_mh:     { name: 'Moving head (wash)', short: 'Mover wash', alias: 'intelligent', cat: 'light', w: 1.3, d: 1.3, shape: 'round', watts: 300, dmx: 14, beam: 30, mover: true },
-  profile:     { name: 'Profile / ellipsoidal', short: 'Profile', alias: 'leko ers source four', cat: 'light', w: .9, d: 2.2, shape: 'rect', watts: 200, dmx: 5, beam: 26 },
-  fresnel:     { name: 'Fresnel', short: 'Fresnel', cat: 'light', w: 1.2, d: 1.4, shape: 'rect', watts: 150, dmx: 4, beam: 45 },
-  uplight:     { name: 'LED uplight', short: 'Uplight', alias: 'wall wash', cat: 'light', w: .7, d: .7, shape: 'rect', watts: 40, dmx: 6, beam: 30 },
+  par_led:     { name: 'LED par', short: 'Par', alias: 'parcan can', cat: 'light', w: 1, d: 1.1, shape: 'round', watts: 120, dmx: 7, beam: 25, plink: true, rgbw: true },
+  wash_led:    { name: 'LED wash', short: 'Wash', alias: 'flood', cat: 'light', w: 1.3, d: 1.3, shape: 'round', watts: 200, dmx: 10, beam: 40, plink: true, rgbw: true },
+  bar_led:     { name: 'LED light bar', short: 'Light bar', alias: 'batten strip', cat: 'light', w: 3.3, d: .6, shape: 'rect', watts: 100, dmx: 8, beam: 35, plink: true, rgbw: true },
+  bar_up:      { name: 'LED bar (uplighting)', short: 'Up bar', alias: 'wall wash batten upward', cat: 'light', w: 3.3, d: .6, shape: 'rect', watts: 100, dmx: 8, beam: 35, plink: true, rgbw: true, up: true },
+  spot_mh:     { name: 'Moving head (spot)', short: 'Spot', alias: 'mover intelligent', cat: 'light', w: 1.3, d: 1.3, shape: 'round', watts: 250, dmx: 16, beam: 18, mover: true, plink: true, rgbw: true },
+  wash_mh:     { name: 'Moving head (wash)', short: 'Mover wash', alias: 'intelligent', cat: 'light', w: 1.3, d: 1.3, shape: 'round', watts: 300, dmx: 14, beam: 30, mover: true, plink: true, rgbw: true },
+  profile:     { name: 'Profile / ellipsoidal', short: 'Profile', alias: 'leko ers source four', cat: 'light', w: .9, d: 2.2, shape: 'rect', watts: 200, dmx: 5, beam: 26, plink: true },
+  fresnel:     { name: 'Fresnel', short: 'Fresnel', cat: 'light', w: 1.2, d: 1.4, shape: 'rect', watts: 150, dmx: 4, beam: 45, plink: true },
+  uplight:     { name: 'LED uplight', short: 'Uplight', alias: 'wall wash', cat: 'light', w: .7, d: .7, shape: 'rect', watts: 40, dmx: 6, beam: 30, plink: true, rgbw: true },
   hazer:       { name: 'Hazer', short: 'Hazer', alias: 'haze fog smoke', cat: 'light', w: 1.6, d: 1, shape: 'rect', watts: 400, dmx: 2 },
   light_desk:  { name: 'Lighting console', short: 'Lighting desk', alias: 'lighting board controller', cat: 'light', w: 3.5, d: 2, shape: 'desk', watts: 100, ldesk: true },
   dmx_split:   { name: 'DMX splitter (4 lines)', short: 'DMX split', alias: 'opto buffer', cat: 'light', w: 1.6, d: .7, shape: 'rack', watts: 15, dmxOuts: 4 },
@@ -1885,7 +1904,7 @@ const GEAR_GROUPS = [
   ['Mics & DI', ['vox_mic', 'vox_wl', 'headset', 'inst_mic', 'di_mono', 'di_stereo', 'usb_if'], 'vox_mic'],
   ['Monitors & PA', ['wedge', 'iem', 'iem_rack', 'main_spk', 'sub', 'la_main', 'la_sub'], 'wedge'],
   ['Desks & tech', ['stagebox', 'rack', 'foh', 'mon_desk', 'mt_ipad', 'laptop', 'camera', 'conf_mon'], 'foh'],
-  ['Lighting', ['par_led', 'wash_led', 'bar_led', 'spot_mh', 'wash_mh', 'profile', 'fresnel', 'uplight', 'light_stand', 'hazer', 'light_desk', 'dmx_split', 'truss', 'light_pipe', 'foh_bar'], 'par_led'],
+  ['Lighting', ['par_led', 'wash_led', 'bar_led', 'bar_up', 'spot_mh', 'wash_mh', 'profile', 'fresnel', 'uplight', 'light_stand', 'hazer', 'light_desk', 'dmx_split', 'truss', 'light_pipe', 'foh_bar'], 'par_led'],
   ['Stage & power', ['riser', 'drum_riser', 'walkway', 'drum_shield', 'pulpit', 'music_stand', 'ipad_stand', 'distro', 'wall_outlet', 'pboard2', 'pboard4', 'pboard6'], 'distro'],
 ];
 const OVERHEAD_TYPES = ['main_spk', 'sub', 'la_main', 'la_sub'];
@@ -2497,11 +2516,18 @@ function extDown(e, depth = 0) {   // what is plugged into a board: [{it, watts}
     if (c.type !== 'power' || !touches(c, e.id) || c === f) continue;
     const o = other(c, e.id); if (!o) continue;
     if (isExt(o)) { if (feedOf(o) === c) out.push({ it: o, watts: extDown(o, depth + 1).reduce((a, x) => a + x.watts, 0) }); }
-    else if (!isPowerSource(o)) out.push({ it: o, watts: Number(prop(o, 'watts')) || 0 });
+    else if (!isPowerSource(o) && !(c.link && c.to !== o.id)) out.push({ it: o, watts: chainW(o) });
   }
   return out;
 }
 const extLoad = e => extDown(e).reduce((a, x) => a + x.watts, 0);
+/* Lights that pass power through (power in, power out) can feed the next light: a link is a power cable marked link, from the
+   light that feeds it. A chain's whole draw counts where its first light plugs in. */
+const linkKids = it => plan.cables.filter(c => c.type === 'power' && c.link && c.from === it.id).map(c => itemById(c.to)).filter(Boolean);
+const linkFeed = it => plan.cables.find(c => c.type === 'power' && c.link && c.to === it.id);
+function chainOf(it, depth = 0) { return depth > 64 ? [] : [it, ...linkKids(it).flatMap(k => chainOf(k, depth + 1))]; }
+const chainW = it => chainOf(it).reduce((a, x) => a + (Number(prop(x, 'watts')) || 0), 0);
+const linkCapW = () => 10 * (Number(prop(plan.items.find(isPowerSource) || {}, 'volts')) || 230) * .8;   // what one link cable should carry: 80% of 10 A
 const extUsed = e => { const f = feedOf(e); return plan.cables.filter(c => c.type === 'power' && touches(c, e.id) && c !== f).length; };
 function circuitLoads(src) {
   if (isExt(src)) { const d = extDown(src); return { loads: [d.reduce((a, x) => a + x.watts, 0)], items: [d.map(x => x.it)], cap: (Number(prop(src, 'amps')) || 10) * (Number(prop(src, 'volts')) || 230) }; }
@@ -2512,7 +2538,7 @@ function circuitLoads(src) {
     if (isExt(it)) { if (feedOf(it) === c) { const k = clamp((c.circuit || 1) - 1, 0, n - 1); loads[k] += extLoad(it); items[k].push(it); } continue; }
     if (isPowerSource(it)) continue;
     const k = clamp((c.circuit || 1) - 1, 0, n - 1);
-    loads[k] += Number(prop(it, 'watts')) || 0; items[k].push(it);
+    loads[k] += chainW(it); items[k].push(...chainOf(it));
   }
   return { loads, items, cap: (Number(prop(src, 'amps')) || 16) * (Number(prop(src, 'volts')) || 230) };
 }
@@ -2547,6 +2573,38 @@ function autoCable() {
       const b = pickBox(it, outs, 'outs'); portUse.get(b.id).outs += outs; addCable('xlr', b.id, it.id, { auto: true });
     }
   }
+  // DMX: the console feeds the splitter if there is one. Each truss, pipe or bar is a line of its own and the floor lights make
+  // one more, daisy-chained light to light from the one nearest where the line starts. With no free splitter output, a line
+  // carries on from the end of the one before.
+  const ldesk = plan.items.find(i => cat(i).ldesk), lights = plan.items.filter(isDmx);
+  if (ldesk && lights.length) {
+    const dmxed = it => plan.cables.some(c => c.type === 'dmx' && touches(c, it.id)), split = plan.items.find(i => cat(i).dmxOuts);
+    if (split && !dmxed(split)) addCable('dmx', ldesk.id, split.id, { auto: true });
+    const groups = new Map();
+    for (const it of lights) if (!dmxed(it)) { const k = mountOf(it)?.id || 'floor'; (groups.get(k) || groups.set(k, []).get(k)).push(it); }
+    const head = split || ldesk; let outs = split ? Number(prop(split, 'dmxOuts')) - plan.cables.filter(c => c.type === 'dmx' && c.from === split.id).length : 0, tail = null;
+    const near = g => Math.min(...g.map(i => dist(i, head)));
+    for (const g of [...groups.values()].sort((a, b) => near(a) - near(b))) {
+      let cur = split && outs > 0 ? (outs--, split) : tail || head;
+      const left = g.slice();
+      while (left.length) { const nx = nearest(cur, left); left.splice(left.indexOf(nx), 1); addCable('dmx', cur.id, nx.id, { auto: true, ...(mountOf(nx) || mountOf(cur) ? { level: 'ceiling' } : {}) }); cur = nx; }
+      tail = cur;
+    }
+  }
+  assignDmx();
+  // lights that pass power through are linked light to light along their DMX line, a new chain on each truss, pipe or bar
+  // and whenever the next light would take the chain past what one link cable should carry; each chain's first light plugs in below
+  if (plan.settings.powerLink !== false && sources.length) for (const L of dmxLines()) {
+    let prev = null;
+    for (const it of L.items) {
+      const ok = cat(it).plink && !has(it, 'power');
+      if (ok && prev && mountOf(prev) === mountOf(it) && dist(prev, it) < fromM(8)) {
+        let head = prev; for (let f = linkFeed(head); f; f = linkFeed(head)) head = itemById(f.from);
+        if (chainW(head) + (Number(prop(it, 'watts')) || 0) <= linkCapW()) { addCable('power', prev.id, it.id, { auto: true, link: true, ...(mountOf(it) ? { level: 'ceiling' } : {}) }); prev = it; continue; }
+      }
+      prev = ok ? it : null;
+    }
+  }
   // extension leads first: each one plugs into the nearest power point or distro
   const mains = sources.filter(x => !isExt(x));
   for (const e of sources.filter(isExt)) {
@@ -2555,8 +2613,8 @@ function autoCable() {
     addCable('power', e.id, src.id, { auto: true, circuit: loads.indexOf(Math.min(...loads)) + 1 });
   }
   for (const it of order) {
-    if (!needsPower(it) || has(it, 'power') || !sources.length) continue;
-    const w = Number(prop(it, 'watts')) || 0;
+    if (!needsPower(it) || plan.cables.some(c => c.type === 'power' && touches(c, it.id) && !(c.link && c.from === it.id)) || !sources.length) continue;   // a light that only feeds others still needs its own plug
+    const w = chainW(it);
     // a board is only used while it is plugged in and has a free outlet and headroom
     const cands = sources.filter(x => !isExt(x) || (feedOf(x) && extUsed(x) < (Number(prop(x, 'outlets')) || 4) && circuitLoads(x).loads[0] + w <= circuitLoads(x).cap * .8));
     if (!cands.length) continue;
@@ -2592,25 +2650,6 @@ function autoCable() {
     const offStage = d.y > maxY + 1 && b.y < maxY && !chans().length, ex = b.x > (minX + maxX) / 2 ? maxX + .8 : minX - .8, fy = maxY + 1.2;
     addCable('cat6', b.id, d.id, { auto: true, ...(offStage ? { points: [[r2(ex), r2(b.y)], [r2(ex), r2(fy)], [r2(d.x), r2(fy)]], edge: true } : {}) });
   }
-  // DMX: the console feeds the splitter if there is one. Each truss, pipe or bar is a line of its own and the floor lights make
-  // one more, daisy-chained light to light from the one nearest where the line starts. With no free splitter output, a line
-  // carries on from the end of the one before.
-  const ldesk = plan.items.find(i => cat(i).ldesk), lights = plan.items.filter(isDmx);
-  if (ldesk && lights.length) {
-    const dmxed = it => plan.cables.some(c => c.type === 'dmx' && touches(c, it.id)), split = plan.items.find(i => cat(i).dmxOuts);
-    if (split && !dmxed(split)) addCable('dmx', ldesk.id, split.id, { auto: true });
-    const groups = new Map();
-    for (const it of lights) if (!dmxed(it)) { const k = mountOf(it)?.id || 'floor'; (groups.get(k) || groups.set(k, []).get(k)).push(it); }
-    const head = split || ldesk; let outs = split ? Number(prop(split, 'dmxOuts')) - plan.cables.filter(c => c.type === 'dmx' && c.from === split.id).length : 0, tail = null;
-    const near = g => Math.min(...g.map(i => dist(i, head)));
-    for (const g of [...groups.values()].sort((a, b) => near(a) - near(b))) {
-      let cur = split && outs > 0 ? (outs--, split) : tail || head;
-      const left = g.slice();
-      while (left.length) { const nx = nearest(cur, left); left.splice(left.indexOf(nx), 1); addCable('dmx', cur.id, nx.id, { auto: true, ...(mountOf(nx) || mountOf(cur) ? { level: 'ceiling' } : {}) }); cur = nx; }
-      tail = cur;
-    }
-  }
-  assignDmx();
   // speaker and sub feeds fly overhead unless the room setting says otherwise
   if (plan.settings.overheadSpk !== false) for (const c of plan.cables) if (c.auto && [itemById(c.from), itemById(c.to)].some(i => i && OVERHEAD_TYPES.includes(i.type))) c.level = 'ceiling';
 }
@@ -2631,7 +2670,21 @@ function mountOf(it) {
   return null;
 }
 // how far the beam throws before it lands: what you set by dragging its aim, else a usual distance for where it is
-const throwOf = it => it.throw ?? (it.type === 'uplight' ? fromM(1.5) : mountOf(it)?.type === 'foh_bar' ? fromM(7) : mountOf(it) ? fromM(4) : fromM(3.2));
+const isUp = it => !mountOf(it) && !!(it.up ?? cat(it).up);   // a floor light aimed up a wall or the set
+const throwOf = it => it.throw ?? (isUp(it) ? fromM(1.2) : it.type === 'uplight' ? fromM(1.5) : mountOf(it)?.type === 'foh_bar' ? fromM(7) : mountOf(it) ? fromM(4) : fromM(3.2));
+/* Looks: each remembers every light's colour (red, green, blue and white, 0–255) and dimmer (0–100 %). Lights a look doesn't
+   mention, and every light before the first look, are warm white at full. */
+const FX_DEF = { r: 0, g: 0, b: 0, w: 255, d: 100 };
+const curLook = () => (plan.looks || []).find(l => l.id === plan.lookId) || plan.looks?.[0] || null;
+const fxOf = it => ({ ...FX_DEF, ...(curLook()?.fx?.[it.id] || {}) });
+// what a beam looks like: the emitters mixed and scaled so the strongest is full (the dimmer sets the strength); null when dark.
+// White-only lights (profiles, fresnels) stay warm white whatever colour is asked of them.
+function fxRGB(f, it) {
+  if (!f.d) return null;
+  if (it && !cat(it).rgbw) return [255, 226, 176];
+  const R = f.r + f.w, G = f.g + f.w * .9, B = f.b + f.w * .72, m = Math.max(R, G, B);
+  return m ? [R, G, B].map(v => Math.round(v / m * 255)) : null;
+}
 function beamGeom(it) {
   const [ux, uy] = aimOf(it, -1), T = throwOf(it), r = Math.max(fromM(.4), T * Math.tan(cat(it).beam / 2 * Math.PI / 180));
   return { cx: it.x + ux * T, cy: it.y + uy * T, r, ux, uy };
@@ -2664,6 +2717,40 @@ function assignDmx(all = false) {
     if (a <= 512) { it.dmxA = a; take(L.universe, a, n); }
   }
 }
+/* The desk: picked on the lighting console, it sets colours for the open look; picked on one light, just that light. */
+const DESK_PRESETS = [['Warm white', { r: 0, g: 0, b: 0, w: 255 }], ['Cool white', { r: 110, g: 150, b: 255, w: 180 }], ['Red', { r: 255, g: 0, b: 0, w: 0 }], ['Amber', { r: 255, g: 110, b: 0, w: 0 }],
+  ['Yellow', { r: 255, g: 200, b: 0, w: 0 }], ['Green', { r: 0, g: 255, b: 40, w: 0 }], ['Cyan', { r: 0, g: 210, b: 255, w: 0 }], ['Blue', { r: 0, g: 40, b: 255, w: 0 }],
+  ['Congo', { r: 80, g: 0, b: 255, w: 0 }], ['Magenta', { r: 255, g: 0, b: 180, w: 0 }], ['Pink', { r: 255, g: 50, b: 110, w: 40 }]];
+let deskSel = null, fxSnap = null;   // the lights picked on the desk (null: all of them); the state before a fader drag
+const deskLights = () => plan.items.filter(isFixture);
+function deskTargets() { const s = sel?.kind === 'item' && itemById(sel.id); if (s && isFixture(s)) return [s]; const all = deskLights(); return deskSel ? all.filter(i => deskSel.has(i.id)) : all; }
+const fxName = (f, it) => { if (!f.d) return 'Off'; if (it && !cat(it).rgbw) return `White${f.d < 100 ? ` ${f.d}%` : ''}`; const p = DESK_PRESETS.find(([, c]) => ['r', 'g', 'b', 'w'].every(k => c[k] === f[k])); return `${p ? p[0] : `R${f.r} G${f.g} B${f.b} W${f.w}`}${f.d < 100 ? ` ${f.d}%` : ''}`; };
+const fxSwatch = (f, it) => { const c = fxRGB(f, it); return c ? `rgb(${c.join(',')})` : 'transparent'; };
+function ensureLook() { if (!plan.looks?.length) { plan.looks = [{ id: uid(), name: 'Look 1', fx: {} }]; plan.lookId = plan.looks[0].id; } return curLook(); }
+function setFx(list, patch) { const L = ensureLook(); for (const it of list) L.fx[it.id] = { ...fxOf(it), ...patch }; }
+function deskControls(ts) {
+  const f = ts.length ? fxOf(ts[0]) : FX_DEF, white = ts.length && ts.every(i => !cat(i).rgbw);
+  return `<div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${white && n !== 'Warm white' ? ' disabled' : ''}></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off"></button></div>
+    <div class="faders">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].map(([k, l]) => `<label class="fader f-${k}"><span>${l}</span><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${white && 'rgb'.includes(k) ? 'disabled' : ''} aria-label="${l}"><output>${f[k]}${k === 'd' ? '%' : ''}</output></label>`).join('')}</div>
+    <p class="hint">${ts.length > 1 ? `Sets ${plural(ts.length, 'light')} together. ` : ''}${white ? 'White-only lights take the dimmer only.' : 'The beams on the plot show the mix.'}</p>`;
+}
+function deskHtml() {
+  const looks = plan.looks || [], cur = curLook(), all = deskLights(), ts = deskTargets(), picked = new Set(ts.map(i => i.id));
+  const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : [])];
+  return `<section class="isec desk"><h3>Looks <span>${looks.length ? esc(cur.name) : 'none yet'}</span></h3>
+    <div class="looks">${looks.map(l => `<button class="lookchip" data-look="${l.id}" aria-pressed="${l.id === cur?.id}">${esc(l.name)}</button>`).join('')}<button class="lookchip add" data-looknew>${ic('plus', 'sm')}New look</button></div>
+    ${cur ? `<div class="row lookedit"><input id="iLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"><button class="btn quiet" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button></div>` : '<p class="hint">Set colours below and they become your first look. Make one look per moment: worship, prayer, preaching.</p>'}
+    </section><section class="isec desk"><h3>Lights <span>${picked.size} of ${all.length}</span></h3>
+    ${all.length ? `<div class="deskgrp" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="lookchip" data-dgrp="${k}">${esc(n)}</button>`).join('')}</div>
+    <div class="deskfx">${all.map(i => `<button class="fxchip" data-dfx="${i.id}" aria-pressed="${picked.has(i.id)}" title="${esc(fxName(fxOf(i), i))}"><i style="background:${fxSwatch(fxOf(i), i)}"></i>${esc(itemName(i))}</button>`).join('')}</div>
+    ${deskControls(ts)}` : '<p class="hint">Add lights and they can be set here.</p>'}</section>`;
+}
+function looksSheetHtml() {
+  const looks = plan.looks || [], all = deskLights(); if (!looks.length || !all.length) return '';
+  const row = L => { const by = new Map(); for (const it of all) { const f = { ...FX_DEF, ...(L.fx[it.id] || {}) }, k = fxName(f, it); (by.get(k) || by.set(k, { f, it, l: [] }).get(k)).l.push(itemName(it)); }
+    return `<div class="lookrow"><b>${esc(L.name)}</b><div class="lookfx">${[...by].map(([k, g]) => `<span><i style="background:${fxSwatch(g.f, g.it)}"></i>${esc(k)}: ${esc(g.l.join(', '))}</span>`).join('')}</div></div>`; };
+  return `<h3 class="dmxh">Looks</h3><div class="lookrows">${looks.map(row).join('')}</div>`;
+}
 // the details panel for lights, the lighting console and the things lights hang on
 function lightingInsp(it) {
   const C = cat(it);
@@ -2675,13 +2762,16 @@ function lightingInsp(it) {
   if (C.ldesk) {
     const L = dmxLines();
     return `<section class="isec"><h3>DMX lines <span>${L.length}</span></h3>${L.length ? `<div class="dmxlines">${L.map(l => `<div><b>Line ${l.name}</b><small>${esc(l.from)} · universe ${l.universe} · ${plural(l.items.length, 'light')}</small></div>`).join('')}</div>` : '<p class="hint">No lights connected yet.</p>'}
-      <button class="btn quiet block" id="iReaddr">${ic('wand', 'sm')}Re-address every light</button></section>`;
+      <button class="btn quiet block" id="iReaddr">${ic('wand', 'sm')}Re-address every light</button>
+      <label class="row" for="iPowerLink" style="gap:8px;flex-wrap:nowrap;margin-top:10px"><input type="checkbox" id="iPowerLink" ${plan.settings.powerLink !== false ? 'checked' : ''} style="accent-color:var(--accent)"><span>Pass power light to light<small class="hint" style="display:block">Lights with power out are linked along their line</small></span></label></section>${deskHtml()}`;
   }
   const w = dmxWhere().get(it.id), n = dmxCh(it), hang = mountOf(it);
   const where = w ? `Universe ${w.line.universe} · line ${w.line.name}${it.dmxA ? ` · ${it.dmxA}–${it.dmxA + n - 1}` : ''}` : 'Not on a DMX line';
   return `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><div class="grid2">${field('iDmxA', 'Start address', it.dmxA || '', 'number', 'min="1" max="512" step="1"')}${field('iDmxCh', 'Channels (mode)', n, 'number', 'min="1" max="64" step="1"')}</div>
+    ${isFixture(it) && !hang ? `<label class="row" for="iUp" style="gap:8px;flex-wrap:nowrap;margin-top:8px"><input type="checkbox" id="iUp" ${isUp(it) ? 'checked' : ''} style="accent-color:var(--accent)"><span>Shines upward<small class="hint" style="display:block">Up a wall, the set or a backdrop</small></span></label>` : ''}
     ${isFixture(it) ? `<div class="grid2" style="margin-top:8px">${field('iThrow', 'Throw', mVal(throwOf(it)), 'number', 'step=".1" min=".5"', 'm')}<div class="field"><span>Hangs on</span><p class="hint" style="margin:6px 0 0">${hang ? esc(itemName(hang)) : 'Floor or stand'}</p></div></div>
-    <p class="hint">Drag the yellow dot on the plot to aim it.</p>` : ''}</section>`;
+    <p class="hint">Drag the yellow dot on the plot to aim it.</p>` : ''}</section>
+    ${isFixture(it) ? `<section class="isec desk"><h3>Colour <span>${esc(curLook()?.name || 'before any look')}</span></h3>${deskControls([it])}</section>` : ''}`;
 }
 // the lighting patch: every light by universe and address, with where it hangs, its line and its power
 const dmxAddr = r => r.u && r.a ? `${r.u}.${String(r.a).padStart(3, '0')}` : '—';
@@ -2689,9 +2779,9 @@ const LIGHT_COLS = [['Address', dmxAddr], ['Light', 'name'], ['Type', 'type'], [
 function lightPatch() {
   const where = dmxWhere();
   return plan.items.filter(isDmx).map(it => {
-    const w = where.get(it.id), pc = plan.cables.find(c => c.type === 'power' && touches(c, it.id)), src = pc && other(pc, it.id);
+    const w = where.get(it.id), lf = linkFeed(it), pc = lf || plan.cables.find(c => c.type === 'power' && touches(c, it.id) && !(c.link && c.from === it.id)), src = pc && other(pc, it.id);
     return { it, u: w?.line.universe || 0, a: w ? it.dmxA || 0 : 0, name: itemName(it), type: cat(it).name, ch: dmxCh(it), hang: mountOf(it) ? itemName(mountOf(it)) : 'Floor',
-      line: w ? w.line.name : 'not connected', power: src ? `${itemName(src)}${!isExt(src) && Number(prop(src, 'circuits')) > 1 ? ` · C${pc.circuit || 1}` : ''}` : '—' };
+      line: w ? w.line.name : 'not connected', power: lf && src ? `Linked from ${itemName(src)}` : src ? `${itemName(src)}${!isExt(src) && Number(prop(src, 'circuits')) > 1 ? ` · C${pc.circuit || 1}` : ''}` : '—' };
   }).sort((a, b) => (a.u || 99) - (b.u || 99) || (a.a || 999) - (b.a || 999) || a.name.localeCompare(b.name));
 }
 function lightingSheetHtml(rows, head) {
@@ -2699,7 +2789,7 @@ function lightingSheetHtml(rows, head) {
   const chain = L => `<div class="dmxchain"><span class="dmxsrc"><b>Line ${L.name}</b><small>${esc(L.from)} · universe ${L.universe}</small></span>${L.items.map(it => `<span class="dmxarr" aria-hidden="true">→</span><span class="dmxdev${bad.has(it.id) ? ' flag' : ''}"><b>${esc(itemName(it))}</b><small>${it.dmxA ? `${it.dmxA}–${it.dmxA + dmxCh(it) - 1}` : 'no address'}</small></span>`).join('')}</div>`;
   return `<section class="sheet" id="sec-lighting" data-sheet="lighting">${head('Lighting patch', 'lighting', `${plural(rows.length, 'light')} · ${plural(lines.length, 'DMX line')} · ${(watts / 1000).toFixed(1)} kW. Set each light to its address and channel mode before focus.`)}
     <div class="tablewrap"><table class="lighttbl"><thead><tr>${LIGHT_COLS.map(c => `<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr class="${bad.has(r.it.id) ? 'flag' : ''}"><td class="mono">${dmxAddr(r)}</td><td><b>${esc(r.name)}</b></td><td>${esc(r.type)}</td><td class="num">${r.ch}</td><td>${esc(r.hang)}</td><td>${esc(r.line)}</td><td>${esc(r.power)}</td></tr>`).join('')}</tbody></table></div>
-    ${lines.length ? `<h3 class="dmxh">DMX lines</h3><div class="dmxchains">${lines.map(chain).join('')}</div><div class="row dmxfoot"><p class="hint">Each line runs light to light in this order. End every line with a DMX terminator.</p><button class="btn quiet" id="lightReaddr" title="Number every light in the order its line runs">${ic('wand', 'sm')}Re-address in line order</button></div>` : '<p class="hint">Add a lighting console and the lights are chained into DMX lines here.</p>'}</section>`;
+    ${lines.length ? `<h3 class="dmxh">DMX lines</h3><div class="dmxchains">${lines.map(chain).join('')}</div><div class="row dmxfoot"><p class="hint">Each line runs light to light in this order. End every line with a DMX terminator.</p><button class="btn quiet" id="lightReaddr" title="Number every light in the order its line runs">${ic('wand', 'sm')}Re-address in line order</button></div>${looksSheetHtml()}` : '<p class="hint">Add a lighting console and the lights are chained into DMX lines here.</p>'}</section>`;
 }
 function dmxIssues() {
   const out = [], lights = plan.items.filter(isDmx); if (!lights.length) return out;
@@ -2993,6 +3083,10 @@ function warnings() {
     if (!f) out.push({ lvl: 'warn', id: e.id, fix: 'cable', msg: `${itemName(e)} isn't plugged into a power point or distro.` });
     else if (isExt(other(f, e.id))) out.push({ lvl: 'warn', id: e.id, msg: `${itemName(e)} is plugged into another extension lead. Plug it into a power point or distro instead.` });
     if (n > max) out.push({ lvl: 'bad', id: e.id, msg: `${itemName(e)}: ${n} plugs but only ${max} outlets.` });
+  }
+  for (const h of plan.items.filter(i => linkKids(i).length && !linkFeed(i))) {
+    const W = chainW(h), n = chainOf(h).length, cap = linkCapW();
+    if (W > cap) out.push({ lvl: W > cap / .8 ? 'bad' : 'warn', id: h.id, msg: `${itemName(h)} feeds ${n - 1} more ${n === 2 ? 'light' : 'lights'} on a power link (${Math.round(W)} W). That's more than one link should carry (${Math.round(cap)} W): start a new chain.` });
   }
   const unp = plan.items.filter(i => inputsOf(i).length && !patchOf(i));
   for (const i of unp) out.push({ lvl: 'warn', id: i.id, fix: 'cable', msg: `${itemName(i)} isn't patched to a stage box or desk.` });
@@ -3520,7 +3614,7 @@ const SYM_CSS = `
 .s-cab{fill:#2b3640}.s-cabtop{fill:#36434f}.s-mesh{fill:#14181c}.s-cone{fill:#5d6a77}.s-dot{fill:rgba(255,255,255,.2)}.s-txt{fill:rgba(255,255,255,.55);font:700 .3px Archivo,Arial,sans-serif;letter-spacing:.02px}
 .s-wood{fill:#c08a4e}.s-wood2{fill:#7a5232}.s-red2{fill:#b5413a}.s-blk{fill:#26292d}.s-brass{fill:#d6b04a}
 .c-audio{fill:#2e6a99}.c-inst{fill:#6b51a3}.c-power{fill:#b85a22}.c-infra{fill:#44535e}.c-video{fill:#a3426b}.c-light{fill:#8a6f2c}
-.s-led{fill:#fff7d6}.s-haze{fill:none;stroke:rgba(220,226,232,.45);stroke-width:.09;stroke-linecap:round}
+.s-led{fill:#fff7d6}.s-uparrow{fill:none;stroke:#ffe9a8;stroke-width:.07;stroke-linecap:round;stroke-linejoin:round}.s-haze{fill:none;stroke:rgba(220,226,232,.45);stroke-width:.09;stroke-linecap:round}
 .s-truss{fill:none;stroke:rgba(200,208,216,.75);stroke-width:.07}.s-lace{stroke-width:.04}.s-pipe{fill:rgba(200,208,216,.55);stroke:rgba(0,0,0,.3);stroke-width:.03}
 .light-deck .s-truss{stroke:rgba(40,46,54,.7)}.light-deck .s-pipe{fill:rgba(40,46,54,.55)}
 `;
@@ -3805,6 +3899,8 @@ const SYM = (() => {
     wash_led: '<path class="s-yoke" d="M-.62 .36V-.2M.62 .36V-.2M-.62 .36H.62"/>' + rect(-.52, -.5, 1.04, .98, 's-can', .26) + rect(-.48, -.65, .96, .2, 's-lens', .09) +
       [-.3, -.1, .1, .3].map(x => circ(x, -.55, .045, 's-led')).join(''),
     bar_led: rect(-1.62, -.2, 3.24, .48, 's-can', .1) + rect(-1.56, -.3, 3.12, .14, 's-lens', .05) + Array.from({ length: 10 }, (_, i) => circ(-1.38 + i * .307, -.23, .045, 's-led')).join(''),
+    bar_up: rect(-1.62, -.2, 3.24, .48, 's-can', .1) + rect(-1.56, -.3, 3.12, .14, 's-lens', .05) + Array.from({ length: 10 }, (_, i) => circ(-1.38 + i * .307, -.23, .045, 's-led')).join('') +
+      '<path class="s-uparrow" d="M-.22 .16L0 -.02L.22 .16"/>',
     spot_mh: rect(-.6, -.1, 1.2, .62, 's-can', .12) + '<path class="s-yoke" d="M-.5 .2V-.35M.5 .2V-.35"/>' + circ(0, -.2, .4, 's-can') + circ(0, -.38, .22, 's-lens') + circ(0, -.38, .08, 's-led'),
     wash_mh: rect(-.6, -.1, 1.2, .62, 's-can', .12) + '<path class="s-yoke" d="M-.5 .2V-.35M.5 .2V-.35"/>' + circ(0, -.22, .42, 's-can') + circ(0, -.36, .3, 's-lens') +
       [[-.13, -.36], [.13, -.36], [0, -.48], [0, -.24]].map(([x, y]) => circ(x, y, .05, 's-led')).join(''),
@@ -4079,6 +4175,7 @@ function flowOf(c) {
   if (!a || !b) return { dir: 1, kind: 'signal' };
   if (c.type === 'cat6') return { dir: 0, kind: 'link' };
   if (c.type === 'dmx') return { dir: cat(b).ldesk || (cat(b).dmxOuts && !cat(a).ldesk) ? -1 : 1, kind: 'signal' };   // away from the console
+  if (c.type === 'power' && c.link) return { dir: 1, kind: 'power' };   // light to light, away from the plug
   if (c.type === 'power') {
     const up = [a, b].find(x => isPowerSource(x) && !(isExt(x) && feedOf(x) === c)) || b;
     return { dir: up === a ? 1 : -1, kind: 'power' };
@@ -4433,7 +4530,6 @@ function renderPlot() {
   if (!layerOff('seats')) s += seatsSvg();
   s = s.replace('</defs>', `<clipPath id="deckclip"><path d="${deckD}"/></clipPath><clipPath id="houseclip"><path clip-rule="evenodd" d="M${f3(v.x0)} ${f3(v.y0)}h${f3(v.vw)}v${f3(v.vh)}h${f3(-v.vw)}Z${deckD}"/></clipPath></defs>`);
   s = s.replace('</defs>', '<filter id="deckblur" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation=".22"/></filter><linearGradient id="lipShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient><linearGradient id="deckSheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".06"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".08"/></linearGradient></defs>');
-  s = s.replace('</defs>', '<radialGradient id="lbPool"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".34"/><stop offset=".6" stop-color="#ffd27a" stop-opacity=".14"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient></defs>');   // where a light lands
   s += `<path class="deck-shadow" transform="translate(.06 .22)" d="${deckD}"/>`;
   for (const [a, c] of frontEdges(poly)) { const lip = fromM(.16), q = `${a[0]},${a[1]} ${c[0]},${c[1]} ${c[0]},${f3(c[1] + lip)} ${a[0]},${f3(a[1] + lip)}`; s += `<polygon class="deck-lip" points="${q}"/><polygon points="${q}" fill="url(#lipShade)"/>`; }   // the deck's front face, seen from above
   s += `<path class="deck" d="${deckD}"/><path class="deck-sheen" d="${deckD}" fill="url(#deckSheen)"/>`;
@@ -6078,7 +6174,7 @@ function syncChanItems() {
 }
 const canSitInChannel = it => it && cableEnd(it) && it.type !== 'rack';
 // personal gear (instruments, mics, DIs, pedals, monitors) dropped within 1.5 m of a person token belongs to that person
-const SHARED_TYPES = new Set(['par_led', 'wash_led', 'bar_led', 'spot_mh', 'wash_mh', 'profile', 'fresnel', 'uplight', 'hazer', 'light_desk', 'dmx_split', 'truss', 'light_pipe', 'foh_bar', 'stagebox', 'rack', 'foh', 'mon_desk', 'iem_rack', 'main_spk', 'sub', 'la_main', 'la_sub', 'distro', 'wall_outlet', 'pboard2', 'pboard4', 'pboard6', 'camera', 'conf_mon', 'light_stand', 'riser', 'drum_riser', 'walkway', 'drum_shield', 'pulpit']);
+const SHARED_TYPES = new Set(['par_led', 'wash_led', 'bar_led', 'bar_up', 'spot_mh', 'wash_mh', 'profile', 'fresnel', 'uplight', 'hazer', 'light_desk', 'dmx_split', 'truss', 'light_pipe', 'foh_bar', 'stagebox', 'rack', 'foh', 'mon_desk', 'iem_rack', 'main_spk', 'sub', 'la_main', 'la_sub', 'distro', 'wall_outlet', 'pboard2', 'pboard4', 'pboard6', 'camera', 'conf_mon', 'light_stand', 'riser', 'drum_riser', 'walkway', 'drum_shield', 'pulpit']);
 function ownerNear(it) {
   if (!plan.team.length || SHARED_TYPES.has(it.type) || cat(it).shape === 'person' || cat(it).shape === 'platform' || !['inst', 'audio', 'infra'].includes(cat(it).cat)) return null;
   const people = plan.items.filter(i => cat(i).shape === 'person' && i.personId && personById(i.personId));
@@ -6585,6 +6681,15 @@ function setStageD(m) { if (!(m > 0)) { toast(Number.isFinite(m) ? 'Stage depth 
 
 /* inspector */
 $('inspector').addEventListener('keydown', e => { if (e.target.matches?.('input[type=text], input[type=number], #iLabel') && e.key === 'Enter') { e.preventDefault(); e.target.blur(); } if (e.target.id === 'iLabel' && e.key === 'Escape') { e.target.value = itemById(sel.id)?.label || ''; e.target.blur(); } });
+// faders: the plot follows while you drag; letting go makes it one undo step
+$('inspector').addEventListener('input', e => {
+  const t = e.target, k = t.dataset?.fx; if (!k) return;
+  if (weekLocked()) { lockedNote(); return; }
+  if (!fxSnap) fxSnap = snapState();
+  setFx(deskTargets(), { [k]: Number(t.value) });
+  if (t.nextElementSibling) t.nextElementSibling.textContent = t.value + (k === 'd' ? '%' : '');
+  renderPlot();
+});
 $('inspector').addEventListener('change', e => {
   const t = e.target;
   const it = sel?.kind === 'item' ? itemById(sel.id) : null;
@@ -6593,6 +6698,9 @@ $('inspector').addEventListener('change', e => {
   if (t.id === 'isw') { mutate(() => setStageW(mIn(t.value))); return; }
   if (t.id === 'isd') { mutate(() => setStageD(mIn(t.value))); return; }
   if (t.id === 'iSnap') { ui.snap = Number(t.value); try { localStorage.setItem('stageplot.snap', String(ui.snap)); } catch { /* memory only */ } toast(ui.snap ? `Gear snaps to ${snapOpts().find(([v]) => v === ui.snap)?.[1].replace(' grid', '') || uSmall(fromM(ui.snap))} as you move it · hold Alt to place freely` : 'Snapping off'); return; }
+  if (t.id === 'iLookName') { const cur = curLook(); if (cur && t.value.trim()) mutate(() => { cur.name = t.value.trim().slice(0, 40); }); return; }
+  if (t.dataset.fx) { if (fxSnap) { const before = fxSnap; fxSnap = null; pushUndo(before, stepLabel('Light colour changed', before)); recordRev('Light colour changed', before); save(); renderAll(); } return; }
+  if (t.id === 'iPowerLink') { mutate(() => { plan.settings.powerLink = t.checked; autoCable(); }, t.checked ? 'Lights pass power light to light' : 'Every light plugs in on its own'); return; }
   if (t.id === 'gPerson') { if (t.value !== '*') mutate(() => { for (const i of selIds().map(itemById)) i.personId = t.value || undefined; }); return; }
   if (it) mutate(() => {
     const n = Number(t.value);
@@ -6608,6 +6716,7 @@ $('inspector').addEventListener('change', e => {
       case 'iInputs': it.inputs = t.value.split(',').map(s => s.trim()).filter(Boolean); it.inputsEdited = true; break;
       case 'iIns': it.ins = Math.max(1, n); break; case 'iOuts': it.outsMax = Math.max(0, n); break;
       case 'iOutsUse': it.outs = Math.max(0, n); break;
+      case 'iUp': it.up = t.checked; delete it.throw; break;
       case 'iDmxA': if (t.value === '') delete it.dmxA; else it.dmxA = clamp(Math.round(n), 1, 512); break;
       case 'iDmxCh': if (n > 0) it.dmxCh = clamp(Math.round(n), 1, 64); break;
       case 'iThrow': if (n > 0) it.throw = r2(fromM(mIn(n))); break;
@@ -6634,6 +6743,12 @@ $('inspector').addEventListener('click', e => {
   if (t.dataset.selitem) { if (itemById(t.dataset.selitem)) { sel = { kind: 'item', id: t.dataset.selitem }; group = null; focusItem(t.dataset.selitem); renderPlot(); renderInspector(); } return; }
   if (t.dataset.selc) { sel = { kind: 'cable', id: t.dataset.selc }; renderPlot(); renderInspector(); return; }
   if (t.id === 'iReaddr') { mutate(() => assignDmx(true), 'Every light re-addressed'); return; }
+  if (t.dataset.preset) { const ts = deskTargets(), c = DESK_PRESETS.find(p => p[0] === t.dataset.preset)?.[1]; if (ts.length) mutate(() => setFx(ts, c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 })); return; }
+  if (t.dataset.look) { mutate(() => { plan.lookId = t.dataset.look; }); return; }
+  if (t.hasAttribute('data-looknew')) { mutate(() => { const cur = ensureLook(), L = { id: uid(), name: `Look ${plan.looks.length + 1}`, fx: JSON.parse(JSON.stringify(cur.fx)) }; plan.looks.push(L); plan.lookId = L.id; }, 'New look, copied from the one before'); setTimeout(() => $('iLookName')?.select(), 30); return; }
+  if (t.hasAttribute('data-lookdel')) { const cur = curLook(); if (cur) mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; }, `Deleted ${cur.name}`); return; }
+  if (t.dataset.dgrp) { const k = t.dataset.dgrp, all = deskLights(); deskSel = k === 'all' ? null : new Set(all.filter(i => k === 'floor' ? !mountOf(i) : mountOf(i)?.id === k.slice(2)).map(i => i.id)); renderInspector(); return; }
+  if (t.dataset.dfx) { const id = t.dataset.dfx; if (e.shiftKey || e.ctrlKey || e.metaKey) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.has(id) ? deskSel.delete(id) : deskSel.add(id); } else deskSel = new Set([id]); renderInspector(); return; }
   if (t.dataset.level) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.level = t.dataset.level === 'ceiling' ? 'ceiling' : undefined; c.auto = false; }); return; }
   if (t.dataset.route) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.route = t.dataset.route === 'direct' ? 'direct' : undefined; }); return; }
   if (t.dataset.gmodel) {
@@ -7046,10 +7161,20 @@ function beamsSvg(selSet) {
   let s = '';
   for (const it of plan.items) {
     if (!isFixture(it) || !itemShown(it)) continue;
-    const { cx, cy, r, ux, uy } = beamGeom(it), px = -uy, py = ux, hung = !!mountOf(it), on = selSet.has(it.id), lift = hung ? .7 : 1;
-    const cls = `${hung ? ' hung' : ''}${on ? ' on' : ''}${cat(it).mover ? ' mover' : ''}`;
-    s += `<path class="lb-cone${cls}" d="M${f3(it.x)} ${f3(it.y)}L${f3(cx + px * r * lift)} ${f3(cy + py * r * lift)}L${f3(cx - px * r * lift)} ${f3(cy - py * r * lift)}Z"/>` +
-      `<ellipse class="lb-pool${cls}" cx="${f3(cx)}" cy="${f3(cy)}" rx="${f3(hung ? r : r * 1.25)}" ry="${f3(r)}" transform="rotate(${f3(Math.atan2(uy, ux) * 180 / Math.PI)} ${f3(cx)} ${f3(cy)})"/>`;
+    const on = selSet.has(it.id), f = fxOf(it), col = fxRGB(f, it), { cx, cy, r, ux, uy } = beamGeom(it), px = -uy, py = ux;
+    if (!col) { if (on) s += `<circle class="lb-off" cx="${f3(cx)}" cy="${f3(cy)}" r="${f3(r)}"/>`; continue; }   // off in this look: picked, it shows where it would land
+    const a = Math.max(.3, f.d / 100), c = col.join(','), gid = `lbp-${it.id}`, hung = !!mountOf(it);
+    if (isUp(it)) {   // thrown up a wall or the set: a short, wide fan, brightest where it lands
+      const T = throwOf(it), hw = Number(prop(it, 'w')) / 2, sp = hw + T * Math.tan(cat(it).beam / 2 * Math.PI / 180), ex = it.x + ux * T, ey = it.y + uy * T;
+      s += `<linearGradient id="${gid}" gradientUnits="userSpaceOnUse" x1="${f3(it.x)}" y1="${f3(it.y)}" x2="${f3(ex)}" y2="${f3(ey)}"><stop offset="0" stop-color="rgb(${c})" stop-opacity="${f3(.06 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="${f3((on ? .55 : .4) * a)}"/></linearGradient>` +
+        `<path class="lb-up${on ? ' on' : ''}" fill="url(#${gid})" d="M${f3(it.x - px * hw)} ${f3(it.y - py * hw)}L${f3(it.x + px * hw)} ${f3(it.y + py * hw)}L${f3(ex + px * sp)} ${f3(ey + py * sp)}L${f3(ex - px * sp)} ${f3(ey - py * sp)}Z"/>` +
+        `<path class="lb-wall" style="stroke:rgba(${c},${f3(.75 * a)})" d="M${f3(ex - px * sp)} ${f3(ey - py * sp)}L${f3(ex + px * sp)} ${f3(ey + py * sp)}"/>`;
+      continue;
+    }
+    const lift = hung ? .7 : 1, ca = (on ? .16 : hung ? .04 : .07) * a, cls = `${hung ? ' hung' : ''}${on ? ' on' : ''}${cat(it).mover ? ' mover' : ''}`;
+    s += `<radialGradient id="${gid}"><stop offset="0" stop-color="rgb(${c})" stop-opacity="${f3(.36 * a)}"/><stop offset=".6" stop-color="rgb(${c})" stop-opacity="${f3(.15 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="0"/></radialGradient>` +
+      `<path class="lb-cone${cls}" style="fill:rgba(${c},${f3(ca)})" d="M${f3(it.x)} ${f3(it.y)}L${f3(cx + px * r * lift)} ${f3(cy + py * r * lift)}L${f3(cx - px * r * lift)} ${f3(cy - py * r * lift)}Z"/>` +
+      `<ellipse class="lb-pool${cls}" fill="url(#${gid})" style="--lc:rgba(${c},.75)" cx="${f3(cx)}" cy="${f3(cy)}" rx="${f3(hung ? r : r * 1.25)}" ry="${f3(r)}" transform="rotate(${f3(Math.atan2(uy, ux) * 180 / Math.PI)} ${f3(cx)} ${f3(cy)})"/>`;
   }
   return `<g class="beams" aria-hidden="true">${s}</g>`;
 }

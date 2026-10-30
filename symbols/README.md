@@ -59,6 +59,7 @@ Downstage (toward the audience) is the bottom of each drawing. Regenerate with `
 | ![LED par](par_led.svg) | `par_led` | LED par | 0.30 × 0.34 m |
 | ![LED wash](wash_led.svg) | `wash_led` | LED wash | 0.40 × 0.40 m |
 | ![LED light bar](bar_led.svg) | `bar_led` | LED light bar | 1.01 × 0.18 m |
+| ![LED bar (uplighting)](bar_up.svg) | `bar_up` | LED bar (uplighting) | 1.01 × 0.18 m |
 | ![Moving head (spot)](spot_mh.svg) | `spot_mh` | Moving head (spot) | 0.40 × 0.40 m |
 | ![Moving head (wash)](wash_mh.svg) | `wash_mh` | Moving head (wash) | 0.40 × 0.40 m |
 | ![Profile / ellipsoidal](profile.svg) | `profile` | Profile / ellipsoidal | 0.27 × 0.67 m |
