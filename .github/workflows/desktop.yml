@@ -51,8 +51,8 @@ jobs:
           name: Stagehand-${{ matrix.target }}
           path: |
             desktop/dist/*.dmg
-            desktop/dist/*-mac.zip
-            desktop/dist/*.exe
+            desktop/dist/*-x64.exe
+            desktop/dist/*-arm64.exe
           if-no-files-found: error
 
   release:
