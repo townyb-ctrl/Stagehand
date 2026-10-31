@@ -1473,6 +1473,9 @@ tr.flag td { color: var(--bad); }
 .litem input { width: 22px; height: 22px; flex: none; accent-color: #16a34a; }
 .litem span { display: grid; gap: 1px; min-width: 0; } .litem small { color: var(--muted); font-size: 12.5px; }
 .litem.done { background: color-mix(in srgb, #22c55e 9%, var(--surface)); border-color: color-mix(in srgb, #22c55e 40%, var(--line)); } .litem.done b { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent); color: var(--muted); }
+.faultbadge path:first-child { fill: #f5a524; stroke: #1b1f27; stroke-width: .08; stroke-linejoin: round; } .faultbadge .fb-mark { fill: none; stroke: #1b1f27; stroke-width: .13; stroke-linecap: round; } .faultbadge { cursor: pointer; }
+.isec.fault.on { border-left: 3px solid #f5a524; padding-left: 10px; } .faultnow { display: flex; align-items: center; gap: 8px; } .faultnow b { flex: 1; } .faultnow svg { color: #c27c0e; } .faultpicks { display: flex; flex-wrap: wrap; gap: 6px; } .faultpicks .btn { padding: 4px 10px; font-size: 12.5px; min-height: 0; }
+.ld-fault { display: inline-flex; margin-left: 6px; color: #f5a524; vertical-align: -2px; } .faultcell { color: var(--warn-ink, #8a5a00); white-space: nowrap; } .faultcell svg { vertical-align: -2px; margin-right: 4px; }
 .notebadge circle { fill: var(--accent); stroke: #fff; stroke-width: .07; } .notebadge path { fill: none; stroke: #fff; stroke-width: .07; stroke-linecap: round; } .notebadge { cursor: pointer; }
 tr.flag .ch { background: var(--bad-soft); color: var(--bad); }
 .sheetgrid { display: grid; gap: 22px; }
@@ -1580,7 +1583,7 @@ tr.flag .ch { background: var(--bad-soft); color: var(--bad); }
 .rblock dt { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: #666; } .rblock dd { white-space: nowrap; margin: 0; font-weight: 700; font-family: var(--f-mono, monospace); font-size: 12px; }
 .riderplot { position: relative; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; background: #fff; }
 .riderplot .snap { filter: grayscale(1) contrast(1.12); display: block; width: 100%; max-height: 112mm; }
-.riderplot .house-fill { fill: #fff; } .riderplot .house-dots, .riderplot .ov-own, .riderplot .notebadge { display: none; }
+.riderplot .house-fill { fill: #fff; } .riderplot .house-dots, .riderplot .ov-own, .riderplot .notebadge, .riderplot .faultbadge { display: none; }
 .riderplot path[class^="cab"], .riderplot .lead-shadow, .riderplot .fl, .riderplot .chport, .riderplot .cab-inside { display: none; }
 .riderplot .scalebar text { font-size: .55px; fill: #111; font-family: var(--f-mono, monospace); }
 .riderplot .zone:not(.on-deck) { display: none; }
@@ -3169,7 +3172,7 @@ function deskListHtml() {
   const picked = new Set(deskPicked().map(i => i.id)), L = curLook();
   const rows = deskLights().slice().sort((a, b) => (mountOf(a) ? 0 : 1) - (mountOf(b) ? 0 : 1) || (itemName(mountOf(a) || {}) || '').localeCompare(itemName(mountOf(b) || {}) || '') || a.x - b.x);
   return `<div class="ld-list" role="listbox" aria-multiselectable="true" aria-label="Lights">${rows.map(i => { const f = fxEff(i, L), raw = fxOf(i), sw = fxSwatch(raw, i), on = picked.has(i.id);
-    return `<div class="ld-row${on ? ' on' : ''}" role="option" aria-selected="${on}" tabindex="0" data-ldfx="${i.id}"><i class="ld-dotl${sw === 'transparent' ? ' dark' : ''}" style="background:${sw}"></i><b>${esc(itemName(i))}</b><span class="ld-where">${ui.adv ? `<span class="mono">${ldAddr(i)}</span> · ` : ''}${esc(mountOf(i) ? itemName(mountOf(i)) : 'Floor')}</span><span class="ld-cname">${esc(fxName(raw, i))}</span><span class="ld-pct">${f.d}%</span></div>`; }).join('')}</div>`;
+    return `<div class="ld-row${on ? ' on' : ''}" role="option" aria-selected="${on}" tabindex="0" data-ldfx="${i.id}"><i class="ld-dotl${sw === 'transparent' ? ' dark' : ''}" style="background:${sw}"></i><b>${esc(itemName(i))}${i.fault ? `<span class="ld-fault" title="${esc(i.fault)}">${ic('alert', 'sm')}<span class="sr-only">Problem: ${esc(i.fault)}</span></span>` : ''}</b><span class="ld-where">${ui.adv ? `<span class="mono">${ldAddr(i)}</span> · ` : ''}${esc(mountOf(i) ? itemName(mountOf(i)) : 'Floor')}</span><span class="ld-cname">${esc(fxName(raw, i))}</span><span class="ld-pct">${f.d}%</span></div>`; }).join('')}</div>`;
 }
 // zoomed in on the desk's map: the view's top-left corner and how far in (1 = the whole stage)
 function deskZoomVb(vb) {
@@ -3218,7 +3221,7 @@ function deskMapSvg() {
   lights.forEach((a, k) => { const A = box(a); for (const b of lights.slice(k + 1)) { const B = box(b); if (A[0] < B[2] && B[0] < A[2] && A[1] < B[3] && B[1] < A[3]) { crowd.add(a.id); crowd.add(b.id); } } });
   const dots = lights.map(i => { const f = fxOf(i), sw = fxSwatch(f, i), shape = ldShape(i, sw, rr, U), on = picked.has(i.id);
     const halo = on || desk.flash?.has(i.id) ? `<g class="ld-halo">${shape.replace(/class="[^"]*"/g, '').replace(/style="[^"]*"/g, `style="stroke-width:${f3(U * .7)}"`)}</g>` : '';
-    return `<g class="ld-fx${on ? ' on' : ''}${desk.flash?.has(i.id) ? ' flashing' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .9)}" style="stroke-width:${f3(U * .3)}"/>${halo}${shape}<text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px" class="${showAddr ? 'addr' : ''}${crowd.has(i.id) && !on ? ' crowd' : ''}">${esc(lab(i))}</text></g>`; }).join('');
+    return `<g class="ld-fx${on ? ' on' : ''}${desk.flash?.has(i.id) ? ' flashing' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .9)}" style="stroke-width:${f3(U * .3)}"/>${halo}${shape}${i.fault ? faultTri(i.x + rr * 1.15, i.y - rr * 1.15, U * .95, i) : ''}<text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px" class="${showAddr ? 'addr' : ''}${crowd.has(i.id) && !on ? ' crowd' : ''}">${esc(lab(i))}</text></g>`; }).join('');
   // where each picked light lands: a target to drag (Shift drags every picked light's target together)
   const aims = desk.big || weekLocked() || lookPeek ? '' : deskPicked().filter(i => !isUp(i)).map(i => { const g = beamGeom(i), x = f3(g.cx), y = f3(g.cy), r = f3(U * 1.15);
     return `<g class="ld-aim" data-ldaim="${i.id}" role="button" tabindex="0" aria-label="Aim ${esc(itemName(i))}: drag to move where it lands, or use the arrow keys" title="Drag to aim ${esc(itemName(i))} (Shift: all picked lights, Alt: free angle)"><line class="ld-aimline" x1="${f3(i.x)}" y1="${f3(i.y)}" x2="${x}" y2="${y}" style="stroke-width:${f3(U * .16)};stroke-dasharray:${f3(U * .6)} ${f3(U * .45)}"/><circle class="ld-aimhit" cx="${x}" cy="${y}" r="${f3(U * 2.2)}"/><circle class="ld-aimc" cx="${x}" cy="${y}" r="${r}" style="stroke-width:${f3(U * .28)}"/><path class="ld-aimx" d="M${f3(g.cx - U * 1.9)} ${y}h${f3(U * 1.1)}M${f3(g.cx + U * .8)} ${y}h${f3(U * 1.1)}M${x} ${f3(g.cy - U * 1.9)}v${f3(U * 1.1)}M${x} ${f3(g.cy + U * .8)}v${f3(U * 1.1)}" style="stroke-width:${f3(U * .22)}"/></g>`; }).join('');
@@ -3427,6 +3430,8 @@ $('deskDlg').addEventListener('click', e => {
   if (t.id === 'ldDone') { closeDesk(); return; }
   if (desk.ctx && !t.closest('.ld-ctx')) { desk.ctx = null; renderDesk(); return; }
   if (t.dataset.ctxpre) { const ts = deskCtxTargets(), c = DESK_PRESETS.find(p => p[0] === t.dataset.ctxpre)?.[1]; desk.ctx = null; if (ts.length && !lookPeek) { fxSnap = snapState(); setFx(ts, c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); deskSel = new Set(ts.map(i => i.id)); deskCommit(); } else renderDesk(); return; }
+  if (t.hasAttribute('data-ctxfaults')) { desk.ctx.faults = true; desk.ctx.y = Math.max(0, desk.ctx.y - 120); renderDesk(); setTimeout(() => document.querySelector('[data-ctxfault]')?.focus(), 20); return; }
+  if (t.dataset.ctxfault || t.hasAttribute('data-ctxfaultclear')) { const it = itemById(desk.ctx.id); desk.ctx = null; setFault(it, t.dataset.ctxfault || ''); renderDesk(); return; }
   if (t.hasAttribute('data-ctxonly')) { deskSel = new Set([desk.ctx.id]); desk.ctx = null; renderDesk(); return; }
   if (t.hasAttribute('data-ctxtype')) { const ty = itemById(desk.ctx.id)?.type; deskSel = new Set(deskLights().filter(i => i.type === ty).map(i => i.id)); desk.ctx = null; renderDesk(); return; }
   if (t.hasAttribute('data-ctxmount')) { const m = mountOf(itemById(desk.ctx.id)); deskSel = new Set(deskLights().filter(i => mountOf(i) === m).map(i => i.id)); desk.ctx = null; renderDesk(); return; }
@@ -3545,7 +3550,7 @@ function deskCtxHtml() {
   const ts = deskCtxTargets(), m = mountOf(it), white = ts.every(i => !cat(i).rgbw);
   return `<div class="ld-ctx" role="menu" aria-label="${esc(itemName(it))}" style="left:${c.x}px;top:${c.y}px"><div class="ld-ctxhead">${ts.length > 1 ? plural(ts.length, 'light') : esc(itemName(it))}</div>
     <div class="ld-ctxsw">${CTX_PRESETS.map(n => `<button role="menuitem" data-ctxpre="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === n)[1], d: 100 })}" ${white && n !== 'Warm white' ? 'disabled' : ''}></button>`).join('')}<button role="menuitem" class="off" data-ctxpre="Off" title="Off" aria-label="Off"></button></div>
-    <button role="menuitem" data-ctxonly>Only this one</button><button role="menuitem" data-ctxtype>Every ${esc(cat(it).short.toLowerCase())}</button><button role="menuitem" data-ctxmount>${m ? `Everything on ${esc(itemName(m))}` : 'Every floor light'}</button><button role="menuitem" data-ctxflash>${ic('zap', 'sm')}Flash</button></div>`;
+    <button role="menuitem" data-ctxonly>Only this one</button><button role="menuitem" data-ctxtype>Every ${esc(cat(it).short.toLowerCase())}</button><button role="menuitem" data-ctxmount>${m ? `Everything on ${esc(itemName(m))}` : 'Every floor light'}</button><button role="menuitem" data-ctxflash>${ic('zap', 'sm')}Flash</button>${it.fault ? `<button role="menuitem" data-ctxfaultclear>${ic('check', 'sm')}Fixed: ${esc(it.fault)}</button>` : c.faults ? `<div class="ld-ctxhead">Problem with ${esc(itemName(it))}</div>${FAULTS.map(f => `<button role="menuitem" data-ctxfault="${esc(f)}">${esc(f)}</button>`).join('')}` : `<button role="menuitem" data-ctxfaults>${ic('alert', 'sm')}Mark a problem…</button>`}</div>`;
 }
 function openDeskCtx(id, cx, cy) { const r = $('ldBody').getBoundingClientRect(); desk.ctx = { id, x: Math.round(Math.min(cx - r.left, r.width - 220)), y: Math.round(Math.min(cy - r.top, r.height - 230)) }; renderDesk(); setTimeout(() => document.querySelector('.ld-ctx button')?.focus(), 20); }
 function flashLights(ids) { desk.flash = new Set(ids); renderPlot(); if (desk.open) $('ldMapWrap').innerHTML = deskStageHtml(); clearTimeout(desk.flashT); desk.flashT = setTimeout(() => { desk.flash = null; renderPlot(); if (desk.open && $('ldMapWrap')) $('ldMapWrap').innerHTML = deskStageHtml(); }, 1700); }
@@ -3657,30 +3662,34 @@ function lightingInsp(it) {
       <button class="btn primary block" data-opendesk="${it.id}">${ic('sun', 'sm')}Open the lighting desk</button>
       <p class="hint" style="margin:10px 0 0">${hang ? `Hangs on ${esc(itemName(hang))}` : 'On the floor or a stand'}${a != null ? ` · hits faces at ${Math.round(a)}°${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ''}` : ''}. Drag the yellow dot on the plot to aim it${cat(it).zoom ? ', the white dot to size the beam' : ''}.</p></section>`
     : `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><p class="hint" style="margin:0">${n} channels. Address and mode are under More settings.</p></section>`;
+  const faultSec = `<section class="isec fault${it.fault ? ' on' : ''}"><h3>Problem <span>${it.fault ? 'needs attention' : 'none'}</span></h3>${it.fault
+    ? `<div class="faultnow">${ic('alert', 'sm')}<b>${esc(it.fault)}</b><button class="btn quiet" data-faultclear="${it.id}">${ic('check', 'sm')}Fixed</button></div>`
+    : `<div class="faultpicks" role="group" aria-label="Mark a problem with this light">${FAULTS.map(f => `<button class="btn quiet" data-fault="${esc(f)}">${esc(f)}</button>`).join('')}</div><div class="field" style="margin-top:8px"><label for="iFault">Something else</label><input id="iFault" type="text" maxlength="80" placeholder="e.g. Yoke knob missing"></div>`}</section>`;
   const adv = `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><div class="grid2">${field('iDmxA', 'Start address', it.dmxA || '', 'number', 'min="1" max="512" step="1"')}${field('iDmxCh', 'Channels (mode)', n, 'number', 'min="1" max="64" step="1"')}</div></section>` +
     (fix ? `<section class="isec"><h3>Light</h3><div class="field"><label for="iLType">Light type</label><select id="iLType">${LIGHT_TYPES().map(t => `<option value="${t}" ${t === it.type ? 'selected' : ''}>${esc(CAT[t].name)}</option>`).join('')}</select></div>
       <div class="grid2" style="margin-top:8px">${field('iThrow', 'Throw', mVal(throwOf(it)), 'number', 'step=".1" min=".5"', 'm')}${cat(it).zoom ? field('iBeam', `Beam (${cat(it).zoom.join('–')}°)`, beamOf(it), 'number', `step="1" min="${cat(it).zoom[0]}" max="${cat(it).zoom[1]}"`, '°') : ''}</div>
       ${a != null ? `<p class="hint" style="margin:8px 0 0">${hang ? `Hangs at ${uLen(fixtureH(it))}. ` : ''}${(g => `Lands about ${uLen(2 * g.r)} across. `)(beamGeom(it))}Hits faces at <b>${Math.round(a)}°</b>${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ', a good angle'} (30–50° is best).</p>` : ''}
       ${!hang ? `<label class="row" for="iUp" style="gap:8px;flex-wrap:nowrap;margin-top:8px"><input type="checkbox" id="iUp" ${isUp(it) ? 'checked' : ''} style="accent-color:var(--accent)"><span>Shines upward<small class="hint" style="display:block">Up a wall, the set or a backdrop</small></span></label>` : ''}
       <button class="btn quiet block" data-mirror="${it.id}" style="margin-top:8px" title="Place a matching light on the other side of the stage, aimed the same way">${ic('copy', 'sm')}Mirror to the other side</button></section>` : '');
-  return { basic, adv };
+  return { basic: basic + faultSec, adv };
 }
 // the lighting patch: every light by universe and address, with where it hangs, its line and its power
 const dmxAddr = r => r.u && r.a ? `${r.u}.${String(r.a).padStart(3, '0')}` : '—';
 const LIGHT_COLS = [['Address', dmxAddr], ['Light', 'name'], ['Type', 'type'], ['Ch', 'ch'], ['Hangs on', 'hang'], ['Line', 'line'], ['Power', 'power']];
+const lightCols = () => plan.items.some(i => isDmx(i) && i.fault) ? [...LIGHT_COLS, ['Problem', 'fault']] : LIGHT_COLS;
 function lightPatch() {
   const where = dmxWhere();
   return plan.items.filter(isDmx).map(it => {
     const w = where.get(it.id), lf = linkFeed(it), pc = lf || plan.cables.find(c => c.type === 'power' && touches(c, it.id) && !(c.link && c.from === it.id)), src = pc && other(pc, it.id);
     return { it, u: w?.line.universe || 0, a: w ? it.dmxA || 0 : 0, name: itemName(it), type: cat(it).name, ch: dmxCh(it), hang: mountOf(it) ? itemName(mountOf(it)) : 'Floor',
-      line: w ? w.line.name : 'not connected', power: lf && src ? `Linked from ${itemName(src)}` : src ? `${itemName(src)}${!isExt(src) && Number(prop(src, 'circuits')) > 1 ? ` · C${pc.circuit || 1}` : ''}` : '—' };
+      fault: it.fault || '', line: w ? w.line.name : 'not connected', power: lf && src ? `Linked from ${itemName(src)}` : src ? `${itemName(src)}${!isExt(src) && Number(prop(src, 'circuits')) > 1 ? ` · C${pc.circuit || 1}` : ''}` : '—' };
   }).sort((a, b) => (a.u || 99) - (b.u || 99) || (a.a || 999) - (b.a || 999) || a.name.localeCompare(b.name));
 }
 function lightingSheetHtml(rows, head) {
   const lines = dmxLines(), bad = new Set(dmxIssues().map(x => x.id)), watts = rows.reduce((t, r) => t + (Number(prop(r.it, 'watts')) || 0), 0);
   const chain = L => `<div class="dmxchain"><span class="dmxsrc"><b>Line ${L.name}</b><small>${esc(L.from)} · universe ${L.universe}</small></span>${L.items.map(it => `<span class="dmxarr" aria-hidden="true">→</span><span class="dmxdev${bad.has(it.id) ? ' flag' : ''}"><b>${esc(itemName(it))}</b><small>${it.dmxA ? `${it.dmxA}–${it.dmxA + dmxCh(it) - 1}` : 'no address'}</small></span>`).join('')}</div>`;
   return `<section class="sheet" id="sec-lighting" data-sheet="lighting">${head('Lighting patch', 'lighting', `${plural(rows.length, 'light')} · ${plural(lines.length, 'DMX line')} · ${(watts / 1000).toFixed(1)} kW. Set each light to its address and channel mode before focus.`)}
-    <div class="tablewrap"><table class="lighttbl"><thead><tr>${LIGHT_COLS.map(c => `<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr class="${bad.has(r.it.id) ? 'flag' : ''}"><td class="mono">${dmxAddr(r)}</td><td><b>${esc(r.name)}</b></td><td>${esc(r.type)}</td><td class="num">${r.ch}</td><td>${esc(r.hang)}</td><td>${esc(r.line)}</td><td>${esc(r.power)}</td></tr>`).join('')}</tbody></table></div>
+    <div class="tablewrap"><table class="lighttbl"><thead><tr>${lightCols().map(c => `<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr class="${bad.has(r.it.id) ? 'flag' : ''}"><td class="mono">${dmxAddr(r)}</td><td><b>${esc(r.name)}</b></td><td>${esc(r.type)}</td><td class="num">${r.ch}</td><td>${esc(r.hang)}</td><td>${esc(r.line)}</td><td>${esc(r.power)}</td>${lightCols().length > LIGHT_COLS.length ? `<td class="faultcell">${r.fault ? `${ic('alert', 'sm')}${esc(r.fault)}` : ''}</td>` : ''}</tr>`).join('')}</tbody></table></div>
     ${lines.length ? `<h3 class="dmxh">DMX lines</h3><div class="dmxchains">${lines.map(chain).join('')}</div><div class="row dmxfoot"><p class="hint">Each line runs light to light in this order. End every line with a DMX terminator.</p><span class="row" style="gap:6px"><button class="btn quiet" data-opendesk>${ic('sun', 'sm')}Lighting desk</button><button class="btn quiet" id="lightReaddr" title="Number every light in the order its line runs">${ic('wand', 'sm')}Re-address in line order</button></span></div>${groupsSheetHtml()}${looksSheetHtml()}` : '<p class="hint">Add a lighting console and the lights are chained into DMX lines here.</p>'}</section>`;
 }
 /* Heights: trusses, pipes and bars hang at a trim height (set in their details; under the ceiling by default). A front light
@@ -3741,6 +3750,12 @@ function faceIssues() {
   }
   return out;
 }
+/* Fault notes: a light that flickers, won't answer or needs a lamp or gel carries a note until someone marks it fixed. It
+   shows on the plot, in the desk, on the patch sheet and in the week's checks, and travels with the light into later weeks. */
+const FAULTS = ['Flickering', 'Not responding', 'Wrong colour', 'Needs a new lamp or gel', 'Loose or rattling'];
+const faultIssues = () => plan.items.filter(i => i.fault && (isDmx(i) || isFixture(i))).map(i => ({ lvl: 'warn', id: i.id, msg: `${itemName(i)}: ${i.fault}. Fix or swap it before the service, then mark it fixed in its details.` }));
+const faultTri = (x, y, k, it) => `<g class="faultbadge" data-id="${it.id}" transform="translate(${f3(x)} ${f3(y)}) scale(${f3(k)})"><title>${esc(itemName(it))}: ${esc(it.fault)}</title><path d="M0 -.62L.62 .46H-.62Z"/><path class="fb-mark" d="M0 -.26V.12M0 .27v.01"/></g>`;
+function setFault(it, txt) { if (!it) return; const v = (txt || '').trim().slice(0, 80); mutate(() => { if (v) it.fault = v; else delete it.fault; }, v ? `${itemName(it)}: ${v}` : `${itemName(it)} marked fixed`); }
 function dmxIssues() {
   const out = [], lights = plan.items.filter(isDmx); if (!lights.length) return out;
   const desk = plan.items.find(i => cat(i).ldesk);
@@ -4053,6 +4068,7 @@ function warnings() {
   for (const x of dmxIssues()) out.push(x);
   for (const x of faceIssues()) out.push(x);
   for (const x of angleIssues()) out.push(x);
+  for (const x of faultIssues()) out.push(x);
   return out;
 }
 
@@ -5550,6 +5566,7 @@ function renderPlot() {
     const g = `<g class="item${C.shape === 'person' ? ' is-person' : C.shape === 'platform' ? ' is-floor' : C.cat === 'inst' ? ' is-inst' : ''}${selSet.has(it.id) ? ' picked' : ''}${it.chan ? ' inchan' : ''}${frozen(it) ? ' locked' : ''}${tr?.items.has(it.id) ? ' intrace' : ''}${fset?.has(it.id) ? ' infocus' : ''}${lifted?.has(it.id) && C.shape !== 'platform' ? ' lifting' : settling.has(it.id) ? ' settle' : ''}" data-id="${it.id}" transform="translate(${it.x} ${it.y}) rotate(${it.rot || 0})" role="img" aria-label="${esc(itemName(it))}${it.note ? ' — ' + esc(it.note) : ''}"><g class="liftg">${shapeSvg(it, iw, id)}</g></g>`;
     if (L < 1) s += g; else top += g;
     if ((C.wireless || C.iem) && !layersBypass) { const [rw, rh] = halfExt(it), k = 1 / scale; top += `<g class="rfmark" transform="translate(${f3(it.x + rw * .7)} ${f3(it.y - rh * .7)}) scale(${f3(k)})" aria-hidden="true"><circle r="5.5"/><path d="M-2.6 -.6a3.7 3.7 0 0 1 5.2 0M-1.3 .9a1.85 1.85 0 0 1 2.6 0"/><circle class="rfdot" cy="2.2" r=".9"/></g>`; }   // wireless: a little signal mark instead of a plug
+    if (it.fault && (isFixture(it) || isDmx(it))) { const m = Math.max(iw, id) / 2 * .72; top += faultTri(it.x - m, it.y - m, .9, it); }   // a light with a problem
     if (it.note && !layerOff('labels')) { const m = Math.max(iw, id) / 2 * .72; top += `<g class="notebadge" data-id="${it.id}" transform="translate(${f3(it.x + m)} ${f3(it.y - m)})"><title>${esc(it.note)}</title><circle r=".45"/><path d="M-.2 -.14h.4M-.2 0h.4M-.2 .14h.26"/></g>`; }   // a note pinned to the gear   // cables run under the gear, so plugs disappear beneath it instead of crossing it
     if (C.shape === 'platform') { const r = (it.rot || 0) % 180 === 90, hw = (r ? id : iw) / 2, hd = (r ? iw : id) / 2; risers.push([it.x - hw, it.y - hd, it.x + hw, it.y + hd]); }
     if (C.shape !== 'platform') { const r = (it.rot || 0) % 180 === 90, hw = (r ? id : iw) / 2, hd = (r ? iw : id) / 2; obstacles.push([it.x - hw, it.y - hd, it.x + hw, it.y + hd]); }
@@ -6670,7 +6687,7 @@ function renderPaper() {
   const teamCols = [['Name', 'name'], ['Position', 'role'], ['Sings', r => r.sings ? 'yes' : '']];
   const full = cols => cols.map(c => c[0] === 'Patch' ? ['Patch', 'port'] : c);   // copies keep the full box names
   const lp = lightPatch();
-  paperData = { lighting: tsv(lp, LIGHT_COLS), inputs: tsv(ins, full(inCols)), outputs: tsv(outs, full(outCols)), mixes: tsv(mixes, mixCols), pull: tsv(pull, pullCols), team: tsv(plan.team, teamCols) };
+  paperData = { lighting: tsv(lp, lightCols()), inputs: tsv(ins, full(inCols)), outputs: tsv(outs, full(outCols)), mixes: tsv(mixes, mixCols), pull: tsv(pull, pullCols), team: tsv(plan.team, teamCols) };
   const cell = (r, c, i) => {
     const v = typeof c[1] === 'function' ? c[1](r) : r[c[1]];
     if (r.spare && c[0] !== 'Ch') return `<td class="spare">${c[0] === 'Input' ? 'Spare' : c[0] === 'Mic / DI' ? esc(r.mic) : ''}</td>`;
@@ -7709,6 +7726,7 @@ $('inspector').addEventListener('change', e => {
       case 'iDmxA': if (t.value === '') delete it.dmxA; else it.dmxA = clamp(Math.round(n), 1, 512); break;
       case 'iDmxCh': if (n > 0) it.dmxCh = clamp(Math.round(n), 1, 64); break;
       case 'iThrow': if (n > 0) it.throw = r2(fromM(mIn(n))); break;
+      case 'iFault': if (t.value.trim()) it.fault = t.value.trim().slice(0, 80); break;
       case 'iLen': if (n > 0) it.w = fromM(mIn(n)); break;
       case 'iBeam': if (cat(it).zoom && n > 0) it.beam = clamp(Math.round(n), ...cat(it).zoom); break;
       case 'iMountH': if (n > 0) it.h = r2(fromM(mIn(n))); break;
@@ -7742,6 +7760,8 @@ $('inspector').addEventListener('click', e => {
   if (t.dataset.look) { switchLook(t.dataset.look); return; }
   if (t.hasAttribute('data-opendesk')) { openDesk(t.dataset.opendesk || null); return; }
   if (t.dataset.mirror) { mirrorLight(t.dataset.mirror); return; }
+  if (t.dataset.fault && sel?.id) { setFault(itemById(sel.id), t.dataset.fault); return; }
+  if (t.dataset.faultclear) { setFault(itemById(t.dataset.faultclear), ''); return; }
   if (t.dataset.level) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.level = t.dataset.level === 'ceiling' ? 'ceiling' : undefined; c.auto = false; }); return; }
   if (t.dataset.route) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.route = t.dataset.route === 'direct' ? 'direct' : undefined; }); return; }
   if (t.dataset.gmodel) {
@@ -8888,6 +8908,7 @@ svg.addEventListener('pointerover', e => {
       const L = curLook(), raw = fxIn(it, L), eff = fxEff(it, L);
       if (isFixture(it)) rows.push(['Colour', `${fxName(raw, it)}${L ? ` · ${L.name}` : ''}`], ['Level', `${eff.d}%${lookMaster(L) < 100 ? ` (look at ${lookMaster(L)}%)` : ''}`]);
       rows.push(['DMX', ldAddr(it)], ['Hangs on', mountOf(it) ? itemName(mountOf(it)) : 'Floor or stand']);
+      if (it.fault) rows.push(['Problem', it.fault]);
     }
     if (['platform', 'speaker', 'wedge'].includes(C.shape)) rows.push(['Size', `${uDim(prop(it, 'w'), prop(it, 'd'))}`]);   // size matters for risers and speakers; for gear it's noise
     const h = $('hoverCard'), hue = personColour(it.personId);
