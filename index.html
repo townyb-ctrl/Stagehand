@@ -655,6 +655,40 @@ svg text { font-family: var(--f-ui); }
 .ldesk.big .ld-map { cursor: default; }
 @media (max-width: 600px) { .ld-bigs { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; } .ld-bigmap { height: 30vh; } .ld-big { min-height: 84px; padding: 12px; } .ld-big b { font-size: 16px; } .ld-bigmap { margin: 10px 12px 0; } .ld-bigtop .ld-faces { display: none; } }
 .ld-moods button:hover { background: var(--ld-raise); }
+.ld-viewtog { display: inline-flex; padding: 2px; border-radius: 9px; background: var(--ld-panel); border: 1px solid var(--ld-line); }
+.ld-viewtog button { border: 0; background: none; color: var(--ld-mute); font: inherit; font-size: 12px; font-weight: 650; padding: 4px 10px; border-radius: 7px; cursor: pointer; }
+.ld-viewtog button[aria-pressed="true"] { background: var(--ld-bg); color: var(--ld-ink); box-shadow: var(--shadow-1); }
+.ld-mapwrap { position: relative; } .ld-mapwrap.listing { background: var(--ld-panel); box-shadow: inset 0 0 0 1px var(--ld-line); overflow-y: auto; }
+.ld-fit { position: absolute; top: 10px; right: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(10,13,18,.75); color: #fff; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ld-list { display: grid; padding: 6px; }
+.ld-row { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto auto 46px; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 9px; cursor: pointer; font-size: 13.5px; }
+.ld-row:hover { background: var(--ld-raise); } .ld-row.on { background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--ld-acc); }
+.ld-row:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: -2px; }
+.ld-dotl { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); } .ld-dotl.dark { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 3px, var(--ld-line2) 3px 6px) !important; }
+.ld-where, .ld-cname { color: var(--ld-mute); font-size: 12.5px; } .ld-row.on .ld-where, .ld-row.on .ld-cname { color: var(--ld-ink2); } .ld-pct { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.ld-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.ld-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 9px; border-radius: 999px; background: var(--ld-panel); border: 1px solid var(--ld-line2); font-size: 12.5px; font-weight: 600; }
+.ld-chip i { width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
+.ld-chip button { width: 20px; height: 20px; display: grid; place-items: center; border: 0; border-radius: 50%; background: none; color: var(--ld-mute); cursor: pointer; padding: 0; } .ld-chip button:hover { background: var(--ld-raise); color: var(--ld-ink); }
+.ld-chip.more { padding-right: 9px; color: var(--ld-mute); }
+.ldesk .pswatch.mine i { box-shadow: inset 0 0 0 1px rgba(0,0,0,.15), 0 0 0 2px var(--ld-card), 0 0 0 3px var(--ld-acc); }
+.ld-tipcard { position: absolute; z-index: 7; right: 488px; top: 280px; width: 290px; padding: 14px 16px; border-radius: 14px; background: var(--ld-ink); color: var(--ld-bg); box-shadow: var(--shadow-3); display: grid; gap: 6px; }
+.ld-tipcard p { margin: 0; font-size: 13px; opacity: .85; line-height: 1.45; } .ld-tipcard .row { gap: 6px; justify-content: flex-end; margin-top: 4px; }
+.ld-tipcard .ld-mini { background: transparent; color: inherit; border-color: color-mix(in srgb, var(--ld-bg) 35%, transparent); } .ld-tipcard .ld-mini.primary { background: var(--ld-acc); color: var(--accent-ink); border-color: var(--ld-acc); }
+.ld-tipdots { display: inline-flex; gap: 4px; margin-right: auto; } .ld-tipdots i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .3; } .ld-tipdots i.on { opacity: 1; }
+.ld-coach { outline: 2px solid var(--ld-acc) !important; outline-offset: 3px; border-radius: 12px; transition: outline-color .2s; }
+.lookpill { display: flex; align-items: center; gap: 4px; margin-top: 8px; padding: 4px; width: max-content; }
+.lp-btn { display: flex; align-items: center; gap: 9px; border: 0; background: none; color: var(--ink); font: inherit; padding: 4px 8px; border-radius: 9px; cursor: pointer; } .lp-btn:hover { background: var(--surface-2); }
+.lp-txt { display: grid; text-align: left; line-height: 1.15; } .lp-txt small { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; } .lp-txt b { font-size: 13.5px; }
+.lp-pal { display: inline-flex; gap: 2px; } .lp-pal i { width: 7px; height: 16px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.lookpill .iconbtn[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.lp-menu { margin-top: 6px; padding: 6px; display: grid; gap: 2px; min-width: 220px; width: max-content; }
+.lp-menu button { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--ink); font: inherit; font-size: 13.5px; font-weight: 600; text-align: left; cursor: pointer; }
+.lp-menu button:hover { background: var(--surface-2); } .lp-menu button[aria-pressed="true"] { background: var(--accent-soft); }
+.lp-menu .lp-pal { margin-left: auto; } .lp-menu .lp-pal i { width: 6px; height: 12px; }
+.lp-no { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 6px; background: var(--surface-2); font-size: 11px; color: var(--muted); }
+.lp-menu .lp-desk { border-top: 1px solid var(--line); border-radius: 0 0 8px 8px; margin-top: 4px; padding-top: 10px; color: var(--accent-text); }
+.ov-houseoff { fill: #03050a; fill-opacity: .66; pointer-events: none; } .ov-glow { mix-blend-mode: screen; pointer-events: none; }
 .ld-thumb { grid-column: 2; display: block; width: 96px; height: 34px; border-radius: 6px; overflow: hidden; background: #0b0e13; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
 .ld-thumbsvg { width: 100%; height: 100%; display: block; } .ld-thumbsvg .ld-deck { fill: #1b202b; stroke: none; }
 .ld-look.dropb { box-shadow: -3px 0 0 var(--ld-acc); } .ld-look[draggable="true"] { cursor: pointer; }
@@ -747,6 +781,7 @@ svg text { font-family: var(--f-ui); }
 @keyframes ldPulse { 50% { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .ld-live i { animation: none; } }
 @media (max-width: 900px) { .ld-lookacts { padding-left: 4px; } .ld-body { display: block; overflow-y: auto; } .ld-stage { grid-template-rows: auto minmax(240px, 46vh) auto; } .ld-body > .ld-colour { overflow: visible; } .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; } .ld-rename input { width: 100px; } .ld-brand small { display: none; } }
+@media (max-width: 900px) { .ld-tipcard { right: 16px; left: 16px; top: auto; bottom: 64px; width: auto; } }
 @media (max-width: 600px) { .ldesk { border-radius: 16px; } .ld-top { gap: 10px; padding: 12px; } .ld-actions { gap: 4px; } .ld-actions .ld-icon { width: 32px; height: 32px; } .ld-rename { flex: 1; min-width: 0; } .ld-rename input { width: 100%; min-width: 0; }
   .ld-stage { padding: 12px; } .ld-bar { display: grid; gap: 8px; } .ld-mapwrap { min-height: 220px; } .ld-mixrow { grid-template-columns: 1fr; justify-items: center; } .ldesk .ld-faders { width: 100%; } .ld-groups { display: flex; flex-wrap: wrap; } .ld-colour { padding: 12px; } .ld-foot { flex-wrap: wrap; gap: 4px 12px; padding: 8px 12px; } }
 .lookrows { display: grid; gap: 8px; } .lookrow { display: grid; grid-template-columns: 140px 1fr; gap: 10px; font-size: 13px; padding: 6px 0; border-top: 1px solid var(--line); }
@@ -2912,12 +2947,20 @@ function mirrorLight(id) {
     autoPatch(); sel = { kind: 'item', id: m.id };
   }, `${itemName(it)} mirrored to stage ${nx > cx ? 'left' : 'right'}`);
 }
+// the desk's colour buttons: the standard eleven, with any you've made your own (right-click one) in their place
+const deskPresets = () => DESK_PRESETS.map((p, i) => db.myPresets?.[i] ? [db.myPresets[i].name, db.myPresets[i].c, true] : p);
+function setMyPreset(i) {
+  const ts = deskPicked(); if (!ts.length) { toast('Pick a light showing the colour you want, then right-click a colour button to keep it there'); return; }
+  const f = fxOf(ts[0]), mine = (db.myPresets ||= []), n = mine.filter(Boolean).length + (mine[i] ? 0 : 1), was = DESK_PRESETS[i][0];
+  mine[i] = { name: mine[i]?.name || `Mine ${n}`, c: { r: f.r, g: f.g, b: f.b, w: f.w } }; save(); renderDesk();
+  toast(`${was} is now your colour`, { label: 'Put back', fn: () => { db.myPresets[i] = null; save(); renderDesk(); } });
+}
 const DESK_PRESETS = [['Warm white', { r: 0, g: 0, b: 0, w: 255 }], ['Cool white', { r: 110, g: 150, b: 255, w: 180 }], ['Red', { r: 255, g: 0, b: 0, w: 0 }], ['Amber', { r: 255, g: 110, b: 0, w: 0 }],
   ['Yellow', { r: 255, g: 200, b: 0, w: 0 }], ['Green', { r: 0, g: 255, b: 40, w: 0 }], ['Cyan', { r: 0, g: 210, b: 255, w: 0 }], ['Blue', { r: 0, g: 40, b: 255, w: 0 }],
   ['Congo', { r: 80, g: 0, b: 255, w: 0 }], ['Magenta', { r: 255, g: 0, b: 180, w: 0 }], ['Pink', { r: 255, g: 50, b: 110, w: 40 }]];
 let deskSel = null, fxSnap = null, deskClip = null;   // the lights picked on the desk (null: all of them); the state before a fader or wheel drag
 const deskLights = () => plan.items.filter(isFixture);
-const fxName = (f, it) => { if (!f.d) return 'Off'; if (it && !cat(it).rgbw) return `White${f.d < 100 ? ` ${f.d}%` : ''}`; const p = DESK_PRESETS.find(([, c]) => ['r', 'g', 'b', 'w'].every(k => c[k] === f[k])); return `${p ? p[0] : `R${f.r} G${f.g} B${f.b} W${f.w}`}${f.d < 100 ? ` ${f.d}%` : ''}`; };
+const fxName = (f, it) => { if (!f.d) return 'Off'; if (it && !cat(it).rgbw) return `White${f.d < 100 ? ` ${f.d}%` : ''}`; const p = deskPresets().find(([, c]) => ['r', 'g', 'b', 'w'].every(k => c[k] === f[k])); return `${p ? p[0] : `R${f.r} G${f.g} B${f.b} W${f.w}`}${f.d < 100 ? ` ${f.d}%` : ''}`; };
 const fxSwatch = (f, it) => { const c = fxRGB(f, it); return c ? `rgb(${c.join(',')})` : 'transparent'; };
 function ensureLook() { if (!plan.looks?.length) { plan.looks = [{ id: uid(), name: 'Look 1', fx: {} }]; plan.lookId = plan.looks[0].id; } return curLook(); }
 function setFx(list, patch) { const L = ensureLook(); for (const it of list) L.fx[it.id] = { ...fxOf(it), ...patch }; }
@@ -2931,7 +2974,16 @@ function deskLaunch() {
 /* The lighting desk: a window of its own. Looks across the top; the stage on the left, where you pick lights and see their
    beams; colour on the right: a wheel, presets, and RGBW and dimmer faders. */
 const desk = { open: false, drag: null, box: null };
+try { desk.view = localStorage.getItem('stageplot.deskView') || 'map'; } catch { desk.view = 'map'; }
+// three short pointers the first time the desk opens, then never again
+const DESK_TIPS = [['Pick lights', 'Click lights on the stage, or a group above it. Shift-click adds more.', '#ldMapWrap'], ['Choose a colour', 'Use the wheel or a colour button; the beams change as you go. Dim sets how bright.', '#ldColour'], ['Keep it as a look', 'Changes save to the open look. + Look adds another: a copy, a mood or one from your library.', '[data-addlook]']];
+function deskTipHtml() {
+  if (desk.tip == null || desk.big) return '';
+  const [h, txt] = DESK_TIPS[desk.tip];
+  return `<div class="ld-tipcard" role="dialog" aria-label="Tip ${desk.tip + 1} of 3"><b>${h}</b><p>${txt}</p><div class="row"><span class="ld-tipdots">${DESK_TIPS.map((_, k) => `<i class="${k === desk.tip ? 'on' : ''}"></i>`).join('')}</span><button class="ld-mini" data-tip="skip">Skip</button><button class="ld-mini primary" data-tip="${desk.tip < 2 ? 'next' : 'done'}">${desk.tip < 2 ? 'Next' : 'Got it'}</button></div></div>`;
+}
 function openDesk(onlyId) {
+  try { if (!localStorage.getItem('stageplot.deskTips')) desk.tip = 0; } catch { /* no tips without storage */ }
   if (!deskLights().length) { toast('Add lights first (Add gear → Lighting)'); return; }
   if (onlyId) deskSel = new Set([onlyId]);
   desk.open = true; $('deskDlg').hidden = false; renderDesk(); setTimeout(() => $('ldDone')?.focus(), 30);
@@ -2960,6 +3012,27 @@ function deskFrame() {   // the desk's view: framed on the stage, the lights and
 }
 // a look as a tiny stage: deck and beams only, for the look buttons
 function lookThumb(L, k) { const { vb } = deskFrame(); return `<svg class="ld-thumbsvg" viewBox="${vb}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path class="ld-deck" d="${polyPath(stagePoly())}"/>${beamsSvg(new Set(), 'lt' + k, 2.4, L)}</svg>`; }
+// the desk's stage: the map, or (List) every light in a row with its colour and level
+// the picked lights as chips under the stage (× lets one go); with none or all picked, a line saying how to pick
+function deskChipsHtml(all, picked) {
+  if (!picked.length || picked.length === all.length) return `<p class="ld-tip">${picked.length ? `All ${plural(all.length, 'light')} picked <span>·</span> ` : ''}Click a light to pick it <span>·</span> Shift-click to add <span>·</span> drag across the stage to pick several</p>`;
+  const show = picked.slice(0, 10);
+  return `<div class="ld-chips" aria-label="Picked lights">${show.map(i => `<span class="ld-chip"><i style="background:${fxSwatch(fxOf(i), i)}"></i>${esc(itemName(i))}<button data-unpick="${i.id}" aria-label="Let go of ${esc(itemName(i))}" title="Let go">${ic('x', 'sm')}</button></span>`).join('')}${picked.length > 10 ? `<span class="ld-chip more">+${picked.length - 10} more</span>` : ''}</div>`;
+}
+function deskStageHtml() { return desk.view === 'list' && !desk.big ? deskListHtml() : deskMapSvg(); }
+function deskListHtml() {
+  const picked = new Set(deskPicked().map(i => i.id)), L = curLook();
+  const rows = deskLights().slice().sort((a, b) => (mountOf(a) ? 0 : 1) - (mountOf(b) ? 0 : 1) || (itemName(mountOf(a) || {}) || '').localeCompare(itemName(mountOf(b) || {}) || '') || a.x - b.x);
+  return `<div class="ld-list" role="listbox" aria-multiselectable="true" aria-label="Lights">${rows.map(i => { const f = fxEff(i, L), raw = fxOf(i), sw = fxSwatch(raw, i), on = picked.has(i.id);
+    return `<div class="ld-row${on ? ' on' : ''}" role="option" aria-selected="${on}" tabindex="0" data-ldfx="${i.id}"><i class="ld-dotl${sw === 'transparent' ? ' dark' : ''}" style="background:${sw}"></i><b>${esc(itemName(i))}</b><span class="ld-where">${esc(mountOf(i) ? itemName(mountOf(i)) : 'Floor')}</span><span class="ld-cname">${esc(fxName(raw, i))}</span><span class="ld-pct">${f.d}%</span></div>`; }).join('')}</div>`;
+}
+// zoomed in on the desk's map: the view's top-left corner and how far in (1 = the whole stage)
+function deskZoomVb(vb) {
+  const [x, y, w, h] = vb.split(' ').map(Number); desk.base = [x, y, w, h];
+  const z = desk.zoom; if (!z || z.k <= 1.01) { desk.zoom = null; return vb; }
+  const zw = w / z.k, zh = h / z.k; z.x = clamp(z.x, x, x + w - zw); z.y = clamp(z.y, y, y + h - zh);
+  return `${f3(z.x)} ${f3(z.y)} ${f3(zw)} ${f3(zh)}`;
+}
 function deskMapSvg() {
   const { R, vb, U } = deskFrame(), picked = new Set(deskPicked().map(i => i.id));
   const ms = mounts().map(m => { const r = (m.rot || 0) * Math.PI / 180, hw = Number(prop(m, 'w')) / 2, dx = Math.cos(r) * hw, dy = Math.sin(r) * hw; return `<line class="ld-mount" x1="${f3(m.x - dx)}" y1="${f3(m.y - dy)}" x2="${f3(m.x + dx)}" y2="${f3(m.y + dy)}"/>`; }).join('');
@@ -2967,7 +3040,7 @@ function deskMapSvg() {
     return `<g class="ld-fx${picked.has(i.id) ? ' on' : ''}${desk.flash?.has(i.id) ? ' flashing' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${picked.has(i.id)}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .7)}" style="stroke-width:${f3(U * .45)}"/><circle class="ld-dot${sw === 'transparent' ? ' dark' : ''}" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr)}" style="fill:${sw === 'transparent' ? 'var(--surface)' : sw};stroke-width:${f3(U * .2)}"/><text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px">${esc(itemName(i))}</text></g>`; }).join('');
   const L = curLook(), faces = stagePeople().map(p => { const st = faceState(p, L), nm = personById(p.personId)?.name || itemName(p);
     return `<g class="ld-face ${st}"><title>${esc(nm)}: ${st === 'lit' ? 'face lit' : st === 'deep' ? 'lit only in deep colour' : st === 'side' ? 'lit from one side only' : 'in the dark'}</title><circle cx="${f3(p.x)}" cy="${f3(p.y)}" r="${f3(U * 1.5)}" style="stroke-width:${f3(U * .28)}"/><text x="${f3(p.x)}" y="${f3(p.y + U * .5)}" text-anchor="middle" style="font-size:${f3(U * 1.3)}px">${esc(initials(nm))}</text></g>`; }).join('');
-  return `<svg class="ld-map" id="ldMap" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
+  return `${desk.zoom && !desk.big ? `<button class="ld-fit" id="ldFit" title="Show the whole stage (double-click the map)">${ic('fit', 'sm')}Fit</button>` : ''}<svg class="ld-map" id="ldMap" viewBox="${desk.big ? vb : deskZoomVb(vb)}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
     <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${faces}${dots}</svg>`;
 }
 /* Changing looks: the beams as they were fade out over the new ones (both on the plot and in the desk), about 0.7 s. */
@@ -3051,7 +3124,7 @@ function deskColourHtml() {
   return `<div class="ld-card ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'No lights picked'}</b><small>${ts.length ? esc(fxName(f, ts[0])) : 'Pick lights on the stage'}</small></div>${ts.length ? `<button class="ld-mini" data-flash title="Make the picked lights pulse on the stage, to find them">${ic('zap', 'sm')}Flash</button>` : ''}</div>
     <div class="ld-card"><div class="ld-cardhead"><span class="ld-label">Colour &amp; levels</span>${ui.adv ? '' : '<!--'}<span class="ld-clip"><button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button></span>${ui.adv ? '' : '-->'}</div>
       <div class="ld-mixrow"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders${ui.adv ? '' : ' few'}">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].filter(([k]) => ui.adv || k === 'd').map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--ld-acc)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
-      <div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><i></i><span>${n.replace(' white', '')}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><i></i><span>Off</span></button></div>
+      <div class="lpresets" role="group" aria-label="Colour presets (right-click one to keep the picked light's colour there)">${deskPresets().map(([n, c, mine], pi) => `<button class="pswatch${mine ? ' mine' : ''}" data-preset="${n}" data-pi="${pi}" title="${n}${mine ? ' (yours: right-click to change again)' : ' (right-click to replace with the picked colour)'}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><i></i><span>${n.replace(' white', '')}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><i></i><span>Off</span></button></div>
       <div class="ld-recentrow">${rec.length ? `<div class="ld-recent" title="Recent colours">${rec.map((c, i) => `<button class="ld-rsw" data-recent="${i}" style="--sw:${fxSwatch({ ...c, d: 100 })}" aria-label="Recent colour ${esc(fxName({ ...c, d: 100 }))}" title="${esc(fxName({ ...c, d: 100 }))}" ${!ts.length || white ? 'disabled' : ''}></button>`).join('')}</div>` : ''}
       ${ui.adv ? '' : '<!--'}<label class="ld-hex"><span class="sr-only">Colour code</span><input id="ldHex" type="text" value="${hex}" placeholder="#1f6bff" maxlength="7" spellcheck="false" aria-label="Colour code, like #1f6bff" ${!ts.length || white ? 'disabled' : ''}></label>${ui.adv ? '' : '-->'}</div>
       ${white ? '<p class="ld-note">White-only lights take the dimmer only.</p>' : ''}</div>
@@ -3061,6 +3134,11 @@ function renderDesk() {
   if (!desk.open) return;
   $('ldBody').classList.toggle('big', !!desk.big);
   if (desk.big) { renderBig(); return; }
+  renderDeskMain();
+  document.querySelectorAll('.ld-coach').forEach(e => e.classList.remove('ld-coach'));
+  if (desk.tip != null) document.querySelector(DESK_TIPS[desk.tip][2])?.classList.add('ld-coach');
+}
+function renderDeskMain() {
   const looks = plan.looks || [], cur = curLook(), all = deskLights(), picked = deskPicked();
   const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : []), ...lgroups().map(g => ['g:' + g.id, g.name])];
   const gOn = k => { const ids = deskGroupIds(k); return ids.length === picked.length && ids.every(i => picked.includes(i)); };
@@ -3074,11 +3152,11 @@ function renderDesk() {
         <small>From your library</small>${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') : '<small class="ld-empty">Nothing saved yet: open a look, then ⋯ → Save to library.</small>'}</div>` : ''}${desk.lmenu && cur ? `<div class="ld-moods ld-lookmenu" role="group" aria-label="${esc(cur.name)}"><button data-libsave>${ic('save', 'sm')}Save to library<small>Use it in any week</small></button><button data-lookdel class="bad">${ic('trash', 'sm')}Delete this look</button></div>` : ''}
       <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
     <div class="ld-body"><section class="ld-stage" aria-label="Stage">
-      <div class="ld-bar"><span class="ld-label">Stage</span><span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
+      <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button></span><span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
           : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
-      <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}" id="ldMapWrap">${deskMapSvg()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
-      <p class="ld-tip">Click a light to pick it <span>·</span> Shift-click to add <span>·</span> drag across the stage to pick several</p></section>
+      <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}${desk.view === 'list' ? ' listing' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
+      ${deskChipsHtml(all, picked)}</section>${deskTipHtml()}
       <aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside></div>
     <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span>${ui.adv ? '' : '<!--'}<span class="ld-keys" aria-label="Keys: 1 to 9 looks, up and down dimmer, A all lights, C copy, V paste, hold Space to peek, Ctrl Z undo"><kbd>1–9</kbd> looks <kbd>↑</kbd><kbd>↓</kbd> dimmer <kbd>A</kbd> all <kbd>C</kbd><kbd>V</kbd> copy, paste <kbd>Space</kbd> peek <kbd>Ctrl Z</kbd> undo</span>${ui.adv ? '' : '-->'}</div>`;
 }
@@ -3092,7 +3170,7 @@ function facesSummary() {
 function deskLive() {
   if (!desk.open) return;
   if (desk.big) { $('ldMapWrap').innerHTML = deskMapSvg(); if ($('ldFaces')) $('ldFaces').innerHTML = facesSummary(); renderPlot(); return; }
-  $('ldMapWrap').innerHTML = deskMapSvg();
+  $('ldMapWrap').innerHTML = deskStageHtml();
   if ($('ldFaces')) $('ldFaces').innerHTML = facesSummary();
   const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, info = document.querySelector('.ld-pickinfo');
   if (info) { const sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent', b = info.querySelector('.bigsw'); b.style.setProperty('--c', sw); b.classList.toggle('none', sw === 'transparent'); info.querySelector('small').textContent = ts.length ? fxName(f, ts[0]) : ''; }
@@ -3135,6 +3213,10 @@ $('deskDlg').addEventListener('click', e => {
   if (t.id === 'ldUndo') { undo(); renderDesk(); return; }
   if (t.id === 'ldRedo') { redo(); renderDesk(); return; }
   if (t.hasAttribute('data-fxcopy')) { deskCopy(); return; }
+  if (t.dataset.dview) { desk.view = t.dataset.dview; try { localStorage.setItem('stageplot.deskView', desk.view); } catch { /* memory only */ } renderDesk(); return; }
+  if (t.id === 'ldFit') { desk.zoom = null; $('ldMapWrap').innerHTML = deskStageHtml(); return; }
+  if (t.dataset.unpick) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.delete(t.dataset.unpick); renderDesk(); return; }
+  if (t.dataset.tip) { if (t.dataset.tip === 'next' && desk.tip < 2) desk.tip++; else { desk.tip = null; try { localStorage.setItem('stageplot.deskTips', '1'); } catch { /* ok */ } } renderDesk(); return; }
   if (t.hasAttribute('data-addlook')) { desk.add = !desk.add; desk.lmenu = false; renderDesk(); return; }
   if (t.hasAttribute('data-lookmenu')) { desk.lmenu = !desk.lmenu; desk.add = false; renderDesk(); return; }
   if (t.dataset.libuse) { libUse(t.dataset.libuse); return; }
@@ -3144,7 +3226,7 @@ $('deskDlg').addEventListener('click', e => {
   if (t.id === 'ldBigExit') { desk.big = false; renderDesk(); return; }
   if (t.dataset.mood) { moodLook(t.dataset.mood); return; }
   if (t.hasAttribute('data-fxpaste')) { deskPaste(); return; }
-  if (t.dataset.preset) { const c = DESK_PRESETS.find(p => p[0] === t.dataset.preset)?.[1], ts = deskPicked(); if (ts.length) deskSet(c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); return; }
+  if (t.dataset.preset) { const c = deskPresets().find(p => p[0] === t.dataset.preset)?.[1], ts = deskPicked(); if (ts.length) deskSet(c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); return; }
   if (t.dataset.dgrp) { const k = t.dataset.dgrp; deskSel = k === 'all' ? null : new Set(deskGroupIds(k).map(i => i.id)); renderDesk(); return; }
   if (t.hasAttribute('data-gnew')) { if (!deskPicked().length) return; desk.naming = true; renderDesk(); setTimeout(() => $('ldGName')?.focus(), 20); return; }
   if (t.hasAttribute('data-gsave')) { saveDeskGroup(); return; }
@@ -3166,7 +3248,21 @@ $('deskDlg').addEventListener('input', e => {
   const k = e.target.dataset?.fx; if (k) { deskSet({ [k]: Number(e.target.value) }, true); return; }
   if (e.target.hasAttribute?.('data-master')) { if (lookPeek || weekLocked()) return; if (!fxSnap) fxSnap = snapState(); ensureLook().master = Number(e.target.value); deskLive(); }
 });
-$('deskDlg').addEventListener('contextmenu', e => { const g = e.target.closest('[data-ldfx]'); if (!g) return; e.preventDefault(); openDeskCtx(g.dataset.ldfx, e.clientX, e.clientY); });
+$('deskDlg').addEventListener('contextmenu', e => { const ps = e.target.closest('.pswatch[data-pi]'); if (ps) { e.preventDefault(); setMyPreset(+ps.dataset.pi); return; } const g = e.target.closest('[data-ldfx]'); if (!g) return; e.preventDefault(); openDeskCtx(g.dataset.ldfx, e.clientX, e.clientY); });
+// the desk's map zooms with Ctrl/Alt + scroll (or a pinch), pans with scroll once zoomed in; a double-click fits it again
+$('deskDlg').addEventListener('wheel', e => {
+  const map = e.target.closest('#ldMap'); if (!map || desk.big || !desk.base) return;
+  const [bx, by, bw, bh] = desk.base, z = desk.zoom || { k: 1, x: bx, y: by };
+  if (e.ctrlKey || e.altKey || e.metaKey) {
+    e.preventDefault(); const p = deskMapPt(e), k = clamp(z.k * Math.exp(-e.deltaY * .0025), 1, 8);
+    desk.zoom = { k, x: p.x - (p.x - z.x) * z.k / k, y: p.y - (p.y - z.y) * z.k / k };
+  } else if (desk.zoom) {
+    e.preventDefault(); const r = map.getBoundingClientRect(), u = Math.max(bw / z.k / r.width, bh / z.k / r.height);
+    desk.zoom = { ...z, x: z.x + e.deltaX * u, y: z.y + e.deltaY * u };
+  } else return;
+  $('ldMapWrap').innerHTML = deskStageHtml();
+}, { passive: false });
+$('deskDlg').addEventListener('dblclick', e => { if (e.target.closest('#ldMap') && !e.target.closest('[data-ldfx]') && desk.zoom) { desk.zoom = null; $('ldMapWrap').innerHTML = deskStageHtml(); } });
 // hover a light on the desk's stage: its beam comes forward, the others step back
 $('deskDlg').addEventListener('pointerover', e => { const g = e.target.closest('[data-ldfx]'), map = $('ldMap'); if (!map) return; map.classList.toggle('hl', !!g); map.querySelectorAll('.lb.hl').forEach(b => b.classList.remove('hl')); if (g) map.querySelector(`.lb[data-b="${g.dataset.ldfx}"]`)?.classList.add('hl'); });
 $('deskDlg').addEventListener('pointerout', e => { if (!e.relatedTarget?.closest?.('[data-ldfx]')) $('ldMap')?.classList.remove('hl'); });
@@ -3184,6 +3280,7 @@ function moveLook(id, beforeId, dir = 0) {
 function peekStart() { const prev = desk.prevLook && plan.looks?.find(l => l.id === desk.prevLook && l.id !== plan.lookId); if (!prev || lookPeek) return; lookPeek = prev.id; renderDesk(); renderPlot(); }
 function peekEnd() { if (!lookPeek) return; lookPeek = null; renderDesk(); renderPlot(); }
 document.addEventListener('keyup', e => { if (e.key === ' ' && lookPeek) peekEnd(); });
+document.addEventListener('pointerdown', e => { if (lookPickOpen && !e.target.closest('.lookpill, .lp-menu')) { lookPickOpen = false; renderFloat(); } });
 $('deskDlg').addEventListener('pointerup', () => { if (lookPeek && desk.peekBtn) { desk.peekBtn = false; peekEnd(); } });
 $('deskDlg').addEventListener('keydown', e => {
   const g = e.target.closest?.('[data-ldfx]'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pickDeskFx(g.dataset.ldfx, e.shiftKey); }
@@ -3206,7 +3303,7 @@ function deskCtxHtml() {
     <button role="menuitem" data-ctxonly>Only this one</button><button role="menuitem" data-ctxtype>Every ${esc(cat(it).short.toLowerCase())}</button><button role="menuitem" data-ctxmount>${m ? `Everything on ${esc(itemName(m))}` : 'Every floor light'}</button><button role="menuitem" data-ctxflash>${ic('zap', 'sm')}Flash</button></div>`;
 }
 function openDeskCtx(id, cx, cy) { const r = $('ldBody').getBoundingClientRect(); desk.ctx = { id, x: Math.round(Math.min(cx - r.left, r.width - 220)), y: Math.round(Math.min(cy - r.top, r.height - 230)) }; renderDesk(); setTimeout(() => document.querySelector('.ld-ctx button')?.focus(), 20); }
-function flashLights(ids) { desk.flash = new Set(ids); renderPlot(); if (desk.open) $('ldMapWrap').innerHTML = deskMapSvg(); clearTimeout(desk.flashT); desk.flashT = setTimeout(() => { desk.flash = null; renderPlot(); if (desk.open && $('ldMapWrap')) $('ldMapWrap').innerHTML = deskMapSvg(); }, 1700); }
+function flashLights(ids) { desk.flash = new Set(ids); renderPlot(); if (desk.open) $('ldMapWrap').innerHTML = deskStageHtml(); clearTimeout(desk.flashT); desk.flashT = setTimeout(() => { desk.flash = null; renderPlot(); if (desk.open && $('ldMapWrap')) $('ldMapWrap').innerHTML = deskStageHtml(); }, 1700); }
 function deskCopy() { const ts = deskPicked(); if (!ts.length) return; const f = fxOf(ts[0]); deskClip = { r: f.r, g: f.g, b: f.b, w: f.w, d: f.d }; toast(`Copied ${fxName(f, ts[0])}`); renderDesk(); }
 function deskPaste() { if (deskClip && deskPicked().length) deskSet({ ...deskClip }); }
 // the desk's keys: 1–9 looks, ↑ ↓ dimmer (Shift for big steps), A all lights, C copy and V paste a colour
@@ -3215,7 +3312,7 @@ function deskKey(e) {
   if ((e.ctrlKey || e.metaKey) && !typing && e.key.toLowerCase() === 'z') { e.shiftKey ? redo() : undo(); renderDesk(); return true; }
   if ((e.ctrlKey || e.metaKey) && !typing && e.key.toLowerCase() === 'y') { redo(); renderDesk(); return true; }
   if (e.altKey && !typing && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) { const L = curLook(); if (L) moveLook(L.id, null, e.key === 'ArrowLeft' ? -1 : 1); return true; }
-  if (e.key === ' ' && !typing && !e.target.matches?.('button')) { if (!e.repeat) peekStart(); return true; }
+  if (e.key === ' ' && !typing && !e.target.matches?.('button') && !e.target.closest?.('[data-ldfx]')) { if (!e.repeat) peekStart(); return true; }
   if (e.target.matches?.('input[type=text], input[type=range]') || e.ctrlKey || e.metaKey || e.altKey) return false;
   const looks = plan.looks || [];
   if (/^[1-9]$/.test(e.key) && looks[+e.key - 1]) { switchLook(looks[+e.key - 1].id); return true; }
@@ -3245,6 +3342,7 @@ $('deskDlg').addEventListener('pointerdown', e => {
     wheel.onpointerup = () => { desk.drag = null; wheel.onpointermove = null; deskCommit(); };
     e.preventDefault(); return;
   }
+  const row = e.target.closest('.ld-row[data-ldfx]'); if (row) { pickDeskFx(row.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
   const map = e.target.closest('#ldMap'); if (!map) return;
   const g = e.target.closest('[data-ldfx]'); if (g) { pickDeskFx(g.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
   const p0 = deskMapPt(e); desk.box = { x0: p0.x, y0: p0.y, x1: p0.x, y1: p0.y, add: e.shiftKey };
@@ -5320,7 +5418,7 @@ function renderPlot() {
   }
   s = s.replace('<!--HITS-->', chv.hits + hits);
   // ceiling runs pass over the gear when you're looking at cables; while they're quiet they tuck under it, so names and symbols stay clean
-  s += (quiet ? ceil + top : top + ceil) + chv.over + labels + selb + placeLabels([...labCands, ...bundleCands], obstacles, risers) + lens + wps + chv.handles;
+  s += (quiet ? ceil + top : top + ceil) + chv.over + houseOffSvg(selSet) + labels + selb + placeLabels([...labCands, ...bundleCands], obstacles, risers) + lens + wps + chv.handles;
   if (drag?.kind === 'box') {
     const x = Math.min(drag.x0, drag.x1), y = Math.min(drag.y0, drag.y1);
     s += `<rect class="marquee" x="${f3(x)}" y="${f3(y)}" width="${f3(Math.abs(drag.x1 - drag.x0))}" height="${f3(Math.abs(drag.y1 - drag.y0))}" rx=".1"/>`;
@@ -5456,7 +5554,7 @@ function renderFloat() {
       <span class="stat"><b>${t.ins}</b> inputs</span>
       ${ui.adv ? `<span class="stat optional"><b>${fmtLen(t.cab, 0)}</b> cable</span>
       <span class="stat optional"><b>${(t.watts / 1000).toFixed(1)}</b> kW</span>` : ''}
-    </div>${checksPopHtml()}`;
+    </div>${checksPopHtml()}${lookPillHtml()}`;
   { const key = `${plan.id}|${w.length}|${bad}`, was = lastCheckKey; lastCheckKey = key;   // the count changed (same week): one soft pulse so it's noticed
     if (was && was.split('|')[0] === plan.id && was !== key && !matchMedia('(prefers-reduced-motion: reduce)').matches) $('checksBtn')?.querySelector('.chip')?.animate([{ transform: 'scale(1)', boxShadow: '0 0 0 0 color-mix(in srgb, currentColor 35%, transparent)' }, { transform: 'scale(1.06)', boxShadow: '0 0 0 6px transparent', offset: .45 }, { transform: 'scale(1)', boxShadow: '0 0 0 0 transparent' }], { duration: 700, easing: 'ease-out' }); }
 }
@@ -5656,7 +5754,14 @@ function runFix(kind, id) {
     setTimeout(() => { const s = $('pr-' + id); if (s) { s.focus(); s.scrollIntoView({ block: 'center' }); } }, 80);
   }
 }
-let checksOpen = false;
+let checksOpen = false, lookPickOpen = false;
+// on the plot, under the status: which look is showing, a quick way to switch, and the house lights
+function lookPillHtml() {
+  if (view !== 'plot' || !plan.items.some(isFixture)) return '';
+  const looks = plan.looks || [], cur = curLook(), pal = cur ? lookPalette(cur) : [];
+  return `<div class="panel lookpill"><button class="lp-btn" id="lookPick" aria-expanded="${lookPickOpen}" aria-haspopup="true" title="Switch looks"><span class="lp-pal">${(pal.length ? pal : ['#ffe2b0']).map(c => `<i style="background:${c}"></i>`).join('')}</span><span class="lp-txt"><small>Look</small><b>${esc(cur?.name || 'Warm white')}</b></span>${ic('chevD', 'sm')}</button><button class="iconbtn" id="houseOff" aria-pressed="${overOn('dark')}" aria-label="House lights off" title="${overOn('dark') ? 'House lights back on' : 'House lights off: the room dark, so the lighting shows'}">${ic('moon', 'sm')}</button></div>
+    ${lookPickOpen ? `<div class="panel lp-menu" role="group" aria-label="Looks">${looks.map((l, k) => `<button data-lplook="${l.id}" aria-pressed="${l.id === cur?.id}"><span class="lp-no">${k + 1}</span>${esc(l.name)}<span class="lp-pal">${lookPalette(l).map(c => `<i style="background:${c}"></i>`).join('')}</span></button>`).join('') || '<p class="hint" style="margin:4px 8px">No looks yet.</p>'}<button data-lpdesk class="lp-desk">${ic('sun', 'sm')}Open the lighting desk</button></div>` : ''}`;
+}
 function checksPopHtml() {
   const w = warnings();
   if (!checksOpen || !w.length) return '';
@@ -5892,7 +5997,7 @@ function renderInspector() {
         <h3>Ready <span style="display:flex;gap:6px;align-items:center">${hide}</span></h3>
         <div class="allset"><span class="mark">${ic('check', 'sm')}</span><div><b>All set for ${esc(new Date(plan.date + 'T12:00').toLocaleDateString(undefined, { weekday: 'long' }))}</b><small>Stage, team, gear, audio and power all check out.</small></div></div>
         <button class="btn primary block" data-go="paper">${ic('sheet', 'sm')}Open the paperwork</button></section>`
-      : `<section class="isec setupguide"><h3 title="Do these in any order. Ticks follow what's on the plan">Set up this week <span style="display:flex;gap:4px;align-items:center"><span class="gprog" aria-label="${nDone} of 6 done">${steps.map(x => `<i class="${x.done ? 'on' : ''}"></i>`).join('')}</span><button class="iconbtn" id="guideOff" aria-label="Hide the guide" title="Hide the guide (bring it back from ⋯)" style="margin:-6px -2px">${ic('x', 'sm')}</button>${hide}</span></h3>
+      : `<section class="isec setupguide"><h3 title="Do these in any order. Ticks follow what's on the plan">Set up this week <span style="display:flex;gap:4px;align-items:center"><span class="gprog" role="img" aria-label="${nDone} of 6 done">${steps.map(x => `<i class="${x.done ? 'on' : ''}"></i>`).join('')}</span><button class="iconbtn" id="guideOff" aria-label="Hide the guide" title="Hide the guide (bring it back from ⋯)" style="margin:-6px -2px">${ic('x', 'sm')}</button>${hide}</span></h3>
         <ol class="steps">${steps.map((x, i) => `<li class="${x.done ? 'done' : i === nowIdx ? 'now' : ''}${x.done && guideSeen && !guideSeen.has(x.k) ? ' pop' : ''}"><span class="mark">${x.done ? ic('check', 'sm') : i + 1}</span><div><button class="steplink" data-step="${x.k}" title="Go to ${esc(x.t)}"><b>${esc(x.t)}</b><span class="sub">${esc(x.sub)}</span></button>${i === nowIdx ? `<div class="stepact">${x.act}</div>` : ''}</div></li>`).join('')}</ol>
       </section>`;
     if (ui.guide) guideSeen = new Set(steps.filter(x => x.done).map(x => x.k));
@@ -6848,6 +6953,10 @@ $('ftools').addEventListener('click', e => {
   if (e.target.closest('#zOut')) zoomCenter(1 / 1.25);
 });
 $('fstats').addEventListener('click', e => {
+  if (e.target.closest('#lookPick')) { lookPickOpen = !lookPickOpen; renderFloat(); return; }
+  if (e.target.closest('#houseOff')) { setCableView(() => { cableView.over.has('dark') ? cableView.over.delete('dark') : cableView.over.add('dark'); }); renderFloat(); return; }
+  { const b = e.target.closest('[data-lplook]'); if (b) { lookPickOpen = false; if (b.dataset.lplook !== curLook()?.id) switchLook(b.dataset.lplook); else renderFloat(); return; } }
+  if (e.target.closest('[data-lpdesk]')) { lookPickOpen = false; renderFloat(); openDesk(); return; }
   if (e.target.closest('#checksBtn')) { if (warnings().length) { checksOpen = !checksOpen; renderFloat(); } else openPaper(); return; }
   if (e.target.closest('#checksClose')) { checksOpen = false; renderFloat(); return; }
   if (e.target.closest('#checksPaper')) { checksOpen = false; openPaper('sec-checks'); }
@@ -7744,7 +7853,7 @@ const LAYERS = [['people', 'People', 'users'], ['gear', 'Gear', 'box'], ['beams'
 /* ===================================================================
    Views: overlays you switch on in Layers (never saved into the week, never printed)
    =================================================================== */
-const OVERLAYS = [['owners', 'Whose gear', 'users', 'A colour halo around each person’s gear'], ['bright', 'Brightness', 'sun', 'Where the open look is bright or dim'],
+const OVERLAYS = [['owners', 'Whose gear', 'users', 'A colour halo around each person’s gear'], ['dark', 'House lights off', 'moon', 'The room dark, so the lighting shows'], ['bright', 'Brightness', 'sun', 'Where the open look is bright or dim'],
   ['sight', 'Sightlines from FOH', 'eye', 'What the desk can’t see past'], ['heat', 'Sound coverage', 'zap', 'Loudest red, quietest blue']];
 const overOn = k => !layersBypass && !!cableView.over?.has(k);
 // the room's walls: the back of the stage, the sides of the house (or the stage, if it's wider) and the back of the house
@@ -7816,6 +7925,12 @@ function sightSvg(deckD) {
   return s;
 }
 // brightness: the stage veiled darker wherever the open look's light is weak (uplighting lights the set, so it doesn't count)
+// house lights off: the room goes dark over the gear and people, and the beams are drawn again on top, glowing
+function houseOffSvg(selSet) {
+  if (!overOn('dark') || !plan.items.some(isFixture)) return '';
+  const b = bounds();
+  return `<rect class="ov-houseoff" x="${f3(b.x0 - 50)}" y="${f3(b.y0 - 50)}" width="${f3(b.vw + 100)}" height="${f3(b.vh + 100)}"/><g class="ov-glow">${beamsSvg(selSet, 'lbd', 1.6)}</g>`;
+}
 function brightSvg() {
   const lights = plan.items.filter(i => isFixture(i) && !isUp(i)); if (!lights.length) return '';
   const sp = stagePoly(), xs = sp.map(q => q[0]), ys = sp.map(q => q[1]), step = Math.max(.6, (Math.max(...xs) - Math.min(...xs)) / 40), L = curLook();
