@@ -830,6 +830,10 @@ svg text { font-family: var(--f-ui); }
 .lb-wall { stroke-width: .12; stroke-linecap: round; fill: none; } .lb-up.on { stroke: rgba(255, 214, 110, .5); stroke-width: .03; }
 .beams.lit .lb, .beams .lit .lb { mix-blend-mode: screen; } .beams.lit, .beams .lit { isolation: isolate; } .lb-glow { pointer-events: none; }
 .ld-planks { pointer-events: none; }
+.ld-front { width: 100%; height: 100%; display: block; } .lf-bg { fill: #07090d; } .lf-wall { fill: #1a1f29; } .lf-floor { fill: #0d1016; } .lf-deck { fill: #222833; stroke: rgba(255,255,255,.12); stroke-width: 1; } .lf-face { fill: #11151c; stroke: rgba(255,255,255,.08); stroke-width: 1; }
+.lf-light > *, .lf-up { mix-blend-mode: screen; } .lf-rig { stroke: #4b5363; stroke-linecap: round; fill: none; } .lf-rig.truss { stroke: #3a414e; stroke-dasharray: 3 2; }
+.lf-body { fill: #2b313b; stroke: #5d6676; stroke-width: 1; } .lf-lens { stroke: rgba(0,0,0,.4); stroke-width: .6; } .lf-fx { cursor: pointer; } .lf-sel { fill: none; stroke: var(--ld-acc); stroke-width: 2; } .lf-fx:focus-visible { outline: none; } .lf-fx:focus-visible .lf-body { stroke: var(--ld-acc); stroke-width: 2; }
+.lf-shadow { fill: rgba(0,0,0,.45); } .lf-person text { fill: rgba(225,231,240,.55); font: 600 11px var(--f-ui, sans-serif); } .lf-note { fill: rgba(225,231,240,.4); font: 500 11px var(--f-ui, sans-serif); }
 .lb-off { fill: none; stroke: rgba(160, 170, 180, .55); stroke-width: .04; stroke-dasharray: .2 .15; }
 .zoomh { fill: #fff; stroke: #3a2c05; stroke-width: calc(var(--labs) * .6); cursor: ew-resize; }
 .aimh { fill: #ffd66e; stroke: #3a2c05; stroke-width: calc(var(--labs) * .6); cursor: grab; } .c-staging { fill: rgba(255,255,255,.05); stroke: rgba(255,255,255,.42) !important; stroke-dasharray: .3 .2; stroke-width: .07 !important; }
@@ -2955,9 +2959,13 @@ function fxRGB(f, it) {
   const R = f.r + f.w, G = f.g + f.w * .9, B = f.b + f.w * .72, m = Math.max(R, G, B);
   return m ? [R, G, B].map(v => Math.round(v / m * 255)) : null;
 }
+/* Where a light lands, from how high it hangs: the real distance from the lens to the floor sets the pool's size, and the
+   angle it comes down at stretches the pool into an oval along the aim (a flat throw from a floor light, a long one;
+   straight down from overhead, nearly round). r is the half-width across, rl the half-length along the aim; D the distance. */
 function beamGeom(it) {
-  const [ux, uy] = aimOf(it, -1), T = throwOf(it), r = Math.max(fromM(.4), T * Math.tan(beamOf(it) / 2 * Math.PI / 180));
-  return { cx: it.x + ux * T, cy: it.y + uy * T, r, ux, uy };
+  const [ux, uy] = aimOf(it, -1), T = throwOf(it), h = Math.max(fromM(.2), fixtureH(it)), D = Math.hypot(T, h), half = Math.tan(beamOf(it) / 2 * Math.PI / 180);
+  const r = Math.max(fromM(.4), D * half), rl = r * Math.min(1.6, D / h);
+  return { cx: it.x + ux * T, cy: it.y + uy * T, r, rl, ux, uy, D };
 }
 /* DMX lines: every cable out of the console is one output (one universe); a splitter copies its universe to each of its
    outputs. Each line is the chain of lights from there, in cable order. */
@@ -3081,7 +3089,72 @@ function deskChipsHtml(all, picked) {
   const show = picked.slice(0, 10);
   return `<div class="ld-chips" aria-label="Picked lights">${show.map(i => `<span class="ld-chip"><i style="background:${fxSwatch(fxOf(i), i)}"></i>${esc(itemName(i))}<button data-unpick="${i.id}" aria-label="Let go of ${esc(itemName(i))}" title="Let go">${ic('x', 'sm')}</button></span>`).join('')}${picked.length > 10 ? `<span class="ld-chip more">+${picked.length - 10} more</span>` : ''}</div>`;
 }
-function deskStageHtml() { return desk.view === 'list' && !desk.big ? deskListHtml() : deskMapSvg(); }
+function deskStageHtml() { return desk.big ? deskMapSvg() : desk.view === 'list' ? deskListHtml() : desk.view === 'front' ? deskFrontSvg() : deskMapSvg(); }
+/* Audience view: the stage as the congregation sees it, in perspective from a seat in the middle of the room. The back wall,
+   the deck and its front face, the rigging at its real height, each light's shaft through a little haze, its pool on the floor
+   and the people: lit from the front they take on the light's colour, lit from behind they get a coloured rim. */
+const FRONT_DECK = fromM(.45), PERSON_H = fromM(1.75);
+function deskFrontSvg() {
+  const sp = stagePoly(), xs = sp.map(q => q[0]), ys = sp.map(q => q[1]), x0 = Math.min(...xs), x1 = Math.max(...xs), front = Math.max(...ys), R = roomRect();
+  const W = 1000, H = 560, mid = (x0 + x1) / 2, camY = front + fromM(8), eye = fromM(3.4), sF = W * .9 / Math.max(fromM(2), x1 - x0), f = sF * (camY - front), Hz = H * .94 - eye * sF;
+  const sc = y => f / Math.max(fromM(.6), camY - y), P = (x, y, z) => { const k = sc(y); return [W / 2 + (x - mid) * k, Hz - (z - eye) * k]; }, pt = q => `${f3(q[0])} ${f3(q[1])}`;
+  const onDeck = (x, y) => inPoly(x, y, sp), base = (x, y) => onDeck(x, y) ? FRONT_DECK : 0, wallH = ceilH(), L = curLook(), picked = new Set(deskPicked().map(i => i.id));
+  const quad = (a, b, c, d, cls, extra = '') => `<path class="${cls}" d="M${pt(a)}L${pt(b)}L${pt(c)}L${pt(d)}Z"${extra}/>`;
+  let defs = '', back = '', light = '', rig = '', ppl = '';
+  // room: back wall, floor, the deck's top and the faces of it that look at the audience
+  back += quad(P(R.x0, R.y0, 0), P(R.x1, R.y0, 0), P(R.x1, R.y0, wallH), P(R.x0, R.y0, wallH), 'lf-wall');
+  back += quad(P(R.x0, R.y0, 0), P(R.x1, R.y0, 0), P(R.x1, camY - fromM(1), 0), P(R.x0, camY - fromM(1), 0), 'lf-floor');
+  back += `<path class="lf-deck" d="M${sp.map(q => pt(P(q[0], q[1], FRONT_DECK))).join('L')}Z"/>`;
+  sp.forEach((a, k) => {   // the deck's edges that face the audience show their front
+    const b = sp[(k + 1) % sp.length], mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; let nx = (b[1] - a[1]) / l, ny = (a[0] - b[0]) / l;
+    if (inPoly(mx + nx * .1, my + ny * .1, sp)) { nx = -nx; ny = -ny; }
+    if (nx * (mid - mx) + ny * (camY - my) > 0) back += quad(P(a[0], a[1], 0), P(b[0], b[1], 0), P(b[0], b[1], FRONT_DECK), P(a[0], a[1], FRONT_DECK), 'lf-face');
+  });
+  const lit = [];
+  for (const it of deskLights()) {
+    const fx = fxEff(it, L), col = fxRGB(fx, it); if (!col) continue;
+    const a = Math.min(1.3, fx.d / 100 * 1.4), c = col.join(','), hot = col.map(v => Math.round(v + (255 - v) * .45)).join(','), gid = `lf-${it.id}`, b0 = base(it.x, it.y);
+    if (isUp(it)) {   // up a wall: a fan of colour rising from the bar, brightest at the bottom
+      const [ux, uy] = aimOf(it, -1), T = Math.min(throwOf(it), wallDist(it.x, it.y, ux, uy)), hw = Number(prop(it, 'w')) / 2 + fromM(.1), wy = it.y + uy * T, top = Math.min(wallH, b0 + fromM(3.6)), spr = hw + fromM(1.3);
+      defs += `<linearGradient id="${gid}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="rgb(${hot})" stop-opacity="${f3(Math.min(1, a))}"/><stop offset=".4" stop-color="rgb(${c})" stop-opacity="${f3(Math.min(1, .7 * a))}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="0"/></linearGradient>`;
+      light += quad(P(it.x - hw, wy, b0), P(it.x + hw, wy, b0), P(it.x + spr, wy, top), P(it.x - spr, wy, top), 'lf-up', ` fill="url(#${gid})"`);
+      lit.push({ it, lens: P(it.x, it.y, b0 + fromM(.1)) }); continue;
+    }
+    const g = beamGeom(it), ang = Math.atan2(g.uy, g.ux), pz = base(g.cx, g.cy), zl = fixtureH(it) + (mountOf(it) ? 0 : b0), lens = P(it.x, it.y, zl);
+    const pool = Array.from({ length: 28 }, (_, k) => { const t = k / 28 * Math.PI * 2, lx = Math.cos(t) * g.rl, ly = Math.sin(t) * g.r; return P(g.cx + lx * Math.cos(ang) - ly * Math.sin(ang), g.cy + lx * Math.sin(ang) + ly * Math.cos(ang), pz); });
+    const ctr = P(g.cx, g.cy, pz), angs = pool.map(q => Math.atan2(q[1] - lens[1], q[0] - lens[0])), ref = Math.atan2(ctr[1] - lens[1], ctr[0] - lens[0]), rel = angs.map(v => Math.atan2(Math.sin(v - ref), Math.cos(v - ref)));
+    const lo = pool[rel.indexOf(Math.min(...rel))], hi = pool[rel.indexOf(Math.max(...rel))];
+    defs += `<radialGradient id="${gid}"><stop offset="0" stop-color="rgb(${hot})" stop-opacity="${f3(Math.min(1, .7 * a))}"/><stop offset=".35" stop-color="rgb(${c})" stop-opacity="${f3(.45 * a)}"/><stop offset=".75" stop-color="rgb(${c})" stop-opacity="${f3(.12 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="0"/></radialGradient>` +
+      `<linearGradient id="${gid}-s" gradientUnits="userSpaceOnUse" x1="${pt(lens).replace(' ', '" y1="')}" x2="${pt(ctr).replace(' ', '" y2="')}"><stop offset="0" stop-color="rgb(${hot})" stop-opacity="${f3(Math.min(1, .38 * a))}"/><stop offset=".5" stop-color="rgb(${c})" stop-opacity="${f3(.13 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="${f3(.05 * a)}"/></linearGradient>` +
+      `<radialGradient id="${gid}-g"><stop offset="0" stop-color="rgb(${hot})" stop-opacity="${f3(Math.min(1, .9 * a))}"/><stop offset=".3" stop-color="rgb(${c})" stop-opacity="${f3(.3 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="0"/></radialGradient>`;
+    light += `<g class="lf-beam" data-b="${it.id}"><path d="M${pt(lens)}L${pt(lo)}L${pt(hi)}Z" fill="url(#${gid}-s)"/><path d="M${pool.map(pt).join('L')}Z" fill="url(#${gid})"/><circle cx="${f3(lens[0])}" cy="${f3(lens[1])}" r="${f3(Math.max(6, fromM(.4) * sc(it.y)))}" fill="url(#${gid}-g)"/></g>`;
+    lit.push({ it, lens, g, col, k: fx.d / 100 });
+  }
+  // rigging and the lights on it
+  for (const m of mounts()) { const w = Number(prop(m, 'w')) / 2, r = (m.rot || 0) * Math.PI / 180, z = mountH(m), a = P(m.x - Math.cos(r) * w, m.y - Math.sin(r) * w, z), b = P(m.x + Math.cos(r) * w, m.y + Math.sin(r) * w, z); rig += `<path class="lf-rig${cat(m).shape === 'truss' ? ' truss' : ''}" d="M${pt(a)}L${pt(b)}" style="stroke-width:${f3(Math.max(1.5, fromM(cat(m).shape === 'truss' ? .3 : .06) * sc(m.y)))}"/>`; }
+  const actors = [];
+  for (const it of deskLights()) {
+    const up = isUp(it), zl = up ? base(it.x, it.y) + fromM(.1) : fixtureH(it) + (mountOf(it) ? 0 : base(it.x, it.y)), q = P(it.x, it.y, zl), k = Math.max(4, fromM(.32) * sc(it.y)), sw = fxSwatch(fxOf(it), it), on = picked.has(it.id);
+    if (q[1] < -20 || q[0] < -40 || q[0] > W + 40) continue;
+    const bw = up ? Number(prop(it, 'w')) * sc(it.y) : k * 1.2;
+    const fxSvg = `<g class="lf-fx${on ? ' on' : ''}" data-ldfx="${it.id}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(itemName(it))}, ${esc(fxName(fxOf(it), it))}"><title>${esc(itemName(it))}</title>${on ? `<rect class="lf-sel" x="${f3(q[0] - bw / 2 - 3)}" y="${f3(q[1] - k * .6 - 3)}" width="${f3(bw + 6)}" height="${f3(k * 1.2 + 6)}" rx="4"/>` : ''}<rect class="lf-body" x="${f3(q[0] - bw / 2)}" y="${f3(q[1] - k * (up ? .3 : .6))}" width="${f3(bw)}" height="${f3(k * (up ? .6 : 1.2))}" rx="${f3(k * .2)}"/><ellipse class="lf-lens" cx="${f3(q[0])}" cy="${f3(q[1] + (up ? 0 : k * .2))}" rx="${f3(up ? bw * .4 : k * .38)}" ry="${f3(k * (up ? .14 : .26))}" style="fill:${sw === 'transparent' ? '#252a33' : sw}"/></g>`;
+    if (mountOf(it)) rig += fxSvg; else actors.push([it.y, fxSvg]);
+  }
+  // people, far ones first: the colour they're lit with from the front, a rim from behind
+  for (const p of stagePeople().slice().sort((a, b) => a.y - b.y)) {
+    let fr = [0, 0, 0], rim = [0, 0, 0];
+    for (const l of lit) { if (!l.g) continue; const dx = p.x - l.g.cx, dy = p.y - l.g.cy, al = dx * l.g.ux + dy * l.g.uy, ac = -dx * l.g.uy + dy * l.g.ux, q2 = (al / l.g.rl) ** 2 + (ac / l.g.r) ** 2; if (q2 > 1.15) continue;
+      const w = l.k * Math.max(0, 1 - .7 * q2), tgt = l.g.uy < -.15 ? fr : rim; l.col.forEach((v, i) => { tgt[i] += v * w; }); }
+    const k = sc(p.y), [px, py] = P(p.x, p.y, base(p.x, p.y)), nm = personById(p.personId)?.name || itemName(p);
+    const fill = `rgb(${fr.map((v, i) => Math.round([30, 34, 42][i] + Math.min(255, v) * .55)).join(',')})`, rimOn = Math.max(...rim) > 20, rc = `rgb(${rim.map(v => Math.round(Math.min(255, v * 1.2))).join(',')})`;
+    const m = v => f3(fromM(v) * k);
+    const body = `M${f3(px - fromM(.11) * k)} ${f3(py)}L${f3(px - fromM(.16) * k)} ${f3(py - fromM(.95) * k)}L${f3(px - fromM(.23) * k)} ${f3(py - fromM(1.42) * k)}Q${f3(px)} ${f3(py - fromM(1.52) * k)} ${f3(px + fromM(.23) * k)} ${f3(py - fromM(1.42) * k)}L${f3(px + fromM(.16) * k)} ${f3(py - fromM(.95) * k)}L${f3(px + fromM(.11) * k)} ${f3(py)}Z`;
+    actors.push([p.y, `<g class="lf-person"><title>${esc(nm)}</title><ellipse class="lf-shadow" cx="${f3(px)}" cy="${f3(py)}" rx="${m(.32)}" ry="${m(.06)}"/><path d="${body}" style="fill:${fill}${rimOn ? `;stroke:${rc};stroke-width:${f3(Math.max(1, fromM(.025) * k))}` : ''}"/><circle cx="${f3(px)}" cy="${f3(py - fromM(1.63) * k)}" r="${m(.115)}" style="fill:${fill}${rimOn ? `;stroke:${rc};stroke-width:${f3(Math.max(1, fromM(.025) * k))}` : ''}"/><path d="${body}" fill="url(#lfShade)"/><text x="${f3(px)}" y="${f3(py + Math.max(12, fromM(.3) * k))}" text-anchor="middle">${esc(nm.split(' ')[0])}</text></g>`]);
+  }
+  ppl = actors.sort((a, b) => a[0] - b[0]).map(a => a[1]).join('');
+  return `<svg class="ld-front" id="ldFront" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="The stage from the audience in ${esc(L?.name || 'warm white')}: lights, beams and people"><defs>${defs}<linearGradient id="lfShade" x1="0" y1="0" x2="0" y2="1"><stop offset=".15" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient><filter id="lfSoft" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
+    <rect class="lf-bg" width="${W}" height="${H}"/>${back}<g class="lf-light" filter="url(#lfSoft)">${light}</g>${ppl}${rig}<text class="lf-note" x="${W - 14}" y="${H - 12}" text-anchor="end">From the middle of the room · ${esc(L?.name || 'no look yet')}</text></svg>`;
+}
 function deskListHtml() {
   const picked = new Set(deskPicked().map(i => i.id)), L = curLook();
   const rows = deskLights().slice().sort((a, b) => (mountOf(a) ? 0 : 1) - (mountOf(b) ? 0 : 1) || (itemName(mountOf(a) || {}) || '').localeCompare(itemName(mountOf(b) || {}) || '') || a.x - b.x);
@@ -3257,7 +3330,7 @@ function renderDeskMain() {
       ${desk.nocol ? looksHtml : ''}${desk.kmenu ? `<div class="ld-moods ld-keysmenu" role="dialog" aria-label="Keyboard shortcuts"><b>Keyboard shortcuts</b><dl>${DESK_KEYS.map(([k, d]) => `<dt>${k.split(' ').map(x => `<kbd>${x}</kbd>`).join('')}</dt><dd>${d}</dd>`).join('')}</dl></div>` : ''}${desk.vmenu ? `<div class="ld-moods ld-viewmenu" role="group" aria-label="Desk layout">${[['dock', desk.dock, 'Dock beside the plot', 'See the stage plot full size while you work'], ['compact', desk.compact, 'Compact', 'Smaller buttons and faders, for small screens'], ['nocol', desk.nocol, 'Hide the colour panel', 'Give the stage the full width'], ['pics', !desk.slim, 'Stage pictures on looks', 'Bigger look buttons with a tiny picture of each']].map(([k, on, l, sub]) => `<button data-vopt="${k}" aria-pressed="${!!on}"><span class="ld-check">${on ? ic('check', 'sm') : ''}</span><span>${l}<small>${sub}</small></span></button>`).join('')}</div>` : ''}
       <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" data-keysmenu aria-expanded="${!!desk.kmenu}" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts"><span class="ld-q" aria-hidden="true">?</span></button><span class="ld-moodwrap"><button class="ld-icon" data-viewmenu aria-expanded="${!!desk.vmenu}" title="Layout: dock beside the plot, compact, hide the colour panel" aria-label="Desk layout">${ic(desk.dock ? 'panelR' : 'sliders', 'sm')}</button></span><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
     ${desk.dock ? '<div class="ld-resize" role="separator" aria-orientation="vertical" aria-label="Drag to resize the desk" title="Drag to resize (double-click for the usual width)"></div>' : ''}<div class="ld-body${desk.nocol ? ' nocol' : ''}"><section class="ld-stage" aria-label="Stage">
-      <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
+      <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list' && desk.view !== 'front'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button><button data-dview="front" aria-pressed="${desk.view === 'front'}" title="The stage as the congregation sees it">Front</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
           : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
       <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}${desk.view === 'list' ? ' listing' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
@@ -3465,7 +3538,7 @@ $('deskDlg').addEventListener('pointerdown', e => {
     wheel.onpointerup = () => { desk.drag = null; wheel.onpointermove = null; deskCommit(); };
     e.preventDefault(); return;
   }
-  const row = e.target.closest('.ld-row[data-ldfx]'); if (row) { pickDeskFx(row.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
+  const row = e.target.closest('.ld-row[data-ldfx], #ldFront [data-ldfx]'); if (row) { pickDeskFx(row.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
   const map = e.target.closest('#ldMap'); if (!map) return;
   const g = e.target.closest('[data-ldfx]'); if (g) { pickDeskFx(g.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
   const p0 = deskMapPt(e); desk.box = { x0: p0.x, y0: p0.y, x1: p0.x, y1: p0.y, add: e.shiftKey };
@@ -3510,7 +3583,7 @@ function lightingInsp(it) {
   const adv = `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><div class="grid2">${field('iDmxA', 'Start address', it.dmxA || '', 'number', 'min="1" max="512" step="1"')}${field('iDmxCh', 'Channels (mode)', n, 'number', 'min="1" max="64" step="1"')}</div></section>` +
     (fix ? `<section class="isec"><h3>Light</h3><div class="field"><label for="iLType">Light type</label><select id="iLType">${LIGHT_TYPES().map(t => `<option value="${t}" ${t === it.type ? 'selected' : ''}>${esc(CAT[t].name)}</option>`).join('')}</select></div>
       <div class="grid2" style="margin-top:8px">${field('iThrow', 'Throw', mVal(throwOf(it)), 'number', 'step=".1" min=".5"', 'm')}${cat(it).zoom ? field('iBeam', `Beam (${cat(it).zoom.join('–')}°)`, beamOf(it), 'number', `step="1" min="${cat(it).zoom[0]}" max="${cat(it).zoom[1]}"`, '°') : ''}</div>
-      ${a != null ? `<p class="hint" style="margin:8px 0 0">${hang ? `Hangs at ${uLen(fixtureH(it))}. ` : ''}Hits faces at <b>${Math.round(a)}°</b>${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ', a good angle'} (30–50° is best).</p>` : ''}
+      ${a != null ? `<p class="hint" style="margin:8px 0 0">${hang ? `Hangs at ${uLen(fixtureH(it))}. ` : ''}${(g => `Lands about ${uLen(2 * g.r)} across. `)(beamGeom(it))}Hits faces at <b>${Math.round(a)}°</b>${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ', a good angle'} (30–50° is best).</p>` : ''}
       ${!hang ? `<label class="row" for="iUp" style="gap:8px;flex-wrap:nowrap;margin-top:8px"><input type="checkbox" id="iUp" ${isUp(it) ? 'checked' : ''} style="accent-color:var(--accent)"><span>Shines upward<small class="hint" style="display:block">Up a wall, the set or a backdrop</small></span></label>` : ''}
       <button class="btn quiet block" data-mirror="${it.id}" style="margin-top:8px" title="Place a matching light on the other side of the stage, aimed the same way">${ic('copy', 'sm')}Mirror to the other side</button></section>` : '');
   return { basic, adv };
@@ -3565,7 +3638,7 @@ function faceLight(p, L) {
     if (!isFixture(it) || isUp(it) || it.y < p.y - fromM(.5)) continue;
     const f = fxEff(it, L), col = fxRGB(f, it); if (!col) continue;
     const { cx, cy, r, ux, uy } = beamGeom(it), dx = p.x - cx, dy = p.y - cy, along = dx * ux + dy * uy, across = -dx * uy + dy * ux;
-    const q2 = (along / (mountOf(it) ? r : r * 1.25)) ** 2 + (across / r) ** 2; if (q2 > 1) continue;
+    const q2 = (along / beamGeom(it).rl) ** 2 + (across / r) ** 2; if (q2 > 1) continue;
     const c = f.d / 100 * (1 - .6 * q2); face += c; white += c * Math.min(...col) / 255;
     const dx2 = it.x - p.x; if (Math.abs(dx2) < fromM(1)) mid += c; else if (dx2 < 0) left += c; else right += c;   // which side of them it comes from
   }
@@ -6812,7 +6885,7 @@ svg.addEventListener('pointermove', e => {
   if (drag?.kind === 'zoom') {   // the pool's edge follows the pointer, within what the light can zoom to (whole degrees, Alt for halves)
     const it = itemById(drag.id), p = toFt(e); if (!it) return;
     const g = beamGeom(it), half = Math.abs((p.x - g.cx) * -g.uy + (p.y - g.cy) * g.ux), [lo, hi] = cat(it).zoom;
-    let a = clamp(2 * Math.atan(half / throwOf(it)) * 180 / Math.PI, lo, hi); a = e.altKey ? Math.round(a * 2) / 2 : Math.round(a);
+    let a = clamp(2 * Math.atan(half / g.D) * 180 / Math.PI, lo, hi); a = e.altKey ? Math.round(a * 2) / 2 : Math.round(a);
     if (a !== beamOf(it)) { it.beam = a; drag.moved = true; }
     renderPlot(); return;
   }
@@ -7995,7 +8068,7 @@ function beamsSvg(selSet, pre = 'lbp', k = 1, L = curLook(), opt = {}) {
   let s = '';
   for (const it of plan.items) {
     if (!isFixture(it) || !itemShown(it)) continue;
-    const on = selSet.has(it.id), f = fxEff(it, L), col = fxRGB(f, it), { cx, cy, r, ux, uy } = beamGeom(it), px = -uy, py = ux;
+    const on = selSet.has(it.id), f = fxEff(it, L), col = fxRGB(f, it), { cx, cy, r, rl, ux, uy } = beamGeom(it), px = -uy, py = ux;
     let one = '';
     if (!col) { if (on) one = `<circle class="lb-off" cx="${f3(cx)}" cy="${f3(cy)}" r="${f3(r)}"/>`; }   // off in this look: picked, it shows where it would land
     else {
@@ -8014,7 +8087,7 @@ function beamsSvg(selSet, pre = 'lbp', k = 1, L = curLook(), opt = {}) {
           `<radialGradient id="${gid}"><stop offset="0" stop-color="rgb(${hot})" stop-opacity="${o(.58 * pa)}"/><stop offset=".3" stop-color="rgb(${c})" stop-opacity="${o(.42 * pa)}"/><stop offset=".62" stop-color="rgb(${c})" stop-opacity="${o(.2 * pa)}"/><stop offset=".85" stop-color="rgb(${c})" stop-opacity="${o(.06 * pa)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="0"/></radialGradient>` +
           `<radialGradient id="${gid}-g"><stop offset="0" stop-color="rgb(${hot})" stop-opacity="${o(.7 * a)}"/><stop offset=".35" stop-color="rgb(${c})" stop-opacity="${o(.25 * a)}"/><stop offset="1" stop-color="rgb(${c})" stop-opacity="0"/></radialGradient>` +
           `<path class="lb-cone${cls}" fill="url(#${gid}-s)" d="M${f3(it.x + px * lw)} ${f3(it.y + py * lw)}L${f3(cx + px * r * lift)} ${f3(cy + py * r * lift)}L${f3(cx - px * r * lift)} ${f3(cy - py * r * lift)}L${f3(it.x - px * lw)} ${f3(it.y - py * lw)}Z"/>` +
-          `<ellipse class="lb-pool${cls}" fill="url(#${gid})" style="--lc:rgba(${c},.75)" cx="${f3(cx)}" cy="${f3(cy)}" rx="${f3(hung ? r : r * 1.25)}" ry="${f3(r)}" transform="rotate(${f3(ang)} ${f3(cx)} ${f3(cy)})"/>` +
+          `<ellipse class="lb-pool${cls}" fill="url(#${gid})" style="--lc:rgba(${c},.75)" cx="${f3(cx)}" cy="${f3(cy)}" rx="${f3(rl)}" ry="${f3(r)}" transform="rotate(${f3(ang)} ${f3(cx)} ${f3(cy)})"/>` +
           `<circle class="lb-glow" fill="url(#${gid}-g)" cx="${f3(it.x + ux * fromM(.08))}" cy="${f3(it.y + uy * fromM(.08))}" r="${f3(fromM(.45))}"/>`;
       }
     }
@@ -8076,7 +8149,7 @@ function brightSvg() {
   let s = `<filter id="brBlur" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="${f3(step * .8)}"/></filter><g class="ov-bright" clip-path="url(#deckclip)"><g filter="url(#brBlur)">`;
   for (let y = Math.min(...ys) + step / 2; y < Math.max(...ys); y += step) for (let x = Math.min(...xs) + step / 2; x < Math.max(...xs); x += step) {
     let I = 0;
-    for (const g of geo) { const dx = x - g.cx, dy = y - g.cy, a = dx * g.ux + dy * g.uy, c = -dx * g.uy + dy * g.ux, q2 = (a / (g.hung ? g.r : g.r * 1.25)) ** 2 + (c / g.r) ** 2; if (q2 < 1.3) I += g.k * Math.max(0, 1 - .75 * q2); }
+    for (const g of geo) { const dx = x - g.cx, dy = y - g.cy, a = dx * g.ux + dy * g.uy, c = -dx * g.uy + dy * g.ux, q2 = (a / g.rl) ** 2 + (c / g.r) ** 2; if (q2 < 1.3) I += g.k * Math.max(0, 1 - .75 * q2); }
     const v = Math.max(0, .62 * (1 - Math.min(1, I)));
     if (v > .02) s += `<rect x="${f3(x - step / 2)}" y="${f3(y - step / 2)}" width="${f3(step + .02)}" height="${f3(step + .02)}" style="fill-opacity:${f3(v)}"/>`;
   }
