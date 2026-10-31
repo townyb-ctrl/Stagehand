@@ -830,6 +830,7 @@ svg text { font-family: var(--f-ui); }
 .lb-wall { stroke-width: .12; stroke-linecap: round; fill: none; } .lb-up.on { stroke: rgba(255, 214, 110, .5); stroke-width: .03; }
 .beams.lit .lb, .beams .lit .lb { mix-blend-mode: screen; } .beams.lit, .beams .lit { isolation: isolate; } .lb-glow { pointer-events: none; }
 .ld-planks { pointer-events: none; }
+.ld-zoom { cursor: ew-resize; } .ld-zoomk { fill: rgba(0,0,0,.45); stroke: #fff; } .ld-zoom:hover .ld-zoomk, .ld-zoom:focus-visible .ld-zoomk { stroke: var(--ld-acc); } .ld-zoom:focus-visible { outline: none; }
 .ld-aim { cursor: move; } .ld-aimhit { fill: transparent; } .ld-aimline { stroke: rgba(255,255,255,.55); fill: none; pointer-events: none; } .ld-aimc { fill: rgba(0,0,0,.25); stroke: #fff; } .ld-aimx { stroke: #fff; stroke-linecap: round; }
 .ld-aim:hover .ld-aimc, .ld-aim:focus-visible .ld-aimc { stroke: var(--ld-acc); fill: rgba(0,0,0,.4); } .ld-aim:focus-visible { outline: none; }
 .ld-front { width: 100%; height: 100%; display: block; } .lf-bg { fill: #07090d; } .lf-wall { fill: #1a1f29; } .lf-floor { fill: #0d1016; } .lf-deck { fill: #222833; stroke: rgba(255,255,255,.12); stroke-width: 1; } .lf-face { fill: #11151c; stroke: rgba(255,255,255,.08); stroke-width: 1; }
@@ -2487,6 +2488,7 @@ function load() {
   return null;
 }
 function save() {
+  try { rememberMovers(); } catch { /* early in start-up, before looks exist */ }
   db.plans[plan.id] = plan; db.currentId = plan.id;
   try { localStorage.setItem(STORE, JSON.stringify(db)); markSaved(true); } catch { markSaved(false); /* storage blocked: work continues in memory */ }
 }
@@ -3220,10 +3222,13 @@ function deskMapSvg() {
   // where each picked light lands: a target to drag (Shift drags every picked light's target together)
   const aims = desk.big || weekLocked() || lookPeek ? '' : deskPicked().filter(i => !isUp(i)).map(i => { const g = beamGeom(i), x = f3(g.cx), y = f3(g.cy), r = f3(U * 1.15);
     return `<g class="ld-aim" data-ldaim="${i.id}" role="button" tabindex="0" aria-label="Aim ${esc(itemName(i))}: drag to move where it lands, or use the arrow keys" title="Drag to aim ${esc(itemName(i))} (Shift: all picked lights, Alt: free angle)"><line class="ld-aimline" x1="${f3(i.x)}" y1="${f3(i.y)}" x2="${x}" y2="${y}" style="stroke-width:${f3(U * .16)};stroke-dasharray:${f3(U * .6)} ${f3(U * .45)}"/><circle class="ld-aimhit" cx="${x}" cy="${y}" r="${f3(U * 2.2)}"/><circle class="ld-aimc" cx="${x}" cy="${y}" r="${r}" style="stroke-width:${f3(U * .28)}"/><path class="ld-aimx" d="M${f3(g.cx - U * 1.9)} ${y}h${f3(U * 1.1)}M${f3(g.cx + U * .8)} ${y}h${f3(U * 1.1)}M${x} ${f3(g.cy - U * 1.9)}v${f3(U * 1.1)}M${x} ${f3(g.cy + U * .8)}v${f3(U * 1.1)}" style="stroke-width:${f3(U * .22)}"/></g>`; }).join('');
+  // a picked light that zooms gets a handle on the side of its pool: drag it to make the beam wider or tighter
+  const zooms = desk.big || weekLocked() || lookPeek ? '' : deskPicked().filter(i => cat(i).zoom && !isUp(i)).map(i => { const g = beamGeom(i), x = g.cx - g.uy * g.r, y = g.cy + g.ux * g.r, s = U * .95, ang = Math.atan2(g.ux, -g.uy) * 180 / Math.PI;
+    return `<g class="ld-zoom" data-ldzoom="${i.id}" role="slider" tabindex="0" aria-label="Beam size of ${esc(itemName(i))}" aria-valuemin="${cat(i).zoom[0]}" aria-valuemax="${cat(i).zoom[1]}" aria-valuenow="${beamOf(i)}" aria-valuetext="${beamOf(i)}°" title="Drag to size the beam of ${esc(itemName(i))}: ${beamOf(i)}° (${cat(i).zoom.join('–')}°; Shift: all picked)"><circle class="ld-aimhit" cx="${f3(x)}" cy="${f3(y)}" r="${f3(U * 2)}"/><g transform="rotate(${f3(ang)} ${f3(x)} ${f3(y)})"><rect class="ld-zoomk" x="${f3(x - s * 1.5)}" y="${f3(y - s * .8)}" width="${f3(s * 3)}" height="${f3(s * 1.6)}" rx="${f3(s * .8)}" style="stroke-width:${f3(U * .22)}"/><path class="ld-aimx" d="M${f3(x - s * .9)} ${f3(y)}h${f3(s * 1.8)}M${f3(x - s * .9)} ${f3(y)}l${f3(s * .5)} ${f3(-s * .4)}M${f3(x - s * .9)} ${f3(y)}l${f3(s * .5)} ${f3(s * .4)}M${f3(x + s * .9)} ${f3(y)}l${f3(-s * .5)} ${f3(-s * .4)}M${f3(x + s * .9)} ${f3(y)}l${f3(-s * .5)} ${f3(s * .4)}" style="stroke-width:${f3(U * .2)}"/></g></g>`; }).join('');
   const L = curLook(), faces = stagePeople().map(p => { const st = faceState(p, L), nm = personById(p.personId)?.name || itemName(p);
     return `<g class="ld-face ${st}"><title>${esc(nm)}: ${st === 'lit' ? 'face lit' : st === 'deep' ? 'lit only in deep colour' : st === 'side' ? 'lit from one side only' : 'in the dark'}</title><circle cx="${f3(p.x)}" cy="${f3(p.y)}" r="${f3(U * 1.5)}" style="stroke-width:${f3(U * .28)}"/><text x="${f3(p.x)}" y="${f3(p.y + U * .5)}" text-anchor="middle" style="font-size:${f3(U * 1.3)}px">${esc(initials(nm))}</text></g>`; }).join('');
   return `${desk.zoom && !desk.big ? `<button class="ld-fit" id="ldFit" title="Show the whole stage (double-click the map)">${ic('fit', 'sm')}Fit</button>` : ''}<svg class="ld-map" id="ldMap" viewBox="${desk.big ? vb : deskZoomVb(vb)}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
-    <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/><pattern id="ldBoards" width="8" height="1.2" patternUnits="userSpaceOnUse"><path d="M0 .6h8M0 1.2h8M0 0v.6M4 .6v.6" fill="none" stroke="rgba(255,255,255,.035)" stroke-width=".035"/></pattern><path class="ld-planks" d="${polyPath(stagePoly())}" fill="url(#ldBoards)"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${faces}${dots}${aims}</svg>`;
+    <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/><pattern id="ldBoards" width="8" height="1.2" patternUnits="userSpaceOnUse"><path d="M0 .6h8M0 1.2h8M0 0v.6M4 .6v.6" fill="none" stroke="rgba(255,255,255,.035)" stroke-width=".035"/></pattern><path class="ld-planks" d="${polyPath(stagePoly())}" fill="url(#ldBoards)"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${faces}${dots}${aims}${zooms}</svg>`;
 }
 /* Changing looks: the beams as they were fade out over the new ones (both on the plot and in the desk), about 0.7 s. */
 let lookFade = null;
@@ -3341,7 +3346,7 @@ function renderDeskMain() {
       ${desk.nocol ? looksHtml : ''}${desk.kmenu ? `<div class="ld-moods ld-keysmenu" role="dialog" aria-label="Keyboard shortcuts"><b>Keyboard shortcuts</b><dl>${DESK_KEYS.map(([k, d]) => `<dt>${k.split(' ').map(x => `<kbd>${x}</kbd>`).join('')}</dt><dd>${d}</dd>`).join('')}</dl></div>` : ''}${desk.vmenu ? `<div class="ld-moods ld-viewmenu" role="group" aria-label="Desk layout">${[['dock', desk.dock, 'Dock beside the plot', 'See the stage plot full size while you work'], ['compact', desk.compact, 'Compact', 'Smaller buttons and faders, for small screens'], ['nocol', desk.nocol, 'Hide the colour panel', 'Give the stage the full width'], ['pics', !desk.slim, 'Stage pictures on looks', 'Bigger look buttons with a tiny picture of each']].map(([k, on, l, sub]) => `<button data-vopt="${k}" aria-pressed="${!!on}"><span class="ld-check">${on ? ic('check', 'sm') : ''}</span><span>${l}<small>${sub}</small></span></button>`).join('')}</div>` : ''}
       <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" data-keysmenu aria-expanded="${!!desk.kmenu}" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts"><span class="ld-q" aria-hidden="true">?</span></button><span class="ld-moodwrap"><button class="ld-icon" data-viewmenu aria-expanded="${!!desk.vmenu}" title="Layout: dock beside the plot, compact, hide the colour panel" aria-label="Desk layout">${ic(desk.dock ? 'panelR' : 'sliders', 'sm')}</button></span><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
     ${desk.dock ? '<div class="ld-resize" role="separator" aria-orientation="vertical" aria-label="Drag to resize the desk" title="Drag to resize (double-click for the usual width)"></div>' : ''}<div class="ld-body${desk.nocol ? ' nocol' : ''}"><section class="ld-stage" aria-label="Stage">
-      <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list' && desk.view !== 'front'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button><button data-dview="front" aria-pressed="${desk.view === 'front'}" title="The stage as the congregation sees it">Front</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
+      <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list' && desk.view !== 'front'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button><button data-dview="front" aria-pressed="${desk.view === 'front'}" title="The stage as the congregation sees it">Front</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span>${desk.view === 'front' && dlCap !== null ? `<button class="ld-mini" data-frontpic title="Save the front view as a picture to share">${ic('save', 'sm')}Save picture</button>` : ''}<div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
           : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
       <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}${desk.view === 'list' ? ' listing' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
@@ -3370,9 +3375,20 @@ function deskLive() {
   for (const el of document.querySelectorAll('[data-master]')) { const m = lookMaster(L); if (el !== document.activeElement) el.value = m; const lab = el.closest('label'); lab.style.setProperty('--v', faderPct('d', m)); const o = lab.querySelector('output'); if (o) o.textContent = m + '%'; }
   renderPlot();
 }
+/* Moving heads point somewhere different in each look: the open look keeps where they point (saved with every change),
+   and switching looks turns them to that look's position. A look that has never seen a mover takes it where it is. */
+const isMover = it => !!cat(it).mover;
+function rememberMovers() {
+  if (lookPeek || typeof plan === 'undefined' || !plan?.looks?.length) return; const L = curLook(); if (!L) return;
+  const ms = plan.items.filter(isMover); if (!ms.length) { if (L.pos) delete L.pos; return; }
+  L.pos = Object.fromEntries(ms.map(it => [it.id, { rot: it.rot || 0, throw: it.throw ?? null, beam: it.beam ?? null }]));
+}
+function applyMovers(L) {
+  for (const it of plan.items.filter(isMover)) { const q = L?.pos?.[it.id]; if (!q) continue; it.rot = q.rot; for (const k of ['throw', 'beam']) { if (q[k] == null) delete it[k]; else it[k] = q[k]; } }
+}
 function switchLook(id) {
   const cur = curLook(); if (!id || id === cur?.id || lookPeek) return;
-  fadeLooksFrom(); desk.prevLook = cur?.id; mutate(() => { plan.lookId = id; }); if (desk.open) renderDesk();
+  fadeLooksFrom(); desk.prevLook = cur?.id; mutate(() => { rememberMovers(); plan.lookId = id; applyMovers(curLook()); }); if (desk.open) renderDesk();
 }
 // the last colours you used, newest first, kept on this device
 const deskRecent = () => (db.deskRecent ||= []);
@@ -3413,6 +3429,7 @@ $('deskDlg').addEventListener('click', e => {
   if (t.hasAttribute('data-viewmenu')) { desk.vmenu = !desk.vmenu; desk.add = desk.lmenu = desk.kmenu = false; renderDesk(); return; }
   if (t.hasAttribute('data-keysmenu')) { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = desk.vmenu = false; renderDesk(); return; }
   if (t.dataset.vopt) { const k = t.dataset.vopt === 'pics' ? 'slim' : t.dataset.vopt; desk[k] = !desk[k]; desk.vmenu = false; if (k === 'dock' && desk.dock) desk.view = 'list'; deskLayoutSave(); renderDesk(); if (k === 'dock') { needFit = true; renderPlot(); } return; }
+  if (t.hasAttribute('data-frontpic')) { frontPicture(); return; }
   if (t.hasAttribute('data-lookfold')) { desk.lfold = !desk.lfold; desk.add = desk.lmenu = false; deskLayoutSave(); renderDesk(); return; }
   if (t.hasAttribute('data-colshow')) { desk.nocol = false; deskLayoutSave(); renderDesk(); return; }
   if (t.dataset.libuse) { libUse(t.dataset.libuse); return; }
@@ -3431,7 +3448,7 @@ $('deskDlg').addEventListener('click', e => {
   if (t.dataset.gdel) { const g = lgroups().find(x => x.id === t.dataset.gdel); if (g) { mutate(() => { plan.lgroups = plan.lgroups.filter(x => x.id !== g.id); }, `Group “${g.name}” deleted`); renderDesk(); } return; }
   if (t.dataset.look) { switchLook(t.dataset.look); return; }
   if (t.hasAttribute('data-looknew')) { desk.add = false; mutate(() => { const cur = ensureLook(); if (plan.looks.length === 1 && !Object.keys(cur.fx).length) return; const L = { id: uid(), name: `Look ${plan.looks.length + 1}`, fx: JSON.parse(JSON.stringify(cur.fx)) }; plan.looks.push(L); plan.lookId = L.id; }); renderDesk(); setTimeout(() => $('ldLookName')?.select(), 30); return; }
-  if (t.hasAttribute('data-lookdel')) { desk.lmenu = false; const cur = curLook(); if (cur) { fadeLooksFrom(); mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; }, `Deleted ${cur.name}`); renderDesk(); } return; }
+  if (t.hasAttribute('data-lookdel')) { desk.lmenu = false; const cur = curLook(); if (cur) { fadeLooksFrom(); mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; applyMovers(curLook()); }, `Deleted ${cur.name}`); renderDesk(); } return; }
 });
 $('deskDlg').addEventListener('change', e => {
   const t = e.target;
@@ -3484,6 +3501,11 @@ document.addEventListener('pointerdown', e => { if (lookPickOpen && !e.target.cl
 $('deskDlg').addEventListener('pointerup', () => { if (lookPeek && desk.peekBtn) { desk.peekBtn = false; peekEnd(); } });
 $('deskDlg').addEventListener('keydown', e => {
   const g = e.target.closest?.('[data-ldfx]'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pickDeskFx(g.dataset.ldfx, e.shiftKey); }
+  const zk = e.target.closest?.('[data-ldzoom]'), zd = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1 }[e.key];
+  if (zk && zd && !weekLocked() && !lookPeek) {   // arrow keys: 1° narrower or wider (Shift: 5°)
+    e.preventDefault(); e.stopPropagation(); const it = itemById(zk.dataset.ldzoom), [lo, hi] = cat(it).zoom, b = clamp(beamOf(it) + zd * (e.shiftKey ? 5 : 1), lo, hi), id = it.id;
+    if (b !== beamOf(it)) mutate(() => { it.beam = b; }, `${itemName(it)} beam ${b}°`); renderDesk(); document.querySelector(`[data-ldzoom="${id}"]`)?.focus(); return;
+  }
   const ah = e.target.closest?.('[data-ldaim]'), dir = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
   if (ah && dir && !weekLocked() && !lookPeek) {   // arrow keys nudge where the light lands, 25 cm (Shift: 1 m)
     e.preventDefault(); e.stopPropagation(); const it = itemById(ah.dataset.ldaim), g = beamGeom(it), st = fromM(e.shiftKey ? 1 : .25), id = it.id;
@@ -3552,6 +3574,17 @@ $('deskDlg').addEventListener('pointerdown', e => {
     apply(e); desk.drag = 'wheel'; wheel.setPointerCapture(e.pointerId);
     wheel.onpointermove = ev => { if (desk.drag === 'wheel') apply(ev); };
     wheel.onpointerup = () => { desk.drag = null; wheel.onpointermove = null; deskCommit(); };
+    e.preventDefault(); return;
+  }
+  const zh = e.target.closest('[data-ldzoom]');
+  if (zh && !weekLocked() && !lookPeek) {   // drag the pool's side: the beam zooms to reach the pointer, within what the light can do
+    const me = itemById(zh.dataset.ldzoom), ids = e.shiftKey ? deskPicked().filter(i => cat(i).zoom && !isUp(i)).map(i => i.id) : [me.id], before = snapState(); let moved = false, raf = 0;
+    const move = ev => { const p = deskMapPt(ev), g = beamGeom(me), half = Math.abs((p.x - g.cx) * -g.uy + (p.y - g.cy) * g.ux), [lo, hi] = cat(me).zoom;
+      let a = clamp(2 * Math.atan(half / g.D) * 180 / Math.PI, lo, hi); a = ev.altKey ? Math.round(a * 2) / 2 : Math.round(a);
+      for (const id of ids) { const it = itemById(id), [l2, h2] = cat(it).zoom; it.beam = clamp(a, l2, h2); } moved = true;
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; if ($('ldMapWrap')) $('ldMapWrap').innerHTML = deskStageHtml(); if ($('ldFaces')) $('ldFaces').innerHTML = facesSummary(); renderPlot(); }); };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', () => { window.removeEventListener('pointermove', move); cancelAnimationFrame(raf); if (moved) { const msg = ids.length > 1 ? `${plural(ids.length, 'beam')} sized ${beamOf(me)}°` : `${itemName(me)} beam ${beamOf(me)}°`; pushUndo(before, stepLabel(msg, before)); recordRev(msg, before); save(); } renderDesk(); renderPlot(); }, { once: true });
     e.preventDefault(); return;
   }
   const ah = e.target.closest('[data-ldaim]');
@@ -6260,6 +6293,26 @@ function plotSnapshot(atZoom) {
 }
 /* The plot as a picture to drop into a group chat: the paperwork drawing (cropped to the stage), the page's own styles
    and drawing defs carried inside it, rendered at 2× with a title strip, saved as a PNG. */
+// the desk's front view as a picture: the stage in the open look, as the room sees it, with the week and look across the top
+async function frontPicture() {
+  const W = 2000, H = 1120, head = 110, L = curLook();
+  let svgS = deskFrontSvg().replace(/<rect class="lf-sel"[^>]*\/>/g, '').replace(/ data-ldfx="[^"]*"| role="button"| tabindex="0"/g, '');
+  const css = [...document.querySelectorAll('style')].map(x => x.textContent).join('\n');
+  svgS = svgS.replace(/^<svg /, `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" `).replace(/(<svg[^>]*>)/, `$1<style><![CDATA[${css.replace(/]]>/g, ']] >')}]]></style>`);
+  const url = URL.createObjectURL(new Blob([svgS], { type: 'image/svg+xml' }));
+  try {
+    const im = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = url; });
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H + head; const g = cv.getContext('2d');
+    g.fillStyle = '#07090d'; g.fillRect(0, 0, cv.width, cv.height);
+    g.fillStyle = '#f2f4f8'; g.font = '700 42px Archivo, system-ui, sans-serif'; g.fillText(`${L?.name || 'Lights'} · ${plan.name || 'Untitled service'}`, 40, 60, W - 80);
+    g.fillStyle = '#9aa3b2'; g.font = '500 24px Archivo, system-ui, sans-serif'; g.fillText([longDate(plan.date), multiVenue() ? venueOf(plan)?.name : '', 'From the middle of the room'].filter(Boolean).join('  ·  '), 40, 94, W - 80);
+    g.drawImage(im, 0, head, W, H);
+    const blob = await new Promise(ok => cv.toBlob(ok, 'image/png')); if (!blob) throw new Error('no image');
+    const slug = t => (t || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30);
+    offerFile(`stagehand-${plan.date}-front${L ? '-' + slug(L.name) : ''}.png`, blob, 'image/png');
+  } catch { toast('Couldn’t make the picture here'); }
+  finally { URL.revokeObjectURL(url); }
+}
 async function plotPicture() {
   const z = Math.max(20, Math.min(70, 1500 / (plan.stage.w + fromM(2))));
   let svgS = cropToStage(plotSnapshot(z));
