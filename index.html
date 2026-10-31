@@ -97,7 +97,9 @@ td, .ch, .chip, .cablen, .zoomval, .hint b, .doc-meta b { font-variant-numeric: 
 input, select, textarea { background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-sm); padding: 7px 10px; min-width: 0; transition: border-color .15s, box-shadow .15s; }
 input:hover, select:hover, textarea:hover { border-color: var(--muted); }
 input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-textarea { width: 100%; resize: vertical; font: 13px/1.5 var(--f-mono); }
+input[type="file"] { border: 0; padding: 0; background: none; font-size: 12.5px; color: var(--muted); box-shadow: none; } input[type="file"]:hover { border: 0; }
+input[type="file"]::file-selector-button { font: inherit; font-size: 13.5px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-sm); padding: 7px 12px; margin-right: 10px; cursor: pointer; transition: border-color .15s; } input[type="file"]::file-selector-button:hover { border-color: var(--muted); }
+textarea { width: 100%; resize: vertical; font: 13.5px/1.5 var(--f-ui); } #dataText { font: 12.5px/1.5 var(--f-mono); }
 input[type="number"] { font-family: var(--f-mono); font-size: 13px; font-variant-numeric: tabular-nums; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-sm); padding: 7px 12px; cursor: pointer; white-space: nowrap; font-weight: 500; transition: background .15s, border-color .15s, transform .08s; }
 .btn:hover { border-color: var(--muted); background: var(--surface-2); }
@@ -910,11 +912,15 @@ svg text { font-family: var(--f-ui); }
 /* ---------- inspector ---------- */
 .inspector { background: var(--surface); border-left: 1px solid var(--line); overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; min-width: 0; }   /* a scrollbar never pushes the panel sideways */
 .insp { display: grid; gap: 0; grid-template-columns: minmax(0, 1fr); }
-.insp-head { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 14px 14px 12px 16px; border-bottom: 1px solid var(--line); }
+.insp-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto; column-gap: 12px; row-gap: 0; align-items: center; padding: 12px 10px 12px 16px; border-bottom: 1px solid var(--line); }
+.insp-head > :first-child { grid-row: 1 / 3; align-self: center; } .insp-head > div:nth-child(2) { display: contents; }
+.insp-head > div:nth-child(2) > .eyebrow { grid-column: 2; grid-row: 1; align-self: end; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.insp-head > div:nth-child(2) > :not(.eyebrow) { grid-column: 2 / 4; grid-row: 2; min-width: 0; padding-right: 4px; }
+.insp-head > .row:last-child { grid-column: 3; grid-row: 1; align-self: start; margin-top: -4px; }
 .insp-head .glyph { width: 44px; height: 44px; border-radius: 10px; }
 .insp-head h2 { font-size: 17px; font-weight: 700; line-height: 1.25; }
 .titlein { width: 100%; font: 700 17px/1.25 var(--f-ui); color: var(--ink); border: 1px solid transparent; background: transparent; border-radius: 6px; padding: 2px 6px; margin: 0 -7px; }
-.titlein { resize: none; overflow: hidden; display: block; } .titlein.long { font-size: 15px; }   /* a long name wraps onto a second line beside the panel buttons */
+.titlein { resize: none; overflow: hidden; display: block; } .titlein.long { font-size: 16px; }   /* a long name wraps onto a second line */
 .titlein:hover { border-color: var(--line); }
 .titlein:focus { border-color: var(--accent); background: var(--surface); outline: none; }
 .titlein::placeholder { color: var(--ink); opacity: 1; }
@@ -1066,7 +1072,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .gpick.few { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .gpick.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .gpk .gthumb { height: 84px; width: 100%; display: block; }
-.gpk span { font-size: 10.5px; color: rgba(255,255,255,.75); line-height: 1.1; text-align: center; }
+.gpk span { font-size: 10px; letter-spacing: -.01em; color: rgba(255,255,255,.75); line-height: 1.1; text-align: center; }
 .gpk:hover { border-color: var(--line-2); }
 .gpk[aria-checked="true"] { outline: 2px solid var(--accent); outline-offset: 1px; }
 .swatches { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -1194,7 +1200,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .herostats .hstat > span { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .herobtns { display: grid; gap: 8px; margin-top: auto; }
 .herobtns > .btn.primary { justify-content: center; padding-block: 10px; }
-.herosub { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; } .herosub .btn { justify-content: center; padding-inline: 6px; font-size: 13px; }
+.herosub { display: flex; gap: 6px; } .herosub .btn { flex: 1 1 auto; justify-content: center; padding-inline: 8px; font-size: 13px; white-space: nowrap; }
 .herocount { font: 600 11px var(--f-mono); color: var(--muted); }
 .ldring { width: 16px; height: 16px; flex: none; } .ldring circle { fill: none; stroke: var(--line-2); stroke-width: 2.2; } .ldring .ldfill { stroke: var(--accent); stroke-linecap: round; transition: stroke-dasharray .4s; } .ldring.full .ldfill { stroke: var(--ok); }
 @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .heropic { border-right: 0; border-bottom: 1px solid var(--line); min-height: 0; } }
@@ -6210,7 +6216,7 @@ function renderInspector() {
     const conns = plan.cables.filter(x => touches(x, it.id));
     el.innerHTML = `<div class="insp">
       <div class="insp-head">${C.shape === 'person' ? `<span class="avatar tone-${roleTone(owner?.role)}${owner ? ` hued" style="--hue:${personColour(owner.id)};width:44px;height:44px` : '" style="width:44px;height:44px'}">${esc(initials(owner?.name || it.label))}</span>` : itemPreview(it, 'ipv ipv-lg')}
-        <div style="min-width:0"><div class="eyebrow">${esc(C.name)}</div><textarea id="iLabel" class="titlein${itemName(it).length > 16 ? ' long' : ''}" rows="1" placeholder="${esc(itemName({ ...it, label: '' }))}" aria-label="Name" title="Click to rename">${esc(it.label || '')}</textarea></div>
+        <div style="min-width:0"><div class="eyebrow" title="${esc(C.name)}">${esc(C.name.replace(/\s*\([^)]*\)\s*$/, ''))}</div><textarea id="iLabel" class="titlein${itemName(it).length > 16 ? ' long' : ''}" rows="1" placeholder="${esc(itemName({ ...it, label: '' }))}" aria-label="Name" title="Click to rename">${esc(it.label || '')}</textarea></div>
         <div class="row" style="gap:0"><button class="iconbtn" data-insp-hide aria-label="Hide panel" title="Hide panel ( ] )">${ic('chevsR', 'sm')}</button><button class="iconbtn" id="iClose" aria-label="Deselect">${ic('x', 'sm')}</button></div></div>
       ${ownerUp || it.chan ? `<section class="isec">
         ${ownerUp ? ownerField : ''}
@@ -9030,7 +9036,7 @@ function cmdItems() {
     ['Present on a screen (F)', 'fit', () => setPresent(true)],
     ['Version history', 'undo', () => openHist()],
     [sideOpen ? 'Close the side view (E)' : 'Side view: heights (E)', 'ruler', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } toggleSide(); }],
-    ...OVERLAYS.map(([k, n]) => [`${cableView.over.has(k) ? 'Hide' : 'Show'} ${n.toLowerCase()}`, 'eye', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } setCableView(() => { cableView.over.has(k) ? cableView.over.delete(k) : cableView.over.add(k); }); }]),
+    ...OVERLAYS.map(([k, n]) => [`${cableView.over.has(k) ? 'Hide' : 'Show'} ${n.replace(/^[A-Z](?![A-Z])/, c => c.toLowerCase())}`, 'eye', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } setCableView(() => { cableView.over.has(k) ? cableView.over.delete(k) : cableView.over.add(k); }); }]),
     ['Build stage from team', 'wand', () => buildNow()],
     ['Run a cable', 'cable', () => setMode('cable')],
     ['Draw a cable channel', 'trench', () => setMode('channel')],
