@@ -631,7 +631,12 @@ svg text { font-family: var(--f-ui); }
 .ldesk { position: relative; }
 .ld-moods { position: absolute; z-index: 5; top: 128px; left: 50%; transform: translateX(-50%); display: grid; gap: 2px; padding: 6px; min-width: 220px; border-radius: 12px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
 .ld-moods button { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--ld-ink); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left; }
-.ld-libmenu { left: auto; right: 220px; transform: none; min-width: 250px; }
+.ld-addmenu { left: 18px; transform: none; min-width: 270px; max-height: 60vh; overflow-y: auto; }
+.ld-lookmenu { left: auto; right: 18px; transform: none; min-width: 210px; }
+.ld-lookmenu button small { display: block; margin-left: auto; padding: 0; font-weight: 500; }
+.ld-moods button.bad { color: var(--bad-ink); } .ld-moods small.ld-empty { padding: 6px 10px; }
+.ld-moods > small { padding: 8px 10px 2px; font-weight: 700; letter-spacing: .02em; }
+.ldesk .ld-faders.few { grid-template-columns: repeat(2, 64px); justify-content: center; gap: 12px; }
 .ld-librow { display: flex; align-items: center; } .ld-librow > button:first-child { flex: 1; }
 .ld-moods .ld-libx { padding: 6px; color: var(--ld-mute); } .ld-moods .ld-libx:hover { color: var(--bad-ink); }
 .ldesk.big { width: 100%; height: 100%; grid-template-rows: auto auto auto minmax(0, 1fr); }
@@ -2931,7 +2936,7 @@ function openDesk(onlyId) {
   if (onlyId) deskSel = new Set([onlyId]);
   desk.open = true; $('deskDlg').hidden = false; renderDesk(); setTimeout(() => $('ldDone')?.focus(), 30);
 }
-function closeDesk() { desk.naming = false; desk.moods = false; desk.lib = false; desk.big = false; desk.ctx = null; lookPeek = null; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
+function closeDesk() { desk.naming = false; desk.add = false; desk.lmenu = false; desk.big = false; desk.ctx = null; lookPeek = null; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
 // your own named groups of lights (Front wash, Band backlight…), saved with the week
 const lgroups = () => (plan.lgroups || []).map(g => ({ ...g, ids: g.ids.filter(id => isFixture(itemById(id))) })).filter(g => g.ids.length);
 function deskGroupIds(k) {
@@ -2991,7 +2996,7 @@ function moodLook(m) {
   const [name, frontD, cols, d] = MOODS.find(x => x[0] === m), others = deskLights().filter(i => !isFrontLight(i)).sort((a, b) => a.x - b.x), fx = {};
   for (const it of deskLights()) if (isFrontLight(it)) fx[it.id] = { ...DESK_PRESETS[0][1], d: frontD };
   others.forEach((it, k) => { fx[it.id] = { ...DESK_PRESETS.find(p => p[0] === cols[k % cols.length])[1], d }; });
-  fadeLooksFrom(); desk.moods = false; desk.prevLook = curLook()?.id;
+  fadeLooksFrom(); desk.add = false; desk.prevLook = curLook()?.id;
   mutate(() => { plan.looks ||= []; const n = plan.looks.filter(l => l.name === name || l.name.startsWith(name + ' ')).length, L = { id: uid(), name: n ? `${name} ${n + 1}` : name, fx }; plan.looks.push(L); plan.lookId = L.id; }, `${name} look added: front light stays warm white`);
   renderDesk();
 }
@@ -3019,7 +3024,7 @@ function libUse(id) {
     }
     fx[it.id] = { ...best.fx };
   }
-  fadeLooksFrom(); desk.lib = false; desk.prevLook = curLook()?.id;
+  fadeLooksFrom(); desk.add = false; desk.prevLook = curLook()?.id;
   mutate(() => { plan.looks ||= []; const n = plan.looks.filter(l => l.name === e.name || l.name.startsWith(e.name + ' ')).length, L = { id: uid(), name: n ? `${e.name} ${n + 1}` : e.name, fx }; plan.looks.push(L); plan.lookId = L.id; }, `“${e.name}” from the library, fitted to this week's lights`);
   renderDesk();
 }
@@ -3044,11 +3049,11 @@ function deskColourHtml() {
   const mx = 50 + Math.cos(h * Math.PI / 180) * sat * 50, my = 50 + Math.sin(h * Math.PI / 180) * sat * 50, sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent';
   const hex = f.r + f.g + f.b ? '#' + [f.r, f.g, f.b].map(v => v.toString(16).padStart(2, '0')).join('') : '', rec = deskRecent(), L = curLook(), mst = lookMaster(L);
   return `<div class="ld-card ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'No lights picked'}</b><small>${ts.length ? esc(fxName(f, ts[0])) : 'Pick lights on the stage'}</small></div>${ts.length ? `<button class="ld-mini" data-flash title="Make the picked lights pulse on the stage, to find them">${ic('zap', 'sm')}Flash</button>` : ''}</div>
-    <div class="ld-card"><div class="ld-cardhead"><span class="ld-label">Colour &amp; levels</span><span class="ld-clip"><button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button></span></div>
-      <div class="ld-mixrow"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--ld-acc)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
+    <div class="ld-card"><div class="ld-cardhead"><span class="ld-label">Colour &amp; levels</span>${ui.adv ? '' : '<!--'}<span class="ld-clip"><button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button></span>${ui.adv ? '' : '-->'}</div>
+      <div class="ld-mixrow"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders${ui.adv ? '' : ' few'}">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].filter(([k]) => ui.adv || k === 'd').map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--ld-acc)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
       <div class="lpresets" role="group" aria-label="Colour presets">${DESK_PRESETS.map(([n, c]) => `<button class="pswatch" data-preset="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...c, d: 100 })}"${!ts.length || (white && n !== 'Warm white') ? ' disabled' : ''}><i></i><span>${n.replace(' white', '')}</span></button>`).join('')}<button class="pswatch off" data-preset="Off" title="Off" aria-label="Off" ${ts.length ? '' : 'disabled'}><i></i><span>Off</span></button></div>
       <div class="ld-recentrow">${rec.length ? `<div class="ld-recent" title="Recent colours">${rec.map((c, i) => `<button class="ld-rsw" data-recent="${i}" style="--sw:${fxSwatch({ ...c, d: 100 })}" aria-label="Recent colour ${esc(fxName({ ...c, d: 100 }))}" title="${esc(fxName({ ...c, d: 100 }))}" ${!ts.length || white ? 'disabled' : ''}></button>`).join('')}</div>` : ''}
-      <label class="ld-hex"><span class="sr-only">Colour code</span><input id="ldHex" type="text" value="${hex}" placeholder="#1f6bff" maxlength="7" spellcheck="false" aria-label="Colour code, like #1f6bff" ${!ts.length || white ? 'disabled' : ''}></label></div>
+      ${ui.adv ? '' : '<!--'}<label class="ld-hex"><span class="sr-only">Colour code</span><input id="ldHex" type="text" value="${hex}" placeholder="#1f6bff" maxlength="7" spellcheck="false" aria-label="Colour code, like #1f6bff" ${!ts.length || white ? 'disabled' : ''}></label>${ui.adv ? '' : '-->'}</div>
       ${white ? '<p class="ld-note">White-only lights take the dimmer only.</p>' : ''}</div>
 `;
 }
@@ -3057,13 +3062,16 @@ function renderDesk() {
   $('ldBody').classList.toggle('big', !!desk.big);
   if (desk.big) { renderBig(); return; }
   const looks = plan.looks || [], cur = curLook(), all = deskLights(), picked = deskPicked();
-  const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : []), ...lgroups().map(g => ['g:' + g.id, g.name]), ['none', 'None']];
+  const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : []), ...lgroups().map(g => ['g:' + g.id, g.name])];
   const gOn = k => { const ids = deskGroupIds(k); return ids.length === picked.length && ids.every(i => picked.includes(i)); };
   const myG = lgroups().find(g => gOn('g:' + g.id) && picked.length);
   const cue = (l, k) => `<button class="ld-look" data-look="${l.id}" draggable="true" aria-pressed="${l.id === cur?.id}" title="${esc(l.name)}: drag to reorder (or Alt + ← →)"><span class="ld-cueno">${k + 1}</span><span class="ld-cuename">${esc(l.name)}</span><span class="ld-thumb">${lookThumb(l, k)}</span></button>`;
   $('ldBody').innerHTML = `<div class="ld-top">
       <div class="ld-brand"><span class="ld-logo">${ic('sun')}</span><div><h2 id="ldTitle">Lighting desk</h2><small>${plural(all.length, 'light')} · ${esc(longDate(plan.date))}</small></div></div>
-      <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-looknew>${ic('plus', 'sm')}${looks.length ? 'New look' : 'Save as a look'}</button><span class="ld-moodwrap"><button class="ld-look add" data-moods aria-expanded="${!!desk.moods}">${ic('sun', 'sm')}Mood</button></span><span class="ld-moodwrap"><button class="ld-look add" data-lib aria-expanded="${!!desk.lib}">${ic('layers', 'sm')}Library</button></span><span class="ld-lookacts">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-libsave title="Save this look to the library, to use in any week" aria-label="Save ${esc(cur.name)} to the library">${ic('save', 'sm')}</button><button class="ld-icon" data-lookdel title="Delete this look" aria-label="Delete ${esc(cur.name)}">${ic('trash', 'sm')}</button>` : ''}<button class="ld-icon" id="ldPeek" title="Hold to see the look before (or hold Space)" aria-label="Hold to peek at the previous look" ${desk.prevLook && desk.prevLook !== curLook()?.id ? '' : 'disabled'}>${ic('eye', 'sm')}</button></span></div>${desk.lib ? `<div class="ld-moods ld-libmenu" role="group" aria-label="Looks in the library">${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') + '<small>Fitted to this week’s lights by group, kind and place</small>' : '<small>Nothing saved yet. Open a look and press <b>Save to library</b>.</small>'}</div>` : ''}${desk.moods ? `<div class="ld-moods" role="menu" aria-label="Start a look from a mood">${MOODS.map(([n, , cols]) => `<button role="menuitem" data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}<small>Front light stays warm white</small></div>` : ''}
+      <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-addlook aria-expanded="${!!desk.add}">${ic('plus', 'sm')}Look</button><span class="ld-lookacts">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-lookmenu aria-expanded="${!!desk.lmenu}" title="More for this look" aria-label="More for ${esc(cur.name)}">${ic('dots', 'sm')}</button>` : ''}</span></div>${desk.add ? `<div class="ld-moods ld-addmenu" role="group" aria-label="Add a look">
+        <button data-looknew><span class="ld-pal">${(cur ? lookPalette(cur) : []).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${cur ? `Copy of ${esc(cur.name)}` : 'Start a look'}</button>
+        <small>From a mood · front light stays warm white</small>${MOODS.map(([n, , cols]) => `<button data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}
+        <small>From your library</small>${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') : '<small class="ld-empty">Nothing saved yet: open a look, then ⋯ → Save to library.</small>'}</div>` : ''}${desk.lmenu && cur ? `<div class="ld-moods ld-lookmenu" role="group" aria-label="${esc(cur.name)}"><button data-libsave>${ic('save', 'sm')}Save to library<small>Use it in any week</small></button><button data-lookdel class="bad">${ic('trash', 'sm')}Delete this look</button></div>` : ''}
       <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
     <div class="ld-body"><section class="ld-stage" aria-label="Stage">
       <div class="ld-bar"><span class="ld-label">Stage</span><span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
@@ -3072,7 +3080,7 @@ function renderDesk() {
       <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}" id="ldMapWrap">${deskMapSvg()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
       <p class="ld-tip">Click a light to pick it <span>·</span> Shift-click to add <span>·</span> drag across the stage to pick several</p></section>
       <aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside></div>
-    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span><span class="ld-keys" aria-label="Keys: 1 to 9 looks, up and down dimmer, A all lights, C copy, V paste, hold Space to peek, Ctrl Z undo"><kbd>1–9</kbd> looks <kbd>↑</kbd><kbd>↓</kbd> dimmer <kbd>A</kbd> all <kbd>C</kbd><kbd>V</kbd> copy, paste <kbd>Space</kbd> peek <kbd>Ctrl Z</kbd> undo</span></div>`;
+    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span>${ui.adv ? '' : '<!--'}<span class="ld-keys" aria-label="Keys: 1 to 9 looks, up and down dimmer, A all lights, C copy, V paste, hold Space to peek, Ctrl Z undo"><kbd>1–9</kbd> looks <kbd>↑</kbd><kbd>↓</kbd> dimmer <kbd>A</kbd> all <kbd>C</kbd><kbd>V</kbd> copy, paste <kbd>Space</kbd> peek <kbd>Ctrl Z</kbd> undo</span>${ui.adv ? '' : '-->'}</div>`;
 }
 // how many faces the open look lights, for the desk's stage bar
 function facesSummary() {
@@ -3113,8 +3121,7 @@ function deskSet(patch, live) {
 const deskMapPt = e => { const svgEl = $('ldMap'), pt = svgEl.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const q = pt.matrixTransform(svgEl.getScreenCTM().inverse()); return { x: q.x, y: q.y }; };
 $('deskDlg').addEventListener('click', e => {
   if (e.target === $('deskDlg')) { closeDesk(); return; }
-  if (desk.lib && !e.target.closest('[data-lib], [data-libuse], [data-libdel]')) { desk.lib = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }
-  if (desk.moods && !e.target.closest('[data-moods], [data-mood]')) { desk.moods = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the mood menu
+  if ((desk.add || desk.lmenu) && !e.target.closest('.ld-addmenu, .ld-lookmenu, [data-addlook], [data-lookmenu]')) { desk.add = desk.lmenu = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the look menus
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'ldDone') { closeDesk(); return; }
   if (desk.ctx && !t.closest('.ld-ctx')) { desk.ctx = null; renderDesk(); return; }
@@ -3128,12 +3135,12 @@ $('deskDlg').addEventListener('click', e => {
   if (t.id === 'ldUndo') { undo(); renderDesk(); return; }
   if (t.id === 'ldRedo') { redo(); renderDesk(); return; }
   if (t.hasAttribute('data-fxcopy')) { deskCopy(); return; }
-  if (t.hasAttribute('data-moods')) { desk.moods = !desk.moods; desk.lib = false; renderDesk(); return; }
-  if (t.hasAttribute('data-lib')) { desk.lib = !desk.lib; desk.moods = false; renderDesk(); return; }
+  if (t.hasAttribute('data-addlook')) { desk.add = !desk.add; desk.lmenu = false; renderDesk(); return; }
+  if (t.hasAttribute('data-lookmenu')) { desk.lmenu = !desk.lmenu; desk.add = false; renderDesk(); return; }
   if (t.dataset.libuse) { libUse(t.dataset.libuse); return; }
   if (t.dataset.libdel) { const e = lookLib().find(x => x.id === t.dataset.libdel); if (e) { db.lookLib = lookLib().filter(x => x !== e); save(); toast(`“${e.name}” removed from the library`); renderDesk(); } return; }
-  if (t.hasAttribute('data-libsave')) { libSave(); return; }
-  if (t.id === 'ldBigGo') { desk.big = true; desk.moods = desk.lib = false; renderDesk(); return; }
+  if (t.hasAttribute('data-libsave')) { desk.lmenu = false; libSave(); return; }
+  if (t.id === 'ldBigGo') { desk.big = true; desk.add = desk.lmenu = false; renderDesk(); return; }
   if (t.id === 'ldBigExit') { desk.big = false; renderDesk(); return; }
   if (t.dataset.mood) { moodLook(t.dataset.mood); return; }
   if (t.hasAttribute('data-fxpaste')) { deskPaste(); return; }
@@ -3144,8 +3151,8 @@ $('deskDlg').addEventListener('click', e => {
   if (t.hasAttribute('data-gcancel')) { desk.naming = false; renderDesk(); return; }
   if (t.dataset.gdel) { const g = lgroups().find(x => x.id === t.dataset.gdel); if (g) { mutate(() => { plan.lgroups = plan.lgroups.filter(x => x.id !== g.id); }, `Group “${g.name}” deleted`); renderDesk(); } return; }
   if (t.dataset.look) { switchLook(t.dataset.look); return; }
-  if (t.hasAttribute('data-looknew')) { mutate(() => { const cur = ensureLook(); if (plan.looks.length === 1 && !Object.keys(cur.fx).length) return; const L = { id: uid(), name: `Look ${plan.looks.length + 1}`, fx: JSON.parse(JSON.stringify(cur.fx)) }; plan.looks.push(L); plan.lookId = L.id; }); renderDesk(); setTimeout(() => $('ldLookName')?.select(), 30); return; }
-  if (t.hasAttribute('data-lookdel')) { const cur = curLook(); if (cur) { fadeLooksFrom(); mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; }, `Deleted ${cur.name}`); renderDesk(); } return; }
+  if (t.hasAttribute('data-looknew')) { desk.add = false; mutate(() => { const cur = ensureLook(); if (plan.looks.length === 1 && !Object.keys(cur.fx).length) return; const L = { id: uid(), name: `Look ${plan.looks.length + 1}`, fx: JSON.parse(JSON.stringify(cur.fx)) }; plan.looks.push(L); plan.lookId = L.id; }); renderDesk(); setTimeout(() => $('ldLookName')?.select(), 30); return; }
+  if (t.hasAttribute('data-lookdel')) { desk.lmenu = false; const cur = curLook(); if (cur) { fadeLooksFrom(); mutate(() => { plan.looks = plan.looks.filter(l => l !== cur); plan.lookId = plan.looks[0]?.id; }, `Deleted ${cur.name}`); renderDesk(); } return; }
 });
 $('deskDlg').addEventListener('change', e => {
   const t = e.target;
@@ -3248,7 +3255,7 @@ $('deskDlg').addEventListener('pointerdown', e => {
   };
   window.addEventListener('pointermove', move);
   const end = () => { window.removeEventListener('pointermove', move); const b = desk.box; desk.box = null; if (!b) return; const x0 = Math.min(b.x0, b.x1), x1 = Math.max(b.x0, b.x1), y0 = Math.min(b.y0, b.y1), y1 = Math.max(b.y0, b.y1);
-    if (x1 - x0 < .5 && y1 - y0 < .5) { renderDesk(); return; }   // a click on empty stage keeps what's picked
+    if (x1 - x0 < .5 && y1 - y0 < .5) { if (!b.add) deskSel = new Set(); renderDesk(); return; }   // a click on empty stage lets go of the picked lights
     const hit = deskLights().filter(i => i.x >= x0 && i.x <= x1 && i.y >= y0 && i.y <= y1).map(i => i.id);
     deskSel = new Set([...(b.add ? deskPicked().map(i => i.id) : []), ...hit]); renderDesk(); };
   window.addEventListener('pointerup', end, { once: true });
@@ -3264,30 +3271,28 @@ function groupsSheetHtml() {
   return `<h3 class="dmxh">Groups</h3><div class="lookrows">${gs.map(g => `<div class="lookrow"><b>${esc(g.name)}</b><div class="lookfx"><span>${esc(g.ids.map(id => itemName(itemById(id))).join(', '))}</span></div></div>`).join('')}</div>`;
 }
 // the details panel for lights, the lighting console and the things lights hang on
+// the details panel for lights, the lighting console and the things lights hang on: what most people need up front,
+// DMX, throw, beam and the rest under More settings
 function lightingInsp(it) {
   const C = cat(it);
-  if (C.mount) {
-    const n = plan.items.filter(i => mountOf(i) === it).length;
-    return `<section class="isec"><h3>Hanging position <span>${plural(n, 'light')}</span></h3><div class="grid2">${field('iLen', 'Length', mVal(prop(it, 'w')), 'number', 'step=".1" min=".5"', 'm')}${field('iMountH', 'Height', mVal(mountH(it)), 'number', 'step=".1" min="1"', 'm')}</div>
-      <p class="hint">Lights placed on it hang from it, and its lights share a DMX line.</p></section>`;
-  }
-  if (C.ldesk) {
-    const L = dmxLines();
-    return `<section class="isec"><h3>DMX lines <span>${L.length}</span></h3>${L.length ? `<div class="dmxlines">${L.map(l => `<div><b>Line ${l.name}</b><small>${esc(l.from)} · universe ${l.universe} · ${plural(l.items.length, 'light')}</small></div>`).join('')}</div>` : '<p class="hint">No lights connected yet.</p>'}
+  if (C.mount) { const n = plan.items.filter(i => mountOf(i) === it).length; return { basic: `<section class="isec"><h3>Hanging position <span>${plural(n, 'light')}</span></h3><div class="grid2">${field('iLen', 'Length', mVal(prop(it, 'w')), 'number', 'step=".1" min=".5"', 'm')}${field('iMountH', 'Height', mVal(mountH(it)), 'number', 'step=".1" min="1"', 'm')}</div>
+      <p class="hint">Lights placed on it hang from it, and its lights share a DMX line.</p></section>` }; }
+  if (C.ldesk) { const L = dmxLines(); return { basic: deskLaunch(), adv: `<section class="isec"><h3>DMX lines <span>${L.length}</span></h3>${L.length ? `<div class="dmxlines">${L.map(l => `<div><b>Line ${l.name}</b><small>${esc(l.from)} · universe ${l.universe} · ${plural(l.items.length, 'light')}</small></div>`).join('')}</div>` : '<p class="hint">No lights connected yet.</p>'}
       <button class="btn quiet block" id="iReaddr">${ic('wand', 'sm')}Re-address every light</button>
-      <label class="row" for="iPowerLink" style="gap:8px;flex-wrap:nowrap;margin-top:10px"><input type="checkbox" id="iPowerLink" ${plan.settings.powerLink !== false ? 'checked' : ''} style="accent-color:var(--accent)"><span>Pass power light to light<small class="hint" style="display:block">Lights with power out are linked along their line</small></span></label></section>${deskLaunch()}`;
-  }
-  const w = dmxWhere().get(it.id), n = dmxCh(it), hang = mountOf(it);
+      <label class="row" for="iPowerLink" style="gap:8px;flex-wrap:nowrap;margin-top:10px"><input type="checkbox" id="iPowerLink" ${plan.settings.powerLink !== false ? 'checked' : ''} style="accent-color:var(--accent)"><span>Pass power light to light<small class="hint" style="display:block">Lights with power out are linked along their line</small></span></label></section>` }; }
+  const w = dmxWhere().get(it.id), n = dmxCh(it), hang = mountOf(it), fix = isFixture(it), a = frontAngle(it);
   const where = w ? `Universe ${w.line.universe} · line ${w.line.name}${it.dmxA ? ` · ${it.dmxA}–${it.dmxA + n - 1}` : ''}` : 'Not on a DMX line';
-  return `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><div class="grid2">${field('iDmxA', 'Start address', it.dmxA || '', 'number', 'min="1" max="512" step="1"')}${field('iDmxCh', 'Channels (mode)', n, 'number', 'min="1" max="64" step="1"')}</div>
-    ${isFixture(it) ? `<div class="field" style="margin-top:8px"><label for="iLType">Light type</label><select id="iLType">${LIGHT_TYPES().map(t => `<option value="${t}" ${t === it.type ? 'selected' : ''}>${esc(CAT[t].name)}</option>`).join('')}</select></div>` : ''}
-    ${(() => { const a = frontAngle(it); return a == null ? '' : `<p class="hint" style="margin:8px 0 0">${hang ? `Hangs at ${uLen(fixtureH(it))}. ` : ''}Hits faces at <b>${Math.round(a)}°</b>${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ', a good angle'} (30–50° is best).</p>`; })()}
-    ${isFixture(it) && !hang ? `<label class="row" for="iUp" style="gap:8px;flex-wrap:nowrap;margin-top:8px"><input type="checkbox" id="iUp" ${isUp(it) ? 'checked' : ''} style="accent-color:var(--accent)"><span>Shines upward<small class="hint" style="display:block">Up a wall, the set or a backdrop</small></span></label>` : ''}
-    ${isFixture(it) ? `<div class="grid2" style="margin-top:8px">${field('iThrow', 'Throw', mVal(throwOf(it)), 'number', 'step=".1" min=".5"', 'm')}${cat(it).zoom ? field('iBeam', `Beam (${cat(it).zoom.join('–')}°)`, beamOf(it), 'number', `step="1" min="${cat(it).zoom[0]}" max="${cat(it).zoom[1]}"`, '°') : ''}<div class="field"><span>Hangs on</span><p class="hint" style="margin:6px 0 0">${hang ? esc(itemName(hang)) : 'Floor or stand'}</p></div></div>
-    <p class="hint">Drag the yellow dot on the plot to aim it${cat(it).zoom ? ', and the white dot on the pool’s edge to make the beam wider or tighter' : ''}.</p>` : ''}</section>
-    ${isFixture(it) ? `<section class="isec desk"><h3>Colour <span>${esc(curLook()?.name || 'before any look')}</span></h3><div class="row" style="gap:10px;flex-wrap:nowrap;margin-bottom:10px"><span class="bigsw" style="background:${fxSwatch(fxOf(it), it)}"></span><b>${esc(fxName(fxOf(it), it))}</b></div>
+  const basic = fix ? `<section class="isec desk"><h3>Colour <span>${esc(curLook()?.name || 'before any look')}</span></h3><div class="row" style="gap:10px;flex-wrap:nowrap;margin-bottom:10px"><span class="bigsw" style="background:${fxSwatch(fxOf(it), it)}"></span><b>${esc(fxName(fxOf(it), it))}</b></div>
       <button class="btn primary block" data-opendesk="${it.id}">${ic('sun', 'sm')}Open the lighting desk</button>
-      <button class="btn quiet block" data-mirror="${it.id}" style="margin-top:6px" title="Place a matching light on the other side of the stage, aimed the same way">${ic('copy', 'sm')}Mirror to the other side</button></section>` : ''}`;
+      <p class="hint" style="margin:10px 0 0">${hang ? `Hangs on ${esc(itemName(hang))}` : 'On the floor or a stand'}${a != null ? ` · hits faces at ${Math.round(a)}°${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ''}` : ''}. Drag the yellow dot on the plot to aim it${cat(it).zoom ? ', the white dot to size the beam' : ''}.</p></section>`
+    : `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><p class="hint" style="margin:0">${n} channels. Address and mode are under More settings.</p></section>`;
+  const adv = `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><div class="grid2">${field('iDmxA', 'Start address', it.dmxA || '', 'number', 'min="1" max="512" step="1"')}${field('iDmxCh', 'Channels (mode)', n, 'number', 'min="1" max="64" step="1"')}</div></section>` +
+    (fix ? `<section class="isec"><h3>Light</h3><div class="field"><label for="iLType">Light type</label><select id="iLType">${LIGHT_TYPES().map(t => `<option value="${t}" ${t === it.type ? 'selected' : ''}>${esc(CAT[t].name)}</option>`).join('')}</select></div>
+      <div class="grid2" style="margin-top:8px">${field('iThrow', 'Throw', mVal(throwOf(it)), 'number', 'step=".1" min=".5"', 'm')}${cat(it).zoom ? field('iBeam', `Beam (${cat(it).zoom.join('–')}°)`, beamOf(it), 'number', `step="1" min="${cat(it).zoom[0]}" max="${cat(it).zoom[1]}"`, '°') : ''}</div>
+      ${a != null ? `<p class="hint" style="margin:8px 0 0">${hang ? `Hangs at ${uLen(fixtureH(it))}. ` : ''}Hits faces at <b>${Math.round(a)}°</b>${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ', a good angle'} (30–50° is best).</p>` : ''}
+      ${!hang ? `<label class="row" for="iUp" style="gap:8px;flex-wrap:nowrap;margin-top:8px"><input type="checkbox" id="iUp" ${isUp(it) ? 'checked' : ''} style="accent-color:var(--accent)"><span>Shines upward<small class="hint" style="display:block">Up a wall, the set or a backdrop</small></span></label>` : ''}
+      <button class="btn quiet block" data-mirror="${it.id}" style="margin-top:8px" title="Place a matching light on the other side of the stage, aimed the same way">${ic('copy', 'sm')}Mirror to the other side</button></section>` : '');
+  return { basic, adv };
 }
 // the lighting patch: every light by universe and address, with where it hangs, its line and its power
 const dmxAddr = r => r.u && r.a ? `${r.u}.${String(r.a).padStart(3, '0')}` : '—';
@@ -5782,7 +5787,7 @@ function renderInspector() {
         <div class="field"><label for="iBoxes">Boxes in the hang</label><div class="row" style="gap:6px"><button class="btn" data-boxes="-1" aria-label="One box fewer" ${n <= 1 ? 'disabled' : ''}>${ic('minus', 'sm')}</button><input id="iBoxes" type="number" min="1" max="${mx}" step="1" value="${n}" style="text-align:center;flex:1"><button class="btn" data-boxes="1" aria-label="One box more" ${n >= mx ? 'disabled' : ''}>${ic('plus', 'sm')}</button></div></div>
         <p class="hint">Power draw follows the box count (${Math.round(cat(it).watts / LA_BOXES[it.type].def)} W a box).</p></section>`;
     }
-    if (isDmx(it) || C.ldesk || C.mount) basic += lightingInsp(it);
+    if (isDmx(it) || C.ldesk || C.mount) { const li = lightingInsp(it); basic += li.basic; if (li.adv) adv.unshift(li.adv); }
     // risers are sized by hand, so their size stays up front; everything else is set by its type
     if (isRiser) basic += `<section class="isec"><h3>${C.walk ? 'Walkway size' : 'Riser size'}</h3><div class="grid3">${field('iW', 'Width', mVal(prop(it, 'w')), 'number', 'step=".1" min=".5"', 'm')}${field('iD', 'Depth', mVal(prop(it, 'd')), 'number', 'step=".1" min=".5"', 'm')}${C.walk ? '' : field('iH', 'Height', mVal(it.h ?? fromM(.4)), 'number', 'step=".05" min="0"', 'm')}</div><p class="hint">${C.walk ? 'Floor cables crossing it show up in Checks. ' : ''}Or drag a corner on the plot.</p></section>`;
     adv.push(`<section class="isec"><h3>Position${isRiser ? '' : ' &amp; size'}</h3>
@@ -5798,7 +5803,7 @@ function renderInspector() {
     // owner up front for people and owned gear; shared gear (stage boxes, distros, speakers) keeps it under More settings
     const ownerUp = C.shape === 'person' || !!it.personId, ownerField = `<div class="field"><label for="iPerson">Belongs to</label><select id="iPerson">${pOpts}</select></div>`;
     if (!ownerUp && plan.team.length) adv.unshift(`<section class="isec">${ownerField}</section>`);
-    const moreWhat = [!ownerUp && plan.team.length ? 'owner' : '', 'position', isRiser ? '' : 'size', C.wireless || isPowerSource(it) || isRiser ? '' : 'power draw', ins.length || C.inputs ? 'input names' : '', isExt(it) || isPowerSource(it) ? 'ratings' : '', it.type === 'stagebox' ? 'ports' : ''].filter(Boolean).join(', ');
+    const moreWhat = [C.ldesk ? 'DMX lines' : isDmx(it) ? 'DMX' : '', isFixture(it) ? 'aim and beam' : '', !ownerUp && plan.team.length ? 'owner' : '', 'position', isRiser ? '' : 'size', C.wireless || isPowerSource(it) || isRiser ? '' : 'power draw', ins.length || C.inputs ? 'input names' : '', isExt(it) || isPowerSource(it) ? 'ratings' : '', it.type === 'stagebox' ? 'ports' : ''].filter(Boolean).join(', ');
     const conns = plan.cables.filter(x => touches(x, it.id));
     el.innerHTML = `<div class="insp">
       <div class="insp-head">${C.shape === 'person' ? `<span class="avatar tone-${roleTone(owner?.role)}${owner ? ` hued" style="--hue:${personColour(owner.id)};width:44px;height:44px` : '" style="width:44px;height:44px'}">${esc(initials(owner?.name || it.label))}</span>` : itemPreview(it, 'ipv ipv-lg')}
@@ -6991,7 +6996,7 @@ function closePops() { $('weekPop').hidden = true; $('weekBtn').setAttribute('ar
 document.addEventListener('keydown', e => {
   if (!$('histDlg').hidden) { if (e.key === 'Escape') $('histDlg').hidden = true; return; }
   if (!$('cmdk').hidden) return;
-  if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.moods || desk.naming || desk.lib || desk.ctx)) { desk.moods = desk.naming = desk.lib = false; desk.ctx = null; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
+  if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.add || desk.lmenu || desk.naming || desk.ctx)) { desk.add = desk.lmenu = desk.naming = false; desk.ctx = null; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
   if (!$('rackDlg').hidden) {
     const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
     if (e.key === 'Escape') closeRack();
