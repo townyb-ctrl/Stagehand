@@ -131,6 +131,10 @@ Open `index.html` in a modern browser to run it.
 - **Desk layout** (the sliders button in the desk's header): *Dock beside the plot* turns the desk into a side panel so the real stage plot stays full size beside it (it re-fits, picking a light on the plot picks it in the desk, and the plot keeps its keys); *Compact* for small screens (on by default when the window is short); *Hide the colour panel* gives the stage the full width (the looks move up to the top bar), with a slim *Colour* strip to bring it back. Remembered on this device.
 - **Resize the docked desk**: drag its left edge (340–760 px); double-click the edge for the usual width. The plot re-fits and the width is remembered.
 - **Stage pictures on looks** (layout menu): look buttons are small name buttons by default so many fit in one row; turn this on for bigger buttons with a tiny picture of the stage in each look.
+- **Fold the looks**: the *Looks* heading folds the card to one line showing the open look, giving the colour panel more room. Remembered on this device.
+- **One colour card**: the picked lights, their colour, *Flash* and (Advanced) Copy and Paste head the colour card instead of a separate box.
+- **Warm to cool**: a *White* slider under the wheel sets a white from 2700 K (tungsten) to 6500 K (daylight). On colour lights it mixes red, green, blue and white to match; on white-only lights (profiles, fresnels) it stands for a gel or the fixture's own white. Moving the wheel or a colour fader afterwards clears it.
+- **Map details**: picked lights get an accent outline in their own fixture's shape (no ring); trusses draw as box truss with chords and lattice, pipes and FOH bars with end caps; where names would run into each other only the picked lights keep theirs and the rest show on hover.
 - **Keyboard shortcuts** (the *?* button in the desk's header, or press ?): every desk key in one small list; Esc closes it. The footer no longer carries the key hints.
 - **Picked lights remembered**: reopening the desk brings back the lights you had picked, for each week.
 - **Reset a look**: *⋯ → Reset to warm white* clears a look's colours and master in one step (undoable).
