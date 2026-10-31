@@ -828,7 +828,7 @@ svg text { font-family: var(--f-ui); }
 .dmxlines { display: grid; gap: 6px; margin-bottom: 8px; } .dmxlines div { display: grid; } .dmxlines small { color: var(--muted); font-size: 12px; }
 .lb-pool.on { stroke: var(--lc); stroke-width: .05; } .lb-pool.mover { stroke: var(--lc); stroke-opacity: .6; stroke-width: .04; stroke-dasharray: .25 .18; }
 .lb-wall { stroke-width: .12; stroke-linecap: round; fill: none; } .lb-up.on { stroke: rgba(255, 214, 110, .5); stroke-width: .03; }
-.beams.lit .lb { mix-blend-mode: screen; } .beams.lit { isolation: isolate; } .lb-glow { pointer-events: none; }
+.beams.lit .lb, .beams .lit .lb { mix-blend-mode: screen; } .beams.lit, .beams .lit { isolation: isolate; } .lb-glow { pointer-events: none; }
 .ld-planks { pointer-events: none; }
 .lb-off { fill: none; stroke: rgba(160, 170, 180, .55); stroke-width: .04; stroke-dasharray: .2 .15; }
 .zoomh { fill: #fff; stroke: #3a2c05; stroke-width: calc(var(--labs) * .6); cursor: ew-resize; }
@@ -3146,7 +3146,7 @@ let lookFade = null;
 const LOOK_FADE_MS = 700;
 function fadeLooksFrom() {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !deskLights().length) return;
-  lookFade = { t: performance.now(), plot: beamsSvg(new Set(selIds()), 'lbo'), map: desk.open ? beamsSvg(new Set(), 'lbmo', 2.2) : '' };
+  lookFade = { t: performance.now(), plot: beamsSvg(new Set(selIds()), 'lbo', lum(plan.stage.color) > .55 ? 1 : 1.35, curLook(), { deck: lum(plan.stage.color) > .55 ? 'light' : 'dark' }), map: desk.open ? beamsSvg(new Set(), 'lbmo', 2.2) : '' };
   setTimeout(() => { if (lookFade && performance.now() - lookFade.t >= LOOK_FADE_MS - 20) lookFade = null; }, LOOK_FADE_MS + 30);
 }
 // new beams fade in under the old ones fading out; drawn again mid-fade, they pick up where they were
@@ -5373,7 +5373,7 @@ function renderPlot() {
 
   if (!layersBypass) s += overlaySvg(deckD);
   const selItem = sel?.kind === 'item' ? sel.id : null, selSet = new Set(selIds()), solo = selSet.size === 1;
-  if (!layerOff('beams') && plan.items.some(isFixture)) { const R = roomRect(); s += `<rect class="room-wall" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/>` + fadedBeams(beamsSvg(selSet), 'plot'); }
+  if (!layerOff('beams') && plan.items.some(isFixture)) { const R = roomRect(); s += `<rect class="room-wall" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/>` + fadedBeams(beamsSvg(selSet, 'lbp', lum(plan.stage.color) > .55 ? 1 : 1.35, curLook(), { deck: lum(plan.stage.color) > .55 ? 'light' : 'dark' }), 'plot'); }
   const lifted = drag?.kind === 'item' && drag.moved ? new Set([drag.id, ...(drag.others || []).map(o => o.id)]) : null;   // gear in hand rises off the deck
   const tr = tracing && selItem === tracing && !layersBypass ? traceSets(tracing) : null;   // signal trace runs while its source stays picked
   svg.classList.toggle('tracing', !!tr);
@@ -7989,7 +7989,9 @@ function wallDist(x, y, ux, uy) {   // how far from (x, y) along (ux, uy) to the
   if (uy > 1e-6) t = Math.min(t, (R.y1 - y) / uy); else if (uy < -1e-6) t = Math.min(t, (R.y0 - y) / uy);
   return Math.max(.2, t);
 }
-function beamsSvg(selSet, pre = 'lbp', k = 1, L = curLook()) {   // k: how much brighter to draw (the desk's dark map); L: which look
+// k: how much brighter to draw (the desk's dark map); L: which look; o.deck: on the plot, light mixes like light only over a
+// dark stage floor (over the light page around it, and on a light floor, the beams stay as they are)
+function beamsSvg(selSet, pre = 'lbp', k = 1, L = curLook(), opt = {}) {
   let s = '';
   for (const it of plan.items) {
     if (!isFixture(it) || !itemShown(it)) continue;
@@ -8019,8 +8021,12 @@ function beamsSvg(selSet, pre = 'lbp', k = 1, L = curLook()) {   // k: how much 
     if (one) s += `<g class="lb${desk.flash?.has(it.id) ? ' flash' : ''}" data-b="${it.id}">${one}</g>`;
   }
   const R = roomRect();   // light stops at the walls
-  const soft = k > 1 ? `<filter id="${pre}-soft" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="${f3(fromM(.06))}"/></filter>` : '';
-  return `<g class="beams${k > 1 ? ' lit' : ''}" aria-hidden="true"><clipPath id="${pre}-room"><rect x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/></clipPath>${soft}<g clip-path="url(#${pre}-room)"${soft ? ` filter="url(#${pre}-soft)"` : ''}>${s}</g></g>`;
+  const soft = `<filter id="${pre}-soft" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="${f3(fromM(.06))}"/></filter>`, room = `<clipPath id="${pre}-room"><rect x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/></clipPath>`;
+  if (!opt.deck) return `<g class="beams lit" aria-hidden="true">${room}${soft}<g clip-path="url(#${pre}-room)" filter="url(#${pre}-soft)">${s}</g></g>`;
+  let defs = ''; const shapes = s.replace(/<(linear|radial)Gradient[\s\S]*?<\/\1Gradient>/g, m => { defs += m; return ''; }), dp = polyPath(stagePoly());
+  if (opt.deck === 'light') return `<g class="beams" aria-hidden="true">${room}${soft}<defs>${defs}</defs><g clip-path="url(#${pre}-room)" filter="url(#${pre}-soft)">${shapes}</g></g>`;
+  return `<g class="beams" aria-hidden="true">${room}${soft}<defs>${defs}<clipPath id="${pre}-deck"><path d="${dp}"/></clipPath><mask id="${pre}-off" maskUnits="userSpaceOnUse" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"><rect x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}" fill="#fff"/><path d="${dp}" fill="#000"/></mask></defs>
+    <g clip-path="url(#${pre}-room)"><g mask="url(#${pre}-off)" filter="url(#${pre}-soft)">${shapes}</g><g class="lit" clip-path="url(#${pre}-deck)"><g filter="url(#${pre}-soft)">${shapes}</g></g></g></g>`;
 }
 const PERSON_HUES = ['#f472b6', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#fb7185', '#22d3ee', '#fb923c'];
 const personHue = pid => { const i = plan.team.findIndex(p => p.id === pid); return i < 0 ? null : PERSON_HUES[i % PERSON_HUES.length]; };
