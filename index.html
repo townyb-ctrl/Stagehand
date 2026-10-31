@@ -830,6 +830,8 @@ svg text { font-family: var(--f-ui); }
 .lb-wall { stroke-width: .12; stroke-linecap: round; fill: none; } .lb-up.on { stroke: rgba(255, 214, 110, .5); stroke-width: .03; }
 .beams.lit .lb, .beams .lit .lb { mix-blend-mode: screen; } .beams.lit, .beams .lit { isolation: isolate; } .lb-glow { pointer-events: none; }
 .ld-planks { pointer-events: none; }
+.ld-aim { cursor: move; } .ld-aimhit { fill: transparent; } .ld-aimline { stroke: rgba(255,255,255,.55); fill: none; pointer-events: none; } .ld-aimc { fill: rgba(0,0,0,.25); stroke: #fff; } .ld-aimx { stroke: #fff; stroke-linecap: round; }
+.ld-aim:hover .ld-aimc, .ld-aim:focus-visible .ld-aimc { stroke: var(--ld-acc); fill: rgba(0,0,0,.4); } .ld-aim:focus-visible { outline: none; }
 .ld-front { width: 100%; height: 100%; display: block; } .lf-bg { fill: #07090d; } .lf-wall { fill: #1a1f29; } .lf-floor { fill: #0d1016; } .lf-deck { fill: #222833; stroke: rgba(255,255,255,.12); stroke-width: 1; } .lf-face { fill: #11151c; stroke: rgba(255,255,255,.08); stroke-width: 1; }
 .lf-light > *, .lf-up { mix-blend-mode: screen; } .lf-rig { stroke: #4b5363; stroke-linecap: round; fill: none; } .lf-rig.truss { stroke: #3a414e; stroke-dasharray: 3 2; }
 .lf-body { fill: #2b313b; stroke: #5d6676; stroke-width: 1; } .lf-lens { stroke: rgba(0,0,0,.4); stroke-width: .6; } .lf-fx { cursor: pointer; } .lf-sel { fill: none; stroke: var(--ld-acc); stroke-width: 2; } .lf-fx:focus-visible { outline: none; } .lf-fx:focus-visible .lf-body { stroke: var(--ld-acc); stroke-width: 2; }
@@ -3085,9 +3087,15 @@ function lookThumb(L, k) { const { vb } = deskFrame(); return `<svg class="ld-th
 // the desk's stage: the map, or (List) every light in a row with its colour and level
 // the picked lights as chips under the stage (× lets one go); with none or all picked, a line saying how to pick
 function deskChipsHtml(all, picked) {
-  if (!picked.length || picked.length === all.length) return `<p class="ld-tip">${picked.length ? `All ${plural(all.length, 'light')} picked <span>·</span> ` : ''}Click a light to pick it <span>·</span> Shift-click to add <span>·</span> drag across the stage to pick several</p>`;
+  if (!picked.length || picked.length === all.length) return `<p class="ld-tip">${picked.length ? `All ${plural(all.length, 'light')} picked <span>·</span> Drag a target to aim (Shift: all together) <span>·</span> ` : ''}Click a light to pick it <span>·</span> Shift-click to add <span>·</span> drag across the stage to pick several</p>`;
   const show = picked.slice(0, 10);
   return `<div class="ld-chips" aria-label="Picked lights">${show.map(i => `<span class="ld-chip"><i style="background:${fxSwatch(fxOf(i), i)}"></i>${esc(itemName(i))}<button data-unpick="${i.id}" aria-label="Let go of ${esc(itemName(i))}" title="Let go">${ic('x', 'sm')}</button></span>`).join('')}${picked.length > 10 ? `<span class="ld-chip more">+${picked.length - 10} more</span>` : ''}</div>`;
+}
+// turn a light to face a point on the stage and throw that far (5° steps, or any angle with free)
+function aimLight(it, x, y, free) {
+  if (!it) return; const dx = x - it.x, dy = y - it.y, L = Math.hypot(dx, dy); if (L < fromM(.3)) return;
+  let a = Math.atan2(dx, -dy) * 180 / Math.PI; if (!free) a = Math.round(a / 5) * 5;
+  it.rot = ((Math.round(a) % 360) + 360) % 360; it.throw = r2(Math.max(fromM(.5), L));
 }
 function deskStageHtml() { return desk.big ? deskMapSvg() : desk.view === 'list' ? deskListHtml() : desk.view === 'front' ? deskFrontSvg() : deskMapSvg(); }
 /* Audience view: the stage as the congregation sees it, in perspective from a seat in the middle of the room. The back wall,
@@ -3209,10 +3217,13 @@ function deskMapSvg() {
   const dots = lights.map(i => { const f = fxOf(i), sw = fxSwatch(f, i), shape = ldShape(i, sw, rr, U), on = picked.has(i.id);
     const halo = on || desk.flash?.has(i.id) ? `<g class="ld-halo">${shape.replace(/class="[^"]*"/g, '').replace(/style="[^"]*"/g, `style="stroke-width:${f3(U * .7)}"`)}</g>` : '';
     return `<g class="ld-fx${on ? ' on' : ''}${desk.flash?.has(i.id) ? ' flashing' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .9)}" style="stroke-width:${f3(U * .3)}"/>${halo}${shape}<text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px" class="${showAddr ? 'addr' : ''}${crowd.has(i.id) && !on ? ' crowd' : ''}">${esc(lab(i))}</text></g>`; }).join('');
+  // where each picked light lands: a target to drag (Shift drags every picked light's target together)
+  const aims = desk.big || weekLocked() || lookPeek ? '' : deskPicked().filter(i => !isUp(i)).map(i => { const g = beamGeom(i), x = f3(g.cx), y = f3(g.cy), r = f3(U * 1.15);
+    return `<g class="ld-aim" data-ldaim="${i.id}" role="button" tabindex="0" aria-label="Aim ${esc(itemName(i))}: drag to move where it lands, or use the arrow keys" title="Drag to aim ${esc(itemName(i))} (Shift: all picked lights, Alt: free angle)"><line class="ld-aimline" x1="${f3(i.x)}" y1="${f3(i.y)}" x2="${x}" y2="${y}" style="stroke-width:${f3(U * .16)};stroke-dasharray:${f3(U * .6)} ${f3(U * .45)}"/><circle class="ld-aimhit" cx="${x}" cy="${y}" r="${f3(U * 2.2)}"/><circle class="ld-aimc" cx="${x}" cy="${y}" r="${r}" style="stroke-width:${f3(U * .28)}"/><path class="ld-aimx" d="M${f3(g.cx - U * 1.9)} ${y}h${f3(U * 1.1)}M${f3(g.cx + U * .8)} ${y}h${f3(U * 1.1)}M${x} ${f3(g.cy - U * 1.9)}v${f3(U * 1.1)}M${x} ${f3(g.cy + U * .8)}v${f3(U * 1.1)}" style="stroke-width:${f3(U * .22)}"/></g>`; }).join('');
   const L = curLook(), faces = stagePeople().map(p => { const st = faceState(p, L), nm = personById(p.personId)?.name || itemName(p);
     return `<g class="ld-face ${st}"><title>${esc(nm)}: ${st === 'lit' ? 'face lit' : st === 'deep' ? 'lit only in deep colour' : st === 'side' ? 'lit from one side only' : 'in the dark'}</title><circle cx="${f3(p.x)}" cy="${f3(p.y)}" r="${f3(U * 1.5)}" style="stroke-width:${f3(U * .28)}"/><text x="${f3(p.x)}" y="${f3(p.y + U * .5)}" text-anchor="middle" style="font-size:${f3(U * 1.3)}px">${esc(initials(nm))}</text></g>`; }).join('');
   return `${desk.zoom && !desk.big ? `<button class="ld-fit" id="ldFit" title="Show the whole stage (double-click the map)">${ic('fit', 'sm')}Fit</button>` : ''}<svg class="ld-map" id="ldMap" viewBox="${desk.big ? vb : deskZoomVb(vb)}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
-    <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/><pattern id="ldBoards" width="8" height="1.2" patternUnits="userSpaceOnUse"><path d="M0 .6h8M0 1.2h8M0 0v.6M4 .6v.6" fill="none" stroke="rgba(255,255,255,.035)" stroke-width=".035"/></pattern><path class="ld-planks" d="${polyPath(stagePoly())}" fill="url(#ldBoards)"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${faces}${dots}</svg>`;
+    <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/><pattern id="ldBoards" width="8" height="1.2" patternUnits="userSpaceOnUse"><path d="M0 .6h8M0 1.2h8M0 0v.6M4 .6v.6" fill="none" stroke="rgba(255,255,255,.035)" stroke-width=".035"/></pattern><path class="ld-planks" d="${polyPath(stagePoly())}" fill="url(#ldBoards)"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${faces}${dots}${aims}</svg>`;
 }
 /* Changing looks: the beams as they were fade out over the new ones (both on the plot and in the desk), about 0.7 s. */
 let lookFade = null;
@@ -3473,6 +3484,11 @@ document.addEventListener('pointerdown', e => { if (lookPickOpen && !e.target.cl
 $('deskDlg').addEventListener('pointerup', () => { if (lookPeek && desk.peekBtn) { desk.peekBtn = false; peekEnd(); } });
 $('deskDlg').addEventListener('keydown', e => {
   const g = e.target.closest?.('[data-ldfx]'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pickDeskFx(g.dataset.ldfx, e.shiftKey); }
+  const ah = e.target.closest?.('[data-ldaim]'), dir = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+  if (ah && dir && !weekLocked() && !lookPeek) {   // arrow keys nudge where the light lands, 25 cm (Shift: 1 m)
+    e.preventDefault(); e.stopPropagation(); const it = itemById(ah.dataset.ldaim), g = beamGeom(it), st = fromM(e.shiftKey ? 1 : .25), id = it.id;
+    mutate(() => aimLight(it, g.cx + dir[0] * st, g.cy + dir[1] * st, true), `${itemName(it)} aimed`); renderDesk(); document.querySelector(`[data-ldaim="${id}"]`)?.focus(); return;
+  }
   if (e.target.id === 'ldWheel' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {   // turn the hue with the arrows, more or less colour up and down
     e.preventDefault(); const ts = deskPicked(); if (!ts.length) return; const f = fxOf(ts[0]); let [h, sat] = rgb2hsv(f.r, f.g, f.b); if (!(f.r + f.g + f.b)) sat = 1;
     if (e.key === 'ArrowLeft') h -= 10; if (e.key === 'ArrowRight') h += 10; if (e.key === 'ArrowUp') sat = Math.min(1, sat + .1); if (e.key === 'ArrowDown') sat = Math.max(0, sat - .1);
@@ -3536,6 +3552,16 @@ $('deskDlg').addEventListener('pointerdown', e => {
     apply(e); desk.drag = 'wheel'; wheel.setPointerCapture(e.pointerId);
     wheel.onpointermove = ev => { if (desk.drag === 'wheel') apply(ev); };
     wheel.onpointerup = () => { desk.drag = null; wheel.onpointermove = null; deskCommit(); };
+    e.preventDefault(); return;
+  }
+  const ah = e.target.closest('[data-ldaim]');
+  if (ah && !weekLocked() && !lookPeek) {   // drag a target: the light turns to face it and throws that far
+    const all = e.shiftKey, ids = all ? deskPicked().filter(i => !isUp(i)).map(i => i.id) : [ah.dataset.ldaim], before = snapState(), p0 = deskMapPt(e);
+    const t0 = new Map(ids.map(id => { const g = beamGeom(itemById(id)); return [id, [g.cx, g.cy]]; })); let moved = false, raf = 0;
+    const move = ev => { const p = deskMapPt(ev); for (const id of ids) { const [tx, ty] = t0.get(id); aimLight(itemById(id), tx + p.x - p0.x, ty + p.y - p0.y, ev.altKey); } moved = true;
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; if ($('ldMapWrap')) $('ldMapWrap').innerHTML = deskStageHtml(); if ($('ldFaces')) $('ldFaces').innerHTML = facesSummary(); renderPlot(); }); };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', () => { window.removeEventListener('pointermove', move); cancelAnimationFrame(raf); if (moved) { const msg = ids.length > 1 ? `${plural(ids.length, 'light')} aimed` : `${itemName(itemById(ids[0]))} aimed`; pushUndo(before, stepLabel(msg, before)); recordRev(msg, before); save(); } renderDesk(); renderPlot(); }, { once: true });
     e.preventDefault(); return;
   }
   const row = e.target.closest('.ld-row[data-ldfx], #ldFront [data-ldfx]'); if (row) { pickDeskFx(row.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
