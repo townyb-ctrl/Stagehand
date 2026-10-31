@@ -3260,6 +3260,22 @@ function moodLook(m) {
   mutate(() => { plan.looks ||= []; const n = plan.looks.filter(l => l.name === name || l.name.startsWith(name + ' ')).length, L = { id: uid(), name: n ? `${name} ${n + 1}` : name, fx }; plan.looks.push(L); plan.lookId = L.id; }, `${name} look added: front light stays warm white`);
   renderDesk();
 }
+/* The basics every church uses: Walk-in (people arriving: a soft colour on the stage and the walls, front light off), Full
+   (everything warm white, for rehearsal and focus) and Blackout (everything off, between moments). */
+const BASICS = [['Walk-in', 'Soft blue on the stage and walls, front light off'], ['Full', 'Every light warm white at full'], ['Blackout', 'Everything off']];
+function basicFx(name) {
+  const fx = {}, pre = n => DESK_PRESETS.find(p => p[0] === n)[1], others = deskLights().filter(i => !isFrontLight(i)).sort((a, b) => a.x - b.x);
+  for (const it of deskLights()) fx[it.id] = { ...pre('Warm white'), d: name === 'Full' ? 100 : 0 };
+  if (name === 'Walk-in') others.forEach((it, k) => { fx[it.id] = { ...pre(k % 2 ? 'Congo' : 'Blue'), d: isUp(it) ? 55 : 30 }; });
+  return fx;
+}
+function basicLooks(names) {
+  fadeLooksFrom(); desk.add = false; desk.prevLook = curLook()?.id;
+  const added = [];
+  mutate(() => { plan.looks ||= []; rememberMovers(); for (const name of names) { const n = plan.looks.filter(l => l.name === name || l.name.startsWith(name + ' ')).length, L = { id: uid(), name: n ? `${name} ${n + 1}` : name, fx: basicFx(name) }; plan.looks.push(L); added.push(L); } plan.lookId = added[0].id; },
+    names.length > 1 ? `${names.join(', ')} looks added` : `${names[0]} look added`);
+  renderDesk();
+}
 /* Look library: looks saved once and reused in any week or venue. Each light's colour is kept with where it was (across
    and back on the stage, as fractions), its type, whether it hung, whether it was front light and its group's name; a week
    takes a saved look by giving each of its lights the colour of the saved light most like it. */
@@ -3340,6 +3356,7 @@ function renderDeskMain() {
   const looksHtml = `<div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-addlook aria-expanded="${!!desk.add}">${ic('plus', 'sm')}Look</button><span class="ld-lookacts">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-lookmenu aria-expanded="${!!desk.lmenu}" title="More for this look" aria-label="More for ${esc(cur.name)}">${ic('dots', 'sm')}</button>` : ''}</span></div>${desk.add ? `<div class="ld-moods ld-addmenu" role="group" aria-label="Add a look">
         <button data-looknew><span class="ld-pal">${(cur ? lookPalette(cur) : []).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${cur ? `Copy of ${esc(cur.name)}` : 'Start a look'}</button>
         <small>From a mood · front light stays warm white</small>${MOODS.map(([n, , cols]) => `<button data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}
+        <small>The basics</small>${(() => { const miss = BASICS.map(b => b[0]).filter(n => !(plan.looks || []).some(l => l.name === n)); return miss.length > 1 ? `<button data-basics="${miss.join('|')}"><span class="ld-pal"><i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === 'Blue')[1], d: 100 })}"></i><i style="background:${fxSwatch({ ...DESK_PRESETS[0][1], d: 100 })}"></i><i class="dark"></i></span>Add ${miss.length === 3 ? 'all three' : miss.join(' and ')}</button>` : ''; })()}${BASICS.map(([n, sub]) => `<button data-basics="${n}" title="${esc(sub)}"><span class="ld-pal">${n === 'Blackout' ? '<i class="dark"></i>' : n === 'Full' ? `<i style="background:${fxSwatch({ ...DESK_PRESETS[0][1], d: 100 })}"></i>` : ['Blue', 'Congo'].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}
         <small>From your library</small>${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') : '<small class="ld-empty">Nothing saved yet: open a look, then ⋯ → Save to library.</small>'}</div>` : ''}${desk.lmenu && cur ? `<div class="ld-moods ld-lookmenu" role="group" aria-label="${esc(cur.name)}"><button data-libsave>${ic('save', 'sm')}Save to library<small>Use it in any week</small></button><button data-lookreset>${ic('undo', 'sm')}Reset to warm white</button><button data-lookdel class="bad">${ic('trash', 'sm')}Delete this look</button></div>` : ''}`;
   $('ldBody').innerHTML = `<div class="ld-top${desk.nocol ? '' : ' nolooks'}">
       <div class="ld-brand"><span class="ld-logo">${ic('sun')}</span><div><h2 id="ldTitle">Lighting desk</h2><small>${plural(all.length, 'light')} · ${esc(longDate(plan.date))}</small></div></div>
@@ -3429,6 +3446,7 @@ $('deskDlg').addEventListener('click', e => {
   if (t.hasAttribute('data-viewmenu')) { desk.vmenu = !desk.vmenu; desk.add = desk.lmenu = desk.kmenu = false; renderDesk(); return; }
   if (t.hasAttribute('data-keysmenu')) { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = desk.vmenu = false; renderDesk(); return; }
   if (t.dataset.vopt) { const k = t.dataset.vopt === 'pics' ? 'slim' : t.dataset.vopt; desk[k] = !desk[k]; desk.vmenu = false; if (k === 'dock' && desk.dock) desk.view = 'list'; deskLayoutSave(); renderDesk(); if (k === 'dock') { needFit = true; renderPlot(); } return; }
+  if (t.dataset.basics) { if (deskLights().length) basicLooks(t.dataset.basics.split('|')); return; }
   if (t.hasAttribute('data-frontpic')) { frontPicture(); return; }
   if (t.hasAttribute('data-lookfold')) { desk.lfold = !desk.lfold; desk.add = desk.lmenu = false; deskLayoutSave(); renderDesk(); return; }
   if (t.hasAttribute('data-colshow')) { desk.nocol = false; deskLayoutSave(); renderDesk(); return; }
