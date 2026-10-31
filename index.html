@@ -165,7 +165,7 @@ h1, h2, h3 { margin: 0; text-wrap: balance; }
 .work { --railw: calc(336px * var(--tz, 1)); --inspw: calc(296px * var(--tz, 1)); display: grid; grid-template-columns: var(--railw) minmax(0,1fr) var(--inspw); flex: 1 1 0; min-height: 520px; transition: grid-template-columns .22s ease; }
 .work.rail-collapsed { --railw: 56px; }
 .work.insp-collapsed { --inspw: 0px; }
-.work.deskdock { --inspw: 440px; } .work.deskdock .inspector { visibility: hidden; }
+.work.deskdock { --inspw: var(--dockw, 440px); } .work.deskdock .inspector { visibility: hidden; }
 .insp-collapsed .inspector { visibility: hidden; border-left: 0; }
 .rail-collapsed .railbody, .rail-collapsed .railfoot { display: none; }
 .rail-collapsed .tabs { flex-direction: column; padding: 8px; gap: 6px; border-bottom: 0; }
@@ -657,13 +657,19 @@ svg text { font-family: var(--f-ui); }
 @media (max-width: 600px) { .ld-bigs { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; } .ld-bigmap { height: 30vh; } .ld-big { min-height: 84px; padding: 12px; } .ld-big b { font-size: 16px; } .ld-bigmap { margin: 10px 12px 0; } .ld-bigtop .ld-faces { display: none; } }
 .ld-moods button:hover { background: var(--ld-raise); }
 .ld-viewmenu { left: auto; right: 18px; top: 60px; transform: none; min-width: 270px; }
+.ld-keysmenu { left: auto; right: 60px; top: 60px; transform: none; min-width: 300px; padding: 12px 14px; gap: 8px; } .ld-keysmenu b { font-size: 13px; }
+.ld-keysmenu dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: 12.5px; } .ld-keysmenu dt { white-space: nowrap; } .ld-keysmenu dd { margin: 0; color: var(--ld-ink2); }
+.ld-keysmenu kbd { font: 600 11px var(--f-mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--ld-line2); background: var(--ld-panel); color: var(--ld-ink2); margin-right: 3px; }
+.ld-q { font-weight: 700; font-size: 14px; line-height: 1; }
+.ldesk.slim .ld-thumb { display: none; } .ldesk.slim .ld-look { min-width: 0; grid-template-rows: auto; padding: 6px 12px; } .ldesk.slim .ld-cueno { grid-row: auto; }
+.ld-resize { position: absolute; left: -3px; top: 0; bottom: 0; width: 7px; z-index: 8; cursor: ew-resize; } .ld-resize:hover, .ld-resize:active { background: var(--ld-acc); opacity: .35; }
 .ld-viewmenu button { align-items: flex-start; } .ld-viewmenu small { display: block; font-weight: 500; color: var(--ld-mute); font-size: 11.5px; margin-top: 2px; }
 .ld-check { width: 16px; height: 16px; flex: none; display: grid; place-items: center; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--ld-line2); margin-top: 1px; } .ld-viewmenu button[aria-pressed="true"] .ld-check { background: var(--ld-acc); color: var(--accent-ink); box-shadow: none; }
 .ld-body.nocol { grid-template-columns: minmax(0, 1fr) 44px; }
 .ld-colstrip { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 18px; border: 0; border-left: 1px solid var(--ld-line); background: var(--ld-panel); color: var(--ld-mute); font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; }
 .ld-colstrip span { writing-mode: vertical-rl; letter-spacing: .06em; } .ld-colstrip:hover { color: var(--ld-ink); }
 .overlay.docked { background: none; backdrop-filter: none; pointer-events: none; place-items: stretch end; padding: 64px 0 0; }
-.ldesk.docked { pointer-events: auto; width: 440px; height: 100%; border-radius: 0; border-width: 0 0 0 1px; box-shadow: var(--shadow-2); }
+.ldesk.docked { pointer-events: auto; width: var(--dockw, 440px); position: relative; height: 100%; border-radius: 0; border-width: 0 0 0 1px; box-shadow: var(--shadow-2); }
 .ldesk.docked .ld-body { display: block; overflow-y: auto; } .ldesk.docked .ld-stage { grid-template-rows: auto minmax(200px, 30vh) auto; } .ldesk.docked .ld-mapwrap { min-height: 200px; }
 .ldesk.docked .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; }
 .ldesk.docked .ld-brand small, .ldesk.docked .ld-keys, .ldesk.docked #ldBigGo { display: none; }
@@ -2995,8 +3001,8 @@ function deskLaunch() {
 /* The lighting desk: a window of its own. Looks across the top; the stage on the left, where you pick lights and see their
    beams; colour on the right: a wheel, presets, and RGBW and dimmer faders. */
 const desk = { open: false, drag: null, box: null };
-try { const v = JSON.parse(localStorage.getItem('stageplot.deskLayout') || '{}'); desk.dock = !!v.dock; desk.nocol = !!v.nocol; desk.compact = v.compact ?? innerHeight < 760; } catch { /* defaults */ }
-const deskLayoutSave = () => { try { localStorage.setItem('stageplot.deskLayout', JSON.stringify({ dock: !!desk.dock, nocol: !!desk.nocol, compact: !!desk.compact })); } catch { /* memory only */ } };
+try { const v = JSON.parse(localStorage.getItem('stageplot.deskLayout') || '{}'); desk.dock = !!v.dock; desk.nocol = !!v.nocol; desk.compact = v.compact ?? innerHeight < 760; desk.slim = !!v.slim; desk.dockw = v.dockw || 440; } catch { /* defaults */ }
+const deskLayoutSave = () => { try { localStorage.setItem('stageplot.deskLayout', JSON.stringify({ dock: !!desk.dock, nocol: !!desk.nocol, compact: !!desk.compact, slim: !!desk.slim, dockw: desk.dockw || 440 })); } catch { /* memory only */ } };
 try { desk.view = localStorage.getItem('stageplot.deskView') || 'map'; desk.label = localStorage.getItem('stageplot.deskLabel') || 'name'; } catch { desk.view = 'map'; desk.label = 'name'; }
 // three short pointers the first time the desk opens, then never again
 const DESK_TIPS = [['Pick lights', 'Click lights on the stage, or a group above it. Shift-click adds more.', '#ldMapWrap'], ['Choose a colour', 'Use the wheel or a colour button; the beams change as you go. Dim sets how bright.', '#ldColour'], ['Keep it as a look', 'Changes save to the open look. + Look adds another: a copy, a mood or one from your library.', '[data-addlook]']];
@@ -3015,7 +3021,7 @@ function openDesk(onlyId) {
   if (onlyId) deskSel = new Set([onlyId]);
   desk.open = true; $('deskDlg').hidden = false; renderDesk(); setTimeout(() => $('ldDone')?.focus(), 30);
 }
-function closeDesk() { if ($('plotView').classList.contains('deskdock')) { $('plotView').classList.remove('deskdock'); needFit = true; setTimeout(() => { needFit = true; renderPlot(); }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260); } desk.naming = false; desk.add = false; desk.lmenu = false; desk.vmenu = false; $('deskDlg').classList.remove('docked'); desk.big = false; desk.ctx = null; lookPeek = null; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
+function closeDesk() { desk.kmenu = false; if ($('plotView').classList.contains('deskdock')) { $('plotView').classList.remove('deskdock'); needFit = true; setTimeout(() => { needFit = true; renderPlot(); }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260); } desk.naming = false; desk.add = false; desk.lmenu = false; desk.vmenu = false; $('deskDlg').classList.remove('docked'); desk.big = false; desk.ctx = null; lookPeek = null; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
 // your own named groups of lights (Front wash, Band backlight…), saved with the week
 const lgroups = () => (plan.lgroups || []).map(g => ({ ...g, ids: g.ids.filter(id => isFixture(itemById(id))) })).filter(g => g.ids.length);
 function deskGroupIds(k) {
@@ -3152,6 +3158,7 @@ function renderBig() {
     <div class="ld-bigmap" id="ldMapWrap">${deskMapSvg()}</div>${looks.length ? `<label class="ld-bigmaster"><span>Look level</span><input type="range" data-master min="0" max="100" value="${lookMaster(cur)}" aria-label="Look master"><output>${lookMaster(cur)}%</output></label>` : ''}
     <div class="ld-bigs" role="group" aria-label="Looks">${looks.length ? looks.map((l, k) => { const pal = lookPalette(l); return `<button class="ld-big" data-look="${l.id}" aria-pressed="${l.id === cur?.id}"><span class="ld-bigno">${k + 1}</span><b>${esc(l.name)}</b><span class="ld-bigthumb">${lookThumb(l, 'b' + k)}</span></button>`; }).join('') : '<p class="ld-note">No looks yet. Open the full desk to make some.</p>'}</div>`;
 }
+const DESK_KEYS = [['1–9', 'Switch to that look'], ['↑ ↓', 'Dimmer up or down (Shift: bigger steps)'], ['A', 'Pick every light'], ['C', 'Copy the colour'], ['V', 'Paste it onto the picked lights'], ['Space', 'Hold to peek at the look before'], ['Alt ← →', 'Move the open look'], ['Ctrl Z', 'Undo (Shift for redo)'], ['?', 'Show these keys'], ['Esc', 'Close menus, then the desk']];
 const FADER_COL = { r: '#c9545c', g: '#3f9a6c', b: '#4d6fc4', w: '#b9a77c', d: '#7d8494' };
 const faderPct = (k, v) => f3(v / (k === 'd' ? 100 : 255));   // how full the groove is, 0–1
 // a look's colours at a glance: its most used colours, most first
@@ -3180,6 +3187,8 @@ function renderDesk() {
   { const was = $('plotView').classList.contains('deskdock'), now = !!desk.dock && !desk.big; $('plotView').classList.toggle('deskdock', now); if (was !== now) { needFit = true; setTimeout(() => { needFit = true; renderPlot(); }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260); } }   // docked: the plot makes room, once the panels have moved
   $('ldBody').classList.toggle('docked', !!desk.dock && !desk.big);
   $('ldBody').classList.toggle('compact', !!desk.compact && !desk.big);
+  $('ldBody').classList.toggle('slim', !!desk.slim && !desk.big);
+  $('ldBody').style.setProperty('--dockw', `${desk.dockw || 440}px`); $('plotView').style.setProperty('--dockw', `${desk.dockw || 440}px`);
   if (desk.big) { renderBig(); return; }
   renderDeskMain(); deskSelSave();
   document.querySelectorAll('.ld-coach').forEach(e => e.classList.remove('ld-coach'));
@@ -3196,16 +3205,16 @@ function renderDeskMain() {
       <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-addlook aria-expanded="${!!desk.add}">${ic('plus', 'sm')}Look</button><span class="ld-lookacts">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-lookmenu aria-expanded="${!!desk.lmenu}" title="More for this look" aria-label="More for ${esc(cur.name)}">${ic('dots', 'sm')}</button>` : ''}</span></div>${desk.add ? `<div class="ld-moods ld-addmenu" role="group" aria-label="Add a look">
         <button data-looknew><span class="ld-pal">${(cur ? lookPalette(cur) : []).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${cur ? `Copy of ${esc(cur.name)}` : 'Start a look'}</button>
         <small>From a mood · front light stays warm white</small>${MOODS.map(([n, , cols]) => `<button data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}
-        <small>From your library</small>${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') : '<small class="ld-empty">Nothing saved yet: open a look, then ⋯ → Save to library.</small>'}</div>` : ''}${desk.vmenu ? `<div class="ld-moods ld-viewmenu" role="group" aria-label="Desk layout">${[['dock', desk.dock, 'Dock beside the plot', 'See the stage plot full size while you work'], ['compact', desk.compact, 'Compact', 'Smaller buttons and faders, for small screens'], ['nocol', desk.nocol, 'Hide the colour panel', 'Give the stage the full width']].map(([k, on, l, sub]) => `<button data-vopt="${k}" aria-pressed="${!!on}"><span class="ld-check">${on ? ic('check', 'sm') : ''}</span><span>${l}<small>${sub}</small></span></button>`).join('')}</div>` : ''}${desk.lmenu && cur ? `<div class="ld-moods ld-lookmenu" role="group" aria-label="${esc(cur.name)}"><button data-libsave>${ic('save', 'sm')}Save to library<small>Use it in any week</small></button><button data-lookreset>${ic('undo', 'sm')}Reset to warm white</button><button data-lookdel class="bad">${ic('trash', 'sm')}Delete this look</button></div>` : ''}
-      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><span class="ld-moodwrap"><button class="ld-icon" data-viewmenu aria-expanded="${!!desk.vmenu}" title="Layout: dock beside the plot, compact, hide the colour panel" aria-label="Desk layout">${ic(desk.dock ? 'panelR' : 'sliders', 'sm')}</button></span><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
-    <div class="ld-body${desk.nocol ? ' nocol' : ''}"><section class="ld-stage" aria-label="Stage">
+        <small>From your library</small>${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') : '<small class="ld-empty">Nothing saved yet: open a look, then ⋯ → Save to library.</small>'}</div>` : ''}${desk.kmenu ? `<div class="ld-moods ld-keysmenu" role="dialog" aria-label="Keyboard shortcuts"><b>Keyboard shortcuts</b><dl>${DESK_KEYS.map(([k, d]) => `<dt>${k.split(' ').map(x => `<kbd>${x}</kbd>`).join('')}</dt><dd>${d}</dd>`).join('')}</dl></div>` : ''}${desk.vmenu ? `<div class="ld-moods ld-viewmenu" role="group" aria-label="Desk layout">${[['dock', desk.dock, 'Dock beside the plot', 'See the stage plot full size while you work'], ['compact', desk.compact, 'Compact', 'Smaller buttons and faders, for small screens'], ['nocol', desk.nocol, 'Hide the colour panel', 'Give the stage the full width'], ['slim', desk.slim, 'Slim look buttons', 'Names only, no stage pictures: room for more looks']].map(([k, on, l, sub]) => `<button data-vopt="${k}" aria-pressed="${!!on}"><span class="ld-check">${on ? ic('check', 'sm') : ''}</span><span>${l}<small>${sub}</small></span></button>`).join('')}</div>` : ''}${desk.lmenu && cur ? `<div class="ld-moods ld-lookmenu" role="group" aria-label="${esc(cur.name)}"><button data-libsave>${ic('save', 'sm')}Save to library<small>Use it in any week</small></button><button data-lookreset>${ic('undo', 'sm')}Reset to warm white</button><button data-lookdel class="bad">${ic('trash', 'sm')}Delete this look</button></div>` : ''}
+      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" data-keysmenu aria-expanded="${!!desk.kmenu}" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts"><span class="ld-q" aria-hidden="true">?</span></button><span class="ld-moodwrap"><button class="ld-icon" data-viewmenu aria-expanded="${!!desk.vmenu}" title="Layout: dock beside the plot, compact, hide the colour panel" aria-label="Desk layout">${ic(desk.dock ? 'panelR' : 'sliders', 'sm')}</button></span><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
+    ${desk.dock ? '<div class="ld-resize" role="separator" aria-orientation="vertical" aria-label="Drag to resize the desk" title="Drag to resize (double-click for the usual width)"></div>' : ''}<div class="ld-body${desk.nocol ? ' nocol' : ''}"><section class="ld-stage" aria-label="Stage">
       <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
           : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
       <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}${desk.view === 'list' ? ' listing' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
       ${deskChipsHtml(all, picked)}</section>${deskTipHtml()}
       ${desk.nocol ? `<button class="ld-colstrip" data-colshow title="Show the colour panel" aria-label="Show the colour panel">${ic('chevsL', 'sm')}<span>Colour</span></button>` : `<aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside>`}</div>
-    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span>${ui.adv ? '' : '<!--'}<span class="ld-keys" aria-label="Keys: 1 to 9 looks, up and down dimmer, A all lights, C copy, V paste, hold Space to peek, Ctrl Z undo"><kbd>1–9</kbd> looks <kbd>↑</kbd><kbd>↓</kbd> dimmer <kbd>A</kbd> all <kbd>C</kbd><kbd>V</kbd> copy, paste <kbd>Space</kbd> peek <kbd>Ctrl Z</kbd> undo</span>${ui.adv ? '' : '-->'}</div>`;
+    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span></div>`;
 }
 // how many faces the open look lights, for the desk's stage bar
 function facesSummary() {
@@ -3246,7 +3255,7 @@ function deskSet(patch, live) {
 const deskMapPt = e => { const svgEl = $('ldMap'), pt = svgEl.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const q = pt.matrixTransform(svgEl.getScreenCTM().inverse()); return { x: q.x, y: q.y }; };
 $('deskDlg').addEventListener('click', e => {
   if (e.target === $('deskDlg')) { closeDesk(); return; }
-  if ((desk.add || desk.lmenu || desk.vmenu) && !e.target.closest('.ld-addmenu, .ld-lookmenu, .ld-viewmenu, [data-addlook], [data-lookmenu], [data-viewmenu]')) { desk.add = desk.lmenu = desk.vmenu = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the look menus
+  if ((desk.add || desk.lmenu || desk.vmenu || desk.kmenu) && !e.target.closest('.ld-addmenu, .ld-lookmenu, .ld-viewmenu, .ld-keysmenu, [data-addlook], [data-lookmenu], [data-viewmenu], [data-keysmenu]')) { desk.add = desk.lmenu = desk.vmenu = desk.kmenu = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the look menus
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'ldDone') { closeDesk(); return; }
   if (desk.ctx && !t.closest('.ld-ctx')) { desk.ctx = null; renderDesk(); return; }
@@ -3267,7 +3276,8 @@ $('deskDlg').addEventListener('click', e => {
   if (t.dataset.tip) { if (t.dataset.tip === 'next' && desk.tip < 2) desk.tip++; else { desk.tip = null; try { localStorage.setItem('stageplot.deskTips', '1'); } catch { /* ok */ } } renderDesk(); return; }
   if (t.hasAttribute('data-addlook')) { desk.add = !desk.add; desk.lmenu = false; renderDesk(); return; }
   if (t.hasAttribute('data-lookmenu')) { desk.lmenu = !desk.lmenu; desk.add = desk.vmenu = false; renderDesk(); return; }
-  if (t.hasAttribute('data-viewmenu')) { desk.vmenu = !desk.vmenu; desk.add = desk.lmenu = false; renderDesk(); return; }
+  if (t.hasAttribute('data-viewmenu')) { desk.vmenu = !desk.vmenu; desk.add = desk.lmenu = desk.kmenu = false; renderDesk(); return; }
+  if (t.hasAttribute('data-keysmenu')) { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = desk.vmenu = false; renderDesk(); return; }
   if (t.dataset.vopt) { const k = t.dataset.vopt; desk[k] = !desk[k]; desk.vmenu = false; if (k === 'dock' && desk.dock) desk.view = 'list'; deskLayoutSave(); renderDesk(); if (k === 'dock') { needFit = true; renderPlot(); } return; }
   if (t.hasAttribute('data-colshow')) { desk.nocol = false; deskLayoutSave(); renderDesk(); return; }
   if (t.dataset.libuse) { libUse(t.dataset.libuse); return; }
@@ -3314,6 +3324,7 @@ $('deskDlg').addEventListener('wheel', e => {
   } else return;
   $('ldMapWrap').innerHTML = deskStageHtml();
 }, { passive: false });
+$('deskDlg').addEventListener('dblclick', e => { if (e.target.closest('.ld-resize')) { desk.dockw = 440; deskLayoutSave(); renderDesk(); needFit = true; renderPlot(); return; } });
 $('deskDlg').addEventListener('dblclick', e => { if (e.target.closest('#ldMap') && !e.target.closest('[data-ldfx]') && desk.zoom) { desk.zoom = null; $('ldMapWrap').innerHTML = deskStageHtml(); } });
 // hover a light on the desk's stage: its beam comes forward, the others step back
 $('deskDlg').addEventListener('pointerover', e => { const g = e.target.closest('[data-ldfx]'), map = $('ldMap'); if (!map) return; map.classList.toggle('hl', !!g); map.querySelectorAll('.lb.hl').forEach(b => b.classList.remove('hl')); if (g) map.querySelector(`.lb[data-b="${g.dataset.ldfx}"]`)?.classList.add('hl'); });
@@ -3369,6 +3380,7 @@ function deskKey(e) {
   const looks = plan.looks || [];
   if (/^[1-9]$/.test(e.key) && looks[+e.key - 1]) { switchLook(looks[+e.key - 1].id); return true; }
   if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.target.id !== 'ldWheel') { const ts = deskPicked(); if (!ts.length) return true; const d = clamp(fxOf(ts[0]).d + (e.key === 'ArrowUp' ? 1 : -1) * (e.shiftKey ? 25 : 5), 0, 100); deskSet({ d }); return true; }
+  if (e.key === '?') { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = desk.vmenu = false; renderDesk(); return true; }
   if (e.key.toLowerCase() === 'a') { deskSel = null; renderDesk(); return true; }
   if (e.key.toLowerCase() === 'c') { deskCopy(); return true; }
   if (e.key.toLowerCase() === 'v') { deskPaste(); return true; }
@@ -3376,6 +3388,12 @@ function deskKey(e) {
 }
 function pickDeskFx(id, add) { if (add) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.has(id) ? deskSel.delete(id) : deskSel.add(id); } else deskSel = new Set([id]); renderDesk(); }
 $('deskDlg').addEventListener('pointerdown', e => {
+  if (e.target.closest('.ld-resize')) {   // the docked desk's edge: drag to make it wider or narrower
+    const h = e.target.closest('.ld-resize'); h.setPointerCapture(e.pointerId); e.preventDefault();
+    const move = ev => { desk.dockw = Math.round(clamp(innerWidth - ev.clientX, 340, Math.min(760, innerWidth - 420))); $('ldBody').style.setProperty('--dockw', `${desk.dockw}px`); $('plotView').style.setProperty('--dockw', `${desk.dockw}px`); };
+    const up = () => { h.removeEventListener('pointermove', move); deskLayoutSave(); needFit = true; renderPlot(); };
+    h.addEventListener('pointermove', move); h.addEventListener('pointerup', up, { once: true }); return;
+  }
   if (e.button === 2) return;   // a right-click opens the quick menu (contextmenu), it doesn't pick
   if (desk.ctx && !e.target.closest('.ld-ctx')) { desk.ctx = null; renderDesk(); return; }   // a press anywhere else closes the quick menu
   if (e.target.closest('#ldPeek') && !e.target.closest('#ldPeek').disabled) { desk.peekBtn = true; peekStart(); e.preventDefault(); return; }
@@ -7159,7 +7177,7 @@ document.addEventListener('keydown', e => {
   if (!$('histDlg').hidden) { if (e.key === 'Escape') $('histDlg').hidden = true; return; }
   if (!$('cmdk').hidden) return;
   if (!$('deskDlg').hidden && desk.dock && !e.target.closest?.('#deskDlg') && e.key !== 'Escape') { /* docked: the plot keeps its keys */ }
-  else if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.add || desk.lmenu || desk.vmenu || desk.naming || desk.ctx)) { desk.add = desk.lmenu = desk.vmenu = desk.naming = false; desk.ctx = null; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
+  else if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.add || desk.lmenu || desk.vmenu || desk.kmenu || desk.naming || desk.ctx)) { desk.add = desk.lmenu = desk.vmenu = desk.kmenu = desk.naming = false; desk.ctx = null; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
   if (!$('rackDlg').hidden) {
     const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
     if (e.key === 'Escape') closeRack();

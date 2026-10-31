@@ -129,6 +129,9 @@ Open `index.html` in a modern browser to run it.
 - **Light shapes on the desk's map**: each light is drawn as a little picture of its kind, filled with its colour and turned the way it's aimed: a par with its lens, a wash with its LEDs, a moving head on its base (a spot with a bright lens), a bar, an uplighting bar with an arrow, a profile's barrel, a fresnel's rings, a square uplight, a light on its stand.
 - **Address labels** (desk, Advanced): *Names | Addresses* beside *Map | List* labels each light on the map with its DMX address as the patch sheet writes it (*1.015*), or *no DMX* for a light that isn't on DMX. The list view shows addresses too in Advanced. The desk remembers the choice.
 - **Desk layout** (the sliders button in the desk's header): *Dock beside the plot* turns the desk into a side panel so the real stage plot stays full size beside it (it re-fits, picking a light on the plot picks it in the desk, and the plot keeps its keys); *Compact* for small screens (on by default when the window is short); *Hide the colour panel* gives the stage the full width, with a slim *Colour* strip to bring it back. Remembered on this device.
+- **Resize the docked desk**: drag its left edge (340–760 px); double-click the edge for the usual width. The plot re-fits and the width is remembered.
+- **Slim look buttons** (layout menu): names only, no stage pictures, so many looks fit in one row.
+- **Keyboard shortcuts** (the *?* button in the desk's header, or press ?): every desk key in one small list; Esc closes it. The footer no longer carries the key hints.
 - **Picked lights remembered**: reopening the desk brings back the lights you had picked, for each week.
 - **Reset a look**: *⋯ → Reset to warm white* clears a look's colours and master in one step (undoable).
 - **Light details on the plot**: hovering a light on the stage plot shows its colour and level in the open look, its DMX address and what it hangs on.
@@ -137,7 +140,7 @@ Open `index.html` in a modern browser to run it.
 - **Picked lights as chips**: under the stage, the picked lights show as chips with an × to let one go; with none or all picked, the line says how to pick.
 - **First-time tips**: the first time the desk opens, three short tips point at the stage, the colour panel and *+ Look*; *Skip* or *Got it* and they don't come back.
 - **Copy and paste colour** (desk): *Copy* takes the first picked light's colour and dimmer; *Paste* puts it on every picked light.
-- **Desk keys**: 1–9 switch looks (with the fade), ↑ and ↓ move the dimmer by 5 (Shift: 25), A picks every light, C copies and V pastes a colour. Shown in the desk's footer.
+- **Desk keys**: 1–9 switch looks (with the fade), ↑ and ↓ move the dimmer by 5 (Shift: 25), A picks every light, C copies and V pastes a colour. Listed under the *?* button.
 - **Walls**: light stops at the room's walls (the back of the stage, the sides and back of the house, set under Room), which show as a faint dashed outline while there are lights. Uplighting stops on the wall it hits.
 - **Lighting patch** (Paperwork → Lighting): every light by universe and address (*1.001*) with type, channel count, where it hangs, its line and its power circuit, then each DMX line drawn as a chain from the console or splitter output. *Copy* gives a tab-separated table for a spreadsheet.
 
