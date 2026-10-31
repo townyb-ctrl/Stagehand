@@ -165,6 +165,7 @@ h1, h2, h3 { margin: 0; text-wrap: balance; }
 .work { --railw: calc(336px * var(--tz, 1)); --inspw: calc(296px * var(--tz, 1)); display: grid; grid-template-columns: var(--railw) minmax(0,1fr) var(--inspw); flex: 1 1 0; min-height: 520px; transition: grid-template-columns .22s ease; }
 .work.rail-collapsed { --railw: 56px; }
 .work.insp-collapsed { --inspw: 0px; }
+.work.deskdock { --inspw: 440px; } .work.deskdock .inspector { visibility: hidden; }
 .insp-collapsed .inspector { visibility: hidden; border-left: 0; }
 .rail-collapsed .railbody, .rail-collapsed .railfoot { display: none; }
 .rail-collapsed .tabs { flex-direction: column; padding: 8px; gap: 6px; border-bottom: 0; }
@@ -586,8 +587,8 @@ svg text { font-family: var(--f-ui); }
 .fader input { width: 100%; } .f-r input { accent-color: #e5484d; } .f-g input { accent-color: #30a46c; } .f-b input { accent-color: #3e63dd; } .f-w input { accent-color: #c9b98f; } .f-d input { accent-color: var(--accent); }
 .bigsw { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--line-2); flex: none; background-image: none; }
 /* the lighting desk follows the app's theme; only its stage map stays dark, like the deck, so beams read true */
-.ldesk { --ld-bg: var(--surface); --ld-panel: var(--surface-2); --ld-card: var(--surface); --ld-raise: var(--surface-3); --ld-line: var(--line); --ld-line2: var(--line-2); --ld-ink: var(--ink); --ld-ink2: var(--ink-2); --ld-mute: var(--muted); --ld-acc: var(--accent); --ld-groove: #c9cfd8;
-  width: min(1200px, 100%); height: min(800px, 100%); background: var(--ld-bg); color: var(--ld-ink); border-radius: 20px; border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3);
+.ldesk { --ld-r: 10px; --ld-bg: var(--surface); --ld-panel: var(--surface-2); --ld-card: var(--surface); --ld-raise: var(--surface-3); --ld-line: var(--line); --ld-line2: var(--line-2); --ld-ink: var(--ink); --ld-ink2: var(--ink-2); --ld-mute: var(--muted); --ld-acc: var(--accent); --ld-groove: #c9cfd8;
+  width: min(1200px, 100%); height: min(800px, 100%); background: var(--ld-bg); color: var(--ld-ink); border-radius: 14px; border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3);
   display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ldesk { --ld-card: #1a2029; --ld-raise: #232a36; --ld-groove: #0b0e12; } }
 :root[data-theme="dark"] .ldesk { --ld-card: #1a2029; --ld-raise: #232a36; --ld-groove: #0b0e12; }
@@ -597,12 +598,12 @@ svg text { font-family: var(--f-ui); }
 .ld-lookacts { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding-left: 10px; }
 .ld-brand { display: flex; align-items: center; gap: 11px; } .ld-brand h2 { font-size: 16px; font-weight: 700; letter-spacing: -.01em; color: var(--ld-ink); }
 .ld-brand small { display: block; font-size: 12px; color: var(--ld-mute); margin-top: 1px; }
-.ld-logo { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; color: #b7860b; background: radial-gradient(circle at 50% 40%, rgba(240,180,41,.3), rgba(240,180,41,.08) 70%); box-shadow: inset 0 0 0 1px rgba(240,180,41,.35); }
+.ld-logo { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; color: var(--ld-ink2); background: var(--ld-panel); box-shadow: inset 0 0 0 1px var(--ld-line2); }
 .ld-looks { display: flex; align-items: center; gap: 8px; min-width: 0; overflow-x: auto; padding: 3px; scrollbar-width: thin; }
 .ld-tabs { display: flex; gap: 8px; } .ld-looks { position: relative; }
-.ld-look { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 9px; row-gap: 5px; align-items: center; text-align: left; min-width: 118px; padding: 8px 12px 9px; border-radius: 12px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink2); font: inherit; cursor: pointer; transition: border-color .2s, background .2s, box-shadow .2s; }
+.ld-look { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 9px; row-gap: 5px; align-items: center; text-align: left; min-width: 118px; padding: 8px 12px 9px; border-radius: 8px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink2); font: inherit; cursor: pointer; transition: border-color .2s, background .2s, box-shadow .2s; }
 .ld-look:hover { border-color: var(--ld-mute); background: var(--ld-raise); }
-.ld-look[aria-pressed="true"] { background: var(--ld-raise); border-color: var(--ld-acc); color: var(--ld-ink); box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-1); }
+.ld-look[aria-pressed="true"] { background: var(--ld-raise); border-color: var(--ld-acc); color: var(--ld-ink); box-shadow: inset 0 0 0 1px var(--ld-acc); }
 .ld-cueno { grid-row: span 2; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; background: var(--ld-panel); color: var(--ld-mute); font-variant-numeric: tabular-nums; box-shadow: inset 0 0 0 1px var(--ld-line); }
 .ld-look[aria-pressed="true"] .ld-cueno { background: var(--ld-acc); color: var(--accent-ink); box-shadow: none; }
 .ld-cuename { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
@@ -629,7 +630,7 @@ svg text { font-family: var(--f-ui); }
 .ld-gtools, .ld-gname { display: inline-flex; gap: 6px; align-items: center; } .ld-gname input { height: 28px; width: 210px; font-size: 13px; }
 .ld-moodwrap { display: inline-flex; align-self: stretch; }
 .ldesk { position: relative; }
-.ld-moods { position: absolute; z-index: 5; top: 128px; left: 50%; transform: translateX(-50%); display: grid; gap: 2px; padding: 6px; min-width: 220px; border-radius: 12px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
+.ld-moods { position: absolute; z-index: 5; top: 128px; left: 50%; transform: translateX(-50%); display: grid; gap: 2px; padding: 6px; min-width: 220px; border-radius: 10px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
 .ld-moods button { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--ld-ink); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left; }
 .ld-addmenu { left: 18px; transform: none; min-width: 270px; max-height: 60vh; overflow-y: auto; }
 .ld-lookmenu { left: auto; right: 18px; transform: none; min-width: 210px; }
@@ -643,18 +644,35 @@ svg text { font-family: var(--f-ui); }
 .ld-bigtop { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--ld-line); }
 .ld-bigtop h2 { display: flex; align-items: center; gap: 8px; font-size: 18px; margin-right: auto; } .ld-bigtop .ld-faces { margin: 0; }
 .ld-bigtop .ld-done { display: inline-flex; align-items: center; gap: 6px; }
-.ld-bigmap { height: min(42vh, 420px); margin: 14px 18px 0; border-radius: 16px; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #121722, #07090d); }
+.ld-bigmap { height: min(42vh, 420px); margin: 14px 18px 0; border-radius: 10px; overflow: hidden; background: #0d1117; }
 .ld-bigs { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; padding: 16px 18px 20px; overflow-y: auto; align-content: start; }
-.ld-big { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 12px; row-gap: 10px; min-height: 96px; padding: 16px; border-radius: 18px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink); font: inherit; text-align: left; cursor: pointer; transition: transform .12s, border-color .2s, box-shadow .2s; }
+.ld-big { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 12px; row-gap: 10px; min-height: 96px; padding: 16px; border-radius: 10px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink); font: inherit; text-align: left; cursor: pointer; transition: transform .12s, border-color .2s, box-shadow .2s; }
 .ld-big:active { transform: scale(.98); }
 .ld-big b { font-size: 19px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ld-bigno { grid-row: span 2; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: 17px; background: var(--ld-panel); color: var(--ld-mute); box-shadow: inset 0 0 0 1px var(--ld-line); }
 .ld-bigpal { display: flex; gap: 5px; } .ld-bigpal i { flex: 1; max-width: 46px; height: 8px; border-radius: 4px; }
-.ld-big[aria-pressed="true"] { border-color: var(--ld-acc); box-shadow: 0 0 0 4px var(--accent-soft), var(--shadow-2); }
+.ld-big[aria-pressed="true"] { border-color: var(--ld-acc); box-shadow: inset 0 0 0 1px var(--ld-acc); }
 .ld-big[aria-pressed="true"] .ld-bigno { background: var(--ld-acc); color: var(--accent-ink); }
 .ldesk.big .ld-map { cursor: default; }
 @media (max-width: 600px) { .ld-bigs { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; } .ld-bigmap { height: 30vh; } .ld-big { min-height: 84px; padding: 12px; } .ld-big b { font-size: 16px; } .ld-bigmap { margin: 10px 12px 0; } .ld-bigtop .ld-faces { display: none; } }
 .ld-moods button:hover { background: var(--ld-raise); }
+.ld-viewmenu { left: auto; right: 18px; top: 60px; transform: none; min-width: 270px; }
+.ld-viewmenu button { align-items: flex-start; } .ld-viewmenu small { display: block; font-weight: 500; color: var(--ld-mute); font-size: 11.5px; margin-top: 2px; }
+.ld-check { width: 16px; height: 16px; flex: none; display: grid; place-items: center; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--ld-line2); margin-top: 1px; } .ld-viewmenu button[aria-pressed="true"] .ld-check { background: var(--ld-acc); color: var(--accent-ink); box-shadow: none; }
+.ld-body.nocol { grid-template-columns: minmax(0, 1fr) 44px; }
+.ld-colstrip { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 18px; border: 0; border-left: 1px solid var(--ld-line); background: var(--ld-panel); color: var(--ld-mute); font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; }
+.ld-colstrip span { writing-mode: vertical-rl; letter-spacing: .06em; } .ld-colstrip:hover { color: var(--ld-ink); }
+.overlay.docked { background: none; backdrop-filter: none; pointer-events: none; place-items: stretch end; padding: 64px 0 0; }
+.ldesk.docked { pointer-events: auto; width: 440px; height: 100%; border-radius: 0; border-width: 0 0 0 1px; box-shadow: var(--shadow-2); }
+.ldesk.docked .ld-body { display: block; overflow-y: auto; } .ldesk.docked .ld-stage { grid-template-rows: auto minmax(200px, 30vh) auto; } .ldesk.docked .ld-mapwrap { min-height: 200px; }
+.ldesk.docked .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; }
+.ldesk.docked .ld-brand small, .ldesk.docked .ld-keys, .ldesk.docked #ldBigGo { display: none; }
+.ldesk.docked .ld-bar { flex-wrap: wrap; } .ldesk.docked .ld-tipcard { right: 16px; left: 16px; top: auto; bottom: 64px; width: auto; }
+.ldesk.docked .ld-mixrow { grid-template-columns: auto minmax(0, 1fr); }
+.ldesk.compact .ld-top { padding: 8px 14px; gap: 8px 14px; } .ldesk.compact .ld-look { min-width: 96px; padding: 5px 9px; } .ldesk.compact .ld-thumb { height: 24px; width: 76px; }
+.ldesk.compact .ld-stage { padding: 10px 12px; gap: 8px; } .ldesk.compact .ld-colour { padding: 10px; gap: 8px; } .ldesk.compact .ld-card { padding: 9px 11px; gap: 8px; }
+.ldesk.compact .ld-wheel { width: 112px; } .ldesk.compact .ld-groove, .ldesk.compact .ld-groove input { height: 100px; }
+.ldesk.compact .ldesk .pswatch i, .ldesk.compact .pswatch i { width: 18px; height: 18px; } .ldesk.compact .pswatch span { font-size: 10px; } .ldesk.compact .ld-foot { padding: 6px 14px; }
 .ld-viewtog { display: inline-flex; padding: 2px; border-radius: 9px; background: var(--ld-panel); border: 1px solid var(--ld-line); }
 .ld-viewtog button { border: 0; background: none; color: var(--ld-mute); font: inherit; font-size: 12px; font-weight: 650; padding: 4px 10px; border-radius: 7px; cursor: pointer; }
 .ld-viewtog button[aria-pressed="true"] { background: var(--ld-bg); color: var(--ld-ink); box-shadow: var(--shadow-1); }
@@ -664,15 +682,15 @@ svg text { font-family: var(--f-ui); }
 .ld-row { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto auto 46px; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 9px; cursor: pointer; font-size: 13.5px; }
 .ld-row:hover { background: var(--ld-raise); } .ld-row.on { background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--ld-acc); }
 .ld-row:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: -2px; }
-.ld-dotl { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); } .ld-dotl.dark { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 3px, var(--ld-line2) 3px 6px) !important; }
+.ld-dotl { width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); } .ld-dotl.dark { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 3px, var(--ld-line2) 3px 6px) !important; }
 .ld-where, .ld-cname { color: var(--ld-mute); font-size: 12.5px; } .ld-row.on .ld-where, .ld-row.on .ld-cname { color: var(--ld-ink2); } .ld-pct { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
 .ld-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-.ld-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 9px; border-radius: 999px; background: var(--ld-panel); border: 1px solid var(--ld-line2); font-size: 12.5px; font-weight: 600; }
-.ld-chip i { width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
+.ld-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 9px; border-radius: 6px; background: var(--ld-panel); border: 1px solid var(--ld-line2); font-size: 12.5px; font-weight: 600; }
+.ld-chip i { width: 10px; height: 10px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
 .ld-chip button { width: 20px; height: 20px; display: grid; place-items: center; border: 0; border-radius: 50%; background: none; color: var(--ld-mute); cursor: pointer; padding: 0; } .ld-chip button:hover { background: var(--ld-raise); color: var(--ld-ink); }
 .ld-chip.more { padding-right: 9px; color: var(--ld-mute); }
 .ldesk .pswatch.mine i { box-shadow: inset 0 0 0 1px rgba(0,0,0,.16), 0 0 0 2px var(--ld-card), 0 0 0 3px var(--ld-acc); }
-.ld-tipcard { position: absolute; z-index: 7; right: 488px; top: 280px; width: 290px; padding: 14px 16px; border-radius: 14px; background: var(--ld-ink); color: var(--ld-bg); box-shadow: var(--shadow-3); display: grid; gap: 6px; }
+.ld-tipcard { position: absolute; z-index: 7; right: 488px; top: 280px; width: 290px; padding: 14px 16px; border-radius: 10px; background: var(--ld-ink); color: var(--ld-bg); box-shadow: var(--shadow-3); display: grid; gap: 6px; }
 .ld-tipcard p { margin: 0; font-size: 13px; opacity: .85; line-height: 1.45; } .ld-tipcard .row { gap: 6px; justify-content: flex-end; margin-top: 4px; }
 .ld-tipcard .ld-mini { background: transparent; color: inherit; border-color: color-mix(in srgb, var(--ld-bg) 35%, transparent); } .ld-tipcard .ld-mini.primary { background: var(--ld-acc); color: var(--accent-ink); border-color: var(--ld-acc); }
 .ld-tipdots { display: inline-flex; gap: 4px; margin-right: auto; } .ld-tipdots i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .3; } .ld-tipdots i.on { opacity: 1; }
@@ -706,15 +724,15 @@ svg text { font-family: var(--f-ui); }
 @media (prefers-reduced-motion: reduce) { .lb.flash, .ld-fx.flashing .ld-ring { animation: none; } }
 .ld-stage { position: relative; }
 .ld-mapwrap.peeking { box-shadow: inset 0 0 0 2px var(--ld-acc); }
-.ld-peekpill { position: absolute; top: 64px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 999px; background: var(--ld-acc); color: var(--accent-ink); font-size: 13px; font-weight: 600; box-shadow: var(--shadow-2); pointer-events: none; }
-.ld-ctx { position: absolute; z-index: 6; width: 210px; display: grid; gap: 2px; padding: 8px; border-radius: 12px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
+.ld-peekpill { position: absolute; top: 64px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 8px; background: var(--ld-acc); color: var(--accent-ink); font-size: 13px; font-weight: 600; box-shadow: var(--shadow-2); pointer-events: none; }
+.ld-ctx { position: absolute; z-index: 6; width: 210px; display: grid; gap: 2px; padding: 8px; border-radius: 10px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
 .ld-ctxhead { font-size: 12px; font-weight: 700; color: var(--ld-mute); padding: 2px 6px 6px; }
 .ld-ctxsw { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; padding: 0 2px 6px; border-bottom: 1px solid var(--ld-line); margin-bottom: 4px; }
-.ld-ctxsw button { aspect-ratio: 1; border-radius: 50%; border: 0; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); cursor: pointer; padding: 0; } .ld-ctxsw button:disabled { opacity: .25; }
+.ld-ctxsw button { aspect-ratio: 1; border-radius: 4px; border: 0; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); cursor: pointer; padding: 0; } .ld-ctxsw button:disabled { opacity: .25; }
 .ld-ctxsw button.off { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 3px, var(--ld-line2) 3px 6px); }
 .ld-ctx > button { display: flex; align-items: center; gap: 7px; padding: 7px 8px; border: 0; border-radius: 7px; background: none; color: var(--ld-ink); font: inherit; font-size: 13px; text-align: left; cursor: pointer; } .ld-ctx > button:hover, .ld-ctx > button:focus-visible { background: var(--ld-raise); } .ld-moods .ld-pal i { width: 12px; } .ld-moods small { padding: 4px 10px 2px; color: var(--ld-mute); font-size: 11.5px; }
 .ld-seg[aria-pressed="true"] { background: var(--ld-bg); color: var(--ld-ink); box-shadow: var(--shadow-1), inset 0 0 0 1px var(--ld-line2); }
-.ld-mapwrap { min-height: 0; border-radius: 16px; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #121722, #07090d); box-shadow: inset 0 0 0 1px var(--ld-line), inset 0 20px 60px rgba(0,0,0,.45); }
+.ld-mapwrap { min-height: 0; border-radius: 10px; overflow: hidden; background: #0d1117; box-shadow: inset 0 0 0 1px var(--ld-line); }
 .ld-map { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
 .ld-room { fill: rgba(255,255,255,.012); stroke: rgba(255,255,255,.1); stroke-width: .1; stroke-dasharray: .5 .35; }
 .ld-deck { fill: #1b202b; stroke: rgba(255,255,255,.16); stroke-width: .08; }
@@ -723,7 +741,7 @@ svg text { font-family: var(--f-ui); }
 .ld-lens { fill: rgba(255,255,255,.85); } .ld-ringl, .ld-mark2 { fill: none; stroke: rgba(0,0,0,.35); } .ld-led { fill: rgba(255,255,255,.75); }
 .ld-base { fill: #2a313c; stroke: rgba(255,255,255,.25); } .ld-tripod { stroke: rgba(220,226,232,.55); stroke-linecap: round; }
 .ld-fx text.addr { font-family: var(--f-mono); fill: #ffd66e; } .ld-fx text { fill: rgba(225,231,240,.62); font-weight: 600; pointer-events: none; letter-spacing: .01em; }
-.ld-dot { stroke: rgba(0,0,0,.55); filter: drop-shadow(0 0 .45px currentColor); } .ld-dot.dark { stroke: rgba(255,255,255,.45); stroke-dasharray: .25 .2; }
+.ld-dot { stroke: rgba(0,0,0,.55); } .ld-dot.dark { stroke: rgba(255,255,255,.45); stroke-dasharray: .25 .2; }
 .ld-ring { fill: none; stroke: transparent; } .ld-fx.on .ld-ring { stroke: #fff; } .ld-fx.on text { fill: #fff; }
 .ld-fx:focus-visible { outline: none; } .ld-fx:focus-visible .ld-ring { stroke: var(--ld-acc); }
 .ld-box { fill: rgba(143,132,255,.14); stroke: #a79fff; stroke-width: .1; stroke-dasharray: .4 .25; }
@@ -743,7 +761,7 @@ svg text { font-family: var(--f-ui); }
 @media (max-width: 900px) { .ld-keys { display: none; } }
 .ld-tip { margin: 0; text-align: center; font-size: 12px; color: var(--ld-mute); } .ld-tip span { opacity: .5; margin: 0 4px; }
 .ld-colour { background: var(--ld-panel); border-left: 1px solid var(--ld-line); padding: 14px; display: grid; align-content: start; gap: 10px; overflow-y: auto; scrollbar-width: thin; }
-.ld-card { background: var(--ld-card); border: 1px solid var(--ld-line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 10px; }
+.ld-card { background: var(--ld-card); border: 1px solid var(--ld-line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 10px; }
 .ld-pickinfo { grid-template-columns: auto 1fr; align-items: center; gap: 13px; } .ld-pickinfo div { display: grid; gap: 2px; min-width: 0; }
 .ld-pickinfo b { font-size: 14.5px; } .ld-pickinfo small { color: var(--ld-mute); font-size: 12.5px; }
 .ld-pickinfo .bigsw { width: 40px; height: 40px; border-radius: 8px; border: 1px solid rgba(0,0,0,.12); background: var(--c); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
@@ -780,7 +798,7 @@ svg text { font-family: var(--f-ui); }
 .ld-foot { display: flex; align-items: center; gap: 14px; padding: 10px 18px; border-top: 1px solid var(--ld-line); background: var(--ld-panel); font-size: 12.5px; color: var(--ld-mute); }
 .ld-foot b { color: var(--ld-ink2); }
 .ld-live { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ok-ink); }
-.ld-live i { width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 8px #3ddc84; animation: ldPulse 2.4s ease-in-out infinite; }
+.ld-live i { width: 7px; height: 7px; border-radius: 50%; background: #3f9a6c; }
 @keyframes ldPulse { 50% { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .ld-live i { animation: none; } }
 @media (max-width: 900px) { .ld-lookacts { padding-left: 4px; } .ld-body { display: block; overflow-y: auto; } .ld-stage { grid-template-rows: auto minmax(240px, 46vh) auto; } .ld-body > .ld-colour { overflow: visible; } .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; } .ld-rename input { width: 100px; } .ld-brand small { display: none; } }
@@ -2977,6 +2995,8 @@ function deskLaunch() {
 /* The lighting desk: a window of its own. Looks across the top; the stage on the left, where you pick lights and see their
    beams; colour on the right: a wheel, presets, and RGBW and dimmer faders. */
 const desk = { open: false, drag: null, box: null };
+try { const v = JSON.parse(localStorage.getItem('stageplot.deskLayout') || '{}'); desk.dock = !!v.dock; desk.nocol = !!v.nocol; desk.compact = v.compact ?? innerHeight < 760; } catch { /* defaults */ }
+const deskLayoutSave = () => { try { localStorage.setItem('stageplot.deskLayout', JSON.stringify({ dock: !!desk.dock, nocol: !!desk.nocol, compact: !!desk.compact })); } catch { /* memory only */ } };
 try { desk.view = localStorage.getItem('stageplot.deskView') || 'map'; desk.label = localStorage.getItem('stageplot.deskLabel') || 'name'; } catch { desk.view = 'map'; desk.label = 'name'; }
 // three short pointers the first time the desk opens, then never again
 const DESK_TIPS = [['Pick lights', 'Click lights on the stage, or a group above it. Shift-click adds more.', '#ldMapWrap'], ['Choose a colour', 'Use the wheel or a colour button; the beams change as you go. Dim sets how bright.', '#ldColour'], ['Keep it as a look', 'Changes save to the open look. + Look adds another: a copy, a mood or one from your library.', '[data-addlook]']];
@@ -2985,13 +3005,17 @@ function deskTipHtml() {
   const [h, txt] = DESK_TIPS[desk.tip];
   return `<div class="ld-tipcard" role="dialog" aria-label="Tip ${desk.tip + 1} of 3"><b>${h}</b><p>${txt}</p><div class="row"><span class="ld-tipdots">${DESK_TIPS.map((_, k) => `<i class="${k === desk.tip ? 'on' : ''}"></i>`).join('')}</span><button class="ld-mini" data-tip="skip">Skip</button><button class="ld-mini primary" data-tip="${desk.tip < 2 ? 'next' : 'done'}">${desk.tip < 2 ? 'Next' : 'Got it'}</button></div></div>`;
 }
+// the lights picked in the desk, remembered per week on this device
+function deskSelSave() { try { const m = JSON.parse(localStorage.getItem('stageplot.deskSel') || '{}'); if (deskSel) m[plan.id] = [...deskSel]; else delete m[plan.id]; localStorage.setItem('stageplot.deskSel', JSON.stringify(m)); } catch { /* memory only */ } }
+function deskSelLoad() { try { const ids = JSON.parse(localStorage.getItem('stageplot.deskSel') || '{}')[plan.id]; const ok = (ids || []).filter(id => isFixture(itemById(id))); return ids ? new Set(ok) : null; } catch { return null; } }
 function openDesk(onlyId) {
+  if (!onlyId) deskSel = deskSelLoad();
   try { if (!localStorage.getItem('stageplot.deskTips')) desk.tip = 0; } catch { /* no tips without storage */ }
   if (!deskLights().length) { toast('Add lights first (Add gear → Lighting)'); return; }
   if (onlyId) deskSel = new Set([onlyId]);
   desk.open = true; $('deskDlg').hidden = false; renderDesk(); setTimeout(() => $('ldDone')?.focus(), 30);
 }
-function closeDesk() { desk.naming = false; desk.add = false; desk.lmenu = false; desk.big = false; desk.ctx = null; lookPeek = null; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
+function closeDesk() { if ($('plotView').classList.contains('deskdock')) { $('plotView').classList.remove('deskdock'); needFit = true; setTimeout(() => { needFit = true; renderPlot(); }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260); } desk.naming = false; desk.add = false; desk.lmenu = false; desk.vmenu = false; $('deskDlg').classList.remove('docked'); desk.big = false; desk.ctx = null; lookPeek = null; desk.open = false; $('deskDlg').hidden = true; renderAll(); }
 // your own named groups of lights (Front wash, Band backlight…), saved with the week
 const lgroups = () => (plan.lgroups || []).map(g => ({ ...g, ids: g.ids.filter(id => isFixture(itemById(id))) })).filter(g => g.ids.length);
 function deskGroupIds(k) {
@@ -3152,8 +3176,12 @@ function deskColourHtml() {
 function renderDesk() {
   if (!desk.open) return;
   $('ldBody').classList.toggle('big', !!desk.big);
+  $('deskDlg').classList.toggle('docked', !!desk.dock && !desk.big);
+  { const was = $('plotView').classList.contains('deskdock'), now = !!desk.dock && !desk.big; $('plotView').classList.toggle('deskdock', now); if (was !== now) { needFit = true; setTimeout(() => { needFit = true; renderPlot(); }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260); } }   // docked: the plot makes room, once the panels have moved
+  $('ldBody').classList.toggle('docked', !!desk.dock && !desk.big);
+  $('ldBody').classList.toggle('compact', !!desk.compact && !desk.big);
   if (desk.big) { renderBig(); return; }
-  renderDeskMain();
+  renderDeskMain(); deskSelSave();
   document.querySelectorAll('.ld-coach').forEach(e => e.classList.remove('ld-coach'));
   if (desk.tip != null) document.querySelector(DESK_TIPS[desk.tip][2])?.classList.add('ld-coach');
 }
@@ -3168,15 +3196,15 @@ function renderDeskMain() {
       <div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-addlook aria-expanded="${!!desk.add}">${ic('plus', 'sm')}Look</button><span class="ld-lookacts">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-lookmenu aria-expanded="${!!desk.lmenu}" title="More for this look" aria-label="More for ${esc(cur.name)}">${ic('dots', 'sm')}</button>` : ''}</span></div>${desk.add ? `<div class="ld-moods ld-addmenu" role="group" aria-label="Add a look">
         <button data-looknew><span class="ld-pal">${(cur ? lookPalette(cur) : []).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${cur ? `Copy of ${esc(cur.name)}` : 'Start a look'}</button>
         <small>From a mood · front light stays warm white</small>${MOODS.map(([n, , cols]) => `<button data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}
-        <small>From your library</small>${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') : '<small class="ld-empty">Nothing saved yet: open a look, then ⋯ → Save to library.</small>'}</div>` : ''}${desk.lmenu && cur ? `<div class="ld-moods ld-lookmenu" role="group" aria-label="${esc(cur.name)}"><button data-libsave>${ic('save', 'sm')}Save to library<small>Use it in any week</small></button><button data-lookdel class="bad">${ic('trash', 'sm')}Delete this look</button></div>` : ''}
-      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
-    <div class="ld-body"><section class="ld-stage" aria-label="Stage">
+        <small>From your library</small>${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') : '<small class="ld-empty">Nothing saved yet: open a look, then ⋯ → Save to library.</small>'}</div>` : ''}${desk.vmenu ? `<div class="ld-moods ld-viewmenu" role="group" aria-label="Desk layout">${[['dock', desk.dock, 'Dock beside the plot', 'See the stage plot full size while you work'], ['compact', desk.compact, 'Compact', 'Smaller buttons and faders, for small screens'], ['nocol', desk.nocol, 'Hide the colour panel', 'Give the stage the full width']].map(([k, on, l, sub]) => `<button data-vopt="${k}" aria-pressed="${!!on}"><span class="ld-check">${on ? ic('check', 'sm') : ''}</span><span>${l}<small>${sub}</small></span></button>`).join('')}</div>` : ''}${desk.lmenu && cur ? `<div class="ld-moods ld-lookmenu" role="group" aria-label="${esc(cur.name)}"><button data-libsave>${ic('save', 'sm')}Save to library<small>Use it in any week</small></button><button data-lookreset>${ic('undo', 'sm')}Reset to warm white</button><button data-lookdel class="bad">${ic('trash', 'sm')}Delete this look</button></div>` : ''}
+      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><span class="ld-moodwrap"><button class="ld-icon" data-viewmenu aria-expanded="${!!desk.vmenu}" title="Layout: dock beside the plot, compact, hide the colour panel" aria-label="Desk layout">${ic(desk.dock ? 'panelR' : 'sliders', 'sm')}</button></span><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
+    <div class="ld-body${desk.nocol ? ' nocol' : ''}"><section class="ld-stage" aria-label="Stage">
       <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
           : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
       <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}${desk.view === 'list' ? ' listing' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
       ${deskChipsHtml(all, picked)}</section>${deskTipHtml()}
-      <aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside></div>
+      ${desk.nocol ? `<button class="ld-colstrip" data-colshow title="Show the colour panel" aria-label="Show the colour panel">${ic('chevsL', 'sm')}<span>Colour</span></button>` : `<aside class="ld-colour" id="ldColour">${deskColourHtml()}</aside>`}</div>
     <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span>${ui.adv ? '' : '<!--'}<span class="ld-keys" aria-label="Keys: 1 to 9 looks, up and down dimmer, A all lights, C copy, V paste, hold Space to peek, Ctrl Z undo"><kbd>1–9</kbd> looks <kbd>↑</kbd><kbd>↓</kbd> dimmer <kbd>A</kbd> all <kbd>C</kbd><kbd>V</kbd> copy, paste <kbd>Space</kbd> peek <kbd>Ctrl Z</kbd> undo</span>${ui.adv ? '' : '-->'}</div>`;
 }
 // how many faces the open look lights, for the desk's stage bar
@@ -3218,7 +3246,7 @@ function deskSet(patch, live) {
 const deskMapPt = e => { const svgEl = $('ldMap'), pt = svgEl.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const q = pt.matrixTransform(svgEl.getScreenCTM().inverse()); return { x: q.x, y: q.y }; };
 $('deskDlg').addEventListener('click', e => {
   if (e.target === $('deskDlg')) { closeDesk(); return; }
-  if ((desk.add || desk.lmenu) && !e.target.closest('.ld-addmenu, .ld-lookmenu, [data-addlook], [data-lookmenu]')) { desk.add = desk.lmenu = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the look menus
+  if ((desk.add || desk.lmenu || desk.vmenu) && !e.target.closest('.ld-addmenu, .ld-lookmenu, .ld-viewmenu, [data-addlook], [data-lookmenu], [data-viewmenu]')) { desk.add = desk.lmenu = desk.vmenu = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the look menus
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'ldDone') { closeDesk(); return; }
   if (desk.ctx && !t.closest('.ld-ctx')) { desk.ctx = null; renderDesk(); return; }
@@ -3238,10 +3266,14 @@ $('deskDlg').addEventListener('click', e => {
   if (t.dataset.unpick) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.delete(t.dataset.unpick); renderDesk(); return; }
   if (t.dataset.tip) { if (t.dataset.tip === 'next' && desk.tip < 2) desk.tip++; else { desk.tip = null; try { localStorage.setItem('stageplot.deskTips', '1'); } catch { /* ok */ } } renderDesk(); return; }
   if (t.hasAttribute('data-addlook')) { desk.add = !desk.add; desk.lmenu = false; renderDesk(); return; }
-  if (t.hasAttribute('data-lookmenu')) { desk.lmenu = !desk.lmenu; desk.add = false; renderDesk(); return; }
+  if (t.hasAttribute('data-lookmenu')) { desk.lmenu = !desk.lmenu; desk.add = desk.vmenu = false; renderDesk(); return; }
+  if (t.hasAttribute('data-viewmenu')) { desk.vmenu = !desk.vmenu; desk.add = desk.lmenu = false; renderDesk(); return; }
+  if (t.dataset.vopt) { const k = t.dataset.vopt; desk[k] = !desk[k]; desk.vmenu = false; if (k === 'dock' && desk.dock) desk.view = 'list'; deskLayoutSave(); renderDesk(); if (k === 'dock') { needFit = true; renderPlot(); } return; }
+  if (t.hasAttribute('data-colshow')) { desk.nocol = false; deskLayoutSave(); renderDesk(); return; }
   if (t.dataset.libuse) { libUse(t.dataset.libuse); return; }
   if (t.dataset.libdel) { const e = lookLib().find(x => x.id === t.dataset.libdel); if (e) { db.lookLib = lookLib().filter(x => x !== e); save(); toast(`“${e.name}” removed from the library`); renderDesk(); } return; }
   if (t.hasAttribute('data-libsave')) { desk.lmenu = false; libSave(); return; }
+  if (t.hasAttribute('data-lookreset')) { desk.lmenu = false; const cur = curLook(); if (cur) { fadeLooksFrom(); mutate(() => { cur.fx = {}; delete cur.master; }, `${cur.name} reset to warm white`); renderDesk(); } return; }
   if (t.id === 'ldBigGo') { desk.big = true; desk.add = desk.lmenu = false; renderDesk(); return; }
   if (t.id === 'ldBigExit') { desk.big = false; renderDesk(); return; }
   if (t.dataset.mood) { moodLook(t.dataset.mood); return; }
@@ -5849,6 +5881,7 @@ function applySetup(id) {
 const fitTitle = el => { if (!el) return; el.style.height = 'auto'; el.style.height = `${el.scrollHeight}px`; };   // the name field grows to show the whole name
 document.addEventListener('input', e => { if (e.target.id === 'iLabel') fitTitle(e.target); });
 function renderInspector() {
+  if (desk.open && desk.dock) { const ids = selIds().filter(id => isFixture(itemById(id))); if (ids.length && !(deskSel && ids.length === deskSel.size && ids.every(id => deskSel.has(id)))) { deskSel = new Set(ids); setTimeout(renderDesk, 0); } }   // docked: a light picked on the plot is picked in the desk
   requestAnimationFrame(() => fitTitle($('iLabel')));
   $('plotView').classList.toggle('has-sel', !!sel);   // phones: a selection's details sit right under the plot
   const el = $('inspector');
@@ -7125,7 +7158,8 @@ function closePops() { $('weekPop').hidden = true; $('weekBtn').setAttribute('ar
 document.addEventListener('keydown', e => {
   if (!$('histDlg').hidden) { if (e.key === 'Escape') $('histDlg').hidden = true; return; }
   if (!$('cmdk').hidden) return;
-  if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.add || desk.lmenu || desk.naming || desk.ctx)) { desk.add = desk.lmenu = desk.naming = false; desk.ctx = null; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
+  if (!$('deskDlg').hidden && desk.dock && !e.target.closest?.('#deskDlg') && e.key !== 'Escape') { /* docked: the plot keeps its keys */ }
+  else if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.add || desk.lmenu || desk.vmenu || desk.naming || desk.ctx)) { desk.add = desk.lmenu = desk.vmenu = desk.naming = false; desk.ctx = null; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
   if (!$('rackDlg').hidden) {
     const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
     if (e.key === 'Escape') closeRack();
@@ -8596,6 +8630,11 @@ svg.addEventListener('pointerover', e => {
     const mix = (it.type === 'wedge' || C.iem) && owner && monitorMixes().find(m => m.person === owner.name && m.kind === (C.iem ? 'IEM' : 'Wedge'));
     if (mix) rows.push(['Monitor', `Mix ${mix.mix}`]);
     if (it.chan) rows.push(['Placed', `Inside ${chans().find(c => c.id === it.chan.id)?.name || 'a channel'}`]);
+    if (isFixture(it) || isDmx(it)) {   // a light: its colour and level in the open look, its address and where it hangs
+      const L = curLook(), raw = fxIn(it, L), eff = fxEff(it, L);
+      if (isFixture(it)) rows.push(['Colour', `${fxName(raw, it)}${L ? ` · ${L.name}` : ''}`], ['Level', `${eff.d}%${lookMaster(L) < 100 ? ` (look at ${lookMaster(L)}%)` : ''}`]);
+      rows.push(['DMX', ldAddr(it)], ['Hangs on', mountOf(it) ? itemName(mountOf(it)) : 'Floor or stand']);
+    }
     if (['platform', 'speaker', 'wedge'].includes(C.shape)) rows.push(['Size', `${uDim(prop(it, 'w'), prop(it, 'd'))}`]);   // size matters for risers and speakers; for gear it's noise
     const h = $('hoverCard'), hue = personColour(it.personId);
     h.innerHTML = `<div class="hc-head">${C.shape === 'person' ? `<span class="avatar${hueStyle(it.personId)}">${esc(initials(owner?.name || it.label))}</span>` : itemPreview(it, 'ipv')}<div><div class="eyebrow">${esc(C.shape === 'person' ? 'Performer' : C.name)}</div><b>${esc(C.shape === 'person' ? (owner?.name || it.label) : itemName(it))}</b>${owner && C.shape !== 'person' ? `<span class="hc-owner"><i style="background:${hue}"></i>${esc(firstName(owner.name))}</span>` : ''}</div></div>
