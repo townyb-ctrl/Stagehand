@@ -614,7 +614,7 @@ svg text { font-family: var(--f-ui); }
 .ld-cueno { grid-row: span 2; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; background: var(--ld-panel); color: var(--ld-mute); font-variant-numeric: tabular-nums; box-shadow: inset 0 0 0 1px var(--ld-line); }
 .ld-look[aria-pressed="true"] .ld-cueno { background: var(--ld-acc); color: var(--accent-ink); box-shadow: none; }
 .ld-cuename { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
-.ld-pal { display: flex; gap: 3px; } .ld-pal i { width: 16px; height: 4px; border-radius: 2px; } .ld-pal i.dark { background: var(--ld-line2); box-shadow: none; }
+.ld-pal { display: flex; } .ld-pal i { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 2px var(--ld-bg); } .ld-pal i + i { margin-left: -3px; } .ld-pal i.dark { background: var(--ld-line2); box-shadow: none; }
 .ld-look.add { display: inline-flex; min-width: max-content; flex: none; align-self: stretch; align-items: center; gap: 6px; border-style: dashed; background: transparent; color: var(--ld-mute); font-size: 13px; font-weight: 600; white-space: nowrap; }
 .ld-look.add:hover { color: var(--ld-ink); border-color: var(--ld-mute); }
 .ld-actions { display: flex; align-items: center; gap: 8px; }
@@ -655,8 +655,8 @@ svg text { font-family: var(--f-ui); }
 .ld-bigs { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; padding: 16px 18px 20px; overflow-y: auto; align-content: start; }
 .ld-big { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 12px; row-gap: 10px; min-height: 96px; padding: 16px; border-radius: 10px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink); font: inherit; text-align: left; cursor: pointer; transition: transform .12s, border-color .2s, box-shadow .2s; }
 .ld-big:active { transform: scale(.98); }
-.ld-big b { font-size: 19px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ld-bigno { grid-row: span 2; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: 17px; background: var(--ld-panel); color: var(--ld-mute); box-shadow: inset 0 0 0 1px var(--ld-line); }
+.ld-big > b, .ld-bignote, .ld-bigthumb { grid-column: 2; } .ld-big { align-items: start; } .ld-big > b { align-self: center; } .ld-big b { font-size: 19px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ld-bigno { grid-row: 1; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: 17px; background: var(--ld-panel); color: var(--ld-mute); box-shadow: inset 0 0 0 1px var(--ld-line); }
 .ld-bigpal { display: flex; gap: 5px; } .ld-bigpal i { flex: 1; max-width: 46px; height: 8px; border-radius: 4px; }
 .ld-big[aria-pressed="true"] { border-color: var(--ld-acc); box-shadow: inset 0 0 0 1px var(--ld-acc); }
 .ld-big[aria-pressed="true"] .ld-bigno { background: var(--ld-acc); color: var(--accent-ink); }
@@ -670,7 +670,7 @@ svg text { font-family: var(--f-ui); }
 .ld-q { font-weight: 700; font-size: 14px; line-height: 1; }
 .ldesk.slim .ld-thumb { display: none; } .ldesk.slim .ld-look { min-width: 0; grid-template-rows: auto; padding: 4px 10px 4px 5px; column-gap: 7px; } .ldesk.slim .ld-cueno { grid-row: auto; width: 20px; height: 20px; font-size: 11px; } .ldesk.slim .ld-cuename { font-size: 13px; } .ldesk.slim .ld-look.add { padding: 4px 10px; } .ldesk.slim .ld-rename { height: 30px; } .ldesk.slim .ld-lookacts .ld-icon { width: 30px; height: 30px; }
 .ld-resize { position: absolute; left: -3px; top: 0; bottom: 0; width: 7px; z-index: 8; cursor: ew-resize; } .ld-resize:hover, .ld-resize:active { background: var(--ld-acc); opacity: .35; }
-.ld-viewmenu button { align-items: flex-start; } .ld-viewmenu small { display: block; font-weight: 500; color: var(--ld-mute); font-size: 11.5px; margin-top: 2px; }
+.ld-viewmenu button { align-items: flex-start; } .ld-viewmenu small { display: block; padding: 0 !important; font-weight: 500; color: var(--ld-mute); font-size: 11.5px; margin-top: 2px; }
 .ld-check { width: 16px; height: 16px; flex: none; display: grid; place-items: center; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--ld-line2); margin-top: 1px; } .ld-viewmenu button[aria-pressed="true"] .ld-check { background: var(--ld-acc); color: var(--accent-ink); box-shadow: none; }
 .ld-body.nocol { grid-template-columns: minmax(0, 1fr) 44px; }
 .ld-colstrip { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 18px; border: 0; border-left: 1px solid var(--ld-line); background: var(--ld-panel); color: var(--ld-mute); font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; }
@@ -679,7 +679,7 @@ svg text { font-family: var(--f-ui); }
 .ldesk.docked { pointer-events: auto; width: var(--dockw, 440px); position: relative; height: 100%; border-radius: 0; border-width: 0 0 0 1px; box-shadow: var(--shadow-2); }
 .ldesk.docked .ld-body { display: block; overflow-y: auto; } .ldesk.docked .ld-stage { grid-template-rows: auto minmax(200px, 30vh) auto; } .ldesk.docked .ld-mapwrap { min-height: 200px; }
 .ldesk.docked .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; }
-.ldesk.docked .ld-brand small, .ldesk.docked .ld-keys, .ldesk.docked #ldBigGo { display: none; }
+.ldesk.docked .ld-brand small, .ldesk.docked .ld-keys, .ldesk.docked #ldBigGo { display: none; } .ldesk.docked .ld-brand h2 { white-space: nowrap; font-size: 15px; } .ldesk.docked .ld-foot > span:last-child { display: none; }
 .ldesk.docked .ld-bar { flex-wrap: wrap; } .ldesk.docked .ld-tipcard { right: 16px; left: 16px; top: auto; bottom: 64px; width: auto; }
 .ldesk.docked .ld-mixrow { grid-template-columns: auto minmax(0, 1fr); }
 .ldesk.compact .ld-top { padding: 8px 14px; gap: 8px 14px; } .ldesk.compact .ld-look { min-width: 96px; padding: 5px 9px; } .ldesk.compact .ld-thumb { height: 24px; width: 76px; }
@@ -788,7 +788,7 @@ svg text { font-family: var(--f-ui); }
 .ld-pickinfo .bigsw { width: 40px; height: 40px; border-radius: 8px; border: 1px solid rgba(0,0,0,.12); background: var(--c); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
 .ld-pickinfo .bigsw.none { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 5px, var(--ld-line) 5px 10px); box-shadow: none; }
 .ld-wheelwrap { display: grid; place-items: center; padding: 4px 0; }
-.ld-mixrow { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; }
+.ld-mixrow { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; } .ld-mixrow.few { grid-template-columns: auto auto; justify-content: space-evenly; gap: 28px; }
 .ld-wheel { position: relative; width: 136px; aspect-ratio: 1; border-radius: 50%; cursor: crosshair; touch-action: none;
   background: radial-gradient(circle closest-side, #fff, rgba(255,255,255,0)), conic-gradient(from 90deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
   box-shadow: 0 0 0 1px var(--ld-line2); }
@@ -831,12 +831,12 @@ svg text { font-family: var(--f-ui); }
 .dmxlines { display: grid; gap: 6px; margin-bottom: 8px; } .dmxlines div { display: grid; } .dmxlines small { color: var(--muted); font-size: 12px; }
 .lb-pool.on { stroke: var(--lc); stroke-width: .05; } .lb-pool.mover { stroke: var(--lc); stroke-opacity: .6; stroke-width: .04; stroke-dasharray: .25 .18; }
 .lb-wall { stroke-width: .12; stroke-linecap: round; fill: none; } .lb-up.on { stroke: rgba(255, 214, 110, .5); stroke-width: .03; }
-.beams.lit .lb, .beams .lit .lb { mix-blend-mode: screen; } .beams.lit, .beams .lit { isolation: isolate; } .lb-glow { pointer-events: none; }
+.beams.lit .lb, .beams .lit .lb { mix-blend-mode: screen; } .plotbeams { opacity: .62; transition: opacity .2s; } .plotbeams .lb-pool.on { stroke-opacity: 1; } .beams.lit, .beams .lit { isolation: isolate; } .lb-glow { pointer-events: none; }
 .ld-planks { pointer-events: none; }
 .ld-zoom { cursor: ew-resize; } .ld-zoomk { fill: rgba(0,0,0,.45); stroke: #fff; } .ld-zoom:hover .ld-zoomk, .ld-zoom:focus-visible .ld-zoomk { stroke: var(--ld-acc); } .ld-zoom:focus-visible { outline: none; }
 .ld-aim { cursor: move; } .ld-aimhit { fill: transparent; } .ld-aimline { stroke: rgba(255,255,255,.55); fill: none; pointer-events: none; } .ld-aimc { fill: rgba(0,0,0,.25); stroke: #fff; } .ld-aimx { stroke: #fff; stroke-linecap: round; }
 .ld-aim:hover .ld-aimc, .ld-aim:focus-visible .ld-aimc { stroke: var(--ld-acc); fill: rgba(0,0,0,.4); } .ld-aim:focus-visible { outline: none; }
-.ld-front { width: 100%; height: 100%; display: block; } .lf-bg { fill: #07090d; } .lf-wall { fill: #1a1f29; } .lf-floor { fill: #0d1016; } .lf-deck { fill: #222833; stroke: rgba(255,255,255,.12); stroke-width: 1; } .lf-face { fill: #11151c; stroke: rgba(255,255,255,.08); stroke-width: 1; }
+.ld-front { width: 100%; height: 100%; display: block; } .lf-bg { fill: #0d1117; } .lf-wall { fill: #1a1f29; } .lf-floor { fill: #0d1016; } .lf-deck { fill: #222833; stroke: rgba(255,255,255,.12); stroke-width: 1; } .lf-face { fill: #11151c; stroke: rgba(255,255,255,.08); stroke-width: 1; }
 .lf-light > *, .lf-up { mix-blend-mode: screen; } .lf-rig { stroke: #4b5363; stroke-linecap: round; fill: none; } .lf-rig.truss { stroke: #3a414e; stroke-dasharray: 3 2; }
 .lf-body { fill: #2b313b; stroke: #5d6676; stroke-width: 1; } .lf-lens { stroke: rgba(0,0,0,.4); stroke-width: .6; } .lf-fx { cursor: pointer; } .lf-sel { fill: none; stroke: var(--ld-acc); stroke-width: 2; } .lf-fx:focus-visible { outline: none; } .lf-fx:focus-visible .lf-body { stroke: var(--ld-acc); stroke-width: 2; }
 .lf-shadow { fill: rgba(0,0,0,.45); } .lf-person text { fill: rgba(225,231,240,.55); font: 600 11px var(--f-ui, sans-serif); } .lf-note { fill: rgba(225,231,240,.4); font: 500 11px var(--f-ui, sans-serif); }
@@ -1476,8 +1476,9 @@ tr.flag td { color: var(--bad); }
 .litem input { width: 22px; height: 22px; flex: none; accent-color: #16a34a; }
 .litem span { display: grid; gap: 1px; min-width: 0; } .litem small { color: var(--muted); font-size: 12.5px; }
 .litem.done { background: color-mix(in srgb, #22c55e 9%, var(--surface)); border-color: color-mix(in srgb, #22c55e 40%, var(--line)); } .litem.done b { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent); color: var(--muted); }
-.faultbadge path:first-child { fill: #f5a524; stroke: #1b1f27; stroke-width: .08; stroke-linejoin: round; } .faultbadge .fb-mark { fill: none; stroke: #1b1f27; stroke-width: .13; stroke-linecap: round; } .faultbadge { cursor: pointer; }
-.isec.fault.on { border-left: 3px solid #f5a524; padding-left: 10px; } .faultnow { display: flex; align-items: center; gap: 8px; } .faultnow b { flex: 1; } .faultnow svg { color: #c27c0e; } .faultpicks { display: flex; flex-wrap: wrap; gap: 6px; } .faultpicks .btn { padding: 4px 10px; font-size: 12.5px; min-height: 0; }
+.faultbadge path:not(.fb-mark) { fill: #f5a524; stroke: #1b1f27; stroke-width: .08; stroke-linejoin: round; } .faultbadge .fb-mark { fill: none; stroke: #1b1f27; stroke-width: .13; stroke-linecap: round; } .faultbadge { cursor: pointer; }
+.faultnow { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; background: var(--warn-soft, rgba(245,165,36,.12)); } .faultnow > div { flex: 1; min-width: 0; display: grid; } .faultnow small { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--warn-ink); } .faultnow b { font-size: 14px; color: var(--ink); } .faulticon { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: #f5a524; color: #1b1f27; flex: none; }
+.faultopen { text-decoration: none; padding: 2px 0; display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 13px; } .faultopen:hover { color: var(--ink); } .faultpicks { display: flex; flex-wrap: wrap; gap: 6px; } .faultpicks .btn { padding: 4px 10px; font-size: 12.5px; min-height: 0; }
 .ld-fault { display: inline-flex; margin-left: 6px; color: #f5a524; vertical-align: -2px; } .faultcell { color: var(--warn-ink, #8a5a00); white-space: nowrap; } .faultcell svg { vertical-align: -2px; margin-right: 4px; }
 .notebadge circle { fill: var(--accent); stroke: #fff; stroke-width: .07; } .notebadge path { fill: none; stroke: #fff; stroke-width: .07; stroke-linecap: round; } .notebadge { cursor: pointer; }
 tr.flag .ch { background: var(--bad-soft); color: var(--bad); }
@@ -3168,8 +3169,9 @@ function deskFrontSvg() {
     actors.push([p.y, `<g class="lf-person"><title>${esc(nm)}</title><ellipse class="lf-shadow" cx="${f3(px)}" cy="${f3(py)}" rx="${m(.32)}" ry="${m(.06)}"/><path d="${body}" style="fill:${fill}${rimOn ? `;stroke:${rc};stroke-width:${f3(Math.max(1, fromM(.025) * k))}` : ''}"/><circle cx="${f3(px)}" cy="${f3(py - fromM(1.63) * k)}" r="${m(.115)}" style="fill:${fill}${rimOn ? `;stroke:${rc};stroke-width:${f3(Math.max(1, fromM(.025) * k))}` : ''}"/><path d="${body}" fill="url(#lfShade)"/><text x="${f3(px)}" y="${f3(py + Math.max(12, fromM(.3) * k))}" text-anchor="middle">${esc(nm.split(' ')[0])}</text></g>`]);
   }
   ppl = actors.sort((a, b) => a[0] - b[0]).map(a => a[1]).join('');
-  return `<svg class="ld-front" id="ldFront" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="The stage from the audience in ${esc(L?.name || 'warm white')}: lights, beams and people"><defs>${defs}<linearGradient id="lfShade" x1="0" y1="0" x2="0" y2="1"><stop offset=".15" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient><filter id="lfSoft" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
-    <rect class="lf-bg" width="${W}" height="${H}"/>${back}<g class="lf-light" filter="url(#lfSoft)">${light}</g>${ppl}${rig}<text class="lf-note" x="${W - 14}" y="${H - 12}" text-anchor="end">From the middle of the room · ${esc(L?.name || 'no look yet')}</text></svg>`;
+  const tops = [P(R.x0, R.y0, wallH)[1], ...lit.map(l => l.lens[1])].filter(v => v > -H), y0 = clamp(Math.min(...tops) - 28, 0, H * .4);   // no empty band above the room
+  return `<svg class="ld-front" id="ldFront" viewBox="0 ${f3(y0)} ${W} ${f3(H - y0)}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="The stage from the audience in ${esc(L?.name || 'warm white')}: lights, beams and people"><defs>${defs}<linearGradient id="lfShade" x1="0" y1="0" x2="0" y2="1"><stop offset=".15" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient><filter id="lfSoft" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
+    <rect class="lf-bg" y="${f3(y0)}" width="${W}" height="${f3(H - y0)}"/>${back}<g class="lf-light" filter="url(#lfSoft)">${light}</g>${ppl}${rig}<text class="lf-note" x="${W - 14}" y="${H - 12}" text-anchor="end">From the middle of the room · ${esc(L?.name || 'no look yet')}</text></svg>`;
 }
 function deskListHtml() {
   const picked = new Set(deskPicked().map(i => i.id)), L = curLook();
@@ -3223,7 +3225,7 @@ function deskMapSvg() {
   const box = i => { const w = lab(i).length * U * .82 + U * .6, y = i.y + rr + U * 2.1; return [i.x - w / 2, y - U * 1.4, i.x + w / 2, y + U * .3]; }, crowd = new Set();
   lights.forEach((a, k) => { const A = box(a); for (const b of lights.slice(k + 1)) { const B = box(b); if (A[0] < B[2] && B[0] < A[2] && A[1] < B[3] && B[1] < A[3]) { crowd.add(a.id); crowd.add(b.id); } } });
   const dots = lights.map(i => { const f = fxOf(i), sw = fxSwatch(f, i), shape = ldShape(i, sw, rr, U), on = picked.has(i.id);
-    const halo = on || desk.flash?.has(i.id) ? `<g class="ld-halo">${shape.replace(/class="[^"]*"/g, '').replace(/style="[^"]*"/g, `style="stroke-width:${f3(U * .7)}"`)}</g>` : '';
+    const halo = (on && !desk.big) || desk.flash?.has(i.id) ? `<g class="ld-halo">${shape.replace(/class="[^"]*"/g, '').replace(/style="[^"]*"/g, `style="stroke-width:${f3(U * .7)}"`)}</g>` : '';
     return `<g class="ld-fx${on ? ' on' : ''}${desk.flash?.has(i.id) ? ' flashing' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .9)}" style="stroke-width:${f3(U * .3)}"/>${halo}${shape}${i.fault ? faultTri(i.x + rr * 1.15, i.y - rr * 1.15, U * .95, i) : ''}<text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px" class="${showAddr ? 'addr' : ''}${crowd.has(i.id) && !on ? ' crowd' : ''}">${esc(lab(i))}</text></g>`; }).join('');
   // where each picked light lands: a target to drag (Shift drags every picked light's target together)
   const aims = desk.big || weekLocked() || lookPeek ? '' : deskPicked().filter(i => !isUp(i)).map(i => { const g = beamGeom(i), x = f3(g.cx), y = f3(g.cy), r = f3(U * 1.15);
@@ -3332,7 +3334,7 @@ function deskColourHtml() {
   const mx = 50 + Math.cos(h * Math.PI / 180) * sat * 50, my = 50 + Math.sin(h * Math.PI / 180) * sat * 50, sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent';
   const hex = f.r + f.g + f.b ? '#' + [f.r, f.g, f.b].map(v => v.toString(16).padStart(2, '0')).join('') : '', rec = deskRecent(), L = curLook(), mst = lookMaster(L);
   return `<div class="ld-card ld-colcard"><div class="ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'Pick lights on the stage'}</b></div><span class="ld-pickacts">${ts.length ? `<button class="ld-mini" data-flash title="Make the picked lights pulse on the stage, to find them">${ic('zap', 'sm')}Flash</button>` : ''}${ui.adv ? `<button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button>` : ''}</span></div>
-      <div class="ld-mixrow"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders${ui.adv ? '' : ' few'}">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].filter(([k]) => ui.adv || k === 'd').map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--ld-acc)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
+      <div class="ld-mixrow${ui.adv ? '' : ' few'}"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders${ui.adv ? '' : ' few'}">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].filter(([k]) => ui.adv || k === 'd').map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--ld-acc)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
       <label class="ld-cct" title="Warm (tungsten) to cool (daylight) white"><span class="ld-label">White</span><span class="ld-cctw">Warm</span><input type="range" data-cct min="2700" max="6500" step="100" value="${f.k || CCT_DEF}" ${ts.length ? '' : 'disabled'} aria-label="Colour temperature, warm to cool" aria-valuetext="${f.k ? f.k + ' kelvin' : 'not set'}"><span class="ld-cctw">Cool</span><output>${f.k ? f.k + ' K' : ''}</output></label>
       <div class="ld-recentrow"><span class="ld-label">Recent</span>${rec.length ? `<div class="ld-recent" title="Recent colours">${rec.map((c, i) => `<button class="ld-rsw" data-recent="${i}" style="--sw:${fxSwatch({ ...c, d: 100 })}" aria-label="Recent colour ${esc(fxName({ ...c, d: 100 }))}" title="${esc(fxName({ ...c, d: 100 }))}" ${!ts.length || white ? 'disabled' : ''}></button>`).join('')}</div>` : '<span class="ld-recentnone">Colours you use show here</span>'}<button class="ld-mini ld-offbtn" data-preset="Off" title="Turn the picked lights off" ${ts.length ? '' : 'disabled'}>Off</button>
       ${ui.adv ? '' : '<!--'}<label class="ld-hex"><span class="sr-only">Colour code</span><input id="ldHex" type="text" value="${hex}" placeholder="#1f6bff" maxlength="7" spellcheck="false" aria-label="Colour code, like #1f6bff" ${!ts.length || white ? 'disabled' : ''}></label>${ui.adv ? '' : '-->'}</div>
@@ -3666,9 +3668,10 @@ function lightingInsp(it) {
       <button class="btn primary block" data-opendesk="${it.id}">${ic('sun', 'sm')}Open the lighting desk</button>
       <p class="hint" style="margin:10px 0 0">${hang ? `Hangs on ${esc(itemName(hang))}` : 'On the floor or a stand'}${a != null ? ` · hits faces at ${Math.round(a)}°${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ''}` : ''}. Drag the yellow dot on the plot to aim it${cat(it).zoom ? ', the white dot to size the beam' : ''}.</p></section>`
     : `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><p class="hint" style="margin:0">${n} channels. Address and mode are under More settings.</p></section>`;
-  const faultSec = `<section class="isec fault${it.fault ? ' on' : ''}"><h3>Problem <span>${it.fault ? 'needs attention' : 'none'}</span></h3>${it.fault
-    ? `<div class="faultnow">${ic('alert', 'sm')}<b>${esc(it.fault)}</b><button class="btn quiet" data-faultclear="${it.id}">${ic('check', 'sm')}Fixed</button></div>`
-    : `<div class="faultpicks" role="group" aria-label="Mark a problem with this light">${FAULTS.map(f => `<button class="btn quiet" data-fault="${esc(f)}">${esc(f)}</button>`).join('')}</div><div class="field" style="margin-top:8px"><label for="iFault">Something else</label><input id="iFault" type="text" maxlength="80" placeholder="e.g. Yoke knob missing"></div>`}</section>`;
+  const faultSec = it.fault
+    ? `<section class="isec fault on"><div class="faultnow"><span class="faulticon">${ic('alert', 'sm')}</span><div><small>Problem</small><b>${esc(it.fault)}</b></div><button class="btn quiet" data-faultclear="${it.id}">${ic('check', 'sm')}Fixed</button></div></section>`
+    : ui.faultOpen === it.id ? `<section class="isec fault"><h3>Report a problem</h3><div class="faultpicks" role="group" aria-label="Mark a problem with this light">${FAULTS.map(f => `<button class="lookchip" data-fault="${esc(f)}">${esc(f)}</button>`).join('')}</div><div class="field" style="margin-top:10px"><label for="iFault">Something else</label><input id="iFault" type="text" maxlength="80" placeholder="e.g. Yoke knob missing"></div></section>`
+    : `<section class="isec fault"><button class="tlink faultopen" data-faultopen="${it.id}">${ic('alert', 'sm')}Report a problem with this light</button></section>`;
   const adv = `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><div class="grid2">${field('iDmxA', 'Start address', it.dmxA || '', 'number', 'min="1" max="512" step="1"')}${field('iDmxCh', 'Channels (mode)', n, 'number', 'min="1" max="64" step="1"')}</div></section>` +
     (fix ? `<section class="isec"><h3>Light</h3><div class="field"><label for="iLType">Light type</label><select id="iLType">${LIGHT_TYPES().map(t => `<option value="${t}" ${t === it.type ? 'selected' : ''}>${esc(CAT[t].name)}</option>`).join('')}</select></div>
       <div class="grid2" style="margin-top:8px">${field('iThrow', 'Throw', mVal(throwOf(it)), 'number', 'step=".1" min=".5"', 'm')}${cat(it).zoom ? field('iBeam', `Beam (${cat(it).zoom.join('–')}°)`, beamOf(it), 'number', `step="1" min="${cat(it).zoom[0]}" max="${cat(it).zoom[1]}"`, '°') : ''}</div>
@@ -5543,7 +5546,7 @@ function renderPlot() {
 
   if (!layersBypass) s += overlaySvg(deckD);
   const selItem = sel?.kind === 'item' ? sel.id : null, selSet = new Set(selIds()), solo = selSet.size === 1;
-  if (!layerOff('beams') && plan.items.some(isFixture)) { const R = roomRect(); s += `<rect class="room-wall" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/>` + fadedBeams(beamsSvg(selSet, 'lbp', lum(plan.stage.color) > .55 ? 1 : 1.35, curLook(), { deck: lum(plan.stage.color) > .55 ? 'light' : 'dark' }), 'plot'); }
+  if (!layerOff('beams') && plan.items.some(isFixture)) { const R = roomRect(); s += `<rect class="room-wall" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/>` + `<g class="plotbeams">${fadedBeams(beamsSvg(selSet, 'lbp', lum(plan.stage.color) > .55 ? 1 : 1.35, curLook(), { deck: lum(plan.stage.color) > .55 ? 'light' : 'dark' }), 'plot')}</g>`; }
   const lifted = drag?.kind === 'item' && drag.moved ? new Set([drag.id, ...(drag.others || []).map(o => o.id)]) : null;   // gear in hand rises off the deck
   const tr = tracing && selItem === tracing && !layersBypass ? traceSets(tracing) : null;   // signal trace runs while its source stays picked
   svg.classList.toggle('tracing', !!tr);
@@ -7730,7 +7733,7 @@ $('inspector').addEventListener('change', e => {
       case 'iDmxA': if (t.value === '') delete it.dmxA; else it.dmxA = clamp(Math.round(n), 1, 512); break;
       case 'iDmxCh': if (n > 0) it.dmxCh = clamp(Math.round(n), 1, 64); break;
       case 'iThrow': if (n > 0) it.throw = r2(fromM(mIn(n))); break;
-      case 'iFault': if (t.value.trim()) it.fault = t.value.trim().slice(0, 80); break;
+      case 'iFault': if (t.value.trim()) { it.fault = t.value.trim().slice(0, 80); ui.faultOpen = null; } break;
       case 'iLen': if (n > 0) it.w = fromM(mIn(n)); break;
       case 'iBeam': if (cat(it).zoom && n > 0) it.beam = clamp(Math.round(n), ...cat(it).zoom); break;
       case 'iMountH': if (n > 0) it.h = r2(fromM(mIn(n))); break;
@@ -7764,7 +7767,8 @@ $('inspector').addEventListener('click', e => {
   if (t.dataset.look) { switchLook(t.dataset.look); return; }
   if (t.hasAttribute('data-opendesk')) { openDesk(t.dataset.opendesk || null); return; }
   if (t.dataset.mirror) { mirrorLight(t.dataset.mirror); return; }
-  if (t.dataset.fault && sel?.id) { setFault(itemById(sel.id), t.dataset.fault); return; }
+  if (t.dataset.faultopen) { ui.faultOpen = t.dataset.faultopen; renderInspector(); setTimeout(() => document.querySelector('[data-fault]')?.focus(), 20); return; }
+  if (t.dataset.fault && sel?.id) { ui.faultOpen = null; setFault(itemById(sel.id), t.dataset.fault); return; }
   if (t.dataset.faultclear) { setFault(itemById(t.dataset.faultclear), ''); return; }
   if (t.dataset.level) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.level = t.dataset.level === 'ceiling' ? 'ceiling' : undefined; c.auto = false; }); return; }
   if (t.dataset.route) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.route = t.dataset.route === 'direct' ? 'direct' : undefined; }); return; }
