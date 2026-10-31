@@ -719,7 +719,10 @@ svg text { font-family: var(--f-ui); }
 .ld-room { fill: rgba(255,255,255,.012); stroke: rgba(255,255,255,.1); stroke-width: .1; stroke-dasharray: .5 .35; }
 .ld-deck { fill: #1b202b; stroke: rgba(255,255,255,.16); stroke-width: .08; }
 .ld-mount { stroke: rgba(200,210,222,.32); stroke-width: .3; stroke-linecap: round; }
-.ld-fx { cursor: pointer; } .ld-fx text { fill: rgba(225,231,240,.62); font-weight: 600; pointer-events: none; letter-spacing: .01em; }
+.ld-fx { cursor: pointer; }
+.ld-lens { fill: rgba(255,255,255,.85); } .ld-ringl, .ld-mark2 { fill: none; stroke: rgba(0,0,0,.35); } .ld-led { fill: rgba(255,255,255,.75); }
+.ld-base { fill: #2a313c; stroke: rgba(255,255,255,.25); } .ld-tripod { stroke: rgba(220,226,232,.55); stroke-linecap: round; }
+.ld-fx text.addr { font-family: var(--f-mono); fill: #ffd66e; } .ld-fx text { fill: rgba(225,231,240,.62); font-weight: 600; pointer-events: none; letter-spacing: .01em; }
 .ld-dot { stroke: rgba(0,0,0,.55); filter: drop-shadow(0 0 .45px currentColor); } .ld-dot.dark { stroke: rgba(255,255,255,.45); stroke-dasharray: .25 .2; }
 .ld-ring { fill: none; stroke: transparent; } .ld-fx.on .ld-ring { stroke: #fff; } .ld-fx.on text { fill: #fff; }
 .ld-fx:focus-visible { outline: none; } .ld-fx:focus-visible .ld-ring { stroke: var(--ld-acc); }
@@ -2974,7 +2977,7 @@ function deskLaunch() {
 /* The lighting desk: a window of its own. Looks across the top; the stage on the left, where you pick lights and see their
    beams; colour on the right: a wheel, presets, and RGBW and dimmer faders. */
 const desk = { open: false, drag: null, box: null };
-try { desk.view = localStorage.getItem('stageplot.deskView') || 'map'; } catch { desk.view = 'map'; }
+try { desk.view = localStorage.getItem('stageplot.deskView') || 'map'; desk.label = localStorage.getItem('stageplot.deskLabel') || 'name'; } catch { desk.view = 'map'; desk.label = 'name'; }
 // three short pointers the first time the desk opens, then never again
 const DESK_TIPS = [['Pick lights', 'Click lights on the stage, or a group above it. Shift-click adds more.', '#ldMapWrap'], ['Choose a colour', 'Use the wheel or a colour button; the beams change as you go. Dim sets how bright.', '#ldColour'], ['Keep it as a look', 'Changes save to the open look. + Look adds another: a copy, a mood or one from your library.', '[data-addlook]']];
 function deskTipHtml() {
@@ -3024,7 +3027,7 @@ function deskListHtml() {
   const picked = new Set(deskPicked().map(i => i.id)), L = curLook();
   const rows = deskLights().slice().sort((a, b) => (mountOf(a) ? 0 : 1) - (mountOf(b) ? 0 : 1) || (itemName(mountOf(a) || {}) || '').localeCompare(itemName(mountOf(b) || {}) || '') || a.x - b.x);
   return `<div class="ld-list" role="listbox" aria-multiselectable="true" aria-label="Lights">${rows.map(i => { const f = fxEff(i, L), raw = fxOf(i), sw = fxSwatch(raw, i), on = picked.has(i.id);
-    return `<div class="ld-row${on ? ' on' : ''}" role="option" aria-selected="${on}" tabindex="0" data-ldfx="${i.id}"><i class="ld-dotl${sw === 'transparent' ? ' dark' : ''}" style="background:${sw}"></i><b>${esc(itemName(i))}</b><span class="ld-where">${esc(mountOf(i) ? itemName(mountOf(i)) : 'Floor')}</span><span class="ld-cname">${esc(fxName(raw, i))}</span><span class="ld-pct">${f.d}%</span></div>`; }).join('')}</div>`;
+    return `<div class="ld-row${on ? ' on' : ''}" role="option" aria-selected="${on}" tabindex="0" data-ldfx="${i.id}"><i class="ld-dotl${sw === 'transparent' ? ' dark' : ''}" style="background:${sw}"></i><b>${esc(itemName(i))}</b><span class="ld-where">${ui.adv ? `<span class="mono">${ldAddr(i)}</span> · ` : ''}${esc(mountOf(i) ? itemName(mountOf(i)) : 'Floor')}</span><span class="ld-cname">${esc(fxName(raw, i))}</span><span class="ld-pct">${f.d}%</span></div>`; }).join('')}</div>`;
 }
 // zoomed in on the desk's map: the view's top-left corner and how far in (1 = the whole stage)
 function deskZoomVb(vb) {
@@ -3033,11 +3036,27 @@ function deskZoomVb(vb) {
   const zw = w / z.k, zh = h / z.k; z.x = clamp(z.x, x, x + w - zw); z.y = clamp(z.y, y, y + h - zh);
   return `${f3(z.x)} ${f3(z.y)} ${f3(zw)} ${f3(zh)}`;
 }
+// each light on the desk's map drawn as a little picture of its kind, filled with its colour and turned the way it's aimed
+function ldShape(i, sw, rr, U) {
+  const fill = sw === 'transparent' ? 'var(--surface)' : sw, cls = `ld-dot${sw === 'transparent' ? ' dark' : ''}`, sty = `fill:${fill};stroke-width:${f3(U * .2)}`, x = f3(i.x), y = f3(i.y), r = rr;
+  const t = i.type, rot = `rotate(${i.rot || 0} ${x} ${y})`, line = `stroke-width:${f3(U * .22)}`;
+  if (t === 'bar_led' || t === 'bar_up') return `<g transform="${rot}"><rect class="${cls}" x="${f3(i.x - r * 2.2)}" y="${f3(i.y - r * .55)}" width="${f3(r * 4.4)}" height="${f3(r * 1.1)}" rx="${f3(r * .35)}" style="${sty}"/>${t === 'bar_up' ? `<path class="ld-mark2" d="M${f3(i.x - r * .5)} ${f3(i.y + r * .25)}L${x} ${f3(i.y - r * .25)}L${f3(i.x + r * .5)} ${f3(i.y + r * .25)}" style="${line}"/>` : ''}</g>`;
+  if (t === 'profile') return `<g transform="${rot}"><rect class="${cls}" x="${f3(i.x - r * .55)}" y="${f3(i.y - r * 1.5)}" width="${f3(r * 1.1)}" height="${f3(r * 2.6)}" rx="${f3(r * .3)}" style="${sty}"/><rect class="ld-lens" x="${f3(i.x - r * .45)}" y="${f3(i.y - r * 1.75)}" width="${f3(r * .9)}" height="${f3(r * .4)}" rx="${f3(r * .15)}"/></g>`;
+  if (t === 'spot_mh' || t === 'wash_mh') return `<rect class="ld-base" x="${f3(i.x - r * 1.05)}" y="${f3(i.y - r * .2)}" width="${f3(r * 2.1)}" height="${f3(r * 1.2)}" rx="${f3(r * .25)}" style="${line}"/><circle class="${cls}" cx="${x}" cy="${f3(i.y - r * .15)}" r="${f3(r * .9)}" style="${sty}"/>${t === 'spot_mh' ? `<circle class="ld-lens" cx="${x}" cy="${f3(i.y - r * .15)}" r="${f3(r * .32)}"/>` : ''}`;
+  if (t === 'uplight') return `<rect class="${cls}" x="${f3(i.x - r * .85)}" y="${f3(i.y - r * .85)}" width="${f3(r * 1.7)}" height="${f3(r * 1.7)}" rx="${f3(r * .35)}" style="${sty}"/>`;
+  if (t === 'fresnel') return `<circle class="${cls}" cx="${x}" cy="${y}" r="${f3(r)}" style="${sty}"/><circle class="ld-ringl" cx="${x}" cy="${y}" r="${f3(r * .62)}" style="${line}"/><circle class="ld-ringl" cx="${x}" cy="${y}" r="${f3(r * .28)}" style="${line}"/>`;
+  if (t === 'wash_led') return `<circle class="${cls}" cx="${x}" cy="${y}" r="${f3(r * 1.12)}" style="${sty}"/>${[[-.4, -.35], [.4, -.35], [-.4, .35], [.4, .35]].map(([a, b]) => `<circle class="ld-led" cx="${f3(i.x + a * r)}" cy="${f3(i.y + b * r)}" r="${f3(r * .17)}"/>`).join('')}`;
+  if (t === 'light_stand') return `${[90, 210, 330].map(a => `<path class="ld-tripod" d="M${x} ${y}L${f3(i.x + Math.cos(a * Math.PI / 180) * r * 1.7)} ${f3(i.y + Math.sin(a * Math.PI / 180) * r * 1.7)}" style="${line}"/>`).join('')}<circle class="${cls}" cx="${x}" cy="${y}" r="${f3(r * .9)}" style="${sty}"/>`;
+  return `<circle class="${cls}" cx="${x}" cy="${y}" r="${f3(r)}" style="${sty}"/><circle class="ld-ringl" cx="${x}" cy="${y}" r="${f3(r * .55)}" style="${line}"/>`;   // a par: the can and its lens
+}
+// a light's DMX address the way the patch sheet writes it (1.015), for the desk's Addresses labels
+const ldAddr = i => { if (!isDmx(i)) return 'no DMX'; const w = dmxWhere().get(i.id); return w && i.dmxA ? `${w.line.universe}.${String(i.dmxA).padStart(3, '0')}` : 'no address'; };
 function deskMapSvg() {
   const { R, vb, U } = deskFrame(), picked = new Set(deskPicked().map(i => i.id));
   const ms = mounts().map(m => { const r = (m.rot || 0) * Math.PI / 180, hw = Number(prop(m, 'w')) / 2, dx = Math.cos(r) * hw, dy = Math.sin(r) * hw; return `<line class="ld-mount" x1="${f3(m.x - dx)}" y1="${f3(m.y - dy)}" x2="${f3(m.x + dx)}" y2="${f3(m.y + dy)}"/>`; }).join('');
+  const showAddr = ui.adv && desk.label === 'addr';
   const dots = deskLights().map(i => { const f = fxOf(i), sw = fxSwatch(f, i), rr = U * 1.2;
-    return `<g class="ld-fx${picked.has(i.id) ? ' on' : ''}${desk.flash?.has(i.id) ? ' flashing' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${picked.has(i.id)}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .7)}" style="stroke-width:${f3(U * .45)}"/><circle class="ld-dot${sw === 'transparent' ? ' dark' : ''}" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr)}" style="fill:${sw === 'transparent' ? 'var(--surface)' : sw};stroke-width:${f3(U * .2)}"/><text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px">${esc(itemName(i))}</text></g>`; }).join('');
+    return `<g class="ld-fx${picked.has(i.id) ? ' on' : ''}${desk.flash?.has(i.id) ? ' flashing' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${picked.has(i.id)}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .7)}" style="stroke-width:${f3(U * .45)}"/>${ldShape(i, sw, rr, U)}<text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px"${showAddr ? ' class="addr"' : ''}>${esc(showAddr ? ldAddr(i) : itemName(i))}</text></g>`; }).join('');
   const L = curLook(), faces = stagePeople().map(p => { const st = faceState(p, L), nm = personById(p.personId)?.name || itemName(p);
     return `<g class="ld-face ${st}"><title>${esc(nm)}: ${st === 'lit' ? 'face lit' : st === 'deep' ? 'lit only in deep colour' : st === 'side' ? 'lit from one side only' : 'in the dark'}</title><circle cx="${f3(p.x)}" cy="${f3(p.y)}" r="${f3(U * 1.5)}" style="stroke-width:${f3(U * .28)}"/><text x="${f3(p.x)}" y="${f3(p.y + U * .5)}" text-anchor="middle" style="font-size:${f3(U * 1.3)}px">${esc(initials(nm))}</text></g>`; }).join('');
   return `${desk.zoom && !desk.big ? `<button class="ld-fit" id="ldFit" title="Show the whole stage (double-click the map)">${ic('fit', 'sm')}Fit</button>` : ''}<svg class="ld-map" id="ldMap" viewBox="${desk.big ? vb : deskZoomVb(vb)}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
@@ -3152,7 +3171,7 @@ function renderDeskMain() {
         <small>From your library</small>${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') : '<small class="ld-empty">Nothing saved yet: open a look, then ⋯ → Save to library.</small>'}</div>` : ''}${desk.lmenu && cur ? `<div class="ld-moods ld-lookmenu" role="group" aria-label="${esc(cur.name)}"><button data-libsave>${ic('save', 'sm')}Save to library<small>Use it in any week</small></button><button data-lookdel class="bad">${ic('trash', 'sm')}Delete this look</button></div>` : ''}
       <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
     <div class="ld-body"><section class="ld-stage" aria-label="Stage">
-      <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button></span><span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
+      <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span><div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
           : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
       <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}${desk.view === 'list' ? ' listing' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
@@ -3213,6 +3232,7 @@ $('deskDlg').addEventListener('click', e => {
   if (t.id === 'ldUndo') { undo(); renderDesk(); return; }
   if (t.id === 'ldRedo') { redo(); renderDesk(); return; }
   if (t.hasAttribute('data-fxcopy')) { deskCopy(); return; }
+  if (t.dataset.dlabel) { desk.label = t.dataset.dlabel; try { localStorage.setItem('stageplot.deskLabel', desk.label); } catch { /* memory only */ } renderDesk(); return; }
   if (t.dataset.dview) { desk.view = t.dataset.dview; try { localStorage.setItem('stageplot.deskView', desk.view); } catch { /* memory only */ } renderDesk(); return; }
   if (t.id === 'ldFit') { desk.zoom = null; $('ldMapWrap').innerHTML = deskStageHtml(); return; }
   if (t.dataset.unpick) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.delete(t.dataset.unpick); renderDesk(); return; }
