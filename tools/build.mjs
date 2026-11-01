@@ -2,6 +2,7 @@
 // index.html stays the readable source; this only minifies its one <style> and one <script> block.
 // Usage: cd tools && npm install && npm run build
 import { transform } from 'esbuild';
+import { createHash } from 'node:crypto';
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -24,7 +25,12 @@ const html = src.slice(0, s0) + '<style>' + css.trim() + '</style>' + src.slice(
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 writeFileSync(join(out, 'index.html'), html);
-for (const f of ['manifest.webmanifest', 'sw.js']) cpSync(join(root, f), join(out, f));
+cpSync(join(root, 'manifest.webmanifest'), join(out, 'manifest.webmanifest'));
 cpSync(join(root, 'icons'), join(out, 'icons'), { recursive: true });
+// the offline cache is named after this build, so a new release replaces cached icons and manifest too
+const stamp = createHash('sha256').update(html).update(readFileSync(join(root, 'manifest.webmanifest'))).digest('hex').slice(0, 10);
+const sw = readFileSync(join(root, 'sw.js'), 'utf8');
+if (!/const CACHE = '[^']*';/.test(sw)) throw new Error('sw.js: CACHE name not found');
+writeFileSync(join(out, 'sw.js'), sw.replace(/const CACHE = '[^']*';/, `const CACHE = 'stageplot-${stamp}';`));
 const kb = n => `${Math.round(n / 1024)} KB`;
 console.log(`dist/index.html: ${kb(html.length)} (source ${kb(src.length)})`);

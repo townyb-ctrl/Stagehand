@@ -13,7 +13,7 @@ if ($ => 0) {}
 await p.keyboard.press('Escape'); await p.mouse.click(700, 600);
 console.log('menu closed', await p.evaluate(() => $('moreMenu').hidden));
 await p.click('#moreBtn'); await p.click('[data-mm="help"]'); console.log('help open', await p.evaluate(() => !$('helpDlg').hidden)); await p.keyboard.press('Escape');
-await p.evaluate(() => $('dataBtn').click()); console.log('data open', await p.evaluate(() => !$('dataDlg').hidden)); await p.keyboard.press('Escape');
+await p.evaluate(() => openData()); console.log('data open', await p.evaluate(() => !$('dataDlg').hidden)); await p.keyboard.press('Escape');
 await p.evaluate(() => setTheme('system'));
 // right panel
 await p.evaluate(() => { sel = null; renderAll(); });

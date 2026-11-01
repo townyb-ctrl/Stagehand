@@ -1,0 +1,44 @@
+name: Tests
+
+# Runs the browser tests (tests/) on every push and pull request, against the readable index.html and the minified build.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [source, build]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tests/package-lock.json
+      - name: Install test tools
+        working-directory: tests
+        run: npm ci && npx playwright install --with-deps chromium
+      - name: Build the minified copy
+        if: matrix.target == 'build'
+        working-directory: tools
+        run: npm ci && npm run build
+      - name: Run the tests
+        run: |
+          if [ "${{ matrix.target }}" = build ]; then export STAGEHAND_DIR="$PWD/dist"; fi
+          tests/run.sh
+      - name: Keep screenshots from a failed run
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-output-${{ matrix.target }}
+          path: tests/out/
+          retention-days: 7

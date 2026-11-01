@@ -35,7 +35,7 @@ Weeks save automatically in this browser. **Home → Preferences** copies or dow
 
 ## Shortcuts
 
-`A` add gear · `E` side view · `F` present · `V` move · `S` select · `C` run cable · `M` measure · `H` hide cables · `T` draw channel · `Esc` cancel · `R` rotate (Shift+R 45°) · `D` duplicate · `Del` delete · `+`/`−` zoom · `0` fit · `?` help · arrows nudge 5 cm (Shift 50 cm) · `Ctrl/Cmd+Z` undo (add Shift to redo)
+`A` add gear · `F` present · `V` move · `C` run cable · `H` hide cables · `Esc` cancel · `R` rotate (Shift+R 45°) · `D` duplicate · `Del` delete · `+`/`−` zoom · `0` fit · `?` help · arrows nudge 5 cm (Shift 50 cm) · `Ctrl/Cmd+Z` undo (add Shift to redo) · in Advanced: `E` side view · `S` select box · `M` measure · `T` draw channel
 
 ## Status
 

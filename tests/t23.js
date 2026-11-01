@@ -24,7 +24,7 @@ await p.evaluate(() => { sel = null; railTab = 'stage'; renderAll(); });
 console.log('room: slack folded', await p.evaluate(() => !!$('slack').closest('details')), 'width in panel', await p.evaluate(() => !!$('isw')), 'autoBtn', await p.evaluate(() => !!$('autoBtn')));
 await p.screenshot({ path: 'n-simple-room.png' });
 // switch to advanced
-await p.evaluate(() => $('lvBtn').click());
+await p.evaluate(() => setDetail(!ui.adv));
 console.log('adv: channel tool', await p.evaluate(() => !!document.querySelector('[data-mode="channel"]')), 'no folds', await p.evaluate(() => document.querySelectorAll('details.more').length), 'slack shown', await p.evaluate(() => !!$('slack')));
 await p.click('#cabBtn'); console.log('flow toggle adv', await p.evaluate(() => !!$('cabFlow'))); await p.click('#cabBtn');
 await sel1('stagebox'); console.log('adv iX inline', await p.evaluate(() => $('iX')?.offsetParent != null && !$('iX').closest('details')));

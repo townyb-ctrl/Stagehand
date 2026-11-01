@@ -6,7 +6,7 @@ await p.click('#vPaper'); await p.waitForTimeout(300);
 const [d1] = await Promise.all([p.waitForEvent('download'), p.click('#printMore').then(() => p.click('#sheetsBtn'))]);
 const path = process.cwd() + '/sheets-export.html'; await d1.saveAs(path); console.log('sheets file', d1.suggestedFilename());
 console.log('tab restored', await p.evaluate(() => paperTab));
-await p.evaluate(() => { $('dataBtn').click(); });
+await p.evaluate(() => { openData(); });
 const [d2] = await Promise.all([p.waitForEvent('download'), p.click('#dlAll')]); console.log('backup file', d2.suggestedFilename());
 const q = await ctx.newPage({ viewport: { width: 1100, height: 900 } }); await q.goto('file://' + path); await q.waitForTimeout(600);
 console.log('export sheets', await q.evaluate(() => document.querySelectorAll('.sheet').length), 'snap', !!(await q.$('svg.snap')));
