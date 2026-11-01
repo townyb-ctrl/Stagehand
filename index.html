@@ -677,14 +677,8 @@ svg text { font-family: var(--f-ui); }
 .ldesk.compact .ld-wheel { width: 112px; } .ldesk.compact .ld-groove, .ldesk.compact .ld-groove input { height: 100px; } .ldesk.compact .ld-viewtog { display: inline-flex; padding: 2px; border-radius: var(--r-md); background: var(--surface-2); border: 1px solid var(--line); }
 .ld-viewtog button { border: 0; background: none; color: var(--muted); font: inherit; font-size: 12px; font-weight: 650; padding: 4px 10px; border-radius: var(--r-sm); cursor: pointer; }
 .ld-viewtog button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
-.ld-mapwrap { position: relative; } .ld-mapwrap.listing { background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line); overflow-y: auto; }
+.ld-mapwrap { position: relative; }
 .ld-fit { position: absolute; top: 10px; right: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: var(--r-sm); border: 1px solid rgba(255,255,255,.2); background: rgba(10,13,18,.75); color: #fff; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
-.ld-list { display: grid; padding: 6px; }
-.ld-row { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto auto 46px; align-items: center; gap: 12px; padding: 9px 12px; border-radius: var(--r-md); cursor: pointer; font-size: 13.5px; }
-.ld-row:hover { background: var(--ld-raise); } .ld-row.on { background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
-.ld-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.ld-dotl { width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); } .ld-dotl.dark { background: repeating-linear-gradient(135deg, var(--surface-2) 0 3px, var(--line-2) 3px 6px) !important; }
-.ld-where, .ld-cname { color: var(--muted); font-size: 12.5px; } .ld-row.on .ld-where, .ld-row.on .ld-cname { color: var(--ink-2); } .ld-pct { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
 .ld-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
 .ld-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 9px; border-radius: var(--r-sm); background: var(--surface-2); border: 1px solid var(--line-2); font-size: 12.5px; font-weight: 600; }
 .ld-chip i { width: 10px; height: 10px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
@@ -1183,7 +1177,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .hcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 18px 20px; display: grid; gap: 14px; min-width: 0; }
 .hcard > header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
 .hcard h3 { margin: 0; font-size: var(--t-section); font-weight: 700; }
-.hmore { margin-top: 2px; } .hmore summary { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12.5px; color: var(--ink-2); list-style: none; } .hmore summary::-webkit-details-marker { display: none; } .hmore summary::after { content: "›"; transition: transform .15s; } .hmore[open] summary::after { transform: rotate(90deg); } .hmore p { margin-top: 6px !important; }
+.hmore { margin-top: 2px; } .aboutnew ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 13.5px; color: var(--ink-2); } .hmore summary { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12.5px; color: var(--ink-2); list-style: none; } .hmore summary::-webkit-details-marker { display: none; } .hmore summary::after { content: "›"; transition: transform .15s; } .hmore[open] summary::after { transform: rotate(90deg); } .hmore p { margin-top: 6px !important; }
 .hcard header p { margin: 3px 0 0; color: var(--muted); font-size: 13px; max-width: 62ch; }
 .libtrend { display: inline-flex; width: 56px; flex: none; align-items: center; }
 .libtrend svg { display: block; overflow: visible; }
@@ -1419,8 +1413,7 @@ tr.flag td { color: var(--bad); }
 .litem.done { background: color-mix(in srgb, #22c55e 9%, var(--surface)); border-color: color-mix(in srgb, #22c55e 40%, var(--line)); } .litem.done b { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--ink) 40%, transparent); color: var(--muted); }
 .faultbadge path:not(.fb-mark) { fill: #f5a524; stroke: #1b1f27; stroke-width: .08; stroke-linejoin: round; } .faultbadge .fb-mark { fill: none; stroke: #1b1f27; stroke-width: .13; stroke-linecap: round; } .faultbadge { cursor: pointer; }
 .faultnow { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--r-md); background: var(--warn-soft, rgba(245,165,36,.12)); } .faultnow > div { flex: 1; min-width: 0; display: grid; } .faultnow small { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--warn-ink); } .faultnow b { font-size: 14px; color: var(--ink); } .faulticon { width: 30px; height: 30px; border-radius: var(--r-sm); display: grid; place-items: center; background: #f5a524; color: #1b1f27; flex: none; }
-.faultopen { text-decoration: none; padding: 2px 0; display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 13px; } .faultopen:hover { color: var(--ink); } .faultpicks { display: flex; flex-wrap: wrap; gap: 6px; } .faultpicks .btn { padding: 4px 10px; font-size: 12.5px; min-height: 0; }
-.ld-fault { display: inline-flex; margin-left: 6px; color: #f5a524; vertical-align: -2px; } .faultcell { color: var(--warn-ink, #8a5a00); white-space: nowrap; } .faultcell svg { vertical-align: -2px; margin-right: 4px; }
+.faultopen { text-decoration: none; padding: 2px 0; display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 13px; } .faultopen:hover { color: var(--ink); } .faultpicks { display: flex; flex-wrap: wrap; gap: 6px; } .faultpicks .btn { padding: 4px 10px; font-size: 12.5px; min-height: 0; } .faultcell { color: var(--warn-ink, #8a5a00); white-space: nowrap; } .faultcell svg { vertical-align: -2px; margin-right: 4px; }
 .notebadge circle { fill: var(--accent); stroke: #fff; stroke-width: .07; } .notebadge path { fill: none; stroke: #fff; stroke-width: .07; stroke-linecap: round; } .notebadge { cursor: pointer; }
 tr.flag .ch { background: var(--bad-soft); color: var(--bad); }
 .sheetgrid { display: grid; gap: 22px; }
@@ -1457,6 +1450,7 @@ tr.flag .ch { background: var(--bad-soft); color: var(--bad); }
 .overlay { position: fixed; inset: 0; background: rgba(8,12,16,.48); backdrop-filter: blur(2px); display: grid; place-items: center; padding: 16px; z-index: 40; }
 .modal { background: var(--surface); border-radius: var(--r-lg); border: 1px solid var(--line); box-shadow: var(--shadow-3); width: min(600px, 100%); max-height: 90%; overflow: auto; padding: 22px; display: grid; gap: 14px; }
 .modal h2 { font-size: var(--t-title); font-weight: 700; letter-spacing: -.01em; }
+.sc-h { margin: 14px 0 6px; font-size: 11px; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); } .sc-h:first-of-type { margin-top: 4px; }
 .shortcuts { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; align-items: center; margin: 0; }
 .shortcuts dt { display: flex; gap: 4px; justify-content: flex-end; }
 .shortcuts dd { margin: 0; color: var(--ink-2); }
@@ -1981,43 +1975,39 @@ body.presenting .toast { display: none; }   /* nothing pops up over the plot on 
       <dt>Planning Center</dt><dd>Optional and read-only: service types, plans and who’s scheduled. Stagehand never changes anything in Planning Center.</dd>
       <dt>Works on</dt><dd>Modern browsers on desktop, iPad and phone. Prints on A4 or Letter, or saves as PDF.</dd>
     </dl>
+    <details class="hmore aboutnew"><summary>What’s new in 1.0</summary><ul>
+      <li>Lighting: fixtures, looks, a lighting desk with a stage map and a front view, DMX patch.</li>
+      <li>Venues, setups and a calendar of the coming Sundays on Home.</li>
+      <li>Paperwork you can click through to the plot; everything to print in one menu.</li>
+      <li>A calmer, simpler layout, with every specialist tool in Advanced view.</li></ul></details>
     <div class="row" style="gap:8px"><button class="btn" id="aboutKeys">Keyboard shortcuts</button><button class="btn" id="aboutData">Backup &amp; restore</button></div>
   </div>
 </div>
 <div class="overlay" id="helpDlg" hidden>
   <div class="modal" role="dialog" aria-labelledby="helpTitle" style="width:min(460px,100%)">
     <div class="row" style="justify-content:space-between"><h2 id="helpTitle">Shortcuts</h2><button class="iconbtn" id="helpClose" aria-label="Close"></button></div>
+    <h3 class="sc-h">Getting around</h3>
     <dl class="shortcuts">
-      <dt><span class="kbd">G</span></dt><dd>Home: library and settings</dd>
-      <dt><span class="kbd">P</span></dt><dd>Paperwork, and back to the plot</dd>
-      <dt><span class="kbd">A</span></dt><dd>Add gear: opens the library with search ready</dd>
-      <dt><span class="kbd">V</span></dt><dd>Move tool</dd>
-      <dt><span class="kbd">S</span></dt><dd>Select tool: tap or box-select several (no Shift needed)</dd>
-      <dt><span class="kbd">C</span></dt><dd>Run a cable</dd>
-      <dt><span class="kbd">M</span></dt><dd>Measure between two points</dd>
-      <dt><span class="kbd">E</span></dt><dd>Side view: heights from the house</dd>
-      <dt><span class="kbd">F</span></dt><dd>Present on a screen (Esc leaves)</dd>
-      <dt><span class="kbd">Esc</span></dt><dd>Cancel / deselect</dd>
-      <dt><span class="kbd">R</span></dt><dd>Rotate 90° (Shift: 45°), or drag the knob above selected gear</dd>
-      <dt><span class="kbd">D</span></dt><dd>Duplicate</dd>
-      <dt>Shift-click</dt><dd>Add to / remove from the selection</dd>
-      <dt>Shift-drag floor</dt><dd>Box-select; drag any selected item to move them all</dd>
-      <dt><span class="kbd">Ctrl</span><span class="kbd">A</span></dt><dd>Select all gear</dd>
-      <dt><span class="kbd">Ctrl</span><span class="kbd">C</span> <span class="kbd">V</span></dt><dd>Copy and paste (at the pointer, or into another week)</dd>
-      <dt><span class="kbd">L</span></dt><dd>Lock / unlock in place</dd>
-      <dt><span class="kbd">Del</span></dt><dd>Delete</dd>
-      <dt><span class="kbd">←</span><span class="kbd">→</span></dt><dd>Nudge 5 cm (Shift: 50 cm)</dd>
-      <dt><span class="kbd">+</span><span class="kbd">−</span></dt><dd>Zoom</dd>
-      <dt><span class="kbd">0</span></dt><dd>Fit stage</dd>
-      <dt><span class="kbd">Ctrl</span><span class="kbd">Z</span></dt><dd>Undo (add Shift to redo)</dd>
-      <dt><span class="kbd">Ctrl</span><span class="kbd">K</span></dt><dd>Search actions, gear and people</dd>
-      <dt><span class="kbd">H</span></dt><dd>Show / hide cables (Layers in the toolbar hides people, gear, labels and more)</dd>
-      <dt><span class="kbd">T</span></dt><dd>Draw a cable channel (Enter finishes; Advanced view)</dd>
-      <dt>Hold <span class="kbd">Alt</span></dt><dd>Move without snapping to guides (snap size: click the empty floor)</dd>
-      <dt><span class="kbd">[</span><span class="kbd">]</span></dt><dd>Hide left / right panel</dd>
-      <dt><span class="kbd">\</span></dt><dd>Focus: hide both panels</dd>
-      <dt>Drag floor</dt><dd>Pan · pinch, or scroll with Alt or Ctrl held, to zoom</dd>
+      <dt><span class="kbd">Ctrl</span><span class="kbd">K</span></dt><dd>Search for any action, gear or person</dd>
+      <dt><span class="kbd">G</span> <span class="kbd">P</span></dt><dd>Home · Paperwork</dd>
+      <dt><span class="kbd">F</span></dt><dd>Show mode, full screen (Esc leaves)</dd>
+      <dt><span class="kbd">0</span></dt><dd>Fit the stage · scroll or pinch to zoom</dd>
     </dl>
+    <h3 class="sc-h">On the plot</h3>
+    <dl class="shortcuts">
+      <dt><span class="kbd">A</span></dt><dd>Add gear</dd>
+      <dt><span class="kbd">C</span></dt><dd>Run a cable</dd>
+      <dt><span class="kbd">R</span></dt><dd>Rotate (Shift: 45°)</dd>
+      <dt><span class="kbd">D</span> <span class="kbd">Del</span></dt><dd>Duplicate · Delete</dd>
+      <dt><span class="kbd">←</span><span class="kbd">→</span></dt><dd>Nudge 5 cm (Shift: 50 cm)</dd>
+      <dt>Shift-click</dt><dd>Pick several</dd>
+    </dl>
+    <h3 class="sc-h">Anywhere</h3>
+    <dl class="shortcuts">
+      <dt><span class="kbd">Ctrl</span><span class="kbd">Z</span></dt><dd>Undo (Shift: redo)</dd>
+      <dt><span class="kbd">Esc</span></dt><dd>Cancel or close</dd>
+    </dl>
+    <p class="hint" style="margin:4px 0 0">Every other shortcut shows next to its action in menus and tooltips.</p>
   </div>
 </div>
 
@@ -2314,7 +2304,7 @@ const ui = { adv: false, snap: .05, guide: true };   // snap: metres to round to
 ui.teamGear = true;
 try { ui.teamGear = localStorage.getItem('stageplot.teamGear') !== 'off'; } catch { /* default on */ }
 try { ui.adv = localStorage.getItem('stageplot.detail') === 'adv'; ui.guide = localStorage.getItem('stageplot.guide') !== 'off'; const sn = localStorage.getItem('stageplot.snap'); if (sn !== null && [0, .05, .25, .5].includes(Number(sn))) ui.snap = Number(sn); } catch { /* storage blocked */ }
-function setGuide(on) { ui.guide = on; lsSet('stageplot.guide', on ? 'on' : 'off'); renderInspector(); if (!on) toast('Guide hidden · bring it back from the ⋯ menu'); }
+function setGuide(on) { ui.guide = on; lsSet('stageplot.guide', on ? 'on' : 'off'); renderInspector(); if (!on) toast('Guide hidden. It’s in the ⋯ menu'); }
 const moreOpen = (() => { try { return JSON.parse(localStorage.getItem('stageplot.folds') || '{}') || {}; } catch { return {}; } })();   // which "More settings" folds are open, by panel; kept on this device
 let showAllConns = null;        // item whose full connection list is open
 let placing = null;             // gear type picked from the library, waiting for a click on the stage
@@ -2969,7 +2959,7 @@ const LIGHT_TYPES = () => GEAR_GROUPS.find(g => g[0] === 'Lighting')[1].filter(t
 function mirrorLight(id) {
   const it = itemById(id); if (!it) return;
   const sp = stagePoly(), cx = (Math.min(...sp.map(q => q[0])) + Math.max(...sp.map(q => q[0]))) / 2, nx = r2(2 * cx - it.x);
-  if (Math.abs(nx - it.x) < .5) { toast(`${itemName(it)} is on the centre line, so it has no other side`); return; }
+  if (Math.abs(nx - it.x) < .5) { toast(`${itemName(it)} is already on the centre line`); return; }
   if (plan.items.some(i => i.type === it.type && Math.abs(i.x - nx) < .5 && Math.abs(i.y - it.y) < .5)) { toast('There’s already a matching light there'); return; }
   mutate(() => {
     const n = plan.items.filter(i => i.type === it.type).length, m = addItem(it.type, nx, it.y);
@@ -3055,7 +3045,7 @@ function aimLight(it, x, y, free) {
   let a = Math.atan2(dx, -dy) * 180 / Math.PI; if (!free) a = Math.round(a / 5) * 5;
   it.rot = ((Math.round(a) % 360) + 360) % 360; it.throw = r2(Math.max(fromM(.5), L));
 }
-function deskStageHtml() { return desk.view === 'list' ? deskListHtml() : desk.view === 'front' ? deskFrontSvg() : deskMapSvg(); }
+function deskStageHtml() { return desk.view === 'front' ? deskFrontSvg() : deskMapSvg(); }
 /* Audience view: the stage as the congregation sees it, in perspective from a seat in the middle of the room. The back wall,
    the deck and its front face, the rigging at its real height, each light's shaft through a little haze, its pool on the floor
    and the people: lit from the front they take on the light's colour, lit from behind they get a coloured rim. */
@@ -3121,12 +3111,6 @@ function deskFrontSvg() {
   const tops = [P(R.x0, R.y0, wallH)[1], ...lit.map(l => l.lens[1])].filter(v => v > -H), y0 = clamp(Math.min(...tops) - 28, 0, H * .4);   // no empty band above the room
   return `<svg class="ld-front" id="ldFront" viewBox="0 ${f3(y0)} ${W} ${f3(H - y0)}" preserveAspectRatio="xMidYMid meet" role="group" aria-label="The stage from the audience in ${esc(L?.name || 'warm white')}: lights, beams and people"><defs>${defs}<linearGradient id="lfShade" x1="0" y1="0" x2="0" y2="1"><stop offset=".15" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient><filter id="lfSoft" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
     <rect class="lf-bg" y="${f3(y0)}" width="${W}" height="${f3(H - y0)}"/>${back}<g class="lf-light" filter="url(#lfSoft)">${light}</g>${ppl}${rig}<text class="lf-note" x="${W - 14}" y="${H - 12}" text-anchor="end">From the middle of the room · ${esc(L?.name || 'no look yet')}</text></svg>`;
-}
-function deskListHtml() {
-  const picked = new Set(deskPicked().map(i => i.id)), L = curLook();
-  const rows = deskLights().slice().sort((a, b) => (mountOf(a) ? 0 : 1) - (mountOf(b) ? 0 : 1) || (itemName(mountOf(a) || {}) || '').localeCompare(itemName(mountOf(b) || {}) || '') || a.x - b.x);
-  return `<div class="ld-list" role="listbox" aria-multiselectable="true" aria-label="Lights">${rows.map(i => { const f = fxEff(i, L), raw = fxOf(i), sw = fxSwatch(raw, i), on = picked.has(i.id);
-    return `<div class="ld-row${on ? ' on' : ''}" role="option" aria-selected="${on}" tabindex="0" data-ldfx="${i.id}"><i class="ld-dotl${sw === 'transparent' ? ' dark' : ''}" style="background:${sw}"></i><b>${esc(itemName(i))}${i.fault ? `<span class="ld-fault" title="${esc(i.fault)}">${ic('alert', 'sm')}<span class="sr-only">Problem: ${esc(i.fault)}</span></span>` : ''}</b><span class="ld-where">${ui.adv ? `<span class="mono">${ldAddr(i)}</span> · ` : ''}${esc(mountOf(i) ? itemName(mountOf(i)) : 'Floor')}</span><span class="ld-cname">${esc(fxName(raw, i))}</span><span class="ld-pct">${f.d}%</span></div>`; }).join('')}</div>`;
 }
 // zoomed in on the desk's map: the view's top-left corner and how far in (1 = the whole stage)
 function deskZoomVb(vb) {
@@ -3261,7 +3245,7 @@ function deskColourHtml() {
   const hex = f.r + f.g + f.b ? '#' + [f.r, f.g, f.b].map(v => v.toString(16).padStart(2, '0')).join('') : '', rec = deskRecent(), L = curLook(), mst = lookMaster(L);
   return `<div class="ld-card ld-colcard"><div class="ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'Pick lights on the stage'}</b></div><span class="ld-pickacts">${ts.length && ui.adv ? `<button class="ld-mini" data-flash title="Make the picked lights pulse on the stage, to find them">${ic('zap', 'sm')}Flash</button>` : ''}${ui.adv ? `<button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button>` : ''}</span></div>
       <div class="ld-mixrow${ui.adv ? '' : ' few'}"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders${ui.adv ? '' : ' few'}">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].filter(([k]) => ui.adv || k === 'd').map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--accent)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
-      <label class="ld-cct" title="Warm (tungsten) to cool (daylight) white"><span class="ld-label">White</span><span class="ld-cctw">Warm</span><input type="range" data-cct min="2700" max="6500" step="100" value="${f.k || CCT_DEF}" ${ts.length ? '' : 'disabled'} aria-label="Colour temperature, warm to cool" aria-valuetext="${f.k ? f.k + ' kelvin' : 'not set'}"><span class="ld-cctw">Cool</span><output>${f.k ? f.k + ' K' : ''}</output></label>
+      ${ui.adv ? '' : '<!--'}<label class="ld-cct" title="Warm (tungsten) to cool (daylight) white"><span class="ld-label">White</span><span class="ld-cctw">Warm</span><input type="range" data-cct min="2700" max="6500" step="100" value="${f.k || CCT_DEF}" ${ts.length ? '' : 'disabled'} aria-label="Colour temperature, warm to cool" aria-valuetext="${f.k ? f.k + ' kelvin' : 'not set'}"><span class="ld-cctw">Cool</span><output>${f.k ? f.k + ' K' : ''}</output></label>${ui.adv ? '' : '-->'}
       <div class="ld-recentrow"><span class="ld-label">Recent</span>${rec.length ? `<div class="ld-recent" title="Recent colours">${rec.map((c, i) => `<button class="ld-rsw" data-recent="${i}" style="--sw:${fxSwatch({ ...c, d: 100 })}" aria-label="Recent colour ${esc(fxName({ ...c, d: 100 }))}" title="${esc(fxName({ ...c, d: 100 }))}" ${!ts.length || white ? 'disabled' : ''}></button>`).join('')}</div>` : '<span class="ld-recentnone">Colours you use show here</span>'}<button class="ld-mini ld-offbtn" data-preset="Off" title="Turn the picked lights off" ${ts.length ? '' : 'disabled'}>Off</button>
       ${ui.adv ? '' : '<!--'}<label class="ld-hex"><span class="sr-only">Colour code</span><input id="ldHex" type="text" value="${hex}" placeholder="#1f6bff" maxlength="7" spellcheck="false" aria-label="Colour code, like #1f6bff" ${!ts.length || white ? 'disabled' : ''}></label>${ui.adv ? '' : '-->'}</div>
       ${white ? '<p class="ld-note">White-only lights take the dimmer and the warm-to-cool slider (a gel, or their own white).</p>' : ''}</div>
@@ -3291,12 +3275,12 @@ function renderDeskMain() {
   $('ldBody').innerHTML = `<div class="ld-top nolooks">
       <div class="ld-brand"><span class="ld-logo">${ic('sun')}</span><div><h2 id="ldTitle">Lighting desk</h2><small>${plural(all.length, 'light')} · ${esc(longDate(plan.date))}</small></div></div>
       ${desk.kmenu ? `<div class="ld-moods ld-keysmenu" role="dialog" aria-label="Keyboard shortcuts"><b>Keyboard shortcuts</b><dl>${DESK_KEYS.map(([k, d]) => `<dt>${k.split(' ').map(x => `<kbd>${x}</kbd>`).join('')}</dt><dd>${d}</dd>`).join('')}</dl></div>` : ''}
-      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" data-keysmenu aria-expanded="${!!desk.kmenu}" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts"><span class="ld-q" aria-hidden="true">?</span></button><button class="ld-icon" data-dock aria-pressed="${!!desk.dock}" title="${desk.dock ? 'Back to a window' : 'Dock beside the plot'}" aria-label="Dock beside the plot">${ic('panelR', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
+      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" data-dock aria-pressed="${!!desk.dock}" title="${desk.dock ? 'Back to a window' : 'Dock beside the plot'}" aria-label="Dock beside the plot">${ic('panelR', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
     ${desk.dock ? '<div class="ld-resize" role="separator" aria-orientation="vertical" aria-label="Drag to resize the desk" title="Drag to resize (double-click for the usual width)"></div>' : ''}<div class="ld-body"><section class="ld-stage" aria-label="Stage">
-      <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list' && desk.view !== 'front'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button><button data-dview="front" aria-pressed="${desk.view === 'front'}" title="The stage as the congregation sees it">Front</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span>${desk.view === 'front' && dlCap !== null ? `<button class="ld-mini" data-frontpic title="Save the front view as a picture to share">${ic('save', 'sm')}Save picture</button>` : ''}<div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
+      <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'front'}">Map</button><button data-dview="front" aria-pressed="${desk.view === 'front'}" title="The stage as the congregation sees it">Front</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span>${desk.view === 'front' && dlCap !== null ? `<button class="ld-mini" data-frontpic title="Save the front view as a picture to share">${ic('save', 'sm')}Save picture</button>` : ''}<div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
-          : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
-      <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}${desk.view === 'list' ? ' listing' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
+          : !ui.adv ? '' : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
+      <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
       ${deskChipsHtml(all, picked)}</section>${deskTipHtml()}
       ${`<aside class="ld-colour" id="ldColour"><div class="ld-card ld-lookcard${desk.lfold ? ' folded' : ''}"><button class="ld-cardhead ld-foldbtn" data-lookfold aria-expanded="${!desk.lfold}" title="${desk.lfold ? 'Show the looks' : 'Fold the looks away'}"><span class="ld-label">Looks</span>${desk.lfold && cur ? `<span class="ld-foldname"><span class="ld-cueno">${looks.indexOf(cur) + 1}</span>${esc(cur.name)}</span>` : ''}<span class="ld-chev">${ic('chevD', 'sm')}</span></button>${desk.lfold ? '' : looksHtml}</div>${deskColourHtml()}</aside>`}</div>
 `;
@@ -3365,7 +3349,6 @@ $('deskDlg').addEventListener('click', e => {
   if (t.hasAttribute('data-flash')) { flashLights(deskPicked().map(i => i.id)); return; }
   if (t.dataset.recent) { const c = deskRecent()[+t.dataset.recent]; if (c) deskSet({ ...c }); return; }
   if (t.id === 'ldUndo') { undo(); renderDesk(); return; }
-  if (t.id === 'ldRedo') { redo(); renderDesk(); return; }
   if (t.hasAttribute('data-fxcopy')) { deskCopy(); return; }
   if (t.dataset.dlabel) { desk.label = t.dataset.dlabel; lsSet('stageplot.deskLabel', desk.label); renderDesk(); return; }
   if (t.dataset.dview) { desk.view = t.dataset.dview; lsSet('stageplot.deskView', desk.view); renderDesk(); return; }
@@ -3375,7 +3358,7 @@ $('deskDlg').addEventListener('click', e => {
   if (t.hasAttribute('data-addlook')) { desk.add = !desk.add; desk.lmenu = false; renderDesk(); return; }
   if (t.hasAttribute('data-lookmenu')) { desk.lmenu = !desk.lmenu; desk.add = false; renderDesk(); return; }
   if (t.hasAttribute('data-keysmenu')) { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = false; renderDesk(); return; }
-  if (t.hasAttribute('data-dock')) { desk.dock = !desk.dock; desk.add = desk.lmenu = desk.kmenu = false; if (desk.dock) desk.view = 'list'; deskLayoutSave(); renderDesk(); needFit = true; renderPlot(); return; }
+  if (t.hasAttribute('data-dock')) { desk.dock = !desk.dock; desk.add = desk.lmenu = desk.kmenu = false; deskLayoutSave(); renderDesk(); needFit = true; renderPlot(); return; }
   if (t.dataset.basics) { if (deskLights().length) basicLooks(t.dataset.basics.split('|')); return; }
   if (t.hasAttribute('data-frontpic')) { withBusy(t, frontPicture); return; }
   if (t.hasAttribute('data-lookfold')) { desk.lfold = !desk.lfold; desk.add = desk.lmenu = false; deskLayoutSave(); renderDesk(); return; }
@@ -3542,7 +3525,7 @@ $('deskDlg').addEventListener('pointerdown', e => {
     window.addEventListener('pointerup', () => { window.removeEventListener('pointermove', move); cancelAnimationFrame(raf); if (moved) { const msg = ids.length > 1 ? `${plural(ids.length, 'light')} aimed` : `${itemName(itemById(ids[0]))} aimed`; pushUndo(before, stepLabel(msg, before)); recordRev(msg, before); save(); } renderDesk(); renderPlot(); }, { once: true });
     e.preventDefault(); return;
   }
-  const row = e.target.closest('.ld-row[data-ldfx], #ldFront [data-ldfx]'); if (row) { pickDeskFx(row.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
+  const row = e.target.closest('#ldFront [data-ldfx]'); if (row) { pickDeskFx(row.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
   const map = e.target.closest('#ldMap'); if (!map) return;
   const g = e.target.closest('[data-ldfx]'); if (g) { pickDeskFx(g.dataset.ldfx, e.shiftKey || e.ctrlKey || e.metaKey); return; }
   const p0 = deskMapPt(e); desk.box = { x0: p0.x, y0: p0.y, x1: p0.x, y1: p0.y, add: e.shiftKey };
@@ -4211,7 +4194,7 @@ async function nextFromPco() {
   const there = Object.values(db.plans).find(w => w.venueId === plan.venueId && w.date === pl.date);
   if (there) switchWeek(there.id); else newWeek(true);
   pco.planId = pl.id; await pcoLoadRoster(); if (pco.err) { toast(pco.err); return; }
-  if (!pco.picked.size) { view = 'plot'; railTab = 'team'; renderAll(); toast(`${pl.dates}: no one on your chosen teams yet. Pick people in the Team tab`); return; }
+  if (!pco.picked.size) { view = 'plot'; railTab = 'team'; renderAll(); toast(`${pl.dates}: no one scheduled on your teams yet`); return; }
   pcoApply(); view = 'plot'; railTab = 'team'; renderAll();
 }
 function pcoApply() {
@@ -5545,7 +5528,7 @@ function renderPlot() {
   if (tucked.size && !foldHinted) { foldHinted = true; try { if (!localStorage.getItem('stageplot.foldHint')) setTimeout(() => {   // only once the plot is what you're looking at, not behind the welcome or the stage designer
     if (view !== 'plot' || [...document.querySelectorAll('.overlay')].some(o => !o.hidden)) { foldHinted = false; return; }
     lsSet('stageplot.foldHint', '1');
-    toast('Zoomed out, DIs and in-ear packs fold into number badges. Click one to open it', { label: 'Show all', fn: () => setCableView(() => { cableView.fold = false; }) }); }, 400); } catch { /* ignore */ } }
+    toast('Small boxes fold into badges. Click to open', { label: 'Show all', fn: () => setCableView(() => { cableView.fold = false; }) }); }, 400); } catch { /* ignore */ } }
   for (const [pid, l] of tucked) {
     let cx = l.reduce((a, i) => a + i.x, 0) / l.length, cy = l.reduce((a, i) => a + i.y, 0) / l.length; const r = 8.5 / scale, fn = firstName(personById(pid)?.name || '');
     const me = plan.items.find(i => i.personId === pid && cat(i).shape === 'person');
@@ -6239,7 +6222,15 @@ function tsv(rows, cols) { return [cols.map(c => c[0]).join('\t'), ...rows.map(r
 let paperData = {};
 let paperTab = 'overview';      // one sheet at a time; 'all' shows the lot for printing or scrolling
 // a clean, selection-free drawing of the plot for the overview sheet
+// the drawing is the slow part of the paperwork, so the last one is kept until the stage, its gear, the look or the size changes
+let snapCache = { key: '', html: '' };
 function plotSnapshot(atZoom) {
+  const z0 = atZoom || Math.max(8, Math.min(60, (($('paperInner')?.clientWidth || 1000) - 42) / bounds().vw));
+  const { loadin, linecheck, notes, rev, ...look } = plan, key = JSON.stringify([look, db.channels, z0, ui.text, document.documentElement.dataset.theme, imperial()]);
+  if (snapCache.key === key) return snapCache.html;
+  const html = plotSnapshotDraw(z0); snapCache = { key, html }; return html;
+}
+function plotSnapshotDraw(atZoom) {
   const keep = { sel, group, mode, pending, view, measure, compare, zoom, needFit };
   sel = null; group = null; mode = 'select'; pending = null; measure = null; compare = null; view = 'plot';
   zoom = atZoom || Math.max(8, Math.min(60, (($('paperInner')?.clientWidth || 1000) - 42) / bounds().vw));   // labels sized for the width it's shown at
@@ -6441,7 +6432,7 @@ function lineProgress(ins = inputSheet()) { const st = plan.linecheck || {}, liv
 const sheetEmpty = (icon, title, line, go, label) => `<div class="empty-state sheet-empty">${ic(icon)}<strong>${title}</strong><span>${line}</span>${go ? `<button class="btn" data-goto="${go}">${label}</button>` : ''}</div>`;
 function lineCheckHtml(ins) {
   const st = lineState(), live = ins.filter(r => !r.spare), g = lineProgress(ins), pct = g.total ? Math.round((g.done + g.issue) / g.total * 100) : 0;
-  if (!live.length) return `<section class="sheet" id="sec-linecheck" data-sheet="inputs"><header><div><h2>Line check</h2></div></header>${sheetEmpty('mic', 'Nothing to line-check yet', 'Once there are mics and DIs on stage, each channel shows here to tick off during soundcheck.', 'team', 'Build from the team')}</section>`;
+  if (!live.length) return `<section class="sheet" id="sec-linecheck" data-sheet="inputs"><header><div><h2>Line check</h2></div></header>${sheetEmpty('mic', 'Nothing to line-check yet', 'Each channel shows here to tick off at soundcheck.', 'team', 'Build from the team')}</section>`;
   return `<section class="sheet linecheck" id="sec-linecheck" data-sheet="inputs"><header><div><h2>Line check</h2><p class="hint">At soundcheck, have each source played and tick it when it’s heard at the desk. Flag anything that isn’t right.</p></div></header>
     <div class="lprog"><div class="lbar" role="progressbar" aria-valuemin="0" aria-valuemax="${g.total}" aria-valuenow="${g.done}" aria-label="Line check progress"><span style="width:${pct}%"></span></div><b>${g.done} of ${g.total} heard${g.issue ? ` · ${plural(g.issue, 'problem')}` : ''}</b>${g.done || g.issue ? '<button class="btn quiet" id="lineReset">Start again</button>' : ''}</div>
     <div class="lclist">${live.map(r => { const v = st[r.key] || ''; return `<div class="lcrow${v ? ' ' + v : ''}">
@@ -6639,7 +6630,7 @@ function renderPaper() {
       <div class="tablewrap"><table class="fixed"><colgroup><col style="width:13%"><col style="width:22%"><col style="width:28%"><col></colgroup><thead><tr><th><abbr title="Circuit" class="thshort">Ckt</abbr><span class="thlong">Circuit</span></th><th>Load</th><th>Use</th><th>Gear</th></tr></thead><tbody>
       ${loads.map((wt, k) => { const pct = wt / cap; return `<tr class="${pct > 1 ? 'flag' : ''}"><td><span class="ch">${k + 1}</span></td><td class="mono">${Math.round(wt)} W · ${(wt / (Number(prop(src, 'volts')) || 230)).toFixed(1)} A</td><td><div class="meter"><span class="${pct > 1 ? 'bad' : pct > .8 ? 'warn' : ''}" style="width:${Math.min(100, pct * 100)}%"></span></div></td><td>${esc(items[k].map(itemName).join(', ')) || '<span class="hint">—</span>'}</td></tr>`; }).join('')}
       </tbody></table></div></div>`;
-  }).join('') || sheetEmpty('zap', 'No power on stage yet', 'Add a power distro or wall socket, plug gear into it, and each circuit’s load shows here.', 'gear', 'Add power');
+  }).join('') || sheetEmpty('zap', 'No power on stage yet', 'Add a distro or wall socket to see each circuit’s load.', 'gear', 'Add power');
   const nav = [['overview', 'Overview', w.length ? `${w.length} to check` : undefined], ['spots', 'My spot', plan.team.length || undefined], ['inputs', 'Inputs', ins.length], ['outputs', 'Outputs', outs.length], ...(plan.items.some(i => cat(i).wireless) ? [['rf', 'Wireless', plan.items.filter(i => cat(i).wireless).length]] : []), ['cables', 'Cables', pull.reduce((s, r) => s + r.n, 0)], ['power', 'Power'], ['team', 'Team', plan.team.length], ['loadin', 'Load-in', (() => { const g = loadinProgress(); return g.total ? `${g.done}/${g.total}` : undefined; })()]].filter(n => n[0] !== 'checks' || w.length);
   $('paperInner').innerHTML = `
     ${printDiffHtml()}
@@ -6658,9 +6649,9 @@ function renderPaper() {
       return `<section class="sheet" id="sec-changes" data-sheet="overview">${head(`What’s different from ${esc(longDate(old.date))}`, '', li.length ? 'Read this before load-in' : '')}${li.length ? `<ul class="changelist">${li.join('')}</ul>` : `<p class="hint">Same team and gear as ${esc(longDate(old.date))}.</p>`}</section>`; })()}
     ${(() => { const sh = shortages(); return sh.length ? `<section class="sheet" id="sec-borrow" data-sheet="overview">${head('To borrow', '', 'More than you own (Home → Gear)')}<div class="tablewrap"><table><thead><tr><th>Gear</th><th style="text-align:right">Needed</th><th style="text-align:right">Own</th><th style="text-align:right">Borrow</th></tr></thead><tbody>${sh.map(x => `<tr><td>${esc(CAT[x.t].name)}</td><td class="num">${x.need}</td><td class="num">${x.own}</td><td class="num"><b>${x.short}</b></td></tr>`).join('')}</tbody></table></div></section>` : ''; })()}
     ${(() => { const nt = plan.items.filter(i => i.note); return nt.length ? `<section class="sheet" id="sec-notes" data-sheet="overview">${head('Notes', '', 'Pinned to people and gear on the plot')}<ul class="notelist">${nt.map(i => `<li><b>${esc(itemName(i))}</b><span>${esc(i.note)}</span></li>`).join('')}</ul></section>` : ''; })()}
-    ${paperTab === 'spots' || printOnly === 'spots' ? `<section class="sheet" id="sec-spots" data-sheet="spots"><header><div><h2>My spot</h2><p class="hint">A card for each person: where they stand, their channels, monitor, power and notes. Copy it into a message, or print one per page.</p></div></header>${plan.team.length ? spotsHtml() : sheetEmpty('users', 'No one on the team yet', 'Add this week’s team and each person gets a card: where they stand, their channels, monitor and power.', 'team', 'Add the team')}</section>` : ''}
+    ${paperTab === 'spots' || printOnly === 'spots' ? `<section class="sheet" id="sec-spots" data-sheet="spots"><header><div><h2>My spot</h2><p class="hint">A card for each person: where they stand, their channels, monitor, power and notes. Copy it into a message, or print one per page.</p></div></header>${plan.team.length ? spotsHtml() : sheetEmpty('users', 'No one on the team yet', 'Add the team and each person gets a card.', 'team', 'Add the team')}</section>` : ''}
     ${paperTab === 'rider' || printOnly === 'rider' ? `<section class="sheet" id="sec-rider" data-sheet="rider"><header><div><h2>Rider</h2></div></header>${riderHtml(ins)}</section>` : ''}
-    <section class="sheet" id="sec-inputs" data-sheet="inputs">${head('Input list', '', `${plural(ins.length, 'channel')}. ${chans_().fixed !== false ? 'Channel numbers stay the same every week' + (spareChannels(ins).length ? `; ${plural(spareChannels(ins).length, 'spare channel')} this week` : '') : 'Numbered in band order'}. ${ins.filter(r => r.p48).length} need phantom power.${dIns.n || dIns.c ? ` Since ${shortDate(dIns.date)}: ${[dIns.n && `${dIns.n} new`, dIns.c && `${dIns.c} changed`].filter(Boolean).join(', ')}.` : ''}`).replace('</header>', `<div class="row" style="gap:6px"><button class="btn${chEdit ? ' primary' : ''}" id="chEditBtn" aria-pressed="${chEdit}">${ic('pen', 'sm')}${chEdit ? 'Done' : 'Edit channels'}</button><button class="btn" data-copy="inputs">${ic('copy', 'sm')}Copy</button><button class="btn" data-exp="inputs" data-needs-dl>${ic('save', 'sm')}CSV</button><button class="btn" data-exp="names" data-needs-dl title="Channel, short name, colour and phantom for your desk's scribble strips">${ic('save', 'sm')}Desk names</button></div></header>`)}${chEdit ? chEditHtml(ins) : table([...ins, ...spareChannels(ins).map(x => ({ ch: x.ch, name: 'Spare', mic: x.usual ? `usually ${x.usual}` : '', stand: '', spare: true }))].sort((a, b) => a.ch - b.ch), inCols, 'flag', sheetEmpty('mic', 'No inputs yet', 'Mics, DIs and anything else that needs a channel shows up here.', 'team', 'Build from the team'))}${chEdit ? '' : boxKey(ins)}</section>${paperTab === 'inputs' && ins.some(r => !r.spare) ? lineCheckHtml(ins) : ''}
+    <section class="sheet" id="sec-inputs" data-sheet="inputs">${head('Input list', '', `${plural(ins.length, 'channel')}. ${chans_().fixed !== false ? 'Channel numbers stay the same every week' + (spareChannels(ins).length ? `; ${plural(spareChannels(ins).length, 'spare channel')} this week` : '') : 'Numbered in band order'}. ${ins.filter(r => r.p48).length} need phantom power.${dIns.n || dIns.c ? ` Since ${shortDate(dIns.date)}: ${[dIns.n && `${dIns.n} new`, dIns.c && `${dIns.c} changed`].filter(Boolean).join(', ')}.` : ''}`).replace('</header>', `<div class="row" style="gap:6px"><button class="btn${chEdit ? ' primary' : ''}" id="chEditBtn" aria-pressed="${chEdit}">${ic('pen', 'sm')}${chEdit ? 'Done' : 'Edit channels'}</button><button class="btn" data-copy="inputs">${ic('copy', 'sm')}Copy</button><button class="btn" data-exp="inputs" data-needs-dl>${ic('save', 'sm')}CSV</button><button class="btn" data-exp="names" data-needs-dl title="Channel, short name, colour and phantom for your desk's scribble strips">${ic('save', 'sm')}Desk names</button></div></header>`)}${chEdit ? chEditHtml(ins) : table([...ins, ...spareChannels(ins).map(x => ({ ch: x.ch, name: 'Spare', mic: x.usual ? `usually ${x.usual}` : '', stand: '', spare: true }))].sort((a, b) => a.ch - b.ch), inCols, 'flag', sheetEmpty('mic', 'No inputs yet', 'Mics and DIs show up here with their channels.', 'team', 'Build from the team'))}${chEdit ? '' : boxKey(ins)}</section>${paperTab === 'inputs' && ins.some(r => !r.spare) ? lineCheckHtml(ins) : ''}
     <div class="sheets2">
       <section class="sheet" id="sec-outputs" data-sheet="outputs">${head('Outputs', 'outputs', 'Wedges, mains, subs and IEM transmitters.')}${table(outs, outCols, 'flag', sheetEmpty('zap', 'No outputs yet', 'Add wedges, in-ears or main speakers and they’re patched here.', 'gear', 'Add monitors and speakers'))}${boxKey(outs)}</section>
       <section class="sheet" id="sec-mixes" data-sheet="outputs">${head('Monitor mixes', 'mixes')}${table(mixes, mixCols, '', sheetEmpty('users', 'No monitor mixes yet', 'Each wedge or in-ear pack on stage gets its own mix here.', 'gear', 'Add monitors'))}</section>
@@ -6677,7 +6668,7 @@ function renderPaper() {
       <div class="tablewrap"><table class="rftbl"><thead><tr><th>Pack</th><th>Type</th><th>Who</th><th>Channel or frequency</th></tr></thead><tbody>${rf.map(i => `<tr class="${bad.has(i.id) ? 'flag' : ''}"><td>${esc(itemName(i))}</td><td>${rfKind(i)}</td><td>${esc(personById(i.personId)?.name || '')}</td><td><input type="text" data-rf="${i.id}" value="${esc(rfOf(i))}" placeholder="e.g. Ch 3 or 606.500" aria-label="Channel or frequency for ${esc(itemName(i))}" autocomplete="off">${bad.has(i.id) ? `<span class="rfdup">${ic('alert', 'sm')}Same as another</span>` : ''}<span class="rfprint">${esc(rfOf(i))}</span></td></tr>`).join('')}</tbody></table></div></section>`; })()}
     ${(() => { const fm = floorMarks(); return `<section class="sheet" id="sec-floor" data-sheet="overview">${head('Floor marks', '', `Where to put tape before anything goes on stage. Measured from the stage-right edge (the left as you look from the house) and back from the front edge. Risers are marked by their front stage-right corner; everything else by its centre.`)}
       ${fm.length ? `<div class="tablewrap"><table class="floortbl"><thead><tr><th>#</th><th>Mark</th><th style="text-align:right">From stage right</th><th style="text-align:right">Back from front</th><th>Size</th></tr></thead><tbody>${fm.map((m, k) => `<tr><td><span class="ch">${k + 1}</span></td><td>${esc(itemName(m.i))}${m.riser ? '<small class="hint" style="display:block">front stage-right corner</small>' : ''}</td><td class="mono" style="text-align:right">${uLen(m.across)}</td><td class="mono" style="text-align:right">${uLen(m.back)}</td><td class="mono">${m.size}</td></tr>`).join('')}</tbody></table></div>` : sheetEmpty('fit', 'Nothing on stage yet', 'Build the stage from the team and the marks appear here.', 'team', 'Build from the team')}</section>`; })()}
-    ${(() => { const groups = loadinTasks(), g = loadinProgress(), st = loadinState(), store = inStorage(); if (!g.total && !store.length && powerOrder().length < 2) return `<section class="sheet loadin" id="sec-loadin" data-sheet="loadin">${head('Load-in checklist', '', 'Tick things off as they’re set up. Saved with this week.')}${sheetEmpty('check', 'Nothing to set up yet', 'Every mic, stand, cable and battery on stage becomes a tick box here for the day.', 'team', 'Build from the team')}</section>`; const pct = g.total ? Math.round(g.done / g.total * 100) : 0;
+    ${(() => { const groups = loadinTasks(), g = loadinProgress(), st = loadinState(), store = inStorage(); if (!g.total && !store.length && powerOrder().length < 2) return `<section class="sheet loadin" id="sec-loadin" data-sheet="loadin">${head('Load-in checklist', '', 'Tick things off as they’re set up. Saved with this week.')}${sheetEmpty('check', 'Nothing to set up yet', 'Each mic, stand, cable and battery becomes a tick box.', 'team', 'Build from the team')}</section>`; const pct = g.total ? Math.round(g.done / g.total * 100) : 0;
       return `<section class="sheet loadin" id="sec-loadin" data-sheet="loadin">${head('Load-in checklist', '', 'Tick things off as they’re set up. Saved with this week.')}${boxKey([...inputList(), ...outputList()])}
         ${g.total ? `<div class="lprog"><div class="lbar" role="progressbar" aria-valuemin="0" aria-valuemax="${g.total}" aria-valuenow="${g.done}" aria-label="Load-in progress"><span style="width:${pct}%"></span></div><b>${g.done} of ${g.total} done</b>${g.done ? '<button class="btn quiet" id="loadinReset">Clear ticks</button>' : ''}</div>` : ''}
         ${groups.map(([title, icon, list]) => { const dn = list.filter(t => st[t.key]).length; return `<div class="lgroup"><h3>${ic(icon, 'sm')}${esc(title)} <span class="hint">${dn}/${list.length}</span>${title === 'Batteries' ? `<span class="battneed">${esc(battTotal(list.length))} needed</span><label class="battset"><span>Each takes</span><input type="text" id="battType" value="${esc(battType())}" aria-label="Batteries each pack takes" list="battList"></label><datalist id="battList">${['2 × AA', '1 × AA', '2 × AAA', '1 × 9V', 'Rechargeable'].map(v => `<option value="${v}">`).join('')}</datalist>` : ''}</h3>${list.map(t => `<label class="litem${st[t.key] ? ' done' : ''}"><input type="checkbox" data-chk="${esc(t.key)}" ${st[t.key] ? 'checked' : ''}><span><b>${esc(t.text)}</b><small>${esc(t.sub)}</small></span></label>`).join('')}</div>`; }).join('')}
@@ -6924,7 +6915,7 @@ svg.addEventListener('pointerdown', e => {
       const ct = pending ? (cableType === 'auto' ? guessCable(itemById(pending.from), itemById(id)) : cableType) : null;
       if (!pending) pending = { from: id, points: [] };
       else if (id !== pending.from && ct === 'power' && isMains(itemById(id)) && isMains(itemById(pending.from))) {
-        pending = null; cursorPt = null; toast('Distros and power points are fed from the DB board, so they don’t need a lead between them.'); renderPlot(); return;
+        pending = null; cursorPt = null; toast('Distros are fed from the board; no lead needed'); renderPlot(); return;
       } else if (id !== pending.from) {
         const pts = pending.points, from = pending.from, lvl = pending.level; pending = null; cursorPt = null; pendHover = null; pendChan = null;
         mutate(() => {
@@ -6950,13 +6941,13 @@ svg.addEventListener('pointerdown', e => {
         if (oh) oh.s1 = nearestOn(chans().find(x => x.id === oh.ch).pts, hit.pt[0], hit.pt[1]).s;
         pending.points.push({ ch: hit.ch.id, s0: hit.s, s1: null });
         if (chLevel(hit.ch) === 'ceiling') pending.level = 'ceiling';
-        toast(`Into ${hit.ch.name}. Click the channel again where it comes out, or click the destination.`);
+        toast(`Into ${hit.ch.name}. Click where it leaves`);
       } else {
         if (oh) oh.s1 = nearestOn(chans().find(x => x.id === oh.ch).pts, p.x, p.y).s;
         const prev = pendingLast(), q = pivotSnap(p, prev);
         if (Math.abs(q[0] - prev[0]) + Math.abs(q[1] - prev[1]) > .05) pending.points.push(q);
       }
-    } else { toast('Start on a piece of gear: click a stage box, mic, distro…'); }
+    } else { toast('Start by clicking a piece of gear'); }
     renderPlot(); return;
   }
   if (mode === 'box') {   // Select tool: tap gear to add or drop it, drag a box over the floor, drag a picked item to move them all
@@ -7161,7 +7152,7 @@ svg.addEventListener('pointermove', e => { if (lp.t && Math.hypot(e.clientX - lp
 for (const ev of ['pointerup', 'pointercancel']) svg.addEventListener(ev, () => { clearTimeout(lp.t); lp.t = 0; });
 svg.addEventListener('contextmenu', e => { if (e.isTrusted && Date.now() - lp.fired < 1200) { e.preventDefault(); e.stopImmediatePropagation(); } }, true);   // the browser's own long-press menu, just after ours
 // Older browsers (before Safari 16.2 / Firefox 113) miss colour mixing: say so once rather than look broken
-setTimeout(() => { try { if (!CSS.supports('color', 'color-mix(in srgb, red, blue)') && !sessionStorage.getItem('stageplot.oldBrowser')) { sessionStorage.setItem('stageplot.oldBrowser', '1'); toast('This browser is out of date, so some colours may look off. Updating it fixes this.'); } } catch { /* ignore */ } }, 1200);
+setTimeout(() => { try { if (!CSS.supports('color', 'color-mix(in srgb, red, blue)') && !sessionStorage.getItem('stageplot.oldBrowser')) { sessionStorage.setItem('stageplot.oldBrowser', '1'); toast('Update this browser for correct colours'); } } catch { /* ignore */ } }, 1200);
 document.addEventListener('gesturestart', e => { if (scroller.contains(e.target)) e.preventDefault(); });   // Safari's own page zoom
 scroller.addEventListener('wheel', e => {
   if (!(e.ctrlKey || e.metaKey || e.altKey)) return;   // Ctrl, Cmd or Alt (Option) with the wheel zooms round the pointer; trackpad pinch arrives as Ctrl
@@ -7331,7 +7322,7 @@ function copySelected(cut) {
   clip = { items: JSON.parse(JSON.stringify(items)), cables: JSON.parse(JSON.stringify(plan.cables.filter(c => set.has(c.from) && set.has(c.to)))), cx, cy, from: plan.id };
   lsSet('stageplot.clip', JSON.stringify(clip));
   if (cut) { mutate(() => { plan.items = plan.items.filter(i => !set.has(i.id)); plan.cables = plan.cables.filter(c => !set.has(c.from) && !set.has(c.to)); sel = null; group = null; }, `Cut ${plural(ids.length, 'item')} · Ctrl+V pastes`); }
-  else toast(`Copied ${plural(ids.length, 'item')} · Ctrl+V pastes, here or in another week`);
+  else toast(`Copied ${plural(ids.length, 'item')} · Ctrl+V pastes`);
 }
 function pasteClip() {
   if (!clip?.items?.length) { toast('Nothing copied yet. Select gear and press Ctrl+C'); return; }
@@ -7915,7 +7906,7 @@ function paperworkHtml(only = '') {   // only: 'print-rider' or 'print-spots' ma
   return `<!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(plan.name || 'Stage plot')} · ${esc(plan.date)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=JetBrains+Mono:wght@400;500&display=swap"><style>${css}</style><style>.docnav,.viewbar,[data-copy],.printbar{display:none!important}html,body{height:auto;display:block}.fileprint{position:fixed;top:14px;right:14px;z-index:9;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:0;border-radius:10px;background:#6d5efc;color:#fff;font:600 14px Archivo,system-ui,sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.18)}@media print{.fileprint{display:none!important}}</style></head><body${only ? ` class="${only}${only === 'print-spots' && spots4 ? ' spots4' : ''}"` : ''}><button class="fileprint" onclick="print()">Print or save as PDF</button><main class="paper" style="overflow:visible"><div class="paper-inner">${body}</div></main></body></html>`;
 }
 function importJson(text) {
-  let d; try { d = JSON.parse(text); } catch { toast('That isn’t valid JSON. Check you copied all of it.'); return; }
+  let d; try { d = JSON.parse(text); } catch { toast('That backup isn’t complete. Copy it again'); return; }
   const plans = d?.plans || (d?.stage && d?.items ? { [d.id || uid()]: d } : null);
   if (!plans) { toast('No weeks found in that backup'); return; }
   if (d?.gear?.custom) { const mine = db.gear?.custom || [], ids = new Set(mine.map(c => c.id)); (db.gear ||= { hidden: [], owned: {} }).custom = [...mine, ...d.gear.custom.filter(c => !ids.has(c.id))]; registerCustomGear(db.gear.custom); }
@@ -8616,7 +8607,7 @@ function rkMutate(fn) { const it = itemById(rk.id); if (!it) { closeRack(); retu
 function rkAdd(key, name, u, watts) {
   const it = itemById(rk.id), sp = RACK_DEV[key], uu = sp ? sp.u : u; if (!it) { closeRack(); return; }
   const at = freeSlot(it, uu);
-  if (at < 0) { toast(`No room for ${uu}U. Make the rack taller or remove something.`); return; }
+  if (at < 0) { toast(`No room for ${uu}U in this rack`); return; }
   const d = { id: uid(), key: sp ? key : 'custom', name: sp ? sp.name : name, u: uu, at };
   if (!sp && watts) d.watts = watts;
   rkMutate(i => { i.devices.push(d); }); rk.sel = d.id; renderRack();
@@ -8991,34 +8982,33 @@ function cmdItems() {
     ['Load-in checklist', 'check', () => { view = 'paper'; paperTab = 'loadin'; renderAll(); }],
     ['Present on a screen (F)', 'screen', () => setPresent(true)],
     ['Version history', 'undo', () => openHist()],
-    [sideOpen ? 'Close the side view (E)' : 'Side view: heights (E)', 'ruler', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } toggleSide(); }],
-    ...OVERLAYS.map(([k, n]) => [`${cableView.over.has(k) ? 'Hide' : 'Show'} ${n.replace(/^[A-Z](?![A-Z])/, c => c.toLowerCase())}`, 'eye', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } setCableView(() => { cableView.over.has(k) ? cableView.over.delete(k) : cableView.over.add(k); }); }]),
+    ...(ui.adv ? [[sideOpen ? 'Close the side view (E)' : 'Side view: heights (E)', 'ruler', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } toggleSide(); }]] : []),
+    ...(ui.adv ? OVERLAYS.map(([k, n]) => [`${cableView.over.has(k) ? 'Hide' : 'Show'} ${n.replace(/^[A-Z](?![A-Z])/, c => c.toLowerCase())}`, 'eye', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } setCableView(() => { cableView.over.has(k) ? cableView.over.delete(k) : cableView.over.add(k); }); }]) : []),
     ['Build stage from team', 'wand', () => buildNow()],
     ['Run a cable', 'cable', () => setMode('cable')],
-    ['Draw a cable channel', 'trench', () => setMode('channel')],
+    ...(ui.adv ? [['Draw a cable channel', 'trench', () => setMode('channel')]] : []),
     ['Clear this week, keep the stage', 'room', () => clearWeek(false)],
     ['Clear everything on this week', 'trash', () => clearWeek(true)],
-    ['Add a custom rack', 'box', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } addGear('rack', snapTo(plan.stage.w - fromM(1)), snapTo(fromM(1))); }],
+    ...(ui.adv ? [['Add a custom rack', 'box', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } addGear('rack', snapTo(plan.stage.w - fromM(1)), snapTo(fromM(1))); }]] : []),
     [cableView.all ? 'Hide all cables' : 'Show cables', 'eye', () => setCableView(() => { cableView.all = !cableView.all; })],
-    ['Open paperwork', 'sheet', () => openPaper()],
     ...(plan.items.some(isFixture) ? [['Open the lighting desk', 'sun', () => openDesk()]] : []),
     ['Draw or edit stage shape', 'pen', () => openDesigner(false)],
     ['Import team from Planning Center', 'calendar', () => { railTab = 'team'; togglePanel('rail', true); setTimeout(() => $('pcoStart')?.click(), 60); }],
     ['Add a person to the team', 'users', () => { railTab = 'team'; togglePanel('rail', true); setTimeout(() => $('addPerson')?.click(), 60); }],
     ['New week from this one', 'copy', () => newWeek(false)],
-    ['Save this stage as a setup', 'save', () => { $('weekBtn').click(); setTimeout(() => $('setupName')?.focus(), 60); }],
+    ['Save this stage as a setup', 'save', () => { goHome('setups'); setTimeout(() => $('homeSetupName')?.focus(), 60); }],
     ...Object.entries(setups()).map(([id, su]) => [`Lay out the stage as “${su.name}”`, 'room', () => applySetup(id)]),
     ['New week, same stage, no team', 'room', () => newWeek(true)],
-    [compare ? 'Hide changes since last week' : 'What changed since last week', 'diff', () => toggleCompare()],
-    ['Measure a distance', 'ruler', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } setMode('measure'); }],
-    ['Select several items', 'boxsel', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } setMode('box'); }],
+    ...(ui.adv ? [[compare ? 'Hide changes since last week' : 'What changed since last week', 'diff', () => toggleCompare()]] : []),
+    ...(ui.adv ? [['Measure a distance', 'ruler', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } setMode('measure'); }]] : []),
+    ...(ui.adv ? [['Select several items', 'boxsel', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } setMode('box'); }]] : []),
     [ui.adv ? 'Switch to Simple view' : 'Switch to Advanced view (every setting)', 'sliders', () => setDetail(!ui.adv)],
     ['Fit stage to screen', 'fit', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } fit('stage'); }],
-    ['Re-run cabling', 'wand', () => mutate(autoCable, 'Cabling re-run')],
+    ...(ui.adv ? [['Re-run cabling', 'wand', () => mutate(autoCable, 'Cabling re-run')]] : []),
     ['Save the plot as a picture', 'plot', () => plotPicture()],
     ['Copy a summary for the team chat', 'copy', () => copyText(weekSummary(), $('copyFallback'))],
-    [flipped ? 'See the plot from the house' : 'See the plot from the stage (flip)', 'rotate', () => { view = 'plot'; setFlip(!flipped); }],
-    [plan.setupLock ? 'Unlock the setup' : 'Lock the setup (risers, stage box, speakers, power)', plan.setupLock ? 'unlock' : 'lock', () => { $('setupLock') ? $('setupLock').click() : mutate(() => { if (plan.setupLock) delete plan.setupLock; else plan.setupLock = true; }, plan.setupLock ? 'Setup unlocked' : 'Setup locked'); }],
+    ...(ui.adv ? [[flipped ? 'See the plot from the house' : 'See the plot from the stage (flip)', 'rotate', () => { view = 'plot'; setFlip(!flipped); }]] : []),
+    ...(ui.adv ? [[plan.setupLock ? 'Unlock the setup' : 'Lock the setup (risers, stage box, speakers, power)', plan.setupLock ? 'unlock' : 'lock', () => { $('setupLock') ? $('setupLock').click() : mutate(() => { if (plan.setupLock) delete plan.setupLock; else plan.setupLock = true; }, plan.setupLock ? 'Setup unlocked' : 'Setup locked'); }]] : []),
     ...(pco.mcp ? [['Next plan from Planning Center', 'calendar', () => nextFromPco()]] : []),
     ['Switch theme', 'auto', () => $('themeBtn').click()],
     ['Backup & restore', 'save', () => $('dataBtn').click()],
@@ -9169,7 +9159,7 @@ function resetAll() {
     localStorage.setItem('stageplot.beforeReset', JSON.stringify({ at: new Date().toISOString(), keys: snap }));
     for (const k of Object.keys(snap)) localStorage.removeItem(k);
     sessionStorage.setItem('stageplot.justReset', '1');
-  } catch { toast('This browser is blocking storage, so nothing could be reset'); return; }
+  } catch { toast('Storage is blocked, so nothing was reset'); return; }
   location.reload();
 }
 function restoreBeforeReset() {
@@ -9613,7 +9603,7 @@ async function tidyOldWeeks() {
   if (!ok) { toast('Nothing removed: the backup wasn’t saved'); return; }   // never delete without a copy in hand
   for (const w of gone) { delete db.plans[w.id]; delete histLoad()[w.id]; }
   histSave(); save(); renderAll();
-  toast(`Removed ${plural(gone.length, 'old week')}. The backup has them if you need one back`);
+  toast(`Removed ${plural(gone.length, 'old week')}`);
 }
 function homeData() {
   const before = (() => { try { return localStorage.getItem('stageplot.beforeReset'); } catch { return null; } })();
@@ -9647,7 +9637,7 @@ $('homeView').addEventListener('click', e => {
   if (t.dataset.setupdef) { setDefault('setupId', defaultsOf().setupId === t.dataset.setupdef ? '' : t.dataset.setupdef); renderHome(); return; }
   if (t.id === 'homeSetupSave') { saveSetup($('homeSetupName').value); renderHome(); return; }
   if (t.dataset.defcolor !== undefined) { setDefault('stage.color', t.dataset.defcolor); renderHome(); return; }
-  if (t.id === 'homeDefFromWeek') { const s = plan.stage; db.defaults = { ...(db.defaults || {}), stage: { w: s.w, d: s.d, house: s.house, houseW: s.houseW, color: s.color || '' }, settings: { ...plan.settings } }; save(); renderHome(); toast('This week’s stage is now the default for new weeks'); return; }
+  if (t.id === 'homeDefFromWeek') { const s = plan.stage; db.defaults = { ...(db.defaults || {}), stage: { w: s.w, d: s.d, house: s.house, houseW: s.houseW, color: s.color || '' }, settings: { ...plan.settings } }; save(); renderHome(); toast('New weeks now start from this stage'); return; }
   if (t.id === 'homeDefApply') { const D = defaultsOf(); mutate(() => { Object.assign(plan.stage, D.stage); if (!D.stage.color) delete plan.stage.color; delete plan.stage.poly; Object.assign(plan.settings, D.settings); needFit = true; }, 'Stage defaults applied to this week'); return; }
   if (t.id === 'homeGearAll') { gearPrefs().hidden = []; save(); renderHome(); renderRail(); return; }
   if (t.dataset.gearback) { const g = gearPrefs(); g.hidden = g.hidden.filter(x => x !== t.dataset.gearback); save(); renderHome(); renderRail(); return; }
@@ -9656,7 +9646,7 @@ $('homeView').addEventListener('click', e => {
   if (t.id === 'gf-open') { gearForm.open = true; renderHome(); setTimeout(() => { $('gearForm')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); $('gf-name')?.focus(); }, 30); return; }
   if (t.id === 'gf-cancel' || t.id === 'gf-cancel2') { Object.assign(gearForm, { open: false, name: '', inputs: '', watts: '', group: '', img: '', w: '', d: '', imgErr: '' }); renderHome(); return; }
   if (t.id === 'gf-imgclear') { gearForm.img = ''; gearForm.w = ''; gearForm.d = ''; renderHome(); return; }
-  if (t.id === 'homeGearUnused') { const on = new Set(plan.items.map(i => i.type)); const g = gearPrefs(), before = [...g.hidden]; g.hidden = GEAR_GROUPS.flatMap(([, ts]) => ts).filter(x => !on.has(x)); save(); renderHome(); renderRail(); toast('Your library now has only what’s on this week’s plot', { label: 'Undo', fn: () => { g.hidden = before; save(); renderHome(); renderRail(); } }); return; }
+  if (t.id === 'homeGearUnused') { const on = new Set(plan.items.map(i => i.type)); const g = gearPrefs(), before = [...g.hidden]; g.hidden = GEAR_GROUPS.flatMap(([, ts]) => ts).filter(x => !on.has(x)); save(); renderHome(); renderRail(); toast('Library trimmed to this week’s gear', { label: 'Undo', fn: () => { g.hidden = before; save(); renderHome(); renderRail(); } }); return; }
   if (t.id === 'homeOwnClear') { gearPrefs().owned = {}; save(); renderHome(); return; }
   if (t.id === 'hp-test') { pcoLoadTypes(); return; }
   if (t.id === 'hp-connect') { pcoConnectKey(); return; }
@@ -9723,7 +9713,7 @@ $('homeView').addEventListener('change', e => {
 
 /* ----- safety net: an unexpected error says so once, calmly, and work already saved stays saved ----- */
 let lastCrash = 0;
-const onCrash = () => { if (Date.now() - lastCrash < 15000) return; lastCrash = Date.now(); try { toast('Something went wrong there. Your work is saved; reload if the plot looks off'); } catch { /* nothing more to do */ } };
+const onCrash = () => { if (Date.now() - lastCrash < 15000) return; lastCrash = Date.now(); try { toast('Something went wrong. Your work is saved'); } catch { /* nothing more to do */ } };
 window.addEventListener('error', e => { if (e.filename && !e.filename.startsWith(location.href.split('#')[0])) return; onCrash(); });
 window.addEventListener('unhandledrejection', onCrash);
 
@@ -9752,6 +9742,9 @@ function keepScroll(fn) {
 }
 renderAll = keepScroll(renderAll); renderRail = keepScroll(renderRail); renderInspector = keepScroll(renderInspector); renderFloat = keepScroll(renderFloat); renderPaper = keepScroll(renderPaper);
 renderHome = keepScroll(renderHome); renderDesk = keepScroll(renderDesk); renderWeekPop = keepScroll(renderWeekPop); renderMoreMenu = keepScroll(renderMoreMenu); renderLibrary = keepScroll(renderLibrary); renderHist = keepScroll(renderHist); renderDesigner = keepScroll(renderDesigner); renderRack = keepScroll(renderRack);
+// once: settings from features that are gone
+for (const k of ['stageplot.density', 'stageplot.pages', 'stageplot.startHidden', 'stageplot.tips', 'stageplot.toured']) lsDel(k);
+if (desk.view === 'list') desk.view = 'map';
 restoreUndo();
 renderAll();
 try {
