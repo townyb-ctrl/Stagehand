@@ -320,7 +320,6 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .roster input { margin-top: 3px; accent-color: var(--accent); }
 .roster .nm { font-weight: 600; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .roster small { display: block; color: var(--muted); font-size: 12px; }
-.roster .maps { color: var(--ink-2); }
 .err { color: var(--bad); font-size: 13px; margin: 0; background: var(--bad-soft); padding: 8px 10px; border-radius: var(--r-sm); }
 .skel { display: grid; gap: 10px; }
 .skel-row { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; } .skel-row > span { display: grid; gap: 6px; grid-column: span 1; } .skel-row > span:only-child { grid-column: 1 / -1; }
@@ -340,11 +339,9 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .geartabs { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 6px; flex: none; }   /* every category in view, no sideways scrolling */
 .geartabs button { display: flex; align-items: center; gap: 6px; min-height: 40px; min-width: 0; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r-md); padding: 4px 6px 4px 4px; cursor: pointer; font-size: 13px; letter-spacing: -.01em; font-weight: 600; color: var(--ink-2); text-align: left; transition: border-color .12s, background .12s; }
 .geartabs button .gtname { flex: 1; min-width: 0; line-height: 1.15; }
-.geartabs button .gtn { font: 600 11px var(--f-ui); color: var(--muted); font-variant-numeric: tabular-nums; }
 .geartabs .tabglyph { width: 26px; height: 26px; flex: none; border-radius: var(--r-sm); padding: 2px; }
 .geartabs button:hover { border-color: var(--line-2); color: var(--ink); background: var(--surface-2); }
 .geartabs button[aria-selected="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent); }
-.geartabs button[aria-selected="true"] .gtn { color: var(--accent); }
 /* the library is a palette of tiles: picture first, name under it, what it plugs into in small type */
 .gearlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 8px; }
 .gearcathead { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -656,13 +653,13 @@ svg text { font-family: var(--f-ui); }
 .ld-keysmenu { left: auto; right: 60px; top: 60px; transform: none; min-width: 300px; padding: 12px 14px; gap: 8px; } .ld-keysmenu b { font-size: 13px; }
 .ld-keysmenu dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: 13px; } .ld-keysmenu dt { white-space: nowrap; } .ld-keysmenu dd { margin: 0; color: var(--ink-2); }
 .ld-keysmenu kbd { font: 600 11px var(--f-mono); padding: 1px 4px; border-radius: 4px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink-2); margin-right: 3px; }
-.ld-q { font-weight: 700; font-size: 14px; line-height: 1; } .ldesk .ld-look { min-width: 0; grid-template-rows: auto; padding: 4px 10px 4px 4px; column-gap: 6px; } .ldesk .ld-cueno { grid-row: auto; width: 20px; height: 20px; font-size: 11px; } .ldesk .ld-cuename { font-size: 13px; } .ldesk .ld-look.add { padding: 4px 10px; } .ldesk .ld-rename { height: 30px; } .ldesk .ld-lookacts .ld-icon { width: 30px; height: 30px; }
+.ldesk .ld-look { min-width: 0; grid-template-rows: auto; padding: 4px 10px 4px 4px; column-gap: 6px; } .ldesk .ld-cueno { grid-row: auto; width: 20px; height: 20px; font-size: 11px; } .ldesk .ld-cuename { font-size: 13px; } .ldesk .ld-look.add { padding: 4px 10px; } .ldesk .ld-rename { height: 30px; } .ldesk .ld-lookacts .ld-icon { width: 30px; height: 30px; }
 .ld-resize { position: absolute; left: -3px; top: 0; bottom: 0; width: 7px; z-index: 8; cursor: ew-resize; } .ld-resize:hover, .ld-resize:active { background: var(--accent); opacity: .35; }
 .overlay.docked { background: none; backdrop-filter: none; pointer-events: none; place-items: stretch end; padding: 64px 0 0; }
 .ldesk.docked { pointer-events: auto; width: var(--dockw, 440px); position: relative; height: 100%; border-radius: 0; border-width: 0 0 0 1px; box-shadow: var(--shadow-2); }
 .ldesk.docked .ld-body { display: block; overflow-y: auto; } .ldesk.docked .ld-stage { grid-template-rows: auto minmax(200px, 30vh) auto; } .ldesk.docked .ld-mapwrap { min-height: 200px; }
 .ldesk.docked .ld-colour { border-left: 0; border-top: 1px solid var(--line); overflow: visible; }
-.ldesk.docked .ld-brand small, .ldesk.docked .ld-keys { display: none; } .ldesk.docked .ld-brand h2 { white-space: nowrap; font-size: 14px; }
+.ldesk.docked .ld-brand small { display: none; } .ldesk.docked .ld-brand h2 { white-space: nowrap; font-size: 14px; }
 .ldesk.docked .ld-bar { flex-wrap: wrap; }
 .ldesk.docked .ld-mixrow { grid-template-columns: auto minmax(0, 1fr); }
 .ldesk.compact .ld-top { padding: 8px 14px; gap: 8px 14px; } .ldesk.compact .ld-look { min-width: 96px; padding: 4px 8px; }
@@ -734,9 +731,6 @@ svg text { font-family: var(--f-ui); }
 .ld-mini { display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px; border-radius: var(--r-sm); border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
 .ld-mini:hover:not(:disabled) { color: var(--ink); border-color: var(--muted); } .ld-mini:disabled { opacity: .4; cursor: default; }
 .ld-mini i { width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
-.ld-keys { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
-.ld-keys kbd { font: 600 11px var(--f-mono); padding: 1px 4px; border-radius: 4px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2); margin-left: 6px; } .ld-keys kbd + kbd { margin-left: 0; }
-@media (max-width: 900px) { .ld-keys { display: none; } }
 .ld-tip { margin: 0; text-align: center; font-size: 12px; color: var(--muted); } .ld-tip span { opacity: .5; margin: 0 4px; }
 .ld-colour { background: var(--surface-2); border-left: 1px solid var(--line); padding: 14px; display: grid; align-content: start; gap: 10px; overflow-y: auto; scrollbar-width: thin; }
 .ld-card { background: var(--ld-card); border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 14px; display: grid; gap: 10px; }
@@ -1624,7 +1618,6 @@ td.spare { color: var(--muted); font-style: italic; }
 @media (max-width: 760px) { .hero { grid-template-columns: 1fr; } }
 /* look switch: calm (pictures sit back until picked or pointed at), full colour, mono */
 #plot.style-calm .item:not(.is-person):not(.is-floor):not(.is-inst):not(.picked):not(:hover) { filter: saturate(.72) brightness(.98); }   /* instruments keep their colour: they're what people look for */
-#plot.style-mono { filter: grayscale(1) contrast(1.04); }
 .pstyle { margin: 2px 8px 6px; }
 .itag.gname rect { fill: rgba(16,18,23,.5); stroke: none; } .itag.gname .ilabel { font-weight: 500; fill: rgba(255,255,255,.88); font-size: inherit; }
 .light-deck .itag.gname:not(.sel) rect { fill: rgba(255,255,255,.7); } .light-deck .itag.gname:not(.sel) .ilabel { fill: #3a3f4a; }
@@ -1632,7 +1625,6 @@ td.spare { color: var(--muted); font-style: italic; }
 /* house vignette, paper tables */
 .vignette { pointer-events: none; opacity: .14; } :root[data-theme="dark"] .vignette { opacity: .45; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .vignette { opacity: .45; } }
-#plot.style-mono .vignette { opacity: .1; }
 .sheet tbody tr:nth-child(even):not(:hover) td { background: color-mix(in srgb, var(--surface-2) 70%, transparent); }
 @media (min-width: 761px) {
   .sheet .tablewrap { overflow: visible; }
@@ -2225,8 +2217,6 @@ const OLD_GUITAR = { s_burst: 's_black', s_gold: 's_black', t_burst: 't_black' }
 const DEFAULT_GUITAR = 's_black';
 /* GUITARS:END */
 const guitarModel = it => GUITAR_MODELS[it.model] || GUITAR_MODELS[DEFAULT_GUITAR];
-let lastGuitar = DEFAULT_GUITAR;
-try { const g = localStorage.getItem('stageplot.guitar'); if (GUITAR_MODELS[g]) lastGuitar = g; } catch { /* default */ }
 /* Mic types: vector drawings (MODEL_ART) drawn over the mic's footprint */
 const MIC_MODELS = {
   vox_mic: {
@@ -3223,9 +3213,9 @@ function deskColourHtml() {
   const hex = f.r + f.g + f.b ? '#' + [f.r, f.g, f.b].map(v => v.toString(16).padStart(2, '0')).join('') : '', rec = deskRecent(), L = curLook(), mst = lookMaster(L);
   return `<div class="ld-card ld-colcard"><div class="ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'Pick lights on the stage'}</b></div><span class="ld-pickacts">${ts.length && ui.adv ? `<button class="ld-mini" data-flash title="Make the picked lights pulse on the stage, to find them">${ic('zap', 'sm')}Flash</button>` : ''}${ui.adv ? `<button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button>` : ''}</span></div>
       <div class="ld-mixrow${ui.adv ? '' : ' few'}"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders${ui.adv ? '' : ' few'}">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].filter(([k]) => ui.adv || k === 'd').map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--accent)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
-      ${ui.adv ? '' : '<!--'}<label class="ld-cct" title="Warm (tungsten) to cool (daylight) white"><span class="ld-label">White</span><span class="ld-cctw">Warm</span><input type="range" data-cct min="2700" max="6500" step="100" value="${f.k || CCT_DEF}" ${ts.length ? '' : 'disabled'} aria-label="Colour temperature, warm to cool" aria-valuetext="${f.k ? f.k + ' kelvin' : 'not set'}"><span class="ld-cctw">Cool</span><output>${f.k ? f.k + ' K' : ''}</output></label>${ui.adv ? '' : '-->'}
+      ${ui.adv ? `<label class="ld-cct" title="Warm (tungsten) to cool (daylight) white"><span class="ld-label">White</span><span class="ld-cctw">Warm</span><input type="range" data-cct min="2700" max="6500" step="100" value="${f.k || CCT_DEF}" ${ts.length ? '' : 'disabled'} aria-label="Colour temperature, warm to cool" aria-valuetext="${f.k ? f.k + ' kelvin' : 'not set'}"><span class="ld-cctw">Cool</span><output>${f.k ? f.k + ' K' : ''}</output></label>` : ''}
       <div class="ld-recentrow"><span class="ld-label">Recent</span>${rec.length ? `<div class="ld-recent" title="Recent colours">${rec.map((c, i) => `<button class="ld-rsw" data-recent="${i}" style="--sw:${fxSwatch({ ...c, d: 100 })}" aria-label="Recent colour ${esc(fxName({ ...c, d: 100 }))}" title="${esc(fxName({ ...c, d: 100 }))}" ${!ts.length || white ? 'disabled' : ''}></button>`).join('')}</div>` : '<span class="ld-recentnone">Colours you use show here</span>'}<button class="ld-mini ld-offbtn" data-preset="Off" title="Turn the picked lights off" ${ts.length ? '' : 'disabled'}>Off</button>
-      ${ui.adv ? '' : '<!--'}<label class="ld-hex"><span class="sr-only">Colour code</span><input id="ldHex" type="text" value="${hex}" placeholder="#1f6bff" maxlength="7" spellcheck="false" aria-label="Colour code, like #1f6bff" ${!ts.length || white ? 'disabled' : ''}></label>${ui.adv ? '' : '-->'}</div>
+      ${ui.adv ? `<label class="ld-hex"><span class="sr-only">Colour code</span><input id="ldHex" type="text" value="${hex}" placeholder="#1f6bff" maxlength="7" spellcheck="false" aria-label="Colour code, like #1f6bff" ${!ts.length || white ? 'disabled' : ''}></label>` : ''}</div>
       ${white ? '<p class="ld-note">White-only lights take the dimmer and the warm-to-cool slider (a gel, or their own white).</p>' : ''}</div>
 `;
 }
@@ -6136,11 +6126,11 @@ function renderInspector() {
         <div class="ends">${end('From', srcIt)}${end('To', dstIt)}</div>
         <p class="cabsum"><b>${fmtLen(len)}</b><span>pull ${st.map(fmtStock).join(' + ')}${cableQty(c) > 1 ? ` ×${cableQty(c)}` : ''}</span>${fl.kind === 'link' ? '<span class="chip">digital link</span>' : `<span class="chip flowchip flow-${fl.kind}">${{ in: 'input', out: 'output', power: 'power', signal: 'signal' }[fl.kind] || ''}${pr ? ' · ' + esc(pr.text) : ''}</span>`}</p>
       </section>
-      ${ui.adv || c.level === 'ceiling' || chans().length ? '' : '<!--'}<section class="isec"><h3>Route</h3>
+      ${ui.adv || c.level === 'ceiling' || chans().length ? `<section class="isec"><h3>Route</h3>
         <div class="seg routeseg" role="group" aria-label="Where the cable runs"><button data-level="floor" aria-pressed="${c.level !== 'ceiling'}" title="Along the stage floor">On stage</button><button data-level="ceiling" aria-pressed="${c.level === 'ceiling'}" title="Up, across the ceiling and down">Overhead</button></div>
         ${chans().length && !c.points.length ? `<div class="seg routeseg" role="group" aria-label="Cable channels"><button data-route="auto" aria-pressed="${c.route !== 'direct'}" title="Ride a cable channel when it keeps more of the run off the open floor">${ic('trench', 'sm')}Use channels</button><button data-route="direct" aria-pressed="${c.route === 'direct'}" title="Ignore channels">Direct</button></div>` : ''}
         <p class="hint">${c.level === 'ceiling' ? `Dashed on the plot. Adds ${uLen(plan.settings.ceilH ?? fromM(4.5))} up and down at each end. ` : ''}${via ? `Runs through ${esc(via.name)}. ` : chans().length && c.route !== 'direct' && !c.points.length ? 'No channel helps this run. ' : ''}${c.points.length ? 'Drag the round handles on the plot to reroute.' : 'Drag the cable on the plot to add a bend.'}</p>
-      </section>${ui.adv || c.level === 'ceiling' || chans().length ? '' : '-->'}
+      </section>` : ''}
       <section class="isec"><h3>Cable type</h3><div class="chips">${Object.keys(CABLES).map(k => `<button class="ctype" data-settype="${k}" aria-pressed="${k === c.type}"><span class="sw bg-${k}"></span>${SHORT[k]}</button>`).join('')}</div>
         <div class="row" style="gap:6px;margin-top:12px">${c.points.length ? `<button class="btn" id="cClear">Straighten</button>` : ''}<button class="btn quiet danger" id="cDel">${ic('trash', 'sm')}Delete cable</button></div>
       </section>
@@ -7169,7 +7159,7 @@ function addGear(type, x, y, hit) {
   noteRecent(type);
   mutate(() => {
     const n = plan.items.filter(i => i.type === type).length;
-    const it = addItem(type, x, y, ITEM_MODELS[type] ? { model: ITEM_MODELS[type][lastModel[type]] ? lastModel[type] : type === 'el_guitar' ? lastGuitar : Object.keys(ITEM_MODELS[type])[0] } : {});
+    const it = addItem(type, x, y, ITEM_MODELS[type] ? { model: ITEM_MODELS[type][lastModel[type]] ? lastModel[type] : type === 'el_guitar' ? DEFAULT_GUITAR : Object.keys(ITEM_MODELS[type])[0] } : {});
     if (hit && canSitInChannel(it)) placeInChannel(it, hit);
     freshGear.add(it.id);
     if (type === 'stagebox') it.label = `Stage box ${String.fromCharCode(65 + n)}`;
@@ -7722,7 +7712,7 @@ $('inspector').addEventListener('click', e => {
   if (t.dataset.level) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.level = t.dataset.level === 'ceiling' ? 'ceiling' : undefined; c.auto = false; }); return; }
   if (t.dataset.route) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.route = t.dataset.route === 'direct' ? 'direct' : undefined; }); return; }
   if (t.dataset.gmodel) {
-    const it = itemById(sel.id), k = t.dataset.gmodel; lastModel[it.type] = k; if (it.type === 'el_guitar') lastGuitar = k;
+    const it = itemById(sel.id), k = t.dataset.gmodel; lastModel[it.type] = k;
     lsSet('stageplot.models', JSON.stringify(lastModel));
     mutate(() => { it.model = k; if (it.type === 'el_guitar') { delete it.w; delete it.d; } }, `${MODEL_LABEL[it.type] || 'Type'}: ${ITEM_MODELS[it.type][k].name}`); return;   // a guitar's size follows the new guitar
   }
@@ -9112,7 +9102,6 @@ function renderLibrary() {
     ${su.length ? `<details class="more"><summary>${ic('room', 'sm')}<span><b>Setups</b><small>${plural(su.length, 'saved layout')}</small></span>${ic('chevD', 'sm')}</summary><div class="liblist" style="padding:0 10px 10px">${su.sort((a, b) => a[1].name.localeCompare(b[1].name)).map(([id, x]) => `<div class="librow"><span class="libmain" style="padding:6px 8px"><b>${esc(x.name)}</b><small>${plural(x.items.filter(i => cat(i).shape !== 'person').length, 'item')} · saved ${esc(x.saved || '')}</small></span><button class="iconbtn" data-libsetupdel="${id}" aria-label="Delete setup ${esc(x.name)}" title="Delete setup">${ic('trash', 'sm')}</button></div>`).join('')}</div></details>` : ''}
 `;
 }
-function openLibrary2() { lib.resetArmed = false; lib.typed = ''; goHome('library'); setTimeout(() => $('libSearch')?.focus(), 30); }
 function resetAll() {
   const snap = {};
   try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('stageplot') && k !== 'stageplot.beforeReset') snap[k] = localStorage.getItem(k); } } catch { /* blocked */ }

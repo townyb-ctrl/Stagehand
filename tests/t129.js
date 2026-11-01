@@ -21,7 +21,7 @@ const axe = require('fs').readFileSync(require.resolve('axe-core/axe.min.js'), '
   await p.click('#sec-team [data-copy]'); await p.waitForTimeout(200); o.copied = await p.evaluate(() => [document.querySelector('#sec-team [data-copy]').textContent.trim(), !!document.querySelector('.toast')]);
   await p.waitForTimeout(1700); o.copyBack = await p.evaluate(() => document.querySelector('#sec-team [data-copy]').textContent.trim());
   // 3 tabs at a narrower width
-  await p.setViewportSize({ width: 820, height: 900 }); await p.waitForTimeout(200); await p.evaluate(() => { renderAll(); }); await p.waitForTimeout(300); 
+  await p.setViewportSize({ width: 560, height: 900 }); await p.waitForTimeout(200); await p.evaluate(() => { renderAll(); }); await p.waitForTimeout(300); 
   o.fades = await p.evaluate(() => { const d = document.querySelector('.docnav'); return [d.classList.contains('arr-l'), d.classList.contains('arr-r')]; });
   await p.click(o.fades[1] ? '.navarr.r' : '.navarr.l'); await p.waitForTimeout(600); o.fadesAfter = await p.evaluate(() => { const d = document.querySelector('.docnav'); return [d.classList.contains('arr-l'), d.classList.contains('arr-r')]; });
   await p.screenshot({ path: `u5-${theme}-tabs.png`, clip: { x: 0, y: 60, width: 820, height: 120 } });
