@@ -1,0 +1,15 @@
+const { chromium } = require(require('./app.js').pw); const RICH = require('./rich.js');
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300); await p.evaluate(RICH); await p.waitForTimeout(200);
+const c = () => p.evaluate(() => { const g = plan.items.filter(i => i.gen); return `people ${g.filter(i => i.type === 'person').length} gear ${g.filter(i => i.type !== 'person').length} total ${plan.items.length}`; });
+console.log('start', await c());
+await p.evaluate(() => { railTab = 'team'; renderRail(); document.querySelector('.toast')?.remove(); });
+await p.uncheck('#teamGearCb'); console.log('off', await c(), await p.evaluate(() => $('buildBtn').textContent.trim()));
+await p.screenshot({ path: 't44.png', clip: { x: 0, y: 700, width: 300, height: 200 } });
+await p.click('#addPerson'); await p.fill('[data-f="name"] >> nth=-1', 'New Drummer'); await p.press('[data-f="name"] >> nth=-1', 'Tab');
+await p.selectOption('[data-f="role"] >> nth=-1', 'Drums'); await p.waitForTimeout(100); console.log('new drummer, no kit', await c());
+await p.keyboard.press('Control+z'); await p.keyboard.press('Control+z'); await p.keyboard.press('Control+z');
+await p.reload(); await p.waitForTimeout(500); await p.evaluate(() => { view = 'plot'; renderAll(); }); console.log('pref kept', await p.evaluate(() => ui.teamGear));
+await p.check('#teamGearCb'); console.log('on again', await c());
+console.log('errors', errs); await b.close(); })();

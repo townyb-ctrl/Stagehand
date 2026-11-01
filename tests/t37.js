@@ -1,0 +1,18 @@
+const { chromium } = require(require('./app.js').pw); const RICH = require('./rich.js');
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300); await p.evaluate(RICH); await p.waitForTimeout(200);
+await p.evaluate(() => { document.querySelector('.toast')?.remove(); sel = null; renderAll(); });
+const deck = () => p.evaluate(() => getComputedStyle(document.querySelector('#plot .deck')).fill);
+console.log('default', await deck(), 'swatches', await p.evaluate(() => document.querySelectorAll('.swatch').length));
+await p.click('[data-deckcolor="#1d2943"]'); console.log('navy', await deck(), 'saved', await p.evaluate(() => plan.stage.color));
+await p.screenshot({ path: 't37-navy.png' });
+await p.keyboard.press('Control+z'); console.log('undo', await deck(), await p.evaluate(() => plan.stage.color));
+await p.click('[data-deckcolor="#d8d3c6"]'); console.log('light grid', await p.evaluate(() => getComputedStyle(document.querySelector('#plot .g-major')).stroke), 'zone ink', await p.evaluate(() => getComputedStyle(document.getElementById('plot')).getPropertyValue('--deck-ink').trim()));
+await p.screenshot({ path: 't37-light.png' });
+await p.evaluate(() => { const i = $('iDeckColor'); i.value = '#2a5c3a'; i.dispatchEvent(new Event('change', { bubbles: true })); });
+console.log('custom', await deck(), 'custom pressed', await p.evaluate(() => String(document.querySelector('.swatch.custom').classList.contains('on'))));
+await p.reload(); await p.waitForTimeout(500); await p.evaluate(() => { view = 'plot'; renderAll(); }); console.log('after reload', await deck());
+console.log('paper snapshot carries colour', await p.evaluate(() => plotSnapshot().includes('--deck: #2a5c3a') || plotSnapshot().includes('--deck:#2a5c3a')));
+await p.click('[data-deckcolor=""]'); console.log('back to charcoal', await deck(), await p.evaluate(() => plan.stage.color === undefined));
+console.log('errors', errs); await b.close(); })();

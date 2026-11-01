@@ -1,0 +1,14 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(200);
+const id = await p.evaluate(() => { let id; mutate(() => { id = addGear('la_main', 6, 22)?.id || plan.items[plan.items.length - 1].id; }); sel = { kind: 'item', id }; renderAll(); return id; });
+const st = () => p.evaluate(id => { const it = itemById(id); return [laBoxes(it), prop(it, 'watts'), itemName(it), document.querySelector(`[data-id="${id}"] .s-txt, .s-txt`)?.textContent, $('iBoxes')?.value]; }, id);
+console.log('default', await st());
+await p.click('[data-boxes="1"]'); await p.click('[data-boxes="1"]'); console.log('+2', await st());
+await p.fill('#iBoxes', '14'); await p.press('#iBoxes', 'Tab'); console.log('typed 14', await st());
+await p.fill('#iBoxes', '99'); await p.press('#iBoxes', 'Tab'); console.log('typed 99', await st());
+await p.evaluate(() => undo()); console.log('undo', await st());
+console.log('txts', await p.evaluate(() => [...document.querySelectorAll('#plot .s-txt, svg .s-txt')].map(t => t.textContent)));
+await p.evaluate(id => { sel = { kind: 'item', id }; renderAll(); }, id); await p.screenshot({ path: 'n-la2.png' });
+console.log('errors', errs); await b.close(); })();

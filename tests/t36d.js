@@ -1,0 +1,13 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+await p.goto(require('./app.js').url); await p.waitForTimeout(600);
+await p.click('#welcomeExample'); await p.waitForTimeout(300);
+await p.evaluate(() => { plan.team = []; plan.items = []; plan.cables = []; sel = null; save(); renderAll(); });
+await p.keyboard.press('a'); await p.waitForTimeout(100);
+await p.fill('#gearSearch', 'stage'); await p.waitForTimeout(100);
+console.log('tiles', await p.evaluate(() => [...document.querySelectorAll('.gear[data-add]')].map(g => g.dataset.add).join(',')));
+await p.click('.gear[data-add="stagebox"]'); console.log('placing', await p.evaluate(() => placing));
+const q = await p.evaluate(() => { const m = svg.getScreenCTM(); return { x: fromM(5) * m.a + m.e, y: fromM(6) * m.d + m.f }; });
+console.log(q, await p.evaluate(q => document.elementFromPoint(q.x, q.y).outerHTML.slice(0, 80), q));
+await p.mouse.click(q.x, q.y); console.log('items', await p.evaluate(() => plan.items.map(i => i.type)));
+await b.close(); })();

@@ -1,0 +1,12 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);
+await p.evaluate(() => { plan.settings.autoPatch = false; const amp = plan.items.find(i => i.type === 'bass_amp'); addGear('bass_pedal', amp.x + 3, amp.y + 3); });
+const ids = await p.evaluate(() => [plan.items.find(i => i.type === 'bass_pedal').id, plan.items.find(i => i.type === 'bass_amp').id]);
+const scr = id => p.evaluate(id => { const it = itemById(id), m = svg.getScreenCTM(); return { x: it.x * m.a + m.e, y: it.y * m.d + m.f }; }, id);
+await p.evaluate(id => { sel = null; zoom = 50; renderAll(); focusItem(id); sel = null; renderPlot(); }, ids[0]); await p.waitForTimeout(200); console.log('under', await p.evaluate(id => { const it = itemById(id), m = svg.getScreenCTM(); return document.elementFromPoint(it.x * m.a + m.e, it.y * m.d + m.f)?.closest('g.item')?.dataset.id === id; }, ids[0])); await p.keyboard.press('Escape'); await p.keyboard.press('c'); let q = await scr(ids[0]); await p.mouse.click(q.x, q.y); q = await scr(ids[1]); await p.mouse.click(q.x, q.y); await p.waitForTimeout(50);
+console.log('cable', await p.evaluate(() => { const c = plan.cables[plan.cables.length - 1]; return c.type + ' ' + itemById(c.from).type + '>' + itemById(c.to).type; }), 'drawin', await p.evaluate(() => !!document.querySelector('path.cab.drawin')));
+await p.waitForTimeout(1400); await p.evaluate(() => renderPlot()); console.log('drawin gone', await p.evaluate(() => !document.querySelector('path.cab.drawin')));
+console.log('library has pedal', await p.evaluate(() => GEAR_GROUPS.some(([, t]) => t.includes('bass_pedal'))));
+console.log('errors', errs); await b.close(); })();

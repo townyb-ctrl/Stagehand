@@ -1,0 +1,11 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const errs = []; const p = await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 }); p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(500);
+console.log('first run view', await p.evaluate(() => [view, !$('welcomeDlg').hidden]));
+await p.click('#welcomeExample'); await p.waitForTimeout(400);
+console.log('after example', await p.evaluate(() => [view, plan.team.map(t => t.role).join(','), inputList().length, warnings().map(w => w.msg)]));
+await p.evaluate(() => document.querySelector('.toast')?.remove()); await p.waitForTimeout(200); await p.screenshot({ path: 'h3-example.png' });
+await p.evaluate(() => goHome('gear')); await p.reload(); await p.waitForTimeout(500);
+console.log('after reload', await p.evaluate(() => [view, homeTab]));
+await p.screenshot({ path: 'h3-open.png' });
+console.log('errors', errs); await b.close(); })();

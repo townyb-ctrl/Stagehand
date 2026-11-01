@@ -1,0 +1,14 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300); await p.evaluate(() => fit('room')); await p.waitForTimeout(150);
+const id = await p.evaluate(() => plan.items.find(i => i.type === 'vox_mic').id);
+const q = await p.evaluate(id => { const it = itemById(id), m = svg.getScreenCTM(); return { x: it.x * m.a + m.e, y: it.y * m.d + m.f }; }, id);
+await p.mouse.click(q.x, q.y, { button: 'right' }); await p.click('.ctx-owner summary');
+console.log('people visible', await p.evaluate(() => document.querySelectorAll('.ctx-people button').length), 'menu on screen', await p.evaluate(() => $('ctxMenu').getBoundingClientRect().bottom <= innerHeight));
+const pid = await p.evaluate(() => plan.team[2].id); await p.click(`[data-ctx-person="${pid}"]`);
+console.log('assigned', await p.evaluate(([id, pid]) => itemById(id).personId === pid, [id, pid]), 'menu closed', await p.evaluate(() => $('ctxMenu').hidden));
+await p.evaluate(() => { railTab = 'gear'; renderAll(); });
+console.log('chip height', await p.evaluate(() => Math.round(document.querySelector('.geartabs button').getBoundingClientRect().height)));
+await p.click('[data-geartab="Stage & power"]'); console.log('tab switch', await p.evaluate(() => gearTab));
+console.log('errors', errs); await b.close(); })();

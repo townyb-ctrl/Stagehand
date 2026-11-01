@@ -1,0 +1,11 @@
+const { chromium } = require(require('./app.js').pw); const fs = require('fs');
+const axe = fs.readFileSync(__dirname + '/axe/node_modules/axe-core/axe.min.js', 'utf8');
+(async () => { const b = await chromium.launch(); for (const scheme of ['light', 'dark']) { const p = await b.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: scheme });
+await p.goto(require('./app.js').url); await p.waitForTimeout(500); await p.click('#welcomeExample'); await p.waitForTimeout(400);
+await p.evaluate(() => { localStorage.setItem('stageplot.printOpts', JSON.stringify({ skip: [], scale: 100 })); view = 'paper'; renderAll(); document.querySelectorAll('.toast').forEach(t => t.remove()); });
+await p.click('#printMore'); await p.waitForTimeout(150);
+if (scheme === 'light') await p.screenshot({ path: 'printpop.png', clip: { x: 900, y: 240, width: 540, height: 460 } }); await p.addScriptTag({ content: axe }); console.log(scheme, 'print menu', await p.evaluate(async () => (await axe.run(document, { resultTypes: ['violations'], rules: { region: { enabled: false } } })).violations.map(v => v.id + ':' + v.nodes.length + ' ' + v.nodes[0].target)));
+await p.evaluate(() => { printPop = false; view = 'plot'; railTab = 'team'; plan.team[0].photo = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="red"/></svg>'); pco.changes = { week: plan.id, gone: [{ id: 'x', name: 'Ben Keys', declined: true }], added: [{ key: 'k', name: 'Sam Sing', role: 'Vocalist' }], sig: 'x' }; renderAll(); });
+await p.waitForTimeout(200); console.log(scheme, 'team + change card', await p.evaluate(async () => (await axe.run(document, { resultTypes: ['violations'], rules: { region: { enabled: false } } })).violations.map(v => v.id + ':' + v.nodes.length + ' ' + v.nodes[0].target)));
+if (scheme === 'light') await p.screenshot({ path: 'chgcard.png', clip: { x: 0, y: 60, width: 340, height: 420 } });
+await p.evaluate(() => localStorage.removeItem('stageplot.printOpts')); await p.close(); } await b.close(); })();

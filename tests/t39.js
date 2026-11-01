@@ -1,0 +1,14 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const ctx = await b.newContext({ acceptDownloads: true }); const p = await ctx.newPage({ viewport: { width: 1300, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(500); await p.click('#welcomeExample'); await p.waitForTimeout(300);
+await p.click('#vPaper'); await p.waitForTimeout(300);
+const [d1] = await Promise.all([p.waitForEvent('download'), p.click('#printMore').then(() => p.click('#sheetsBtn'))]);
+const path = __dirname + '/sheets-export.html'; await d1.saveAs(path); console.log('sheets file', d1.suggestedFilename());
+console.log('tab restored', await p.evaluate(() => paperTab));
+await p.evaluate(() => { $('dataBtn').click(); });
+const [d2] = await Promise.all([p.waitForEvent('download'), p.click('#dlAll')]); console.log('backup file', d2.suggestedFilename());
+const q = await ctx.newPage({ viewport: { width: 1100, height: 900 } }); await q.goto('file://' + path); await q.waitForTimeout(600);
+console.log('export sheets', await q.evaluate(() => document.querySelectorAll('.sheet').length), 'snap', !!(await q.$('svg.snap')));
+await q.screenshot({ path: 'sheets-export.png' }); await q.pdf({ path: 'sheets-export.pdf', format: 'A4', printBackground: true });
+console.log('errors', errs); await b.close(); })();

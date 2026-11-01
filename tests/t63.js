@@ -1,0 +1,21 @@
+// hover card (channel, patch, power, monitor, note; no browser tooltip), item preview in details, notice icon + timer that holds on hover, phone tab row
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } }); const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(400); await p.click('#welcomeExample'); await p.waitForTimeout(400);
+await p.evaluate(() => { document.querySelector('.toast')?.remove(); const a = plan.items.find(i => i.type === 'gtr_amp'); a.note = 'Spare valve in the case'; save(); renderAll(); });
+console.log('no item titles', await p.evaluate(() => document.querySelectorAll('#plot .item > title').length), 'labels', await p.evaluate(() => document.querySelector('#plot .item[aria-label]')?.getAttribute('aria-label')));
+const pos = await p.evaluate(() => { const a = plan.items.find(i => i.type === 'gtr_amp'), m = svg.getScreenCTM(); return { x: a.x * m.a + m.e, y: a.y * m.d + m.f }; });
+await p.mouse.move(pos.x, pos.y); await p.waitForTimeout(700);
+console.log('card', await p.evaluate(() => ({ shown: !$('hoverCard').hidden, rows: [...document.querySelectorAll('#hoverCard dt')].map((d, i) => `${d.textContent}: ${document.querySelectorAll('#hoverCard dd')[i].textContent}`), preview: !!document.querySelector('#hoverCard .ipv'), note: document.querySelector('.hc-note')?.textContent })));
+await p.screenshot({ path: 't63-card.png', clip: { x: pos.x - 60, y: pos.y - 60, width: 420, height: 320 } });
+await p.mouse.move(5, 500); await p.evaluate(() => { const a = plan.items.find(i => i.type === 'gtr_amp'); sel = { kind: 'item', id: a.id }; inspOpen = true; applyPanels(false); renderAll(); });
+console.log('details preview', await p.evaluate(() => !!document.querySelector('.insp-head .ipv-lg')));
+await p.screenshot({ path: 't63-insp.png', clip: { x: 1145, y: 64, width: 295, height: 90 } });
+await p.evaluate(() => { const a = plan.items.find(i => i.type === 'gtr_amp'); sel = { kind: 'item', id: a.id }; deleteSelected(); });
+console.log('toast', await p.evaluate(() => [document.querySelector('.toast .ticon') ? 'icon' : '-', !!document.querySelector('.toast .tbar')]));
+await p.hover('.toast'); await p.waitForTimeout(5600); console.log('held while hovered', await p.evaluate(() => !!document.querySelector('.toast')));
+await p.mouse.move(5, 5); await p.waitForTimeout(5400); console.log('gone after leaving', await p.evaluate(() => !document.querySelector('.toast')));
+await p.setViewportSize({ width: 390, height: 844 }); await p.evaluate(() => { view = 'paper'; paperTab = 'loadin'; renderAll(); }); await p.waitForTimeout(300);
+console.log('phone tabs', await p.evaluate(() => { const n = document.querySelector('.docnav nav'); return { oneRow: new Set([...n.querySelectorAll('button')].map(x => Math.round(x.getBoundingClientRect().top))).size === 1, scrolls: n.scrollWidth > n.clientWidth, selVisible: (() => { const r = n.querySelector('[aria-selected="true"]').getBoundingClientRect(), q = n.getBoundingClientRect(); return r.left >= q.left - 1 && r.right <= q.right + 1; })(), overflow: document.documentElement.scrollWidth > innerWidth }; }));
+await p.screenshot({ path: 't63-phone.png', clip: { x: 0, y: 300, width: 390, height: 200 } });
+console.log('errors', errs); await b.close(); })();

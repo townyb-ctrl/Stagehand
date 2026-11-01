@@ -1,0 +1,18 @@
+const { chromium } = require(require('./app.js').pw); const RICH = require('./rich.js');
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(700); if (await p.isVisible('#welcomeDlg')) await p.click('#welcomeExample'); await p.evaluate(RICH); await p.waitForTimeout(200);
+await p.screenshot({ path: 'pn-open.png' });
+await p.keyboard.press('['); await p.keyboard.press(']'); await p.waitForTimeout(500);
+const kid = await p.evaluate(() => plan.items.find(i => i.type === 'midi_keys').id); const kit = await p.$(`#plot .item[data-id="${kid}"]`); const bb = await kit.boundingBox();
+await p.mouse.click(bb.x + bb.width/2, bb.y + bb.height/2); await p.waitForTimeout(200);
+await p.screenshot({ path: 'pn-closed.png' });
+console.log('quick visible', await p.isVisible('#fquick .quick'));
+await p.click('[data-insp-show]'); await p.waitForTimeout(400);
+console.log('insp open', await p.evaluate(() => !document.getElementById('plotView').classList.contains('insp-collapsed')));
+await p.click('#tGear'); await p.waitForTimeout(400);
+console.log('rail open', await p.evaluate(() => !document.getElementById('plotView').classList.contains('rail-collapsed')));
+await p.keyboard.press('Escape'); await p.keyboard.press('\\'); await p.waitForTimeout(400); await p.screenshot({ path: 'pn-focus.png' });
+await p.setViewportSize({ width: 1100, height: 800 }); await p.keyboard.press('\\'); await p.waitForTimeout(400); await p.screenshot({ path: 'pn-1100.png' });
+await p.setViewportSize({ width: 400, height: 800 }); await p.waitForTimeout(300);
+console.log('phone sw', await p.evaluate(() => document.documentElement.scrollWidth), 'errors', errs); await b.close(); })();

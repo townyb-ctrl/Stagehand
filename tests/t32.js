@@ -1,0 +1,12 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);
+console.log('glance', await p.evaluate(() => document.querySelector('.glance')?.textContent), 'tip shown', await p.evaluate(() => $('inspector').textContent.includes('Click anything')));
+await p.evaluate(() => { sel = { kind: 'item', id: plan.items.find(i => i.type === 'stagebox').id }; renderAll(); });
+console.log('conns shown', await p.evaluate(() => document.querySelectorAll('.conns li').length));
+await p.click('[data-allconns]'); console.log('after show all', await p.evaluate(() => document.querySelectorAll('.conns li').length));
+await p.evaluate(() => { sel = null; renderAll(); }); console.log('tip gone', await p.evaluate(() => !$('inspector').textContent.includes('Click anything')));
+await p.reload(); await p.waitForTimeout(500); console.log('tip gone after reload', await p.evaluate(() => !$('inspector').textContent.includes('Click anything')));
+await p.evaluate(() => setDetail(true)); console.log('adv tiles', await p.evaluate(() => document.querySelectorAll('#inspector .tile').length)); await p.evaluate(() => setDetail(false));
+console.log('errors', errs); await b.close(); })();

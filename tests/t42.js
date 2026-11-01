@@ -1,0 +1,28 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);
+await p.evaluate(() => { newWeek(false); newWeek(true); document.querySelector('.toast')?.remove(); });
+await p.click('#vHome'); await p.waitForTimeout(200);
+console.log('rows', await p.evaluate(() => document.querySelectorAll('#libBody .librow').length), 'weeks', await p.evaluate(() => Object.keys(db.plans).length));
+await p.screenshot({ path: 't42-lib.png' });
+await p.fill('#libSearch', 'zzz'); console.log('filtered rows', await p.evaluate(() => document.querySelectorAll('#libBody .libopen').length)); await p.fill('#libSearch', '');
+const first = await p.evaluate(() => document.querySelector('[data-libopen]').dataset.libopen);
+await p.click(`[data-libdel="${first}"]`); await p.click(`[data-libdel="${first}"]`);
+console.log('after delete', await p.evaluate(() => Object.keys(db.plans).length));
+await p.click('.toast button'); console.log('undo delete', await p.evaluate(() => Object.keys(db.plans).length));
+await p.click(`[data-libdup="${first}"]`); console.log('dup', await p.evaluate(() => Object.keys(db.plans).length));
+const second = await p.evaluate(() => [...document.querySelectorAll('[data-libopen]')][2].dataset.libopen);
+await p.click(`[data-libopen="${second}"]`); console.log('opened', await p.evaluate(id => plan.id === id, second), 'closed', await p.evaluate(() => view === 'plot'));
+// reset
+await p.click('#vHome'); await p.click('[data-home="prefs"]'); await p.click('#libReset');
+console.log('go disabled', await p.evaluate(() => $('libResetGo').disabled)); await p.fill('#libType', 'reset');
+await p.screenshot({ path: 't42-reset.png' });
+const n0 = await p.evaluate(() => Object.keys(db.plans).length);
+await Promise.all([p.waitForNavigation(), p.click('#libResetGo')]); await p.waitForTimeout(700);
+console.log('after reset weeks', await p.evaluate(() => Object.keys(db.plans).length), 'was', n0, 'toast', await p.evaluate(() => document.querySelector('.toast')?.textContent));
+await Promise.all([p.waitForNavigation(), p.click('.toast button')]); await p.waitForTimeout(700);
+console.log('restored weeks', await p.evaluate(() => Object.keys(db.plans).length), await p.evaluate(() => document.querySelector('.toast')?.textContent));
+await p.setViewportSize({ width: 400, height: 800 }); await p.click('#vHome'); await p.waitForTimeout(200);
+console.log('phone sw', await p.evaluate(() => document.documentElement.scrollWidth)); await p.screenshot({ path: 't42-phone.png' });
+console.log('errors', errs); await b.close(); })();

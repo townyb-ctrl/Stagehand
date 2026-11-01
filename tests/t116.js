@@ -1,0 +1,20 @@
+// desk: light shapes on the map, address labels
+const { chromium } = require(require('./app.js').pw); const FILE = process.env.APP || require('./app.js').url;
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+  const errs = []; p.on('pageerror', e => errs.push(e.message)); await p.addInitScript(() => { try { localStorage.setItem('stageplot.deskTips', '1'); } catch {} });
+  await p.goto(FILE); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);
+  await p.evaluate(() => { const w = plan.stage.w, d = plan.stage.d;
+    addGear('light_desk', w / 2, d + 14); addGear('truss', w / 2, .8);
+    for (const [t, x] of [['par_led', .3], ['wash_led', .4], ['spot_mh', .5], ['wash_mh', .6], ['bar_led', .7]]) addGear(t, w * x, .8);
+    addGear('profile', 4, d - 1); addGear('fresnel', 8, d - 1); addGear('uplight', 2, 1); addGear('bar_up', w - 3, .6); addGear('light_stand', w - 2, d - 1);
+    sel = null; save(); openDesk(); });
+  console.log('shapes', await p.evaluate(() => [...document.querySelectorAll('#ldMap .ld-fx')].map(g => { const it = itemById(g.dataset.ldfx); return it.type + ':' + [...g.children].filter(c => !c.matches('.ld-ring, text')).map(c => c.tagName).join('+'); }).join(' ')));
+  console.log('simple: no label toggle', !(await p.isVisible('[data-dlabel]')));
+  await p.evaluate(() => { setDetail ? setDetail(true) : null; });
+  await p.evaluate(() => { ui.adv = true; renderDesk(); });
+  await p.click('[data-dlabel="addr"]'); await p.waitForTimeout(80);
+  console.log('addresses', await p.$$eval('#ldMap .ld-fx text.addr', e => e.slice(0, 4).map(x => x.textContent)));
+  console.log('match sheet', await p.evaluate(() => { const r = lightPatch(); const t = [...document.querySelectorAll('#ldMap .ld-fx')].map(g => [itemName(itemById(g.dataset.ldfx)), g.querySelector('text').textContent]); return t.filter(([n, a]) => a !== 'no DMX').filter(([n, a]) => { const row = r.find(x => x.name === n); return !(row && dmxAddr(row) === a); }).map(x => x.join('=') + '/' + dmxAddr(r.find(y => y.name === x[0]) || {})); return t.every(([n, a]) => { const row = r.find(x => x.name === n); return row && dmxAddr(row) === a; }); }));
+  await p.evaluate(() => { closeDesk(); openDesk(); }); console.log('remembered', await p.$$eval('#ldMap text.addr', e => e.length > 0));
+  await p.click('[data-dlabel="name"]'); console.log('names back', await p.$$eval('#ldMap text.addr', e => e.length));
+  console.log('errors', errs); await b.close(); })();

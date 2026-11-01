@@ -1,0 +1,18 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);
+await p.evaluate(() => { document.querySelector('.toast')?.remove(); addGear('el_guitar', fromM(3), fromM(4.6)); zoom = 60; renderAll(); focusItem(sel.id); });
+await p.waitForTimeout(300);
+const id = await p.evaluate(() => sel.id);
+console.log('default model', await p.evaluate(id => itemById(id).model, id), 'size m', await p.evaluate(id => [toM(prop(itemById(id), 'w')).toFixed(2), toM(prop(itemById(id), 'd')).toFixed(2)], id));
+await p.screenshot({ path: 't40-default.png' });
+await p.click('[data-gmodel="hollow_white"]'); await p.waitForTimeout(200);
+console.log('hollow', await p.evaluate(id => [itemById(id).model, toM(prop(itemById(id), 'w')).toFixed(2), toM(prop(itemById(id), 'd')).toFixed(2)], id), 'pressed', await p.evaluate(() => document.querySelector('[data-gmodel="hollow_white"]').getAttribute('aria-checked')));
+await p.screenshot({ path: 't40-hollow.png' });
+await p.keyboard.press('Control+z'); console.log('undo model', await p.evaluate(id => itemById(id).model, id));
+await p.keyboard.press('Control+Shift+z');
+await p.evaluate(() => addGear('el_guitar', fromM(5), fromM(4.6))); console.log('next guitar uses last pick', await p.evaluate(() => itemById(sel.id).model));
+await p.reload(); await p.waitForTimeout(500); console.log('after reload', await p.evaluate(id => itemById(id)?.model, id));
+console.log('paper has guitar photo', await p.evaluate(() => plotSnapshot().includes('class="gart"') && plotSnapshot().includes('data:image/webp')));
+console.log('errors', errs); await b.close(); })();

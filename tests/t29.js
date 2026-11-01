@@ -1,0 +1,12 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);
+const zones = () => p.evaluate(() => [...document.querySelectorAll('#plot text.zone')].map(t => t.textContent));
+console.log('zones', await zones());
+await p.evaluate(() => { sel = { kind: 'item', id: plan.items.find(i => i.type === 'drum_riser').id }; renderAll(); });
+console.log('riser caption on select', (await zones()).find(t => t.includes('CM')));
+await p.evaluate(() => { sel = null; plan.items = plan.items.filter(i => cat(i).shape === 'platform'); renderAll(); });
+console.log('empty stage zones', await zones());
+console.log('pill simple', await p.evaluate(() => $('fstats').textContent.replace(/\s+/g, ' ').trim()));
+console.log('errors', errs); await b.close(); })();

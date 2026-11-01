@@ -1,0 +1,12 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);
+await p.evaluate(() => { plan.stage.color = '#1d2943'; plan.stage.w = fromM(12); save(); renderAll(); document.querySelector('.toast')?.remove(); });
+const sum = () => p.evaluate(() => [plan.team.length, plan.items.length, plan.cables.length, toM(plan.stage.w).toFixed(1), plan.stage.color || '-', Object.keys(db.plans).length].join(' '));
+console.log('before', await sum());
+await p.evaluate(() => clearWeek(false)); console.log('keep stage', await sum());
+await p.keyboard.press('Control+z'); console.log('undo', await sum());
+await p.evaluate(() => clearWeek(true)); console.log('clear all', await sum());
+await p.click('.toast button'); console.log('toast undo', await sum());
+console.log('errors', errs); await b.close(); })();

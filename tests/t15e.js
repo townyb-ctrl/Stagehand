@@ -1,0 +1,16 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+await p.addInitScript(() => { try { localStorage.setItem('stageplot.detail', 'adv'); } catch {} });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(200);
+await p.click('#tGear'); await p.click('[data-geartab="Amps & FX"]'); await p.waitForTimeout(150); await p.screenshot({ path: 'l-band.png' });
+console.log('band tiles', await p.evaluate(() => document.querySelectorAll('#railPane .gear').length));
+await p.fill('#gearSearch', 'ipad'); await p.waitForTimeout(150);
+console.log('search', await p.evaluate(() => [...document.querySelectorAll('#railPane .gear b')].map(b => b.textContent)));
+for (const t of ['ipad_stand', 'ac_preamp', 'midi_fs', 'usb_if', 'mt_ipad', 'edrums']) await p.evaluate(t => addGear(t, 18, 10), t);
+await p.evaluate(() => mutate(() => { buildFromTeam(); autoCable(); }));
+console.log('stands', await p.evaluate(() => [plan.items.filter(i => i.type === 'ipad_stand').length, plan.items.filter(i => i.type === 'music_stand').length]));
+console.log(await p.evaluate(() => plan.items.map(i => i.type + '@' + i.x.toFixed(2) + ',' + i.y.toFixed(2)).join('\n')));
+for (let i = 0; i < 2; i++) await p.click('#zIn');
+await p.screenshot({ path: 'l-plot.png' });
+console.log('errors', errs); await b.close(); })();

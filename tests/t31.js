@@ -1,0 +1,14 @@
+const { chromium } = require(require('./app.js').pw);
+(async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);
+await p.evaluate(() => { sel = { kind: 'item', id: plan.items.find(i => i.type === 'camera' || i.type === 'stagebox').id }; renderAll(); });
+console.log('title value', await p.evaluate(() => $('iLabel').value), 'placeholder', await p.evaluate(() => $('iLabel').placeholder));
+await p.click('#iLabel'); await p.fill('#iLabel', 'Box SR'); await p.keyboard.press('Enter');
+console.log('renamed', await p.evaluate(() => itemById(sel.id).label), 'focus out', await p.evaluate(() => document.activeElement.id !== 'iLabel'));
+await p.fill('#iLabel', ''); await p.keyboard.press('Enter'); console.log('cleared ->', await p.evaluate(() => itemName(itemById(sel.id))));
+await p.click('#iLabel'); await p.keyboard.type('zzz'); await p.keyboard.press('Escape'); console.log('esc keeps', await p.evaluate(() => itemName(itemById(sel.id))), 'still selected', await p.evaluate(() => !!sel));
+console.log('saved idle', await p.waitForFunction(() => $('savedInd').classList.contains('idle'), null, { timeout: 4000 }).then(() => true).catch(() => false));
+console.log('zoomval hidden', await p.evaluate(() => !document.querySelector('.zoomval')));
+await p.screenshot({ path: 'n-title.png', clip: { x: 1140, y: 60, width: 300, height: 400 } });
+console.log('errors', errs); await b.close(); })();
