@@ -2,7 +2,7 @@
 # Runs every browser test. Screenshots and PDFs land in tests/out/ (not committed).
 # Usage: tests/run.sh            all tests
 #        tests/run.sh t24 t55    just these
-# Needs Node and Playwright with Chromium. If Playwright is installed globally: PW=$(npm root -g)/playwright tests/run.sh
+# First time: cd tests && npm install && npx playwright install chromium
 cd "$(dirname "$0")" && mkdir -p out && cd out || exit 1
 list=("$@"); [ ${#list[@]} -eq 0 ] && list=($(ls ../t*.js | xargs -n1 basename | sed 's/\.js$//' | sort -V) smoke perr a11y a11yprint a11ylight monkey)
 fail=0

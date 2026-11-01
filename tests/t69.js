@@ -7,7 +7,7 @@ console.log('drawings', await p.evaluate(() => ({ desk: document.querySelectorAl
 await p.evaluate(() => zoomCenter(3)); await p.waitForTimeout(500);
 for (const t of ['stagebox', 'distro', 'iem_rack', 'foh']) { const box = await p.evaluate(t => { const it = plan.items.find(i => i.type === t), el = document.querySelector(`#plot .item[data-id="${it.id}"]`); el.scrollIntoView({ block: 'center', inline: 'center' }); const r = el.getBoundingClientRect(); return { x: r.x - 12, y: r.y - 12, width: r.width + 24, height: r.height + 24 }; }, t); await p.waitForTimeout(150); await p.screenshot({ path: `g-${t}.png`, clip: await p.evaluate(t => { const it = plan.items.find(i => i.type === t), r = document.querySelector(`#plot .item[data-id="${it.id}"]`).getBoundingClientRect(); return { x: Math.max(0, r.x - 12), y: Math.max(0, r.y - 12), width: r.width + 24, height: r.height + 24 }; }, t) }); }
 await p.evaluate(() => goHome('stage')); await p.waitForTimeout(200);
-await p.setInputFiles('#hd-logo', 'logo.png'); await p.waitForTimeout(600);
+await p.setInputFiles('#hd-logo', __dirname + '/logo.png'); await p.waitForTimeout(600);
 console.log('logo saved', await p.evaluate(() => [!!db.defaults?.logo, (db.defaults?.logo || '').slice(0, 15), !!document.querySelector('.logoprev')]));
 await p.evaluate(() => { view = 'paper'; paperTab = 'overview'; renderAll(); }); console.log('on paper', await p.evaluate(() => !!document.querySelector('.doclogo')));
 await p.evaluate(() => { paperTab = 'rider'; renderPaper(); }); console.log('on rider', await p.evaluate(() => !!document.querySelector('.rlogo')));

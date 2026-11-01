@@ -13,8 +13,8 @@ const bx = await p.locator(`#plot [data-id="${id}"]`).first().boundingBox();
 await p.mouse.move(bx.x + bx.width / 2, bx.y + bx.height / 2); await p.mouse.down(); await p.mouse.move(bx.x + 90, bx.y + 30, { steps: 6 }); await p.mouse.up(); await p.waitForTimeout(150);
 console.log('after drag', await p.getAttribute('#undoBtn', 'title'), '|', await p.getAttribute('#undoBtn', 'aria-label'));
 await p.click('#undoBtn'); await p.waitForTimeout(100);
-console.log('redo title', await p.getAttribute('#redoBtn', 'title'), '| undo now', await p.getAttribute('#undoBtn', 'title'));
-await p.click('#redoBtn'); console.log('back', await p.getAttribute('#undoBtn', 'title'));
+console.log('undo now', await p.getAttribute('#undoBtn', 'title'));
+await p.keyboard.press('Control+Shift+z'); console.log('back', await p.getAttribute('#undoBtn', 'title'));
 // print options
 await p.evaluate(() => { view = 'paper'; paperTab = 'all'; renderAll(); document.querySelectorAll('.toast').forEach(t => t.remove()); });
 await p.click('#printMore'); await p.waitForTimeout(100);

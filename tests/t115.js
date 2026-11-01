@@ -23,11 +23,6 @@ const { chromium } = require(require('./app.js').pw); const FILE = process.env.A
   await p.click('#houseOff'); await p.waitForTimeout(100); console.log('house on', await p.evaluate(() => !document.querySelector('.ov-houseoff')));
   // first-time tips
   await p.click('#lookPick'); await p.click('[data-lpdesk]'); await p.waitForTimeout(150);
-  console.log('tips', await p.isVisible('.ld-tipcard'), (await p.textContent('.ld-tipcard b')).trim(), await p.evaluate(() => document.querySelector('.ld-coach')?.id));
-  await p.click('[data-tip="next"]'); console.log('tip 2', (await p.textContent('.ld-tipcard b')).trim(), await p.evaluate(() => document.querySelector('.ld-coach')?.id));
-  await p.click('[data-tip="next"]'); console.log('tip 3', (await p.textContent('.ld-tipcard b')).trim(), await p.evaluate(() => document.querySelector('.ld-coach')?.matches('[data-addlook]')));
-  await p.click('[data-tip="done"]'); console.log('tips gone', !(await p.isVisible('.ld-tipcard')));
-  await p.evaluate(() => { closeDesk(); openDesk(); }); console.log('not again', !(await p.isVisible('.ld-tipcard')));
   // picked chips
   await p.evaluate(() => { deskSel = new Set(plan.items.filter(i => i.type === 'par_led').map(i => i.id)); renderDesk(); });
   console.log('chips', await p.$$eval('.ld-chip', e => e.map(x => x.textContent.trim())));

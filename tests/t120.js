@@ -1,6 +1,6 @@
 // desk: aim lights by dragging their target on the map, Shift for all picked, arrow keys, undo, axe
 const { chromium } = require(require('./app.js').pw); const FILE = process.env.APP || require('./app.js').url;
-const axe = require('fs').readFileSync(__dirname + '/axe/node_modules/axe-core/axe.min.js', 'utf8');
+const axe = require('fs').readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 (async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } }); const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.addInitScript(() => { try { localStorage.setItem('stageplot.deskTips', '1'); } catch {} });
   await p.goto(FILE); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);

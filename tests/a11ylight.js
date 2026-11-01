@@ -1,5 +1,5 @@
 const { chromium } = require(require('./app.js').pw); const fs = require('fs');
-const axe = fs.readFileSync(__dirname + '/axe/node_modules/axe-core/axe.min.js', 'utf8');
+const axe = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 (async () => { const b = await chromium.launch(); const out = {};
   for (const cs of ['light', 'dark']) { const p = await b.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: cs }); await p.addInitScript(() => { try { localStorage.setItem('stageplot.deskTips', '1'); } catch {} });
     await p.goto(require('./app.js').url); await p.waitForTimeout(600); await p.click('#welcomeExample'); await p.waitForTimeout(300);

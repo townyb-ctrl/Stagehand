@@ -1,6 +1,6 @@
 // lights: fault notes on the details, plot, desk, list, quick menu, hover card, patch sheet and checks
 const { chromium } = require(require('./app.js').pw); const FILE = process.env.APP || require('./app.js').url;
-const axe = require('fs').readFileSync(__dirname + '/axe/node_modules/axe-core/axe.min.js', 'utf8');
+const axe = require('fs').readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 (async () => { const b = await chromium.launch(); const res = {};
   for (const theme of ['light', 'dark']) { const p = await b.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: theme }); const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.addInitScript(() => { try { localStorage.setItem('stageplot.deskTips', '1'); localStorage.setItem('stageplot.detail', 'adv'); } catch {} });

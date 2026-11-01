@@ -1,6 +1,6 @@
 // UI round 3: folds remembered, compact density default, Everything contents, paperwork rows open the plot, empty sheets
 const { chromium } = require(require('./app.js').pw); const FILE = process.env.APP || require('./app.js').url;
-const axe = require('fs').readFileSync(__dirname + '/axe/node_modules/axe-core/axe.min.js', 'utf8');
+const axe = require('fs').readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 (async () => { const b = await chromium.launch(); const res = {};
   for (const theme of ['light', 'dark']) { const p = await b.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: theme }); const errs = []; p.on('pageerror', e => errs.push(e.message)); const o = {};
   await p.clock.setFixedTime(new Date('2026-10-28T10:00:00'));

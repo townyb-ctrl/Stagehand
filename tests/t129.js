@@ -1,6 +1,6 @@
 // UI round 5: sticky details header, sheet-tab fades and arrows, Copied on the button, drag a number's label
 const { chromium } = require(require('./app.js').pw); const FILE = process.env.APP || require('./app.js').url;
-const axe = require('fs').readFileSync(__dirname + '/axe/node_modules/axe-core/axe.min.js', 'utf8');
+const axe = require('fs').readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 (async () => { const b = await chromium.launch(); const res = {};
   for (const theme of ['light', 'dark']) { const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: theme, permissions: ['clipboard-read', 'clipboard-write'] }); const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message)); const o = {};
   await p.clock.setFixedTime(new Date('2026-10-28T10:00:00'));

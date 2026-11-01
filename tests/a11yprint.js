@@ -1,5 +1,5 @@
 const { chromium } = require(require('./app.js').pw); const fs = require('fs');
-const axe = fs.readFileSync(__dirname + '/axe/node_modules/axe-core/axe.min.js', 'utf8');
+const axe = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 (async () => { const b = await chromium.launch(); for (const scheme of ['light', 'dark']) { const p = await b.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: scheme });
 await p.goto(require('./app.js').url); await p.waitForTimeout(500); await p.click('#welcomeExample'); await p.waitForTimeout(400);
 await p.evaluate(() => { localStorage.setItem('stageplot.printOpts', JSON.stringify({ skip: [], scale: 100 })); view = 'paper'; renderAll(); document.querySelectorAll('.toast').forEach(t => t.remove()); });

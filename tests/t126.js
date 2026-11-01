@@ -1,6 +1,6 @@
 // UI round 2: focus rings, toast bottom-left beside the rail, busy buttons, heading scale, dark borders, icons, touch targets, calm delete
 const { chromium } = require(require('./app.js').pw); const FILE = process.env.APP || require('./app.js').url;
-const axe = require('fs').readFileSync(__dirname + '/axe/node_modules/axe-core/axe.min.js', 'utf8');
+const axe = require('fs').readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 (async () => { const b = await chromium.launch(); const res = {};
   for (const theme of ['light', 'dark']) { const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: theme, acceptDownloads: true }); const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message)); const o = {};
   await p.addInitScript(() => { try { localStorage.setItem('stageplot.foldHint', '1'); } catch {} });
