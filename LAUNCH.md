@@ -24,4 +24,4 @@ What has been checked, how, and what is still open before a public launch.
 
 ## Run the checks
 
-The automated tests live outside this folder in the development session; they drive `index.html` with Playwright in Chromium. Symbols are regenerated with `node tools/export-symbols.mjs`.
+The browser tests are in [tests/](tests/README.md). Run them all with `tests/run.sh` (Playwright and Chromium needed).
