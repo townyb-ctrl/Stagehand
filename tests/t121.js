@@ -37,7 +37,7 @@ const axe = require('fs').readFileSync(require.resolve('axe-core/axe.min.js'), '
   await p.evaluate(() => { desk.view = 'front'; renderDesk(); }); await p.waitForTimeout(150);
   console.log('button', await p.isVisible('[data-frontpic]'));
   const [dl] = await Promise.all([p.waitForEvent('download', { timeout: 8000 }).catch(() => null), p.click('[data-frontpic]')]);
-  if (dl) { const f = await dl.path(); const buf = require('fs').readFileSync(f); console.log('png', dl.suggestedFilename(), buf.length > 20000, buf.readUInt32BE(16), buf.readUInt32BE(20)); require('fs').copyFileSync(f, __dirname + '/front.png'); } else console.log('png none', await p.evaluate(() => document.querySelector('.toast')?.textContent));
+  if (dl) { const f = await dl.path(); const buf = require('fs').readFileSync(f); console.log('png', dl.suggestedFilename(), buf.length > 20000, buf.readUInt32BE(16), buf.readUInt32BE(20)); require('fs').copyFileSync(f, process.cwd() + '/front.png'); } else console.log('png none', await p.evaluate(() => document.querySelector('.toast')?.textContent));
   await p.evaluate(() => { desk.view = 'map'; deskSel = new Set(deskLights().map(i => i.id)); renderDesk(); });
   await p.addScriptTag({ content: axe }); console.log('axe', await p.evaluate(async () => (await axe.run(document.querySelector('#deskDlg'), { resultTypes: ['violations'] })).violations.map(v => v.id + ' ' + v.nodes.map(n => n.target.join(' ')).join(' | '))));
   await p.screenshot({ path: 'lt41.png', clip: { x: 130, y: 170, width: 730, height: 600 } });

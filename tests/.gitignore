@@ -1,2 +1,7 @@
 out/
 node_modules/
+*.png
+!logo.png
+!testgear.png
+*.pdf
+*.html
