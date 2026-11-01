@@ -289,14 +289,14 @@ th .thshort { display: none; text-decoration: none; } @media (max-width: 560px) 
 .calday.cur { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); box-shadow: inset 0 -2px 0 var(--accent); }
 .calday em { position: absolute; top: 4px; right: 5px; font: 600 9.5px/1 var(--f-mono); font-style: normal; color: var(--muted); }
 @media (max-width: 560px) { .caldays { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.ined { cursor: text; border-radius: 4px; padding: 1px 3px; margin: -1px -3px; } .ined:hover { background: var(--accent-soft); box-shadow: inset 0 -1px 0 var(--accent); } .ineditbox { width: 100%; padding: 3px 6px; font: inherit; } @media print { .ined:hover { background: none; box-shadow: none; } }
+.ined { cursor: text; border-radius: 4px; padding: 1px 3px; margin: -1px -3px; } .ined:hover { background: var(--surface-3); box-shadow: inset 0 -1px 0 var(--muted); } .ineditbox { width: 100%; padding: 3px 6px; font: inherit; } @media print { .ined:hover { background: none; box-shadow: none; } }
 .pp-preview { position: absolute; right: calc(100% + 10px); top: 0; width: 210px; height: 290px; overflow: hidden; border-radius: var(--r-sm); background: #fff; box-shadow: var(--shadow-2); border: 1px solid var(--line); opacity: 0; visibility: hidden; transition: opacity .12s; pointer-events: none; }
 .pp-preview.on { opacity: 1; visibility: visible; } .pp-preview .ppclone { display: block !important; width: 794px; padding: 40px 46px; transform: scale(.264); transform-origin: 0 0; background: #fff; color: #111; margin: 0; box-shadow: none; }
 @media (max-width: 900px) { .pp-preview { display: none; } }
 .rail, .inspector { transition: opacity .25s ease; } body.dragging-gear .rail, body.dragging-gear .inspector { opacity: .45; } @media (prefers-reduced-motion: reduce) { .rail, .inspector { transition: none; } }
 .rulcur path { stroke: var(--accent); stroke-width: .05; } .rulcur text { fill: var(--accent-text, var(--accent)); font-weight: 600; font-family: var(--f-mono); paint-order: stroke; stroke: var(--bg); stroke-width: .15; } @media print { .rulcur { display: none; } }
 .person[draggable="true"] { cursor: grab; } .person.lifting { opacity: .5; } .person.dropabove { box-shadow: inset 0 2px 0 var(--accent); } .person.dropbelow { box-shadow: inset 0 -2px 0 var(--accent); }
-.backchip { position: absolute; top: 76px; left: 50%; transform: translateX(-50%); z-index: 8; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px 7px 10px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); font: 600 13px var(--f-ui); box-shadow: var(--shadow-2); cursor: pointer; animation: toastIn .18s ease-out; } .backchip:hover { border-color: var(--accent); color: var(--accent-text, var(--accent)); }
+.backchip { position: absolute; top: 76px; left: 50%; transform: translateX(-50%); z-index: 8; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px 7px 10px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); font: 600 13px var(--f-ui); box-shadow: var(--shadow-2); cursor: pointer; animation: toastIn .18s ease-out; } .backchip:hover { border-color: var(--muted); }
 .docnav { position: sticky; } .navarr { display: none; position: absolute; top: 50%; transform: translateY(-50%); z-index: 7; width: 28px; height: 28px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2); place-items: center; cursor: pointer; box-shadow: var(--shadow-1, 0 1px 4px rgba(0,0,0,.08)); padding: 0; }
 .docnav.arr-l .navarr.l, .docnav.arr-r .navarr.r { display: grid; }  .docnav nav { scroll-behavior: smooth; }
 @media print { .navarr { display: none !important; } }
@@ -305,7 +305,7 @@ th .thshort { display: none; text-decoration: none; } @media (max-width: 560px) 
 .alltoc { position: fixed; top: 150px; left: max(12px, calc(50% - 540px - 172px)); width: 156px; display: grid; gap: 2px; padding: 10px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); box-shadow: var(--shadow-1, 0 2px 8px rgba(0,0,0,.06)); z-index: 4; max-height: calc(100vh - 190px); overflow-y: auto; }
 .alltoc b { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 2px 8px 6px; } .alltoc button { text-align: left; border: 0; background: none; padding: 5px 8px; border-radius: var(--r-sm); font: inherit; font-size: 13px; color: var(--ink-2); cursor: pointer; } .alltoc button:hover { background: var(--surface-2); color: var(--ink); }
 @media (max-width: 1400px), print { .alltoc { display: none; } }
-tr[data-showitem] { cursor: pointer; } tr[data-showitem]:hover td { background: var(--accent-soft); } @media print { tr[data-showitem]:hover td { background: none; } }
+tr[data-showitem] { cursor: pointer; } tr[data-showitem]:hover td { background: var(--surface-3); } @media print { tr[data-showitem]:hover td { background: none; } }
 .sheet-empty { padding: 26px 16px; } .sheet-empty > .ic { width: 22px; height: 22px; color: var(--muted); } .sheet-empty .btn { margin-top: 4px; }
 @media print { .sheet-empty .btn { display: none; } }
 
@@ -608,57 +608,57 @@ svg text { font-family: var(--f-ui); }
 .fader input { width: 100%; } .f-r input { accent-color: #e5484d; } .f-g input { accent-color: #30a46c; } .f-b input { accent-color: #3e63dd; } .f-w input { accent-color: #c9b98f; } .f-d input { accent-color: var(--accent); }
 .bigsw { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--line-2); flex: none; background-image: none; }
 /* the lighting desk follows the app's theme; only its stage map stays dark, like the deck, so beams read true */
-.ldesk { --ld-r: 10px; --ld-bg: var(--surface); --ld-panel: var(--surface-2); --ld-card: var(--surface); --ld-raise: var(--surface-3); --ld-line: var(--line); --ld-line2: var(--line-2); --ld-ink: var(--ink); --ld-ink2: var(--ink-2); --ld-mute: var(--muted); --ld-acc: var(--accent); --ld-groove: #c9cfd8;
-  width: min(1200px, 100%); height: min(800px, 100%); background: var(--ld-bg); color: var(--ld-ink); border-radius: 14px; border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3);
+.ldesk { --ld-card: var(--surface); --ld-raise: var(--surface-3); --ld-groove: #c9cfd8;
+  width: min(1200px, 100%); height: min(800px, 100%); background: var(--surface); color: var(--ink); border-radius: 14px; border: 1px solid var(--line-2); box-shadow: var(--shadow-3);
   display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ldesk { --ld-card: #1a2029; --ld-raise: #232a36; --ld-groove: #0b0e12; } }
 :root[data-theme="dark"] .ldesk { --ld-card: #1a2029; --ld-raise: #232a36; --ld-groove: #0b0e12; }
 .ldesk .ic { stroke: currentColor; }
-.ld-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 18px; padding: 12px 18px; background: var(--ld-bg); border-bottom: 1px solid var(--ld-line); }
+.ld-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 18px; padding: 12px 18px; background: var(--surface); border-bottom: 1px solid var(--line); }
 .ld-top .ld-looks { grid-column: 1 / -1; grid-row: 2; }
 .ld-lookcard .ld-looks { flex-wrap: wrap; overflow: visible; padding: 0; gap: 6px; } .ld-lookcard .ld-tabs { display: contents; }
 .ld-lookcard .ld-lookacts { flex: 1 1 100%; flex-wrap: wrap; row-gap: 6px; margin: 2px 0 0; padding: 0; } .ld-lookcard .ld-rename { flex: 1; min-width: 0; height: 32px; } .ld-lookcard .ld-rename input { width: 100%; min-width: 0; } .ld-lookcard .ld-lookacts .ld-icon { width: 32px; height: 32px; }
-.ld-lnote { flex: 1 1 100%; display: flex; } .ld-lnote input { width: 100%; min-width: 0; height: 30px; padding: 0 10px; border-radius: 8px; border: 1px dashed var(--ld-line2); background: transparent; color: var(--ld-ink2); font: inherit; font-size: 12.5px; } .ld-lnote input:focus { border-style: solid; border-color: var(--ld-acc); outline: none; color: var(--ld-ink); } .ld-lnote input::placeholder { color: var(--ld-mute); }
-.ld-top .ld-lnote { flex: 0 1 220px; } .ld-notedot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ld-acc); margin-left: 6px; vertical-align: 2px; } .lp-name { display: grid; text-align: left; } .lp-name small { font-size: 11.5px; font-weight: 500; color: var(--ink-3, var(--muted)); } .looknote { display: block; font-weight: 500; font-style: italic; color: var(--ink-2, inherit); font-size: .9em; }
-.ld-lookcard .ld-moods { position: static; transform: none; box-shadow: none; min-width: 0; max-height: none; border-color: var(--ld-line); }
+.ld-lnote { flex: 1 1 100%; display: flex; } .ld-lnote input { width: 100%; min-width: 0; height: 30px; padding: 0 10px; border-radius: 8px; border: 1px dashed var(--line-2); background: transparent; color: var(--ink-2); font: inherit; font-size: 12.5px; } .ld-lnote input:focus { border-style: solid; border-color: var(--accent); outline: none; color: var(--ink); } .ld-lnote input::placeholder { color: var(--muted); }
+.ld-top .ld-lnote { flex: 0 1 220px; } .ld-notedot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--muted); margin-left: 6px; vertical-align: 2px; } .lp-name { display: grid; text-align: left; } .lp-name small { font-size: 11.5px; font-weight: 500; color: var(--ink-3, var(--muted)); } .looknote { display: block; font-weight: 500; font-style: italic; color: var(--ink-2, inherit); font-size: .9em; }
+.ld-lookcard .ld-moods { position: static; transform: none; box-shadow: none; min-width: 0; max-height: none; border-color: var(--line); }
 .ld-top.nolooks { padding-top: 10px; padding-bottom: 10px; }
 .ld-lookacts { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding-left: 10px; }
-.ld-brand { display: flex; align-items: center; gap: 11px; } .ld-brand h2 { font-size: 16px; font-weight: 700; letter-spacing: -.01em; color: var(--ld-ink); }
-.ld-brand small { display: block; font-size: 12px; color: var(--ld-mute); margin-top: 1px; }
-.ld-logo { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; color: var(--ld-ink2); background: var(--ld-panel); box-shadow: inset 0 0 0 1px var(--ld-line2); }
+.ld-brand { display: flex; align-items: center; gap: 11px; } .ld-brand h2 { font-size: 16px; font-weight: 700; letter-spacing: -.01em; color: var(--ink); }
+.ld-brand small { display: block; font-size: 12px; color: var(--muted); margin-top: 1px; }
+.ld-logo { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; color: var(--ink-2); background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line-2); }
 .ld-looks { display: flex; align-items: center; gap: 8px; min-width: 0; overflow-x: auto; padding: 3px; scrollbar-width: thin; }
 .ld-tabs { display: flex; gap: 8px; } .ld-looks { position: relative; }
-.ld-look { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 9px; row-gap: 5px; align-items: center; text-align: left; min-width: 118px; padding: 8px 12px 9px; border-radius: 8px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink2); font: inherit; cursor: pointer; transition: border-color .2s, background .2s, box-shadow .2s; }
-.ld-look:hover { border-color: var(--ld-mute); background: var(--ld-raise); }
-.ld-look[aria-pressed="true"] { background: var(--ld-raise); border-color: var(--ld-acc); color: var(--ld-ink); box-shadow: inset 0 0 0 1px var(--ld-acc); }
-.ld-cueno { grid-row: span 2; width: 22px; height: 22px; border-radius: 8px; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; background: var(--ld-panel); color: var(--ld-mute); font-variant-numeric: tabular-nums; box-shadow: inset 0 0 0 1px var(--ld-line); }
-.ld-look[aria-pressed="true"] .ld-cueno { background: var(--ld-acc); color: var(--accent-ink); box-shadow: none; }
+.ld-look { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 9px; row-gap: 5px; align-items: center; text-align: left; min-width: 118px; padding: 8px 12px 9px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--ld-card); color: var(--ink-2); font: inherit; cursor: pointer; transition: border-color .2s, background .2s, box-shadow .2s; }
+.ld-look:hover { border-color: var(--muted); background: var(--ld-raise); }
+.ld-look[aria-pressed="true"] { background: var(--ld-raise); border-color: var(--accent); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent); }
+.ld-cueno { grid-row: span 2; width: 22px; height: 22px; border-radius: 8px; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; background: var(--surface-2); color: var(--muted); font-variant-numeric: tabular-nums; box-shadow: inset 0 0 0 1px var(--line); }
+.ld-look[aria-pressed="true"] .ld-cueno { background: var(--accent); color: var(--accent-ink); box-shadow: none; }
 .ld-cuename { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
-.ld-pal { display: flex; } .ld-pal i { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 2px var(--ld-bg); } .ld-pal i + i { margin-left: -3px; } .ld-pal i.dark { background: var(--ld-line2); box-shadow: none; }
-.ld-look.add { display: inline-flex; min-width: max-content; flex: none; align-self: stretch; align-items: center; gap: 6px; border-style: dashed; background: transparent; color: var(--ld-mute); font-size: 13px; font-weight: 600; white-space: nowrap; }
-.ld-look.add:hover { color: var(--ld-ink); border-color: var(--ld-mute); }
+.ld-pal { display: flex; } .ld-pal i { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 2px var(--surface); } .ld-pal i + i { margin-left: -3px; } .ld-pal i.dark { background: var(--line-2); box-shadow: none; }
+.ld-look.add { display: inline-flex; min-width: max-content; flex: none; align-self: stretch; align-items: center; gap: 6px; border-style: dashed; background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.ld-look.add:hover { color: var(--ink); border-color: var(--muted); }
 .ld-actions { display: flex; align-items: center; gap: 8px; }
-.ld-rename { display: flex; align-items: center; gap: 7px; height: 36px; padding: 0 10px; border-radius: 10px; background: var(--ld-card); border: 1px solid var(--ld-line2); color: var(--ld-mute); }
-.ld-rename:focus-within { border-color: var(--ld-acc); }
-.ld-rename input { width: 140px; border: 0; outline: 0; background: none; color: var(--ld-ink); font: inherit; font-size: 13.5px; font-weight: 600; padding: 0; box-shadow: none; }
-.ld-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-mute); cursor: pointer; }
+.ld-rename { display: flex; align-items: center; gap: 7px; height: 36px; padding: 0 10px; border-radius: 10px; background: var(--ld-card); border: 1px solid var(--line-2); color: var(--muted); }
+.ld-rename:focus-within { border-color: var(--accent); }
+.ld-rename input { width: 140px; border: 0; outline: 0; background: none; color: var(--ink); font: inherit; font-size: 13.5px; font-weight: 600; padding: 0; box-shadow: none; }
+.ld-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line-2); background: var(--ld-card); color: var(--muted); cursor: pointer; }
 .ld-icon:hover { color: var(--bad-ink); border-color: var(--bad); }
 .ld-done { height: 36px; padding: 0 18px; border-radius: 10px; border: 0; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
 .ld-done:hover { filter: brightness(1.08); }
-.ldesk button:focus-visible, .ldesk input:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 2px; }
+.ldesk button:focus-visible, .ldesk input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .ld-body { display: grid; grid-template-columns: minmax(0, 1fr) 452px; min-height: 0; }
 .ld-stage { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; padding: 16px 18px; min-height: 0; }
 .ld-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.ld-label { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ld-mute); }
-.ld-groups { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 11px; background: var(--ld-panel); border: 1px solid var(--ld-line); }
-.ld-seg { border: 0; background: none; color: var(--ld-ink2); font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
-.ld-seg:hover { color: var(--ld-ink); background: var(--ld-raise); }
+.ld-label { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.ld-groups { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 11px; background: var(--surface-2); border: 1px solid var(--line); }
+.ld-seg { border: 0; background: none; color: var(--ink-2); font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+.ld-seg:hover { color: var(--ink); background: var(--ld-raise); }
 .ld-seg.mine { font-style: italic; }
 .ld-gtools, .ld-gname { display: inline-flex; gap: 6px; align-items: center; } .ld-gname input { height: 28px; width: 210px; font-size: 13px; }
 .ld-moodwrap { display: inline-flex; align-self: stretch; }
 .ldesk { position: relative; }
-.ld-moods { position: absolute; z-index: 5; top: 128px; left: 50%; transform: translateX(-50%); display: grid; gap: 2px; padding: 6px; min-width: 220px; border-radius: 10px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
-.ld-moods button { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--ld-ink); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left; }
+.ld-moods { position: absolute; z-index: 5; top: 128px; left: 50%; transform: translateX(-50%); display: grid; gap: 2px; padding: 6px; min-width: 220px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line-2); box-shadow: var(--shadow-3); }
+.ld-moods button { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--ink); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left; }
 .ld-addmenu { left: 18px; transform: none; min-width: 270px; max-height: 60vh; overflow-y: auto; }
 .ld-lookmenu { left: auto; right: 18px; transform: none; min-width: 210px; }
 .ld-lookmenu button small { display: block; margin-left: auto; padding: 0; font-weight: 500; }
@@ -666,46 +666,45 @@ svg text { font-family: var(--f-ui); }
 .ld-moods > small { padding: 8px 10px 2px; font-weight: 700; letter-spacing: .02em; }
 .ldesk .ld-faders.few { grid-template-columns: repeat(2, 64px); justify-content: center; gap: 12px; }
 .ld-librow { display: flex; align-items: center; } .ld-librow > button:first-child { flex: 1; }
-.ld-moods .ld-libx { padding: 6px; color: var(--ld-mute); } .ld-moods .ld-libx:hover { color: var(--bad-ink); }
+.ld-moods .ld-libx { padding: 6px; color: var(--muted); } .ld-moods .ld-libx:hover { color: var(--bad-ink); }
 @media (max-width: 600px) { }
 .ld-moods button:hover { background: var(--ld-raise); }
 .ld-keysmenu { left: auto; right: 60px; top: 60px; transform: none; min-width: 300px; padding: 12px 14px; gap: 8px; } .ld-keysmenu b { font-size: 13px; }
-.ld-keysmenu dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: 12.5px; } .ld-keysmenu dt { white-space: nowrap; } .ld-keysmenu dd { margin: 0; color: var(--ld-ink2); }
-.ld-keysmenu kbd { font: 600 11px var(--f-mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--ld-line2); background: var(--ld-panel); color: var(--ld-ink2); margin-right: 3px; }
+.ld-keysmenu dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: 12.5px; } .ld-keysmenu dt { white-space: nowrap; } .ld-keysmenu dd { margin: 0; color: var(--ink-2); }
+.ld-keysmenu kbd { font: 600 11px var(--f-mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink-2); margin-right: 3px; }
 .ld-q { font-weight: 700; font-size: 14px; line-height: 1; } .ldesk .ld-look { min-width: 0; grid-template-rows: auto; padding: 4px 10px 4px 5px; column-gap: 7px; } .ldesk .ld-cueno { grid-row: auto; width: 20px; height: 20px; font-size: 11px; } .ldesk .ld-cuename { font-size: 13px; } .ldesk .ld-look.add { padding: 4px 10px; } .ldesk .ld-rename { height: 30px; } .ldesk .ld-lookacts .ld-icon { width: 30px; height: 30px; }
-.ld-resize { position: absolute; left: -3px; top: 0; bottom: 0; width: 7px; z-index: 8; cursor: ew-resize; } .ld-resize:hover, .ld-resize:active { background: var(--ld-acc); opacity: .35; }
-.ld-check { width: 16px; height: 16px; flex: none; display: grid; place-items: center; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--ld-line2); margin-top: 1px; }
+.ld-resize { position: absolute; left: -3px; top: 0; bottom: 0; width: 7px; z-index: 8; cursor: ew-resize; } .ld-resize:hover, .ld-resize:active { background: var(--accent); opacity: .35; }
+.ld-check { width: 16px; height: 16px; flex: none; display: grid; place-items: center; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--line-2); margin-top: 1px; }
 .overlay.docked { background: none; backdrop-filter: none; pointer-events: none; place-items: stretch end; padding: 64px 0 0; }
 .ldesk.docked { pointer-events: auto; width: var(--dockw, 440px); position: relative; height: 100%; border-radius: 0; border-width: 0 0 0 1px; box-shadow: var(--shadow-2); }
 .ldesk.docked .ld-body { display: block; overflow-y: auto; } .ldesk.docked .ld-stage { grid-template-rows: auto minmax(200px, 30vh) auto; } .ldesk.docked .ld-mapwrap { min-height: 200px; }
-.ldesk.docked .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; }
-.ldesk.docked .ld-brand small, .ldesk.docked .ld-keys, .ldesk.docked #ldBigGo { display: none; } .ldesk.docked .ld-brand h2 { white-space: nowrap; font-size: 15px; } .ldesk.docked .ld-foot > span:last-child { display: none; }
+.ldesk.docked .ld-colour { border-left: 0; border-top: 1px solid var(--line); overflow: visible; }
+.ldesk.docked .ld-brand small, .ldesk.docked .ld-keys { display: none; } .ldesk.docked .ld-brand h2 { white-space: nowrap; font-size: 15px; }
 .ldesk.docked .ld-bar { flex-wrap: wrap; } .ldesk.docked .ld-tipcard { right: 16px; left: 16px; top: auto; bottom: 64px; width: auto; }
 .ldesk.docked .ld-mixrow { grid-template-columns: auto minmax(0, 1fr); }
 .ldesk.compact .ld-top { padding: 8px 14px; gap: 8px 14px; } .ldesk.compact .ld-look { min-width: 96px; padding: 5px 9px; }
 .ldesk.compact .ld-stage { padding: 10px 12px; gap: 8px; } .ldesk.compact .ld-colour { padding: 10px; gap: 8px; } .ldesk.compact .ld-card { padding: 9px 11px; gap: 8px; }
-.ldesk.compact .ld-wheel { width: 112px; } .ldesk.compact .ld-groove, .ldesk.compact .ld-groove input { height: 100px; } .ldesk.compact .ld-foot { padding: 6px 14px; }
-.ld-viewtog { display: inline-flex; padding: 2px; border-radius: 10px; background: var(--ld-panel); border: 1px solid var(--ld-line); }
-.ld-viewtog button { border: 0; background: none; color: var(--ld-mute); font: inherit; font-size: 12px; font-weight: 650; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
-.ld-viewtog button[aria-pressed="true"] { background: var(--ld-bg); color: var(--ld-ink); box-shadow: var(--shadow-1); }
-.ld-mapwrap { position: relative; } .ld-mapwrap.listing { background: var(--ld-panel); box-shadow: inset 0 0 0 1px var(--ld-line); overflow-y: auto; }
+.ldesk.compact .ld-wheel { width: 112px; } .ldesk.compact .ld-groove, .ldesk.compact .ld-groove input { height: 100px; } .ldesk.compact .ld-viewtog { display: inline-flex; padding: 2px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); }
+.ld-viewtog button { border: 0; background: none; color: var(--muted); font: inherit; font-size: 12px; font-weight: 650; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
+.ld-viewtog button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1); }
+.ld-mapwrap { position: relative; } .ld-mapwrap.listing { background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line); overflow-y: auto; }
 .ld-fit { position: absolute; top: 10px; right: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.2); background: rgba(10,13,18,.75); color: #fff; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
 .ld-list { display: grid; padding: 6px; }
 .ld-row { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto auto 46px; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 10px; cursor: pointer; font-size: 13.5px; }
-.ld-row:hover { background: var(--ld-raise); } .ld-row.on { background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--ld-acc); }
-.ld-row:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: -2px; }
-.ld-dotl { width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); } .ld-dotl.dark { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 3px, var(--ld-line2) 3px 6px) !important; }
-.ld-where, .ld-cname { color: var(--ld-mute); font-size: 12.5px; } .ld-row.on .ld-where, .ld-row.on .ld-cname { color: var(--ld-ink2); } .ld-pct { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.ld-row:hover { background: var(--ld-raise); } .ld-row.on { background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+.ld-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.ld-dotl { width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); } .ld-dotl.dark { background: repeating-linear-gradient(135deg, var(--surface-2) 0 3px, var(--line-2) 3px 6px) !important; }
+.ld-where, .ld-cname { color: var(--muted); font-size: 12.5px; } .ld-row.on .ld-where, .ld-row.on .ld-cname { color: var(--ink-2); } .ld-pct { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
 .ld-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-.ld-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 9px; border-radius: 6px; background: var(--ld-panel); border: 1px solid var(--ld-line2); font-size: 12.5px; font-weight: 600; }
+.ld-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 9px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line-2); font-size: 12.5px; font-weight: 600; }
 .ld-chip i { width: 10px; height: 10px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
-.ld-chip button { width: 20px; height: 20px; display: grid; place-items: center; border: 0; border-radius: 50%; background: none; color: var(--ld-mute); cursor: pointer; padding: 0; } .ld-chip button:hover { background: var(--ld-raise); color: var(--ld-ink); }
-.ld-chip.more { padding-right: 9px; color: var(--ld-mute); }
-.ld-tipcard { position: absolute; z-index: 7; right: 488px; top: 280px; width: 290px; padding: 14px 16px; border-radius: 10px; background: var(--ld-ink); color: var(--ld-bg); box-shadow: var(--shadow-3); display: grid; gap: 6px; }
+.ld-chip button { width: 20px; height: 20px; display: grid; place-items: center; border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer; padding: 0; } .ld-chip button:hover { background: var(--ld-raise); color: var(--ink); }
+.ld-chip.more { padding-right: 9px; color: var(--muted); }
+.ld-tipcard { position: absolute; z-index: 7; right: 488px; top: 280px; width: 290px; padding: 14px 16px; border-radius: 10px; background: var(--ink); color: var(--surface); box-shadow: var(--shadow-3); display: grid; gap: 6px; }
 .ld-tipcard p { margin: 0; font-size: 13px; opacity: .85; line-height: 1.45; } .ld-tipcard .row { gap: 6px; justify-content: flex-end; margin-top: 4px; }
-.ld-tipcard .ld-mini { background: transparent; color: inherit; border-color: color-mix(in srgb, var(--ld-bg) 35%, transparent); } .ld-tipcard .ld-mini.primary { background: var(--ld-acc); color: var(--accent-ink); border-color: var(--ld-acc); }
+.ld-tipcard .ld-mini { background: transparent; color: inherit; border-color: color-mix(in srgb, var(--surface) 35%, transparent); } .ld-tipcard .ld-mini.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .ld-tipdots { display: inline-flex; gap: 4px; margin-right: auto; } .ld-tipdots i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .3; } .ld-tipdots i.on { opacity: 1; }
-.ld-coach { outline: 2px solid var(--ld-acc) !important; outline-offset: 3px; border-radius: 12px; transition: outline-color .2s; }
+.ld-coach { outline: 2px solid var(--accent) !important; outline-offset: 3px; border-radius: 12px; transition: outline-color .2s; }
 .lookpill { display: flex; align-items: center; gap: 4px; margin-top: 8px; padding: 4px; width: max-content; }
 .lp-btn { display: flex; align-items: center; gap: 9px; border: 0; background: none; color: var(--ink); font: inherit; padding: 4px 8px; border-radius: 10px; cursor: pointer; } .lp-btn:hover { background: var(--surface-2); }
 .lp-txt { display: grid; text-align: left; line-height: 1.15; } .lp-txt small { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; } .lp-txt b { font-size: 13.5px; }
@@ -718,27 +717,27 @@ svg text { font-family: var(--f-ui); }
 .lp-no { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 6px; background: var(--surface-2); font-size: 11px; color: var(--muted); }
 .lp-menu .lp-desk { border-top: 1px solid var(--line); border-radius: 0 0 8px 8px; margin-top: 4px; padding-top: 10px; color: var(--accent-text); }
 .ov-houseoff { fill: #03050a; fill-opacity: .66; pointer-events: none; } .ov-glow { mix-blend-mode: screen; pointer-events: none; }
-.ld-look.dropb { box-shadow: -3px 0 0 var(--ld-acc); } .ld-look[draggable="true"] { cursor: pointer; }
-.ldesk .ld-faders { grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(0, 1.2fr); gap: 0; } .ld-master { border-left: 1px solid var(--ld-line); padding-left: 6px; } .ld-master .ld-fname { color: var(--ld-acc); }
+.ld-look.dropb { box-shadow: -3px 0 0 var(--accent); } .ld-look[draggable="true"] { cursor: pointer; }
+.ldesk .ld-faders { grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(0, 1.2fr); gap: 0; } .ld-master { border-left: 1px solid var(--line); padding-left: 6px; } .ld-master .ld-fname { color: var(--ink-2); }
 .ld-card.ld-pickinfo { grid-template-columns: auto minmax(0, 1fr) auto; padding: 10px 12px; } .ld-card.ld-pickinfo .bigsw { width: 32px; height: 32px; border-radius: 8px; }
 .ld-recent { display: flex; align-items: center; gap: 6px; } .ld-recent .ld-label { margin-right: 4px; }
-.ld-rsw { width: 20px; height: 20px; border-radius: 5px; border: 0; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.16); cursor: pointer; padding: 0; } .ld-rsw:disabled { opacity: .3; cursor: default; } .ld-rsw:hover:not(:disabled) { box-shadow: inset 0 0 0 1px rgba(0,0,0,.16), 0 0 0 2px var(--ld-card), 0 0 0 3px var(--ld-line2); }
-.ld-recentrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; } .ld-recentnone { font-size: 12px; color: var(--ld-mute); flex: 1; } .ld-offbtn { margin-left: auto; } .ld-hex { flex: 1; display: flex; min-width: 90px; } .ld-hex input { flex: 1; min-width: 0; height: 30px; font-family: var(--f-mono); font-size: 13px; text-transform: lowercase; }
+.ld-rsw { width: 20px; height: 20px; border-radius: 5px; border: 0; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.16); cursor: pointer; padding: 0; } .ld-rsw:disabled { opacity: .3; cursor: default; } .ld-rsw:hover:not(:disabled) { box-shadow: inset 0 0 0 1px rgba(0,0,0,.16), 0 0 0 2px var(--ld-card), 0 0 0 3px var(--line-2); }
+.ld-recentrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; } .ld-recentnone { font-size: 12px; color: var(--muted); flex: 1; } .ld-offbtn { margin-left: auto; } .ld-hex { flex: 1; display: flex; min-width: 90px; } .ld-hex input { flex: 1; min-width: 0; height: 30px; font-family: var(--f-mono); font-size: 13px; text-transform: lowercase; }
 .ld-map.hl .lb:not(.hl) { opacity: .22; } .ld-map .lb { transition: opacity .15s; }
 .lb.flash { animation: lbFlash .5s ease-in-out 3 alternate; } @keyframes lbFlash { from { opacity: 1; filter: none; } to { opacity: .2; } }
 .ld-fx.flashing .ld-ring { stroke: #ffd66e; animation: lbFlash .5s ease-in-out 3 alternate; }
 @media (prefers-reduced-motion: reduce) { .lb.flash, .ld-fx.flashing .ld-ring, .ld-fx.flashing .ld-halo { animation: none; } }
 .ld-stage { position: relative; }
-.ld-mapwrap.peeking { box-shadow: inset 0 0 0 2px var(--ld-acc); }
-.ld-peekpill { position: absolute; top: 64px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 8px; background: var(--ld-acc); color: var(--accent-ink); font-size: 13px; font-weight: 600; box-shadow: var(--shadow-2); pointer-events: none; }
-.ld-ctx { position: absolute; z-index: 6; width: 210px; display: grid; gap: 2px; padding: 8px; border-radius: 10px; background: var(--ld-bg); border: 1px solid var(--ld-line2); box-shadow: var(--shadow-3); }
-.ld-ctxhead { font-size: 12px; font-weight: 700; color: var(--ld-mute); padding: 2px 6px 6px; }
-.ld-ctxsw { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; padding: 0 2px 6px; border-bottom: 1px solid var(--ld-line); margin-bottom: 4px; }
+.ld-mapwrap.peeking { box-shadow: inset 0 0 0 2px var(--accent); }
+.ld-peekpill { position: absolute; top: 64px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-size: 13px; font-weight: 600; box-shadow: var(--shadow-2); pointer-events: none; }
+.ld-ctx { position: absolute; z-index: 6; width: 210px; display: grid; gap: 2px; padding: 8px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line-2); box-shadow: var(--shadow-3); }
+.ld-ctxhead { font-size: 12px; font-weight: 700; color: var(--muted); padding: 2px 6px 6px; }
+.ld-ctxsw { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; padding: 0 2px 6px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
 .ld-ctxsw button { aspect-ratio: 1; border-radius: 4px; border: 0; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); cursor: pointer; padding: 0; } .ld-ctxsw button:disabled { opacity: .25; }
-.ld-ctxsw button.off { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 3px, var(--ld-line2) 3px 6px); }
-.ld-ctx > button { display: flex; align-items: center; gap: 7px; padding: 7px 8px; border: 0; border-radius: 8px; background: none; color: var(--ld-ink); font: inherit; font-size: 13px; text-align: left; cursor: pointer; } .ld-ctx > button:hover, .ld-ctx > button:focus-visible { background: var(--ld-raise); } .ld-moods .ld-pal i { width: 12px; } .ld-moods small { padding: 4px 10px 2px; color: var(--ld-mute); font-size: 11.5px; }
-.ld-seg[aria-pressed="true"] { background: var(--ld-bg); color: var(--ld-ink); box-shadow: var(--shadow-1), inset 0 0 0 1px var(--ld-line2); }
-.ld-mapwrap { min-height: 0; border-radius: 10px; overflow: hidden; background: #0d1117; box-shadow: inset 0 0 0 1px var(--ld-line); }
+.ld-ctxsw button.off { background: repeating-linear-gradient(135deg, var(--surface-2) 0 3px, var(--line-2) 3px 6px); }
+.ld-ctx > button { display: flex; align-items: center; gap: 7px; padding: 7px 8px; border: 0; border-radius: 8px; background: none; color: var(--ink); font: inherit; font-size: 13px; text-align: left; cursor: pointer; } .ld-ctx > button:hover, .ld-ctx > button:focus-visible { background: var(--ld-raise); } .ld-moods .ld-pal i { width: 12px; } .ld-moods small { padding: 4px 10px 2px; color: var(--muted); font-size: 11.5px; }
+.ld-seg[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1), inset 0 0 0 1px var(--line-2); }
+.ld-mapwrap { min-height: 0; border-radius: 10px; overflow: hidden; background: #0d1117; box-shadow: inset 0 0 0 1px var(--line); }
 .ld-map { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
 .ld-room { fill: rgba(255,255,255,.012); stroke: rgba(255,255,255,.1); stroke-width: .1; stroke-dasharray: .5 .35; }
 .ld-deck { fill: #1b202b; stroke: rgba(255,255,255,.16); stroke-width: .08; }
@@ -749,10 +748,10 @@ svg text { font-family: var(--f-ui); }
 .ld-fx text.addr { font-family: var(--f-mono); fill: #ffd66e; } .ld-fx text { fill: rgba(225,231,240,.62); font-weight: 600; pointer-events: none; letter-spacing: .01em; }
 .ld-dot { stroke: rgba(0,0,0,.55); } .ld-dot.dark { stroke: rgba(255,255,255,.45); stroke-dasharray: .25 .2; }
 .ld-ring { fill: none; stroke: transparent; } .ld-fx.on text { fill: #fff; }
-.ld-halo * { fill: var(--ld-acc) !important; stroke: var(--ld-acc) !important; stroke-linejoin: round; } .ld-halo { opacity: .95; } .ld-fx.flashing .ld-halo * { fill: #ffd66e !important; stroke: #ffd66e !important; } .ld-fx.flashing .ld-halo { animation: lbFlash .5s ease-in-out 3 alternate; }
+.ld-halo * { fill: var(--accent) !important; stroke: var(--accent) !important; stroke-linejoin: round; } .ld-halo { opacity: .95; } .ld-fx.flashing .ld-halo * { fill: #ffd66e !important; stroke: #ffd66e !important; } .ld-fx.flashing .ld-halo { animation: lbFlash .5s ease-in-out 3 alternate; }
 .ld-fx:hover:not(.on) .ld-ring { stroke: rgba(255,255,255,.25); } .ld-fx text.crowd { opacity: 0; transition: opacity .12s; } .ld-fx:hover text.crowd, .ld-fx:focus-visible text.crowd { opacity: 1; }
 .ld-trussbg { fill: rgba(200,210,222,.06); } .ld-lattice { fill: none; stroke: rgba(200,210,222,.3); stroke-width: .07; } .ld-chord { fill: none; stroke: rgba(200,210,222,.5); stroke-width: .13; } .ld-cap { fill: rgba(200,210,222,.5); }
-.ld-fx:focus-visible { outline: none; } .ld-fx:focus-visible .ld-ring { stroke: var(--ld-acc); }
+.ld-fx:focus-visible { outline: none; } .ld-fx:focus-visible .ld-ring { stroke: var(--accent); }
 .ld-box { fill: rgba(143,132,255,.14); stroke: #a79fff; stroke-width: .1; stroke-dasharray: .4 .25; }
 .ld-face circle { fill: rgba(255,255,255,.08); stroke: rgba(255,255,255,.55); } .ld-face text { fill: rgba(255,255,255,.85); font-weight: 700; pointer-events: none; }
 .ld-face.deep circle, .ld-face.side circle { stroke: #f5b544; stroke-dasharray: .5 .3; } .ld-face.side circle { stroke-dasharray: .2 .25; } .ld-face.dark circle { fill: rgba(0,0,0,.35); stroke: #ff7a7a; stroke-dasharray: .5 .3; } .ld-face.dark text { fill: #ffb4b4; }
@@ -762,57 +761,55 @@ svg text { font-family: var(--f-ui); }
 .ld-fchip.deep { background: var(--warn-soft); color: var(--warn-ink); } .ld-fchip.dark { background: var(--bad-soft); color: var(--bad-ink); }
 .ld-cardhead { display: flex; align-items: center; justify-content: space-between; }
 .ld-clip { display: inline-flex; gap: 4px; }
-.ld-mini { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 8px; border-radius: 6px; border: 1px solid var(--ld-line2); background: var(--ld-panel); color: var(--ld-ink2); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
-.ld-mini:hover:not(:disabled) { color: var(--ld-ink); border-color: var(--ld-mute); } .ld-mini:disabled { opacity: .4; cursor: default; }
+.ld-mini { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 8px; border-radius: 6px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ld-mini:hover:not(:disabled) { color: var(--ink); border-color: var(--muted); } .ld-mini:disabled { opacity: .4; cursor: default; }
 .ld-mini i { width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
 .ld-keys { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
-.ld-keys kbd { font: 600 10.5px var(--f-mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--ld-line2); background: var(--ld-bg); color: var(--ld-ink2); margin-left: 6px; } .ld-keys kbd + kbd { margin-left: 0; }
+.ld-keys kbd { font: 600 10.5px var(--f-mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2); margin-left: 6px; } .ld-keys kbd + kbd { margin-left: 0; }
 @media (max-width: 900px) { .ld-keys { display: none; } }
-.ld-tip { margin: 0; text-align: center; font-size: 12px; color: var(--ld-mute); } .ld-tip span { opacity: .5; margin: 0 4px; }
-.ld-colour { background: var(--ld-panel); border-left: 1px solid var(--ld-line); padding: 14px; display: grid; align-content: start; gap: 10px; overflow-y: auto; scrollbar-width: thin; }
-.ld-card { background: var(--ld-card); border: 1px solid var(--ld-line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 10px; }
-.ld-pickinfo { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--ld-line); } .ld-pickacts { display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-.ld-cct { display: grid; grid-template-columns: auto auto 1fr auto 52px; align-items: center; gap: 8px; } .ld-cctw { font-size: 11.5px; color: var(--ld-mute); } .ld-cct output { font: 600 11.5px var(--f-mono); color: var(--ld-ink2); text-align: right; }
-.ld-cct input { width: 100%; min-width: 0; height: 8px; border-radius: 99px; appearance: none; -webkit-appearance: none; background: linear-gradient(90deg, #ffb46b, #fff1e0 45%, #d6e4ff); border: 1px solid var(--ld-line2); padding: 0; } .ld-cct input:disabled { opacity: .45; }
-.ld-cct input::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--ld-card); border: 2px solid var(--ld-ink2); cursor: pointer; } .ld-cct input::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--ld-card); border: 2px solid var(--ld-ink2); }
-.ld-foldbtn { width: 100%; border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: pointer; gap: 8px; justify-content: flex-start !important; } .ld-foldbtn .ld-chev { margin-left: auto; color: var(--ld-mute); display: inline-flex; transition: transform .15s; } .ld-lookcard.folded .ld-chev { transform: rotate(-90deg); }
-.ld-foldname { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--ld-ink); } .ld-foldname .ld-cueno { width: 18px; height: 18px; font-size: 10.5px; background: var(--ld-acc); color: var(--accent-ink); box-shadow: none; } .ld-pickinfo div { display: grid; gap: 2px; min-width: 0; }
-.ld-pickinfo b { font-size: 14.5px; } .ld-pickinfo small { color: var(--ld-mute); font-size: 12.5px; }
+.ld-tip { margin: 0; text-align: center; font-size: 12px; color: var(--muted); } .ld-tip span { opacity: .5; margin: 0 4px; }
+.ld-colour { background: var(--surface-2); border-left: 1px solid var(--line); padding: 14px; display: grid; align-content: start; gap: 10px; overflow-y: auto; scrollbar-width: thin; }
+.ld-card { background: var(--ld-card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 10px; }
+.ld-pickinfo { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line); } .ld-pickacts { display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.ld-cct { display: grid; grid-template-columns: auto auto 1fr auto 52px; align-items: center; gap: 8px; } .ld-cctw { font-size: 11.5px; color: var(--muted); } .ld-cct output { font: 600 11.5px var(--f-mono); color: var(--ink-2); text-align: right; }
+.ld-cct input { width: 100%; min-width: 0; height: 8px; border-radius: 99px; appearance: none; -webkit-appearance: none; background: linear-gradient(90deg, #ffb46b, #fff1e0 45%, #d6e4ff); border: 1px solid var(--line-2); padding: 0; } .ld-cct input:disabled { opacity: .45; }
+.ld-cct input::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--ld-card); border: 2px solid var(--ink-2); cursor: pointer; } .ld-cct input::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--ld-card); border: 2px solid var(--ink-2); }
+.ld-foldbtn { width: 100%; border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: pointer; gap: 8px; justify-content: flex-start !important; } .ld-foldbtn .ld-chev { margin-left: auto; color: var(--muted); display: inline-flex; transition: transform .15s; } .ld-lookcard.folded .ld-chev { transform: rotate(-90deg); }
+.ld-foldname { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--ink); } .ld-foldname .ld-cueno { width: 18px; height: 18px; font-size: 10.5px; background: var(--accent); color: var(--accent-ink); box-shadow: none; } .ld-pickinfo div { display: grid; gap: 2px; min-width: 0; }
+.ld-pickinfo b { font-size: 14.5px; } .ld-pickinfo small { color: var(--muted); font-size: 12.5px; }
 .ld-pickinfo .bigsw { width: 40px; height: 40px; border-radius: 8px; border: 1px solid rgba(0,0,0,.12); background: var(--c); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
-.ld-pickinfo .bigsw.none { background: repeating-linear-gradient(135deg, var(--ld-panel) 0 5px, var(--ld-line) 5px 10px); box-shadow: none; }
+.ld-pickinfo .bigsw.none { background: repeating-linear-gradient(135deg, var(--surface-2) 0 5px, var(--line) 5px 10px); box-shadow: none; }
 .ld-wheelwrap { display: grid; place-items: center; padding: 4px 0; }
 .ld-mixrow { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; } .ld-mixrow.few { grid-template-columns: auto auto; justify-content: space-evenly; gap: 28px; }
 .ld-wheel { position: relative; width: 136px; aspect-ratio: 1; border-radius: 50%; cursor: crosshair; touch-action: none;
   background: radial-gradient(circle closest-side, #fff, rgba(255,255,255,0)), conic-gradient(from 90deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
-  box-shadow: 0 0 0 1px var(--ld-line2); }
-.ld-wheel.off { filter: grayscale(1) opacity(.35); cursor: default; } .ld-wheel:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 8px; }
+  box-shadow: 0 0 0 1px var(--line-2); }
+.ld-wheel.off { filter: grayscale(1) opacity(.35); cursor: default; } .ld-wheel:focus-visible { outline: 2px solid var(--accent); outline-offset: 8px; }
 .ld-mark { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.6); pointer-events: none; }
 .ldesk .lpresets { grid-template-columns: repeat(6, 1fr); gap: 8px 4px; margin: 0; }
-.ld-note { margin: 0; font-size: 12px; color: var(--ld-mute); }
+.ld-note { margin: 0; font-size: 12px; color: var(--muted); }
 .ld-faders { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; justify-items: center; }
 .ld-fader { display: grid; justify-items: center; gap: 8px; }
-.ld-fader output { font: 500 11.5px var(--f-mono); color: var(--ld-ink2); min-width: 4ch; text-align: center; padding: 2px 0; }
+.ld-fader output { font: 500 11.5px var(--f-mono); color: var(--ink-2); min-width: 4ch; text-align: center; padding: 2px 0; }
 .ld-groove { position: relative; width: 30px; height: 132px; display: block; }
 .ld-groove::before { content: ''; position: absolute; left: 50%; top: 9px; bottom: 9px; width: 4px; margin-left: -2px; border-radius: 2px; background: var(--ld-groove); }
 .ld-groove::after { content: ''; position: absolute; left: 50%; bottom: 9px; width: 4px; margin-left: -2px; border-radius: 2px; height: calc((100% - 18px) * var(--v)); background: var(--fc); pointer-events: none; }
 .ld-groove input { -webkit-appearance: none; appearance: none; writing-mode: vertical-lr; direction: rtl; position: relative; z-index: 1; width: 30px; height: 132px; margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; cursor: ns-resize; }
 .ld-groove input::-webkit-slider-runnable-track { background: transparent; border: 0; }
-.ld-groove input::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 10px; border-radius: 3px; background: var(--ld-bg); border: 1px solid var(--ld-mute); box-shadow: 0 1px 2px rgba(0,0,0,.25), inset 0 4px 0 -3px var(--ld-mute); }
+.ld-groove input::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 10px; border-radius: 3px; background: var(--surface); border: 1px solid var(--muted); box-shadow: 0 1px 2px rgba(0,0,0,.25), inset 0 4px 0 -3px var(--muted); }
 .ld-groove input::-moz-range-track { background: transparent; border: 0; }
-.ld-groove input::-moz-range-thumb { width: 20px; height: 8px; border-radius: 3px; background: var(--ld-bg); border: 1px solid var(--ld-mute); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.ld-groove input::-moz-range-thumb { width: 20px; height: 8px; border-radius: 3px; background: var(--surface); border: 1px solid var(--muted); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
 .ld-groove input:disabled { cursor: default; } .ld-fader:has(input:disabled) { opacity: .32; }
-.ld-groove input:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 2px; border-radius: 6px; }
-.ld-fname { font-size: 10.5px; font-weight: 600; letter-spacing: .06em; color: var(--ld-mute); } .f-d .ld-fname { color: var(--ld-ink2); }
-.ld-foot { display: flex; align-items: center; gap: 14px; padding: 10px 18px; border-top: 1px solid var(--ld-line); background: var(--ld-panel); font-size: 12.5px; color: var(--ld-mute); }
-.ld-foot b { color: var(--ld-ink2); }
+.ld-groove input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.ld-fname { font-size: 10.5px; font-weight: 600; letter-spacing: .06em; color: var(--muted); } .f-d .ld-fname { color: var(--ink-2); }
 .ld-live { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ok-ink); }
 .ld-live i { width: 7px; height: 7px; border-radius: 50%; background: #3f9a6c; }
 @keyframes ldPulse { 50% { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .ld-live i { animation: none; } }
-@media (max-width: 900px) { .ld-lookacts { padding-left: 4px; } .ld-body { display: block; overflow-y: auto; } .ld-stage { grid-template-rows: auto minmax(240px, 46vh) auto; } .ld-body > .ld-colour { overflow: visible; } .ld-colour { border-left: 0; border-top: 1px solid var(--ld-line); overflow: visible; } .ld-rename input { width: 100px; } .ld-brand small { display: none; } }
+@media (max-width: 900px) { .ld-lookacts { padding-left: 4px; } .ld-body { display: block; overflow-y: auto; } .ld-stage { grid-template-rows: auto minmax(240px, 46vh) auto; } .ld-body > .ld-colour { overflow: visible; } .ld-colour { border-left: 0; border-top: 1px solid var(--line); overflow: visible; } .ld-rename input { width: 100px; } .ld-brand small { display: none; } }
 @media (max-width: 900px) { .ld-tipcard { right: 16px; left: 16px; top: auto; bottom: 64px; width: auto; } }
 @media (max-width: 600px) { .ldesk { border-radius: 16px; } .ld-top { gap: 10px; padding: 12px; } .ld-actions { gap: 4px; } .ld-actions .ld-icon { width: 32px; height: 32px; } .ld-rename { flex: 1; min-width: 0; } .ld-rename input { width: 100%; min-width: 0; }
-  .ld-stage { padding: 12px; } .ld-bar { display: grid; gap: 8px; } .ld-mapwrap { min-height: 220px; } .ld-mixrow { grid-template-columns: 1fr; justify-items: center; } .ldesk .ld-faders { width: 100%; } .ld-groups { display: flex; flex-wrap: wrap; } .ld-colour { padding: 12px; } .ld-foot { flex-wrap: wrap; gap: 4px 12px; padding: 8px 12px; } }
+  .ld-stage { padding: 12px; } .ld-bar { display: grid; gap: 8px; } .ld-mapwrap { min-height: 220px; } .ld-mixrow { grid-template-columns: 1fr; justify-items: center; } .ldesk .ld-faders { width: 100%; } .ld-groups { display: flex; flex-wrap: wrap; } .ld-colour { padding: 12px; }  }
 .lookrows { display: grid; gap: 8px; } .lookrow { display: grid; grid-template-columns: 140px 1fr; gap: 10px; font-size: 13px; padding: 6px 0; border-top: 1px solid var(--line); }
 .lookfx { display: flex; flex-wrap: wrap; gap: 4px 14px; } .lookfx span { display: inline-flex; align-items: center; gap: 6px; }
 .dmxlines { display: grid; gap: 6px; margin-bottom: 8px; } .dmxlines div { display: grid; } .dmxlines small { color: var(--muted); font-size: 12px; }
@@ -820,12 +817,12 @@ svg text { font-family: var(--f-ui); }
 .lb-wall { stroke-width: .12; stroke-linecap: round; fill: none; } .lb-up.on { stroke: rgba(255, 214, 110, .5); stroke-width: .03; }
 .beams.lit .lb, .beams .lit .lb { mix-blend-mode: screen; } .plotbeams { opacity: .62; transition: opacity .2s; } .plotbeams .lb-pool.on { stroke-opacity: 1; } .beams.lit, .beams .lit { isolation: isolate; } .lb-glow { pointer-events: none; }
 .ld-planks { pointer-events: none; }
-.ld-zoom { cursor: ew-resize; } .ld-zoomk { fill: rgba(0,0,0,.45); stroke: #fff; } .ld-zoom:hover .ld-zoomk, .ld-zoom:focus-visible .ld-zoomk { stroke: var(--ld-acc); } .ld-zoom:focus-visible { outline: none; }
+.ld-zoom { cursor: ew-resize; } .ld-zoomk { fill: rgba(0,0,0,.45); stroke: #fff; } .ld-zoom:hover .ld-zoomk, .ld-zoom:focus-visible .ld-zoomk { stroke: var(--accent); } .ld-zoom:focus-visible { outline: none; }
 .ld-aim { cursor: move; } .ld-aimhit { fill: transparent; } .ld-aimline { stroke: rgba(255,255,255,.55); fill: none; pointer-events: none; } .ld-aimc { fill: rgba(0,0,0,.25); stroke: #fff; } .ld-aimx { stroke: #fff; stroke-linecap: round; }
-.ld-aim:hover .ld-aimc, .ld-aim:focus-visible .ld-aimc { stroke: var(--ld-acc); fill: rgba(0,0,0,.4); } .ld-aim:focus-visible { outline: none; }
+.ld-aim:hover .ld-aimc, .ld-aim:focus-visible .ld-aimc { stroke: var(--accent); fill: rgba(0,0,0,.4); } .ld-aim:focus-visible { outline: none; }
 .ld-front { width: 100%; height: 100%; display: block; } .lf-bg { fill: #0d1117; } .lf-wall { fill: #1a1f29; } .lf-floor { fill: #0d1016; } .lf-deck { fill: #222833; stroke: rgba(255,255,255,.12); stroke-width: 1; } .lf-face { fill: #11151c; stroke: rgba(255,255,255,.08); stroke-width: 1; }
 .lf-light > *, .lf-up { mix-blend-mode: screen; } .lf-rig { stroke: #4b5363; stroke-linecap: round; fill: none; } .lf-rig.truss { stroke: #3a414e; stroke-dasharray: 3 2; }
-.lf-body { fill: #2b313b; stroke: #5d6676; stroke-width: 1; } .lf-lens { stroke: rgba(0,0,0,.4); stroke-width: .6; } .lf-fx { cursor: pointer; } .lf-sel { fill: none; stroke: var(--ld-acc); stroke-width: 2; } .lf-fx:focus-visible { outline: none; } .lf-fx:focus-visible .lf-body { stroke: var(--ld-acc); stroke-width: 2; }
+.lf-body { fill: #2b313b; stroke: #5d6676; stroke-width: 1; } .lf-lens { stroke: rgba(0,0,0,.4); stroke-width: .6; } .lf-fx { cursor: pointer; } .lf-sel { fill: none; stroke: var(--accent); stroke-width: 2; } .lf-fx:focus-visible { outline: none; } .lf-fx:focus-visible .lf-body { stroke: var(--accent); stroke-width: 2; }
 .lf-shadow { fill: rgba(0,0,0,.45); } .lf-person text { fill: rgba(225,231,240,.55); font: 600 11px var(--f-ui, sans-serif); } .lf-note { fill: rgba(225,231,240,.4); font: 500 11px var(--f-ui, sans-serif); }
 .lb-off { fill: none; stroke: rgba(160, 170, 180, .55); stroke-width: .04; stroke-dasharray: .2 .15; }
 .zoomh { fill: #fff; stroke: #3a2c05; stroke-width: calc(var(--labs) * .6); cursor: ew-resize; }
@@ -1212,7 +1209,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .hcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 18px 20px; display: grid; gap: 14px; min-width: 0; }
 .hcard > header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
 .hcard h3 { margin: 0; font-size: var(--t-section); font-weight: 700; }
-.hmore { margin-top: 2px; } .hmore summary { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12.5px; color: var(--accent-text, var(--accent)); list-style: none; } .hmore summary::-webkit-details-marker { display: none; } .hmore summary::after { content: "›"; transition: transform .15s; } .hmore[open] summary::after { transform: rotate(90deg); } .hmore p { margin-top: 6px !important; }
+.hmore { margin-top: 2px; } .hmore summary { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12.5px; color: var(--ink-2); list-style: none; } .hmore summary::-webkit-details-marker { display: none; } .hmore summary::after { content: "›"; transition: transform .15s; } .hmore[open] summary::after { transform: rotate(90deg); } .hmore p { margin-top: 6px !important; }
 .hcard header p { margin: 3px 0 0; color: var(--muted); font-size: 13px; max-width: 62ch; }
 .libtrend { display: inline-flex; width: 56px; flex: none; align-items: center; }
 .libtrend svg { display: block; overflow: visible; }
@@ -1381,7 +1378,7 @@ tr.flag td { color: var(--bad); }
 .tchipw:hover .tchipx, .tchipw:focus-within .tchipx { opacity: 1; transform: none; }
 .tchipx:hover { color: var(--bad-ink, var(--bad)); border-color: currentColor; }
 @media (hover: none) { .tchipx { opacity: 1; transform: none; } }   /* touch screens have no hover: the × is always there */
-.tlink { border: 0; background: none; padding: 2px 4px; font: inherit; font-size: 12.5px; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.tlink { border: 0; background: none; padding: 4px 6px; border-radius: var(--r-sm); font: inherit; font-size: 12.5px; font-weight: 500; color: var(--ink-2); cursor: pointer; } .tlink:hover { background: var(--surface-3); color: var(--ink); }
 .tchip.off { border-style: dashed; color: var(--muted); display: inline-flex; align-items: center; gap: 3px; }
 .hiddenteams { margin-top: 2px; align-items: center; }
 .avatar { position: relative; } .avatar .pphoto { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
@@ -1980,7 +1977,7 @@ body.presenting .toast { display: none; }   /* nothing pops up over the plot on 
     <div><div class="eyebrow">Welcome to Stagehand</div><h2 id="welcomeTitle" style="font-size:24px">Let’s start with your stage</h2></div>
     <ol><li>Draw the shape of your stage, or pick a preset and set the size.</li><li>Add this week’s team, from Planning Center or by hand.</li><li>Build the stage, then check patching, power and paperwork.</li></ol>
     <div class="row"><button class="btn primary lg" id="welcomeDraw">Draw my stage</button><button class="btn lg" id="welcomeExample">Explore an example first</button></div>
-    <p class="hint">Drawing your stage replaces the example week. You can change the shape any time from the Room tab.</p>
+    <p class="hint">Drawing your stage replaces the sample service. You can change the shape any time from the Room tab.</p>
   </div>
 </div>
 
@@ -2360,8 +2357,6 @@ function setGuide(on) { ui.guide = on; try { localStorage.setItem('stageplot.gui
 const moreOpen = (() => { try { return JSON.parse(localStorage.getItem('stageplot.folds') || '{}') || {}; } catch { return {}; } })();   // which "More settings" folds are open, by panel; kept on this device
 let showAllConns = null;        // item whose full connection list is open
 let placing = null;             // gear type picked from the library, waiting for a click on the stage
-let tipsSeen = false;
-try { tipsSeen = localStorage.getItem('stageplot.tips') === '1'; } catch { /* ignore */ }
 function setDetail(adv) {
   ui.adv = adv; try { localStorage.setItem('stageplot.detail', adv ? 'adv' : 'simple'); } catch { /* memory only */ }
   if (!adv && mode === 'channel') setMode('select');
@@ -2535,14 +2530,14 @@ function restoreUndo() {
     history = u.h; undoLab = u.hl || []; future = u.f || []; redoLab = u.fl || [];
   } catch { /* nothing to bring back */ }
 }
-function mutate(fn, msg) {
+function mutate(fn, msg, quiet = false) {
   if (weekLocked()) { renderAll(); lockedNote(); return; }   // put back whatever the field showed
   glideNext = true;
   const before = snapState();
   fn(); if (pending && !itemById(pending.from)) pending = null;   // a cable half-run from gear that this change removed is dropped
   pushUndo(before, stepLabel(msg, before));
   recordRev(msg, before); save(); renderAll();
-  if (msg) toast(msg, true);
+  if (msg && !quiet) toast(msg, true);
 }
 function undo() {
   labSync(); const prev = history.pop(), lab = undoLab.pop() || ''; if (!prev) { toast('Nothing to undo'); return; }
@@ -2633,7 +2628,7 @@ function addCable(type, from, to, extra = {}) {
 }
 
 function seed() {
-  const p = blankPlan(); p.name = 'Example week — replace with your team';
+  const p = blankPlan(); p.name = 'Sample service';
   plan = p;
   const W = p.stage.w, D = p.stage.d;
   // a simple four-piece: one stage box, one distro, IEMs, mains and FOH
@@ -3254,7 +3249,7 @@ function basicLooks(names) {
   fadeLooksFrom(); desk.add = false; desk.prevLook = curLook()?.id;
   const added = [];
   mutate(() => { plan.looks ||= []; rememberMovers(); for (const name of names) { const n = plan.looks.filter(l => l.name === name || l.name.startsWith(name + ' ')).length, L = { id: uid(), name: n ? `${name} ${n + 1}` : name, fx: basicFx(name) }; plan.looks.push(L); added.push(L); } plan.lookId = added[0].id; },
-    names.length > 1 ? `${names.join(', ')} looks added` : `${names[0]} look added`);
+    names.length > 1 ? `${names.join(', ')} looks added` : `${names[0]} look added`, true);
   renderDesk();
 }
 /* Look library: looks saved once and reused in any week or venue. Each light's colour is kept with where it was (across
@@ -3300,7 +3295,7 @@ function deskColourHtml() {
   const mx = 50 + Math.cos(h * Math.PI / 180) * sat * 50, my = 50 + Math.sin(h * Math.PI / 180) * sat * 50, sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent';
   const hex = f.r + f.g + f.b ? '#' + [f.r, f.g, f.b].map(v => v.toString(16).padStart(2, '0')).join('') : '', rec = deskRecent(), L = curLook(), mst = lookMaster(L);
   return `<div class="ld-card ld-colcard"><div class="ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'Pick lights on the stage'}</b></div><span class="ld-pickacts">${ts.length && ui.adv ? `<button class="ld-mini" data-flash title="Make the picked lights pulse on the stage, to find them">${ic('zap', 'sm')}Flash</button>` : ''}${ui.adv ? `<button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button>` : ''}</span></div>
-      <div class="ld-mixrow${ui.adv ? '' : ' few'}"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders${ui.adv ? '' : ' few'}">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].filter(([k]) => ui.adv || k === 'd').map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--ld-acc)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
+      <div class="ld-mixrow${ui.adv ? '' : ' few'}"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders${ui.adv ? '' : ' few'}">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].filter(([k]) => ui.adv || k === 'd').map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--accent)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
       <label class="ld-cct" title="Warm (tungsten) to cool (daylight) white"><span class="ld-label">White</span><span class="ld-cctw">Warm</span><input type="range" data-cct min="2700" max="6500" step="100" value="${f.k || CCT_DEF}" ${ts.length ? '' : 'disabled'} aria-label="Colour temperature, warm to cool" aria-valuetext="${f.k ? f.k + ' kelvin' : 'not set'}"><span class="ld-cctw">Cool</span><output>${f.k ? f.k + ' K' : ''}</output></label>
       <div class="ld-recentrow"><span class="ld-label">Recent</span>${rec.length ? `<div class="ld-recent" title="Recent colours">${rec.map((c, i) => `<button class="ld-rsw" data-recent="${i}" style="--sw:${fxSwatch({ ...c, d: 100 })}" aria-label="Recent colour ${esc(fxName({ ...c, d: 100 }))}" title="${esc(fxName({ ...c, d: 100 }))}" ${!ts.length || white ? 'disabled' : ''}></button>`).join('')}</div>` : '<span class="ld-recentnone">Colours you use show here</span>'}<button class="ld-mini ld-offbtn" data-preset="Off" title="Turn the picked lights off" ${ts.length ? '' : 'disabled'}>Off</button>
       ${ui.adv ? '' : '<!--'}<label class="ld-hex"><span class="sr-only">Colour code</span><input id="ldHex" type="text" value="${hex}" placeholder="#1f6bff" maxlength="7" spellcheck="false" aria-label="Colour code, like #1f6bff" ${!ts.length || white ? 'disabled' : ''}></label>${ui.adv ? '' : '-->'}</div>
@@ -3339,7 +3334,7 @@ function renderDeskMain() {
       <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}${desk.view === 'list' ? ' listing' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
       ${deskChipsHtml(all, picked)}</section>${deskTipHtml()}
       ${`<aside class="ld-colour" id="ldColour"><div class="ld-card ld-lookcard${desk.lfold ? ' folded' : ''}"><button class="ld-cardhead ld-foldbtn" data-lookfold aria-expanded="${!desk.lfold}" title="${desk.lfold ? 'Show the looks' : 'Fold the looks away'}"><span class="ld-label">Looks</span>${desk.lfold && cur ? `<span class="ld-foldname"><span class="ld-cueno">${looks.indexOf(cur) + 1}</span>${esc(cur.name)}</span>` : ''}<span class="ld-chev">${ic('chevD', 'sm')}</span></button>${desk.lfold ? '' : looksHtml}</div>${deskColourHtml()}</aside>`}</div>
-    <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span></div>`;
+`;
 }
 // how many faces the open look lights, for the desk's stage bar
 function facesSummary() {
@@ -3439,7 +3434,7 @@ $('deskDlg').addEventListener('change', e => {
   if (t.hasAttribute?.('data-master')) { deskCommit('Look master changed'); return; }
   if (t.id === 'ldHex') { const m = /^#?([0-9a-f]{6})$/i.exec(t.value.trim()); if (!m) { toast('Type a colour code like #1f6bff'); renderDesk(); return; } const n = parseInt(m[1], 16); deskSet({ r: n >> 16 & 255, g: n >> 8 & 255, b: n & 255, w: 0 }); return; }
   if (t.id === 'ldGName') return;
-  if (t.id === 'ldLookNote') { const cur = curLook(), v = t.value.trim().slice(0, 120); if (cur && v !== (cur.note || '')) { mutate(() => { if (v) cur.note = v; else delete cur.note; }, v ? `Note on ${cur.name}` : `Note on ${cur.name} removed`); renderDesk(); } return; }
+  if (t.id === 'ldLookNote') { const cur = curLook(), v = t.value.trim().slice(0, 120); if (cur && v !== (cur.note || '')) { mutate(() => { if (v) cur.note = v; else delete cur.note; }, v ? `Note on ${cur.name}` : `Note on ${cur.name} removed`, true); renderDesk(); } return; }
   if (t.id === 'ldLookName') { const cur = curLook(); if (cur && t.value.trim()) { mutate(() => { cur.name = t.value.trim().slice(0, 40); }); renderDesk(); } return; }
   if (t.dataset.fx) deskCommit();
   if (t.hasAttribute?.('data-cct')) deskCommit('Colour temperature changed');
@@ -3516,7 +3511,7 @@ function deskCtxHtml() {
 }
 function openDeskCtx(id, cx, cy) { const r = $('ldBody').getBoundingClientRect(); desk.ctx = { id, x: Math.round(Math.min(cx - r.left, r.width - 220)), y: Math.round(Math.min(cy - r.top, r.height - 230)) }; renderDesk(); setTimeout(() => document.querySelector('.ld-ctx button')?.focus(), 20); }
 function flashLights(ids) { desk.flash = new Set(ids); renderPlot(); if (desk.open) $('ldMapWrap').innerHTML = deskStageHtml(); clearTimeout(desk.flashT); desk.flashT = setTimeout(() => { desk.flash = null; renderPlot(); if (desk.open && $('ldMapWrap')) $('ldMapWrap').innerHTML = deskStageHtml(); }, 1700); }
-function deskCopy() { const ts = deskPicked(); if (!ts.length) return; const f = fxOf(ts[0]); deskClip = { r: f.r, g: f.g, b: f.b, w: f.w, d: f.d }; toast(`Copied ${fxName(f, ts[0])}`); renderDesk(); }
+function deskCopy() { const ts = deskPicked(); if (!ts.length) return; const f = fxOf(ts[0]); deskClip = { r: f.r, g: f.g, b: f.b, w: f.w, d: f.d }; renderDesk(); }
 function deskPaste() { if (deskClip && deskPicked().length) deskSet({ ...deskClip }); }
 // the desk's keys: 1–9 looks, ↑ ↓ dimmer (Shift for big steps), A all lights, C copy and V paste a colour
 function deskKey(e) {
@@ -3622,7 +3617,7 @@ function lightingInsp(it) {
   const where = w ? `Universe ${w.line.universe} · line ${w.line.name}${it.dmxA ? ` · ${it.dmxA}–${it.dmxA + n - 1}` : ''}` : 'Not on a DMX line';
   const basic = fix ? `<section class="isec desk"><h3>Colour <span>${esc(curLook()?.name || 'before any look')}</span></h3><div class="row" style="gap:10px;flex-wrap:nowrap;margin-bottom:10px"><span class="bigsw" style="background:${fxSwatch(fxOf(it), it)}"></span><b>${esc(fxName(fxOf(it), it))}</b></div>
       <button class="btn primary block" data-opendesk="${it.id}">${ic('sun', 'sm')}Open the lighting desk</button>
-      <p class="hint" style="margin:10px 0 0">${hang ? `Hangs on ${esc(itemName(hang))}` : 'On the floor or a stand'}${a != null ? ` · hits faces at ${Math.round(a)}°${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ''}` : ''}. Drag the yellow dot on the plot to aim it${cat(it).zoom ? ', the white dot to size the beam' : ''}.</p></section>`
+      <p class="hint" style="margin:10px 0 0">${hang ? `Hangs on ${esc(itemName(hang))}` : 'On the floor or a stand'}${a != null ? ` · hits faces at ${Math.round(a)}°${a < 25 ? ', too flat' : a > 60 ? ', too steep' : ''}` : ''}.</p></section>`
     : `<section class="isec"><h3>DMX <span>${esc(where)}</span></h3><p class="hint" style="margin:0">${n} channels. Address and mode are under More settings.</p></section>`;
   const faultSec = it.fault
     ? `<section class="isec fault on"><div class="faultnow"><span class="faulticon">${ic('alert', 'sm')}</span><div><small>Problem</small><b>${esc(it.fault)}</b></div><button class="btn quiet" data-faultclear="${it.id}">${ic('check', 'sm')}Fixed</button></div></section>`
@@ -5613,7 +5608,7 @@ function renderPlot() {
     floorQ += bd.hz ? `<rect class="bundle" x="${f3(bd.lo)}" y="${f3(bd.at - t)}" width="${f3(bd.hi - bd.lo)}" height="${f3(t * 2)}" rx="${f3(t)}"/>` : `<rect class="bundle" x="${f3(bd.at - t)}" y="${f3(bd.lo)}" width="${f3(t * 2)}" height="${f3(bd.hi - bd.lo)}" rx="${f3(t)}"/>`;
     const [bx, by] = bd.hz ? [mid, bd.at - t - fs * .9] : [bd.at + t + tw / 2 + fs * .3, mid];
     const cand = (x, y) => ({ pri: 8, box: [x - tw / 2, y - fs * .85, x + tw / 2, y + fs * .35], svg: `<g class="btag"><rect x="${f3(x - tw / 2)}" y="${f3(y - fs * .85)}" width="${f3(tw)}" height="${f3(fs * 1.2)}" rx="${f3(fs * .6)}"/><text x="${f3(x)}" y="${f3(y)}" text-anchor="middle" style="font-size:${f3(fs)}px">${lab}</text></g>` });
-    bundleCands.push(cand(bx, by));
+    // the band itself says "several cables run here"; the count shows in the hover card, not as another label
   }  // the runs you're looking at draw last, so their casing cuts clean gaps in everything they cross
   const rank = c => sel?.kind === 'cable' && sel.id === c.id ? 2 : selItem && (selSet.has(c.from) || selSet.has(c.to)) ? 1 : 0;
   drawn.sort((a, b) => rank(a.c) - rank(b.c));
@@ -5972,7 +5967,7 @@ function renderRail() {
     pane.innerHTML = `<div class="search">${ic('search', 'sm')}<input id="gearSearch" type="search" placeholder="Search all gear" value="${esc(gearQuery)}" aria-label="Search gear"></div>
       ${q ? `<p class="hint gearhits">${hits ? `${plural(hits, 'match', 'matches')} across all gear` : ''}</p>` : `<div class="geartabs" role="tablist" aria-label="Gear categories">${GEAR_GROUPS.map(([g, types, icon]) => `<button role="tab" data-geartab="${esc(g)}" aria-selected="${g === gearTab}">${glyph(icon, 'tabglyph')}<span class="gtname">${esc(g)}</span></button>`).join('')}</div>`}
       ${!q && recentGear.length ? `<div class="recent"><h2 class="eyebrow">Recently added</h2><div class="recentrow">${recentGear.slice(0, 6).map(t => `<button class="recentchip" data-add="${t}" draggable="true" aria-pressed="${placing === t}" aria-label="Add ${esc(CAT[t].name)}" title="${esc(CAT[t].name)}">${glyph(t)}<span>${esc(tileName(t))}</span></button>`).join('')}</div></div>` : ''}` +
-      (groups.map(([g, types]) => `<div class="gearcat"><div class="gearcathead"><h2 class="eyebrow">${esc(g)}</h2>${q ? '' : '<span class="hint">Tap, then tap the stage · or drag</span>'}</div><div class="gearlist">
+      (groups.map(([g, types]) => `<div class="gearcat"><div class="gearcathead"><h2 class="eyebrow">${esc(g)}</h2></div><div class="gearlist">
         ${types.map(t => { const own = db.gear?.owned?.[t], used = plan.items.filter(i => i.type === t).length, size = uDim(CAT[t].w, CAT[t].d), meta = gearMeta(t);
           return `<button class="gear" data-add="${t}" draggable="true" aria-pressed="${placing === t}" title="${esc(CAT[t].name)} · ${esc(meta)} · ${esc(size)}${own != null ? ` · you own ${own}, ${used} on this week` : ''}">${own != null ? `<i class="ownb${used > own ? ' over' : ''}">own ${own}</i>` : ''}${glyph(t)}<span><b>${esc(tileName(t))}</b><small>${esc(/×/.test(meta) || meta === size ? '' : meta)}</small><small class="gsize">${esc(size)}</small></span></button>`; }).join('')}
       </div></div>`).join('') || `<p class="hint">Nothing matches “${esc(gearQuery)}”.</p>`);
@@ -5983,7 +5978,7 @@ function renderRail() {
       <div class="card"><div class="card-head"><span class="badge">${ic('room', 'sm')}</span><div><h3>Stage shape</h3><p>${plan.stage.poly ? `Custom · ${plan.stage.poly.length} corners` : 'Rectangle'}</p></div></div>
         <svg class="stage-thumb" viewBox="${-fromM(.6)} ${-fromM(.6)} ${st.w + fromM(1.2)} ${st.d + fromM(1.2)}" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path class="th-deck"${st.color ? ` style="fill:${esc(st.color)}"` : ''} d="${polyPath(stagePoly())}"/></svg>
         <button class="btn" id="editStage">${ic('pen', 'sm')}Draw or edit stage shape</button>
-        <p class="hint">${uDim(st.w, st.d)}. Type exact sizes in the right panel with nothing selected.</p></div>
+        <p class="hint">${uDim(st.w, st.d)}</p></div>
       <div class="card"><div class="card-head"><span class="badge">${ic('clip', 'sm')}</span><div><h3>Notes for the crew</h3></div></div>
         <textarea id="notes" rows="4" aria-label="Notes for the crew" placeholder="Load-in time, changeovers, anything special. Shows on the paperwork" style="font-family:var(--f-ui);font-size:14px">${esc(plan.notes)}</textarea></div>
       ${ui.adv ? '' : `<details class="more card more-room" data-fold="room"${moreOpen.room ? ' open' : ''}><summary>${ic('sliders', 'sm')}<span><b>More room settings</b><small>House size, ceiling, cable slack, re-run or clear cabling</small></span>${ic('chevD', 'sm')}</summary><div style="display:grid;gap:12px;padding:0 12px 12px">`}
@@ -6107,7 +6102,6 @@ function renderInspector() {
   requestAnimationFrame(() => fitTitle($('iLabel')));
   $('plotView').classList.toggle('has-sel', !!sel);   // phones: a selection's details sit right under the plot
   const el = $('inspector');
-  if (sel && !tipsSeen) { tipsSeen = true; try { localStorage.setItem('stageplot.tips', '1'); } catch { /* ignore */ } }
   // commit a half-typed field first: replacing a focused input mid-blur throws, and the edit would be lost
   if (el.contains(document.activeElement) && document.activeElement !== el) { document.activeElement.blur(); if (!el.isConnected) return; }
   const gids = selIds();
@@ -6194,12 +6188,12 @@ function renderInspector() {
         ${it.chan ? `<div class="flowline" style="display:flex;justify-content:space-between;align-items:center;gap:8px">Sits inside ${esc(chans().find(c => c.id === it.chan.id)?.name || 'a channel')}<button class="btn" id="iOutCh" style="padding:4px 10px">Take out</button></div>` : ''}
       </section>` : ''}
       ${basic}
-      <section class="isec"><div class="field"><label for="iNote">Note <small class="hint" style="font-weight:400">shows on the plot and the paperwork</small></label><textarea id="iNote" rows="2" placeholder="${C.shape === 'person' ? 'e.g. Bring a 9V battery, uses the left IEM pack' : 'e.g. Borrowed from youth room, needs fresh strings'}">${esc(it.note || '')}</textarea></div></section>
+      <section class="isec"><div class="field"><label for="iNote">Note</label><textarea id="iNote" rows="2" placeholder="${C.shape === 'person' ? 'e.g. Bring a 9V battery, uses the left IEM pack' : 'e.g. Borrowed from youth room, needs fresh strings'}">${esc(it.note || '')}</textarea></div></section>
       ${plan.cables.some(x => touches(x, it.id) && ['inst', 'xlr', 'usb', 'cat6'].includes(x.type)) ? `<section class="isec"><button class="btn block" id="iTrace" aria-pressed="${tracing === it.id}" title="Follow this signal from the stage to the desk and back to the monitors">${ic('zap', 'sm')}${tracing === it.id ? 'Stop tracing' : 'Trace the signal'}</button></section>` : ''}
       <section class="isec"><div class="actions actions4"><button class="btn" id="iRotate" title="Rotate 90° (R)">${ic('rotate', 'sm')}Rotate</button><button class="btn" id="iLock" aria-pressed="${!!it.locked}" title="${it.locked ? 'Locked: can’t be moved by accident (L)' : 'Lock in place (L)'}">${ic(it.locked ? 'lock' : 'unlock', 'sm')}${it.locked ? 'Locked' : 'Lock'}</button><button class="btn" id="iDup" title="Duplicate (D)">${ic('copy', 'sm')}Duplicate</button><button class="btn danger" id="iDel" title="Delete (Del)">${ic('trash', 'sm')}Delete</button></div>
       ${(() => { const same = plan.items.filter(i => i.type === it.type).length, own = it.personId ? plan.items.filter(i => i.personId === it.personId).length : 0, who = personById(it.personId);   // a way into "several at once"
         return same > 1 || own > 1 ? `<div class="selmore">${same > 1 ? `<button class="tlink" data-selall="type">Select all ${same} ${esc(manyOf(CAT[it.type].short || CAT[it.type].name))}</button>` : ''}${own > 1 ? `<button class="tlink" data-selall="person">Select all of ${esc(firstName(who?.name) || 'their')}’s gear (${own})</button>` : ''}</div>` : ''; })()}</section>
-      ${C.shape === 'person' && !conns.length ? '' : `<section class="isec"><h3>Connections <span>${conns.length}</span></h3>${conns.length ? `<ul class="conns">${conns.slice(0, showAllConns === it.id ? conns.length : 4).map(x => `<li><button data-selc="${x.id}"><span class="dot bg-${x.type}"></span><span>${esc(itemName(other(x, it.id)) || '?')}<small>${esc(CABLES[x.type].name)}${x.type === 'power' ? ` · circuit ${x.circuit || 1}` : ''}</small></span><span class="len">${fmtLen(cableLen(x))}</span></button></li>`).join('')}</ul>${conns.length > 4 && showAllConns !== it.id ? `<button class="btn quiet" data-allconns="${it.id}">Show all ${conns.length}</button>` : ''}` : `<p class="hint">Not connected yet.</p><button class="btn" data-ctx-cable="${it.id}">${ic('cable', 'sm')}Run a cable from here</button>`}</section>`}
+      ${C.shape === 'person' && !conns.length ? '' : `<section class="isec"><h3>Connections <span>${conns.length}</span></h3>${conns.length ? `<ul class="conns">${conns.slice(0, showAllConns === it.id ? conns.length : 4).map(x => `<li><button data-selc="${x.id}"><span class="dot bg-${x.type}"></span><span>${esc(itemName(other(x, it.id)) || '?')}<small>${esc(CABLES[x.type].name)}${x.type === 'power' ? ` · circuit ${x.circuit || 1}` : ''}</small></span><span class="len">${fmtLen(cableLen(x))}</span></button></li>`).join('')}</ul>${conns.length > 4 && showAllConns !== it.id ? `<button class="btn quiet" data-allconns="${it.id}">Show all ${conns.length}</button>` : ''}` : `<p class="hint">Not connected yet.</p><button class="btn" data-ctx-cable="${it.id}">${ic('cable', 'sm')}Run cable</button>`}</section>`}
       ${moreFold(adv, moreWhat)}
     </div>`;
   } else if (sel?.kind === 'channel' && chans().find(x => x.id === sel.id)) {
@@ -6285,7 +6279,6 @@ function renderInspector() {
         <p class="glance">${plural(t.ins, 'input')}${t.rf ? ` (${t.rf} RF)` : ''} · ${fmtLen(t.cab, 0)} of cable · ${(t.watts / 1000).toFixed(1)} kW</p>
       </section>
       ${w.length && !ui.guide ? `<section class="isec"><h3>Checks <span>${w.length}</span></h3><ul class="warnlist">${w.slice(0, 3).map(warnItem).join('')}</ul>${w.length > 3 ? `<button class="btn quiet" data-go="checks">See all ${w.length}</button>` : ''}</section>` : ''}
-      ${tipsSeen ? '' : `<section class="isec"><p class="hint">Click anything on the plot to edit it. Shift-click or the Select tool picks several. Press <span class="kbd">?</span> for shortcuts.</p></section>`}
     </div>`;
   }
 }
@@ -6627,8 +6620,8 @@ function printPopHtml() {
     ${o.scale ? `<p class="hint">${scaleFit(o.scale).note}</p>` : ''}
     <h2>Also</h2>
     <button class="btn block pp-toggle" id="inkBtn" aria-pressed="${inkSave}" title="Print in black and white: a white stage, grey lines, no dark header">${ic(inkSave ? 'check' : 'sheet', 'sm')}Ink saver: ${inkSave ? 'on' : 'off'}</button>
-    <button class="btn block" id="sheetsBtn" data-needs-dl title="Every sheet in one file you can open, share and print anywhere"${dlCap === null ? ' hidden' : ''}>${ic('save', 'sm')}Download all sheets as a file</button>
-    <button class="btn block" id="printBlank" title="The empty stage, grid and measurements, for sketching by hand">${ic('room', 'sm')}Print a blank stage sheet</button>
+    <button class="btn block" id="sheetsBtn" data-needs-dl title="Every sheet in one file you can open, share and print anywhere"${dlCap === null ? ' hidden' : ''}>${ic('save', 'sm')}Download sheets</button>
+    <button class="btn block" id="printBlank" title="The empty stage, grid and measurements, for sketching by hand">${ic('room', 'sm')}Blank stage sheet</button>
     <button class="btn primary block" id="printGo">${ic('sheet', 'sm')}Print ${o.skip.length ? plural(PRINT_SHEETS().filter(([k]) => !skip.has(k)).length, 'sheet') : 'every sheet'}</button></div>`;
 }
 // the plot's drawn width at a scale, and the page it needs (portrait, landscape, or too big for A4/Letter)
@@ -6759,7 +6752,7 @@ function renameInput(itemId, idx, v) {
   mutate(() => { list[idx] = v; it.inputs = list; it.inputsEdited = true;
     const after = inputSheet().find(r => r.itemId === itemId && r.inIdx === idx), C = chans_();   // the channel number (and any edits) follow the new name
     if (before && after && before.key !== after.key) for (const o of Object.values(C)) if (o && typeof o === 'object' && before.key in o) { o[after.key] = o[before.key]; delete o[before.key]; }
-  }, `Input renamed to ${v}`);
+  }, `Input renamed to ${v}`, true);
 }
 function startInEdit(span) {
   const [id, k] = span.dataset.inedit.split('|'), inp = document.createElement('input'); inp.type = 'text'; inp.className = 'ineditbox'; inp.value = span.textContent; inp.setAttribute('aria-label', 'Input name');
@@ -6795,7 +6788,7 @@ svg.addEventListener('pointerleave', () => svg.querySelector('#rulCur')?.remove(
   rail.addEventListener('dragover', e => { const r = e.target.closest?.('.person[data-pid]'); if (!dragPid || !r) return; e.preventDefault(); rail.querySelectorAll('.person.dropabove, .person.dropbelow').forEach(x => x.classList.remove('dropabove', 'dropbelow')); const b = r.getBoundingClientRect(); r.classList.add(e.clientY < b.top + b.height / 2 ? 'dropabove' : 'dropbelow'); });
   rail.addEventListener('drop', e => { const r = e.target.closest?.('.person[data-pid]'), from = dragPid; dragPid = null; if (!r || !from || r.dataset.pid === from) { renderRail(); return; } e.preventDefault();
     const below = r.classList.contains('dropbelow'), to = r.dataset.pid;
-    mutate(() => { const i = plan.team.findIndex(t => t.id === from), [p] = plan.team.splice(i, 1); let j = plan.team.findIndex(t => t.id === to); if (below) j++; plan.team.splice(j, 0, p); }, `${personById(from)?.name || 'Person'} moved`); });
+    mutate(() => { const i = plan.team.findIndex(t => t.id === from), [p] = plan.team.splice(i, 1); let j = plan.team.findIndex(t => t.id === to); if (below) j++; plan.team.splice(j, 0, p); }, `${personById(from)?.name || 'Person'} moved`, true); });
   rail.addEventListener('dragend', () => { dragPid = null; rail.querySelectorAll('.person.lifting, .person.dropabove, .person.dropbelow').forEach(x => x.classList.remove('lifting', 'dropabove', 'dropbelow')); }); }
 function backChip() {
   $('backChip')?.remove(); if (!backTo || view !== 'plot') { if (view !== 'plot') backTo = null; return; }
@@ -7562,10 +7555,10 @@ function renderMoreMenu() {
     <p class="hint" style="margin:-8px 0 0">${ui.adv ? 'Every setting and tool is showing.' : 'Everyday controls up front; fine settings under “More settings”.'}</p>
     <div class="mm-row"><span>Theme</span><div class="seg detailseg">${th('system', 'Auto')}${th('light', 'Light')}${th('dark', 'Dark')}</div></div>
     <div class="mm-list">
-      <button data-mm="present">${ic('screen', 'sm')}Present on a screen <span class="kbd">F</span></button>
-      <button data-mm="guide">${ic('check', 'sm')}${ui.guide ? 'Hide' : 'Show'} the setup guide</button>
+      <button data-mm="present">${ic('screen', 'sm')}Present<span class="kbd">F</span></button>
+      <button data-mm="guide">${ic('check', 'sm')}${ui.guide ? 'Hide setup guide' : 'Setup guide'}</button>
       <button data-mm="help">${ic('keyboard', 'sm')}Keyboard shortcuts<span class="kbd">?</span></button>
-      <button data-mm="about">${ic('sheet', 'sm')}About Stagehand</button>
+      <button data-mm="about">${ic('sheet', 'sm')}About</button>
     </div>`;
 }
 function toggleMoreMenu(open = $('moreMenu').hidden) {
@@ -7618,7 +7611,7 @@ $('weekBtn').ondblclick = e => {
   inp.className = 'wkrename'; inp.value = plan.name || ''; inp.maxLength = 80; inp.setAttribute('aria-label', 'Week name');
   Object.assign(inp.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
   document.body.append(inp); inp.focus(); inp.select();
-  let done = false; const end = keep => { if (done) return; done = true; const v = inp.value.trim(); inp.remove(); if (keep && v && v !== plan.name) mutate(() => { plan.name = v; }, `Renamed to ${v}`); b.focus(); };
+  let done = false; const end = keep => { if (done) return; done = true; const v = inp.value.trim(); inp.remove(); if (keep && v && v !== plan.name) mutate(() => { plan.name = v; }, `Renamed to ${v}`, true); b.focus(); };
   inp.onkeydown = ev => { if (ev.key === 'Enter') { ev.preventDefault(); end(true); } else if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); end(false); } };
   inp.onblur = () => end(true);
 };
@@ -8221,7 +8214,7 @@ function dsgKey(e) {
   else if (e.key === 'Enter' && dsg.tool === 'draw') dsgFinish();
 }
 $('welcomeDraw').onclick = () => { $('welcomeDlg').hidden = true; view = 'plot'; renderAll(); openDesigner(true); };
-$('welcomeExample').onclick = () => { $('welcomeDlg').hidden = true; db.setup = true; save(); view = 'plot'; renderAll(); needFit = true; renderPlot(); toast('This is an example week to play with', { label: 'Draw my stage', fn: () => openDesigner() }); };
+$('welcomeExample').onclick = () => { $('welcomeDlg').hidden = true; db.setup = true; save(); view = 'plot'; renderAll(); needFit = true; renderPlot(); toast('This is a sample service to play with', { label: 'Draw my stage', fn: () => openDesigner() }); };
 
 /* ===================================================================
    Cable visibility (per browser)
@@ -8945,7 +8938,8 @@ svg.addEventListener('pointerover', e => {
     if (isFixture(it) || isDmx(it)) {   // a light: its colour and level in the open look, its address and where it hangs
       const L = curLook(), raw = fxIn(it, L), eff = fxEff(it, L);
       if (isFixture(it)) rows.push(['Colour', `${fxName(raw, it)}${L ? ` · ${L.name}` : ''}`], ['Level', `${eff.d}%${lookMaster(L) < 100 ? ` (look at ${lookMaster(L)}%)` : ''}`]);
-      rows.push(['DMX', ldAddr(it)], ['Hangs on', mountOf(it) ? itemName(mountOf(it)) : 'Floor or stand']);
+      if (ui.adv) rows.push(['DMX', ldAddr(it)]);   // addresses are for whoever patches the desk: Advanced
+      rows.push(['Hangs on', mountOf(it) ? itemName(mountOf(it)) : 'Floor or stand']);
       if (it.fault) rows.push(['Problem', it.fault]);
     }
     if (['platform', 'speaker', 'wedge'].includes(C.shape)) rows.push(['Size', `${uDim(prop(it, 'w'), prop(it, 'd'))}`]);   // size matters for risers and speakers; for gear it's noise
@@ -8999,7 +8993,7 @@ svg.addEventListener('contextmenu', e => {
       <button data-ctx="rotate">${ic('rotate', 'sm')}Rotate each 90°<span class="kbd">R</span></button>
       <button data-ctx="dup">${ic('copy', 'sm')}Duplicate<span class="kbd">Ctrl D</span></button>
       <button data-ctx="copy">${ic('clip', 'sm')}Copy<span class="kbd">Ctrl C</span></button>
-      <button data-ctx="lock">${ic(allLocked ? 'unlock' : 'lock', 'sm')}${allLocked ? 'Unlock all' : 'Lock all in place'}<span class="kbd">L</span></button>
+      <button data-ctx="lock">${ic(allLocked ? 'unlock' : 'lock', 'sm')}${allLocked ? 'Unlock all' : 'Lock all'}<span class="kbd">L</span></button>
       <div class="ctx-sep"></div>
       <button data-ctx="del" class="danger">${ic('trash', 'sm')}Delete ${n}<span class="kbd">Del</span></button>`;
   } else if (g) {
@@ -9010,7 +9004,7 @@ svg.addEventListener('contextmenu', e => {
       <button data-ctx="rotate">${ic('rotate', 'sm')}Rotate 90°<span class="kbd">R</span></button>
       <button data-ctx="dup">${ic('copy', 'sm')}Duplicate<span class="kbd">D</span></button>
       <button data-ctx="copy">${ic('clip', 'sm')}Copy<span class="kbd">Ctrl C</span></button>
-      <button data-ctx="lock">${ic(it.locked ? 'unlock' : 'lock', 'sm')}${it.locked ? 'Unlock' : 'Lock in place'}<span class="kbd">L</span></button>
+      <button data-ctx="lock">${ic(it.locked ? 'unlock' : 'lock', 'sm')}${it.locked ? 'Unlock' : 'Lock'}<span class="kbd">L</span></button>
       ${!isPerson && plan.team.length ? `<details class="ctx-owner"><summary>${ic('person', 'sm')}<span>Belongs to</span><span class="ctx-val">${esc(personById(it.personId)?.name || 'Nobody')}</span>${ic('chevR', 'sm')}</summary><div class="ctx-people">${plan.team.slice(0, 16).map(p => `<button data-ctx-person="${p.id}" aria-pressed="${p.id === it.personId}">${esc(p.name || 'Unnamed')}</button>`).join('')}${it.personId ? `<button data-ctx-person="">Nobody</button>` : ''}</div></details>` : ''}
       <div class="ctx-sep"></div>
       <button data-ctx="del" class="danger">${ic('trash', 'sm')}Delete<span class="kbd">Del</span></button>`;
@@ -9692,7 +9686,7 @@ function homeData() {
           <button class="btn" id="tidyGo" ${old.length ? '' : 'disabled'}>${ic('trash', 'sm')}${old.length ? `Back up, then remove ${plural(old.length, 'week')}` : 'Nothing that old'}</button></div>
          <p class="hint">A backup file of everything is saved first; nothing is removed unless it saves. The open week always stays.</p>`); })() +
     `<section class="hcard libdanger">
-      <div><b>Reset to default</b><small>Clears every week, setup and preference in this browser and starts again from the example week. ${before ? 'A copy of your last reset is still kept.' : 'A safety copy is kept so you can restore it.'}</small></div>
+      <div><b>Reset to default</b><small>Clears every week, setup and preference in this browser and starts again from the sample service. ${before ? 'A copy of your last reset is still kept.' : 'A safety copy is kept so you can restore it.'}</small></div>
       ${lib.resetArmed ? `<div class="libconfirm"><label for="libType">Type <b>RESET</b> to confirm</label><div class="row" style="gap:6px;flex-wrap:nowrap"><input id="libType" type="text" autocomplete="off" value="${esc(lib.typed)}" style="flex:1;min-width:0"><button class="btn danger" id="libResetGo" ${lib.typed.trim().toUpperCase() === 'RESET' ? '' : 'disabled'}>Reset everything</button><button class="btn quiet" id="libResetCancel">Cancel</button></div></div>`
         : `<div class="row" style="gap:6px">${before ? `<button class="btn" id="libRestore">${ic('undo', 'sm')}Restore before reset</button>` : ''}<button class="btn danger" id="libReset">${ic('trash', 'sm')}Reset…</button></div>`}
     </section>`;
