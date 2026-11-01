@@ -55,13 +55,14 @@
   --shadow-3: 0 24px 60px rgba(16,24,32,.22), 0 6px 18px rgba(16,24,32,.10);
   --glass: rgba(255,255,255,.86);
   --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
+  --t-page: 24px; --t-title: 18px; --t-section: 16px;   /* one heading scale: a page, a dialog or sheet, a section */
   --f-ui: "Archivo", "Segoe UI", system-ui, -apple-system, sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0a0b0f; --surface: #121419; --surface-2: #171a20; --surface-3: #1e2129; --ink: #ececf1; --ink-2: #b9bdc9; --muted: #8b91a1;
-    --line: #22252d; --line-2: #2e323c; --accent: #8b80ff; --accent-ink: #0b0a1a; --accent-text: #a69dff; --accent-soft: rgba(139,128,255,.15); --tape: #f7c04a;
+    --line: #20232a; --line-2: #2a2e37; --accent: #8b80ff; --accent-ink: #0b0a1a; --accent-text: #a69dff; --accent-soft: rgba(139,128,255,.15); --tape: #f7c04a;
     --deck: #22252e; --deck-edge: #000; --house: #0d0f13; --house-dot: rgba(255,255,255,.06); --house-ink: #8b91a1;
     --ok: #4ade80; --ok-soft: rgba(74,222,128,.13); --ok-ink: #4ade80; --warn-ink: #fbbf24; --bad-ink: #f87171; --warn: #fbbf24; --warn-soft: rgba(251,191,36,.13); --bad: #f87171; --bad-soft: rgba(248,113,113,.13);
     --k-xlr: #60a5fa; --k-cat: #c084fc; --k-pow: #fb923c; --k-inst: #4ade80; --k-spk: #2dd4bf; --k-vid: #f472b6; --k-usb: #cbd5e1; --k-dmx: #facc15;
@@ -72,7 +73,7 @@
 }
 :root[data-theme="dark"] {
   --bg: #0a0b0f; --surface: #121419; --surface-2: #171a20; --surface-3: #1e2129; --ink: #ececf1; --ink-2: #b9bdc9; --muted: #8b91a1;
-  --line: #22252d; --line-2: #2e323c; --accent: #8b80ff; --accent-ink: #0b0a1a; --accent-text: #a69dff; --accent-soft: rgba(139,128,255,.15); --tape: #f7c04a;
+  --line: #20232a; --line-2: #2a2e37; --accent: #8b80ff; --accent-ink: #0b0a1a; --accent-text: #a69dff; --accent-soft: rgba(139,128,255,.15); --tape: #f7c04a;
   --deck: #22252e; --deck-edge: #000; --house: #0d0f13; --house-dot: rgba(255,255,255,.06); --house-ink: #8b91a1;
   --ok: #4ade80; --ok-soft: rgba(74,222,128,.13); --ok-ink: #4ade80; --warn-ink: #fbbf24; --bad-ink: #f87171; --warn: #fbbf24; --warn-soft: rgba(251,191,36,.13); --bad: #f87171; --bad-soft: rgba(248,113,113,.13);
   --k-xlr: #60a5fa; --k-cat: #c084fc; --k-pow: #fb923c; --k-inst: #4ade80; --k-spk: #2dd4bf; --k-vid: #f472b6; --k-usb: #cbd5e1; --k-dmx: #facc15;
@@ -87,6 +88,8 @@ html, body { height: 100%; }
 body { margin: 0; display: flex; flex-direction: column; background: var(--bg); color: var(--ink); font: 14px/1.45 var(--f-ui); -webkit-font-smoothing: antialiased; }
 button, input, select, textarea { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:focus-visible, a:focus-visible, [role="button"]:focus-visible, [role="option"]:focus-visible, [role="tab"]:focus-visible, summary:focus-visible, [tabindex="0"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: 0 0 0 5px var(--accent-soft); }
+.item:focus-visible, g:focus-visible { box-shadow: none; }
 td, .ch, .chip, .cablen, .zoomval, .hint b, .doc-meta b { font-variant-numeric: tabular-nums; }
 ::selection { background: var(--accent-soft); }
 
@@ -108,8 +111,8 @@ input[type="number"] { font-family: var(--f-mono); font-size: 13px; font-variant
 .btn.primary:hover { filter: brightness(1.04); }
 .btn.quiet { background: transparent; border-color: transparent; color: var(--ink-2); }
 .btn.quiet:hover { background: var(--surface-3); }
-.btn.danger { color: var(--bad); }
-.btn.danger:hover { background: var(--bad-soft); border-color: var(--bad); }
+.btn.danger { color: var(--ink-2); } .btn.danger .ic { color: var(--bad); }
+.btn.danger:hover, .btn.danger:focus-visible { color: var(--bad); background: var(--bad-soft); border-color: var(--bad); }
 .btn.block { width: 100%; }
 .btn.lg { padding: 10px 14px; font-size: 15px; }
 .btn:disabled { opacity: .45; cursor: default; transform: none; }
@@ -193,7 +196,7 @@ h1, h2, h3 { margin: 0; text-wrap: balance; }
 .railbody { flex: 1; overflow: auto; padding: 16px; display: grid; align-content: start; gap: 16px; min-height: 0; }
 .railfoot { padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: var(--surface); display: grid; gap: 6px; }
 .sechead { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-.sechead h2 { font-size: 15px; font-weight: 700; }
+.sechead h2 { font-size: var(--t-section); font-weight: 700; }
 
 .people { display: grid; gap: 4px; }
 .person { display: grid; grid-template-columns: 36px minmax(0,1fr) auto auto; gap: 10px; align-items: center; padding: 6px 6px 6px 8px; border-radius: var(--r-md); border: 1px solid transparent; transition: background .15s, border-color .15s; }
@@ -376,7 +379,7 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .dock-sep { width: 1px; align-self: stretch; background: var(--line); margin: 4px 2px; }
 .f-empty { inset: 0; display: grid; place-items: center; pointer-events: none; }
 .emptycard { pointer-events: auto; background: var(--glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-2); padding: 22px 24px; display: grid; gap: 8px; text-align: center; max-width: 520px; margin: 16px; }
-.emptycard h3 { font-size: 18px; font-weight: 700; }
+.emptycard h3 { font-size: var(--t-title); font-weight: 700; }
 .statuspill { display: inline-flex; align-items: center; gap: 4px; }
 .offchip { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border-radius: 99px; background: color-mix(in srgb, var(--warn, #d97706) 16%, transparent); color: var(--warn-ink, var(--ink)); font-size: 12.5px; font-weight: 650; white-space: nowrap; }
 .offchip[hidden] { display: none; }
@@ -1142,7 +1145,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .designer { padding: 16px; }
 .dsg { width: min(1240px, 100%); height: min(860px, 100%); background: var(--surface); border-radius: var(--r-lg); border: 1px solid var(--line); box-shadow: var(--shadow-3); display: grid; grid-template-rows: auto minmax(0,1fr); overflow: hidden; }
 .dsg-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); }
-.dsg-head h2 { font-size: 19px; font-weight: 700; }
+.dsg-head h2 { font-size: var(--t-title); font-weight: 700; letter-spacing: -.01em; }
 .dsg-body { display: grid; grid-template-columns: 300px minmax(0,1fr); min-height: 0; }
 .dsg-side { padding: 16px; display: grid; gap: 14px; align-content: start; overflow: auto; border-right: 1px solid var(--line); }
 .dsg-canvas { position: relative; background: var(--house); min-height: 300px; }
@@ -1224,7 +1227,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .home-in { max-width: 1120px; margin: 0 auto; padding: 28px 20px 80px; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 28px; align-items: start; }
 .homenav { position: sticky; top: 0; display: grid; gap: 4px; }
 .homehello { padding: 0 10px 12px; }
-.homehello h1 { margin: 2px 0 0; font-size: 26px; letter-spacing: -.02em; }
+.homehello h1 { margin: 2px 0 0; font-size: var(--t-page); letter-spacing: -.02em; }
 .hnav { display: flex; align-items: flex-start; gap: 10px; text-align: left; border: 0; background: none; border-radius: 12px; padding: 9px 10px; cursor: pointer; color: var(--ink-2); font: inherit; }
 .hnav .ic { margin-top: 2px; flex: none; }
 .hnav span { display: grid; gap: 1px; min-width: 0; }
@@ -1234,12 +1237,12 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .hnav[aria-current="page"] { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-1); }
 .hnav[aria-current="page"] .ic { color: var(--accent); }
 .homebody { display: grid; gap: 16px; min-width: 0; }
-.hpage h2 { margin: 0; font-size: 24px; letter-spacing: -.02em; } .hpage p { margin: 2px 0 0; color: var(--muted); }
+.hpage h2 { margin: 0; font-size: var(--t-page); letter-spacing: -.02em; } .hpage p { margin: 2px 0 0; color: var(--muted); }
 .librow.editing { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 8px; }
 .librow.editing input[type=text] { flex: 1 1 180px; min-width: 0; }
 .hcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 18px 20px; display: grid; gap: 14px; min-width: 0; }
 .hcard > header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
-.hcard h3 { margin: 0; font-size: 16px; }
+.hcard h3 { margin: 0; font-size: var(--t-section); font-weight: 700; }
 .hmore { margin-top: 2px; } .hmore summary { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12.5px; color: var(--accent-text, var(--accent)); list-style: none; } .hmore summary::-webkit-details-marker { display: none; } .hmore summary::after { content: "›"; transition: transform .15s; } .hmore[open] summary::after { transform: rotate(90deg); } .hmore p { margin-top: 6px !important; }
 .hcard header p { margin: 3px 0 0; color: var(--muted); font-size: 13px; max-width: 62ch; }
 .libtrend { display: inline-flex; width: 56px; flex: none; align-items: center; }
@@ -1352,7 +1355,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 @media screen and (min-width: 900px) and (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .paper.pages { --bg: #23262d; } }
 @media screen and (min-width: 900px) { :root[data-theme="dark"] .paper.pages { --bg: #23262d; } }
 .sheet header { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; justify-content: space-between; }
-.sheet h2 { font-size: 18px; font-weight: 700; }
+.sheet h2 { font-size: var(--t-title); font-weight: 700; letter-spacing: -.01em; }
 .tablewrap { overflow-x: auto; margin: 0 -4px; }
 table { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
 th { text-align: left; font-size: 11px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line-2); white-space: nowrap; }
@@ -1478,7 +1481,7 @@ tr.flag td { color: var(--bad); }
 #tour[hidden] { display: none; }
 .tour-hole { position: fixed; border-radius: 12px; box-shadow: 0 0 0 9999px rgba(8, 10, 14, .55), 0 0 0 2px var(--accent); transition: all .25s ease; pointer-events: none; }
 .tour-card { position: fixed; pointer-events: auto; background: var(--surface); color: var(--ink); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-3); display: grid; gap: 6px; transition: top .25s ease, left .25s ease; }
-.tour-card h2 { margin: 0; font-size: 18px; } .tour-card p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.45; }
+.tour-card h2 { margin: 0; font-size: var(--t-title); } .tour-card p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.45; }
 .tour-step { font-size: 12px; font-weight: 650; color: var(--accent); letter-spacing: .04em; text-transform: uppercase; }
 .tour-acts { gap: 6px; margin-top: 6px; }
 @media (prefers-reduced-motion: reduce) { .tour-hole, .tour-card { transition: none; } }
@@ -1532,12 +1535,16 @@ tr.flag .ch { background: var(--bad-soft); color: var(--bad); }
 /* ---------- overlays ---------- */
 .overlay { position: fixed; inset: 0; background: rgba(8,12,16,.48); backdrop-filter: blur(2px); display: grid; place-items: center; padding: 16px; z-index: 40; }
 .modal { background: var(--surface); border-radius: var(--r-lg); border: 1px solid var(--line); box-shadow: var(--shadow-3); width: min(600px, 100%); max-height: 90%; overflow: auto; padding: 22px; display: grid; gap: 14px; }
-.modal h2 { font-size: 19px; font-weight: 700; }
+.modal h2 { font-size: var(--t-title); font-weight: 700; letter-spacing: -.01em; }
 .shortcuts { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; align-items: center; margin: 0; }
 .shortcuts dt { display: flex; gap: 4px; justify-content: flex-end; }
 .shortcuts dd { margin: 0; color: var(--ink-2); }
-.toast { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--surface); padding: 10px 10px 10px 16px; border-radius: var(--r-md); font-size: 14px; z-index: 50; display: flex; gap: 14px; align-items: center; box-shadow: var(--shadow-3); animation: rise .18s ease-out; max-width: calc(100vw - 32px); }
-.toast:not(:has(button)) { padding-right: 16px; }
+.toast { position: fixed; left: var(--toast-l, 16px); bottom: calc(var(--toast-b, 18px) + env(safe-area-inset-bottom, 0px)); max-width: min(460px, calc(100vw - 32px)); animation: toastIn .18s cubic-bezier(.2, .7, .3, 1); background: var(--ink); color: var(--surface); padding: 10px 10px 10px 16px; border-radius: var(--r-md); font-size: 14px; z-index: 50; display: flex; gap: 14px; align-items: center; box-shadow: var(--shadow-3); animation: rise .18s ease-out; max-width: calc(100vw - 32px); }
+.toast:not(:has(button)) { padding-right: 16px; } @media (pointer: coarse) { .iconbtn { min-width: 42px; min-height: 42px; } .ld-icon { min-width: 40px; min-height: 40px; } .tlink { padding: 8px 6px; } .ld-mini { min-height: 34px; } .hmore summary { padding: 6px 0; } }
+@keyframes toastIn { from { opacity: 0; transform: translateY(8px); } } @media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+.busy { position: relative; overflow: hidden; pointer-events: none; opacity: .85; } .busy::after { content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 40%; background: var(--accent); animation: busyRun 1s ease-in-out infinite; }
+@keyframes busyRun { from { transform: translateX(-100%); } to { transform: translateX(250%); } } @media (prefers-reduced-motion: reduce) { .busy::after { animation: none; width: 100%; opacity: .5; } }
+.donebtn { border-color: var(--ok) !important; } .donebtn::before { content: "✓"; color: var(--ok); font-weight: 700; margin-right: 2px; }
 .toast button { border: 0; background: rgba(255,255,255,.14); color: inherit; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: 650; }
 @keyframes rise { from { transform: translate(-50%, 8px); opacity: 0; } }
 
@@ -2286,6 +2293,7 @@ function toast(msg, withUndo) {
   const life = withUndo ? 5000 : 2400;
   t.innerHTML = `<span class="ticon">${ic(icon, 'sm')}</span><span>${esc(msg)}</span>${withUndo ? `<button type="button">${esc(act ? act.label : 'Undo')}</button><i class="tbar" style="animation-duration:${life}ms"></i>` : ''}`;
   if (withUndo) t.querySelector('button').onclick = () => { t.remove(); act ? act.fn() : undo(); };
+  { const r = view === 'plot' ? document.querySelector('.rail')?.getBoundingClientRect() : null; document.documentElement.style.setProperty('--toast-l', `${Math.round((r && r.width > 40 && innerWidth > 700 ? r.right : 0) + 16)}px`); document.documentElement.style.setProperty('--toast-b', view === 'plot' ? '84px' : '18px'); }   // beside the team panel, not over it
   document.body.appendChild(t);
   let left = life, start = performance.now(), timer = setTimeout(() => t.remove(), left);
   t.addEventListener('mouseenter', () => { clearTimeout(timer); left -= performance.now() - start; t.classList.add('held'); });   // pointing at it holds it, so there's time to press Undo
@@ -3391,7 +3399,7 @@ function renderDeskMain() {
   $('ldBody').innerHTML = `<div class="ld-top${desk.nocol ? '' : ' nolooks'}">
       <div class="ld-brand"><span class="ld-logo">${ic('sun')}</span><div><h2 id="ldTitle">Lighting desk</h2><small>${plural(all.length, 'light')} · ${esc(longDate(plan.date))}</small></div></div>
       ${desk.nocol ? looksHtml : ''}${desk.kmenu ? `<div class="ld-moods ld-keysmenu" role="dialog" aria-label="Keyboard shortcuts"><b>Keyboard shortcuts</b><dl>${DESK_KEYS.map(([k, d]) => `<dt>${k.split(' ').map(x => `<kbd>${x}</kbd>`).join('')}</dt><dd>${d}</dd>`).join('')}</dl></div>` : ''}${desk.vmenu ? `<div class="ld-moods ld-viewmenu" role="group" aria-label="Desk layout">${[['dock', desk.dock, 'Dock beside the plot', 'See the stage plot full size while you work'], ['compact', desk.compact, 'Compact', 'Smaller buttons and faders, for small screens'], ['nocol', desk.nocol, 'Hide the colour panel', 'Give the stage the full width'], ['pics', !desk.slim, 'Stage pictures on looks', 'Bigger look buttons with a tiny picture of each']].map(([k, on, l, sub]) => `<button data-vopt="${k}" aria-pressed="${!!on}"><span class="ld-check">${on ? ic('check', 'sm') : ''}</span><span>${l}<small>${sub}</small></span></button>`).join('')}</div>` : ''}
-      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" data-keysmenu aria-expanded="${!!desk.kmenu}" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts"><span class="ld-q" aria-hidden="true">?</span></button><span class="ld-moodwrap"><button class="ld-icon" data-viewmenu aria-expanded="${!!desk.vmenu}" title="Layout: dock beside the plot, compact, hide the colour panel" aria-label="Desk layout">${ic(desk.dock ? 'panelR' : 'sliders', 'sm')}</button></span><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('fit', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
+      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" data-keysmenu aria-expanded="${!!desk.kmenu}" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts"><span class="ld-q" aria-hidden="true">?</span></button><span class="ld-moodwrap"><button class="ld-icon" data-viewmenu aria-expanded="${!!desk.vmenu}" title="Layout: dock beside the plot, compact, hide the colour panel" aria-label="Desk layout">${ic(desk.dock ? 'panelR' : 'sliders', 'sm')}</button></span><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('grid', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
     ${desk.dock ? '<div class="ld-resize" role="separator" aria-orientation="vertical" aria-label="Drag to resize the desk" title="Drag to resize (double-click for the usual width)"></div>' : ''}<div class="ld-body${desk.nocol ? ' nocol' : ''}"><section class="ld-stage" aria-label="Stage">
       <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list' && desk.view !== 'front'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button><button data-dview="front" aria-pressed="${desk.view === 'front'}" title="The stage as the congregation sees it">Front</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span>${desk.view === 'front' && dlCap !== null ? `<button class="ld-mini" data-frontpic title="Save the front view as a picture to share">${ic('save', 'sm')}Save picture</button>` : ''}<div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
@@ -3479,7 +3487,7 @@ $('deskDlg').addEventListener('click', e => {
   if (t.hasAttribute('data-keysmenu')) { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = desk.vmenu = false; renderDesk(); return; }
   if (t.dataset.vopt) { const k = t.dataset.vopt === 'pics' ? 'slim' : t.dataset.vopt; desk[k] = !desk[k]; desk.vmenu = false; if (k === 'dock' && desk.dock) desk.view = 'list'; deskLayoutSave(); renderDesk(); if (k === 'dock') { needFit = true; renderPlot(); } return; }
   if (t.dataset.basics) { if (deskLights().length) basicLooks(t.dataset.basics.split('|')); return; }
-  if (t.hasAttribute('data-frontpic')) { frontPicture(); return; }
+  if (t.hasAttribute('data-frontpic')) { withBusy(t, frontPicture); return; }
   if (t.hasAttribute('data-lookfold')) { desk.lfold = !desk.lfold; desk.add = desk.lmenu = false; deskLayoutSave(); renderDesk(); return; }
   if (t.hasAttribute('data-colshow')) { desk.nocol = false; deskLayoutSave(); renderDesk(); return; }
   if (t.dataset.libuse) { libUse(t.dataset.libuse); return; }
@@ -4386,6 +4394,9 @@ const ICONS = {
   alignB: '<path d="M3 20h18M6 5h4v11H6zM14 10h4v6h-4z"/>',
   distH: '<path d="M4 4v16M20 4v16M10 8h4v8h-4z"/>',
   distV: '<path d="M4 4h16M4 20h16M8 10h8v4H8z"/>',
+  screen: '<rect x="3" y="4" width="18" height="12.5" rx="1.5"/><path d="M8.5 20.5h7M12 16.5v4"/>',
+  grid: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+  straight: '<path d="M4 18L20 6"/><circle cx="4" cy="18" r="1.6"/><circle cx="20" cy="6" r="1.6"/>',
   fit: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
   chevL: '<path d="M15 18l-6-6 6-6"/>',
   chevR: '<path d="M9 18l6-6-6-6"/>',
@@ -6395,6 +6406,11 @@ async function frontPicture() {
   } catch { toast('Couldn’t make the picture here'); }
   finally { URL.revokeObjectURL(url); }
 }
+// a button that starts something slow shows a running line, then a moment of "Done"
+async function withBusy(btn, fn) {
+  if (!btn || btn.classList.contains('busy')) return fn(); btn.classList.add('busy'); btn.setAttribute('aria-busy', 'true');
+  try { const r = await fn(); btn.classList.add('donebtn'); setTimeout(() => btn.classList.remove('donebtn'), 1400); return r; } finally { btn.classList.remove('busy'); btn.removeAttribute('aria-busy'); }
+}
 async function plotPicture() {
   const z = Math.max(20, Math.min(70, 1500 / (plan.stage.w + fromM(2))));
   let svgS = cropToStage(plotSnapshot(z));
@@ -7544,7 +7560,7 @@ function renderMoreMenu() {
     <div class="mm-row"><span>Theme</span><div class="seg detailseg">${th('system', 'Auto')}${th('light', 'Light')}${th('dark', 'Dark')}</div></div>
     <div class="mm-list">
       <button data-mm="library">${ic('calendar', 'sm')}Home: library &amp; settings</button>
-      <button data-mm="present">${ic('fit', 'sm')}Present on a screen <span class="kbd">F</span></button>
+      <button data-mm="present">${ic('screen', 'sm')}Present on a screen <span class="kbd">F</span></button>
       <button data-mm="picture"${dlCap === null ? ' hidden' : ''}>${ic('plot', 'sm')}Save plot as picture</button>
       <button data-mm="guide">${ic('check', 'sm')}${ui.guide ? 'Hide' : 'Show'} the setup guide</button>
       <button data-mm="help">${ic('keyboard', 'sm')}Keyboard shortcuts<span class="kbd">?</span></button>
@@ -7904,9 +7920,9 @@ $('paperInner').addEventListener('click', e => {
     const g = lineProgress(); if (want === 'ok' && st[k] && g.done === g.total) toast('Line check done. Every channel heard'); return; } }
   if (e.target.closest('#lineReset')) { plan.linecheck = {}; save(); renderPaper(); toast('Line check cleared'); return; }
   if (e.target.closest('#loadinReset')) { plan.loadin = {}; save(); renderPaper(); toast('Ticks cleared'); return; }
-  if (e.target.closest('#picBtn')) { plotPicture(); return; }
+  if (e.target.closest('#picBtn')) { withBusy(e.target.closest('#picBtn'), plotPicture); return; }
   if (e.target.closest('#summaryBtn')) { copyText(weekSummary(), $('copyFallback')); return; }
-  if (e.target.closest('#sheetsBtn')) { offerFile(`stagehand-${plan.date}-sheets.html`, paperworkHtml(), 'text/html'); return; }
+  if (e.target.closest('#sheetsBtn')) { const sb = e.target.closest('#sheetsBtn'); withBusy(sb, async () => { await new Promise(r => setTimeout(r, 30)); return offerFile(`stagehand-${plan.date}-sheets.html`, paperworkHtml(), 'text/html'); }); return; }
   const pt = e.target.closest('[data-ptab]'); if (pt) { paperTab = pt.dataset.ptab; renderPaper(); $('paperView').scrollTop = 0; }
   const go = e.target.closest('[data-goto]'); if (go) { view = 'plot'; railTab = go.dataset.goto; needFit = !zoom; togglePanel('rail', true); renderAll(); }
 });
@@ -9040,7 +9056,7 @@ svg.addEventListener('contextmenu', e => {
     const c = plan.cables.find(x => x.id === sel.id);   // the cable picked above (nearest the pointer)
     m.innerHTML = `<div class="ctx-h">${esc(CABLES[c.type].name)} · ${fmtLen(cableLen(c))}</div>
       <button data-ctx="edit">${ic('panelR', 'sm')}Edit details</button>
-      ${c.points.length ? `<button data-ctx="straighten">${ic('fit', 'sm')}Straighten</button>` : ''}
+      ${c.points.length ? `<button data-ctx="straighten">${ic('straight', 'sm')}Straighten</button>` : ''}
       <button data-ctx="level">${ic('cable', 'sm')}${c.level === 'ceiling' ? 'Run along the floor' : 'Run along the ceiling'}</button>
       <button data-ctx="hidetype">${ic('eyeOff', 'sm')}Hide all ${esc(SHORT[c.type])} cables</button>
       <div class="ctx-sep"></div>
@@ -9079,7 +9095,7 @@ function cmdItems() {
     ['Go to Home (G)', 'calendar', () => goHome()],
     ['Open the paperwork (P)', 'sheet', () => { view = 'paper'; renderAll(); }],
     ['Load-in checklist', 'check', () => { view = 'paper'; paperTab = 'loadin'; renderAll(); }],
-    ['Present on a screen (F)', 'fit', () => setPresent(true)],
+    ['Present on a screen (F)', 'screen', () => setPresent(true)],
     ['Version history', 'undo', () => openHist()],
     [sideOpen ? 'Close the side view (E)' : 'Side view: heights (E)', 'ruler', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } toggleSide(); }],
     ...OVERLAYS.map(([k, n]) => [`${cableView.over.has(k) ? 'Hide' : 'Show'} ${n.replace(/^[A-Z](?![A-Z])/, c => c.toLowerCase())}`, 'eye', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } setCableView(() => { cableView.over.has(k) ? cableView.over.delete(k) : cableView.over.add(k); }); }]),
@@ -9458,7 +9474,7 @@ function todayCard() {
       ${g.total ? `<div class="td-load"><div class="lbar"><span style="width:${pct}%"></span></div><span>Load-in <b>${g.done} of ${g.total}</b></span></div>` : ''}
       ${chg ? `<p class="td-chg">${ic('calendar', 'sm')}${plural(chg, 'change')} from Planning Center to look at</p>` : ''}</div>
     <div class="td-clock" id="todayClock" aria-hidden="true">${esc(now.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }))}</div>
-    <div class="td-acts"><button class="btn primary" data-today="show" data-week="${w.id}">${ic('fit', 'sm')}Show mode</button><button class="btn" data-today="loadin" data-week="${w.id}">${ic('check', 'sm')}Load-in checklist</button><button class="btn" data-today="linecheck" data-week="${w.id}">${ic('mic', 'sm')}Line check</button><button class="btn" data-today="plot" data-week="${w.id}">${ic('plot', 'sm')}Open the plot</button>${chg ? `<button class="btn" data-today="team" data-week="${w.id}">${ic('users', 'sm')}See the changes</button>` : ''}</div>
+    <div class="td-acts"><button class="btn primary" data-today="show" data-week="${w.id}">${ic('screen', 'sm')}Show mode</button><button class="btn" data-today="loadin" data-week="${w.id}">${ic('check', 'sm')}Load-in checklist</button><button class="btn" data-today="linecheck" data-week="${w.id}">${ic('mic', 'sm')}Line check</button><button class="btn" data-today="plot" data-week="${w.id}">${ic('plot', 'sm')}Open the plot</button>${chg ? `<button class="btn" data-today="team" data-week="${w.id}">${ic('users', 'sm')}See the changes</button>` : ''}</div>
   </section>`;
 }
 setInterval(() => { const c = $('todayClock'); if (!c) return; const w = todayWeek(); c.textContent = new Date().toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }); const n = $('todayNext'); if (n && w) n.textContent = nextUp(w) || n.textContent; }, 20000);
