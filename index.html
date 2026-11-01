@@ -274,14 +274,6 @@ th .thshort { display: none; text-decoration: none; } @media (max-width: 560px) 
 .svcx:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); } .svcx .ic { width: 11px; height: 11px; }
 .svcload { padding: 4px 8px; font-size: 12px; }
 .pcovenue { display: flex; gap: 8px; align-items: flex-start; margin: -2px 0 2px; font-size: 12.5px; color: var(--ink-2); } .pcovenue .ic { color: var(--accent-text); flex: none; margin-top: 1px; }
-.startcard { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 22px; align-items: center; padding: 20px 22px; margin-bottom: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow-1); }
-.startart { background: var(--deck); border-radius: 14px; display: grid; place-items: center; padding: 22px 16px; } .startart svg { width: 100%; max-width: 180px; height: auto; }
-.startmain { display: grid; gap: 10px; min-width: 0; } .startmain h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
-.startsteps { list-style: none; margin: 2px 0 4px; padding: 0; display: grid; gap: 8px; }
-.startsteps li { display: flex; gap: 10px; align-items: flex-start; } .startsteps li span:last-child { display: grid; gap: 1px; } .startsteps b { font-size: 14px; } .startsteps small { color: var(--muted); font-size: 12.5px; }
-.startsteps .sn { width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; font: 600 12px var(--f-mono); color: var(--ink-2); box-shadow: inset 0 0 0 1.5px var(--line-2); }
-.startsteps li.done .sn { background: var(--ok); color: #fff; box-shadow: none; } .startsteps li.done .sn .ic { width: 13px; height: 13px; stroke-width: 2.6; } .startsteps li.done b { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line-2); }
-@media (max-width: 760px) { .startcard { grid-template-columns: 1fr; } }
 .calstrip { display: grid; gap: 8px; margin-bottom: 14px; }
 .calhead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; } .calhead .hint { font-size: 12px; }
 .caldays { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; }
@@ -590,7 +582,7 @@ svg text { font-family: var(--f-ui); }
 .c-video { fill: #a3426b; } .c-light { fill: #8a6f2c; }
 .beams { pointer-events: none; }
 .sv-mount line { stroke: var(--ink-2); stroke-width: .05; } .sv-mount rect { fill: none; stroke: var(--ink-2); stroke-width: .08; } .sv-light rect { fill: var(--ink-2); } .sv-light circle { stroke: rgba(0,0,0,.4); stroke-width: .04; }
-.ov-bright { pointer-events: none; } .ov-bright rect { fill: #05070a; }
+
 .lb-fadein { animation: lbIn .7s cubic-bezier(.4, 0, .2, 1) both; } .lb-fadeout { animation: lbOut .7s cubic-bezier(.4, 0, .2, 1) both; pointer-events: none; }
 @keyframes lbIn { from { opacity: 0; } } @keyframes lbOut { to { opacity: 0; } }
 .room-wall { fill: none; stroke: var(--line-2); stroke-width: calc(var(--labs) * .5); stroke-dasharray: calc(var(--labs) * 3) calc(var(--labs) * 2); pointer-events: none; }
@@ -610,9 +602,6 @@ svg text { font-family: var(--f-ui); }
 .fxchip[aria-pressed="true"] { border-color: var(--accent); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent); }
 .fxchip i, .lookfx i { width: 11px; height: 11px; border-radius: 50%; border: 1px solid rgba(127,127,127,.5); flex: none; display: inline-block; }
 .lpresets { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 10px; }
-.pswatch { aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--line-2); background: var(--sw); cursor: pointer; padding: 0; }
-.pswatch:hover:not(:disabled) { transform: scale(1.06); } .pswatch:disabled { opacity: .25; cursor: default; }
-.pswatch.off { background: repeating-linear-gradient(135deg, var(--surface-2) 0 5px, var(--line) 5px 6px); }
 .faders { display: grid; gap: 4px; }
 .fader { display: grid; grid-template-columns: 54px 1fr 40px; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-2); }
 .fader output { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
@@ -630,8 +619,7 @@ svg text { font-family: var(--f-ui); }
 .ld-lookcard .ld-looks { flex-wrap: wrap; overflow: visible; padding: 0; gap: 6px; } .ld-lookcard .ld-tabs { display: contents; }
 .ld-lookcard .ld-lookacts { flex: 1 1 100%; flex-wrap: wrap; row-gap: 6px; margin: 2px 0 0; padding: 0; } .ld-lookcard .ld-rename { flex: 1; min-width: 0; height: 32px; } .ld-lookcard .ld-rename input { width: 100%; min-width: 0; } .ld-lookcard .ld-lookacts .ld-icon { width: 32px; height: 32px; }
 .ld-lnote { flex: 1 1 100%; display: flex; } .ld-lnote input { width: 100%; min-width: 0; height: 30px; padding: 0 10px; border-radius: 8px; border: 1px dashed var(--ld-line2); background: transparent; color: var(--ld-ink2); font: inherit; font-size: 12.5px; } .ld-lnote input:focus { border-style: solid; border-color: var(--ld-acc); outline: none; color: var(--ld-ink); } .ld-lnote input::placeholder { color: var(--ld-mute); }
-.ld-top .ld-lnote { flex: 0 1 220px; } .ld-notedot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ld-acc); margin-left: 6px; vertical-align: 2px; }
-.ld-bignote { grid-column: 2; display: block; font-size: 13px; font-weight: 500; color: var(--ld-mute); line-height: 1.3; } .lp-name { display: grid; text-align: left; } .lp-name small { font-size: 11.5px; font-weight: 500; color: var(--ink-3, var(--muted)); } .looknote { display: block; font-weight: 500; font-style: italic; color: var(--ink-2, inherit); font-size: .9em; }
+.ld-top .ld-lnote { flex: 0 1 220px; } .ld-notedot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ld-acc); margin-left: 6px; vertical-align: 2px; } .lp-name { display: grid; text-align: left; } .lp-name small { font-size: 11.5px; font-weight: 500; color: var(--ink-3, var(--muted)); } .looknote { display: block; font-weight: 500; font-style: italic; color: var(--ink-2, inherit); font-size: .9em; }
 .ld-lookcard .ld-moods { position: static; transform: none; box-shadow: none; min-width: 0; max-height: none; border-color: var(--ld-line); }
 .ld-top.nolooks { padding-top: 10px; padding-bottom: 10px; }
 .ld-lookacts { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding-left: 10px; }
@@ -679,34 +667,14 @@ svg text { font-family: var(--f-ui); }
 .ldesk .ld-faders.few { grid-template-columns: repeat(2, 64px); justify-content: center; gap: 12px; }
 .ld-librow { display: flex; align-items: center; } .ld-librow > button:first-child { flex: 1; }
 .ld-moods .ld-libx { padding: 6px; color: var(--ld-mute); } .ld-moods .ld-libx:hover { color: var(--bad-ink); }
-.ldesk.big { width: 100%; height: 100%; grid-template-rows: auto auto auto minmax(0, 1fr); }
-.ld-bigtop { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--ld-line); }
-.ld-bigtop h2 { display: flex; align-items: center; gap: 8px; font-size: 18px; margin-right: auto; } .ld-bigtop .ld-faces { margin: 0; }
-.ld-bigtop .ld-done { display: inline-flex; align-items: center; gap: 6px; }
-.ld-bigmap { height: min(42vh, 420px); margin: 14px 18px 0; border-radius: 10px; overflow: hidden; background: #0d1117; }
-.ld-bigs { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; padding: 16px 18px 20px; overflow-y: auto; align-content: start; }
-.ld-big { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 12px; row-gap: 10px; min-height: 96px; padding: 16px; border-radius: 10px; border: 1px solid var(--ld-line2); background: var(--ld-card); color: var(--ld-ink); font: inherit; text-align: left; cursor: pointer; transition: transform .12s, border-color .2s, box-shadow .2s; }
-.ld-big:active { transform: scale(.98); }
-.ld-big > b, .ld-bignote, .ld-bigthumb { grid-column: 2; } .ld-big { align-items: start; } .ld-big > b { align-self: center; } .ld-big b { font-size: 19px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ld-bigno { grid-row: 1; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: 17px; background: var(--ld-panel); color: var(--ld-mute); box-shadow: inset 0 0 0 1px var(--ld-line); }
-.ld-bigpal { display: flex; gap: 5px; } .ld-bigpal i { flex: 1; max-width: 46px; height: 8px; border-radius: 4px; }
-.ld-big[aria-pressed="true"] { border-color: var(--ld-acc); box-shadow: inset 0 0 0 1px var(--ld-acc); }
-.ld-big[aria-pressed="true"] .ld-bigno { background: var(--ld-acc); color: var(--accent-ink); }
-.ldesk.big .ld-map { cursor: default; }
-@media (max-width: 600px) { .ld-bigs { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; } .ld-bigmap { height: 30vh; } .ld-big { min-height: 84px; padding: 12px; } .ld-big b { font-size: 16px; } .ld-bigmap { margin: 10px 12px 0; } .ld-bigtop .ld-faces { display: none; } }
+@media (max-width: 600px) { }
 .ld-moods button:hover { background: var(--ld-raise); }
-.ld-viewmenu { left: auto; right: 18px; top: 60px; transform: none; min-width: 270px; }
 .ld-keysmenu { left: auto; right: 60px; top: 60px; transform: none; min-width: 300px; padding: 12px 14px; gap: 8px; } .ld-keysmenu b { font-size: 13px; }
 .ld-keysmenu dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: 12.5px; } .ld-keysmenu dt { white-space: nowrap; } .ld-keysmenu dd { margin: 0; color: var(--ld-ink2); }
 .ld-keysmenu kbd { font: 600 11px var(--f-mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--ld-line2); background: var(--ld-panel); color: var(--ld-ink2); margin-right: 3px; }
-.ld-q { font-weight: 700; font-size: 14px; line-height: 1; }
-.ldesk.slim .ld-thumb { display: none; } .ldesk.slim .ld-look { min-width: 0; grid-template-rows: auto; padding: 4px 10px 4px 5px; column-gap: 7px; } .ldesk.slim .ld-cueno { grid-row: auto; width: 20px; height: 20px; font-size: 11px; } .ldesk.slim .ld-cuename { font-size: 13px; } .ldesk.slim .ld-look.add { padding: 4px 10px; } .ldesk.slim .ld-rename { height: 30px; } .ldesk.slim .ld-lookacts .ld-icon { width: 30px; height: 30px; }
+.ld-q { font-weight: 700; font-size: 14px; line-height: 1; } .ldesk .ld-look { min-width: 0; grid-template-rows: auto; padding: 4px 10px 4px 5px; column-gap: 7px; } .ldesk .ld-cueno { grid-row: auto; width: 20px; height: 20px; font-size: 11px; } .ldesk .ld-cuename { font-size: 13px; } .ldesk .ld-look.add { padding: 4px 10px; } .ldesk .ld-rename { height: 30px; } .ldesk .ld-lookacts .ld-icon { width: 30px; height: 30px; }
 .ld-resize { position: absolute; left: -3px; top: 0; bottom: 0; width: 7px; z-index: 8; cursor: ew-resize; } .ld-resize:hover, .ld-resize:active { background: var(--ld-acc); opacity: .35; }
-.ld-viewmenu button { align-items: flex-start; } .ld-viewmenu small { display: block; padding: 0 !important; font-weight: 500; color: var(--ld-mute); font-size: 11.5px; margin-top: 2px; }
-.ld-check { width: 16px; height: 16px; flex: none; display: grid; place-items: center; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--ld-line2); margin-top: 1px; } .ld-viewmenu button[aria-pressed="true"] .ld-check { background: var(--ld-acc); color: var(--accent-ink); box-shadow: none; }
-.ld-body.nocol { grid-template-columns: minmax(0, 1fr) 44px; }
-.ld-colstrip { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 18px; border: 0; border-left: 1px solid var(--ld-line); background: var(--ld-panel); color: var(--ld-mute); font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; }
-.ld-colstrip span { writing-mode: vertical-rl; letter-spacing: .06em; } .ld-colstrip:hover { color: var(--ld-ink); }
+.ld-check { width: 16px; height: 16px; flex: none; display: grid; place-items: center; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--ld-line2); margin-top: 1px; }
 .overlay.docked { background: none; backdrop-filter: none; pointer-events: none; place-items: stretch end; padding: 64px 0 0; }
 .ldesk.docked { pointer-events: auto; width: var(--dockw, 440px); position: relative; height: 100%; border-radius: 0; border-width: 0 0 0 1px; box-shadow: var(--shadow-2); }
 .ldesk.docked .ld-body { display: block; overflow-y: auto; } .ldesk.docked .ld-stage { grid-template-rows: auto minmax(200px, 30vh) auto; } .ldesk.docked .ld-mapwrap { min-height: 200px; }
@@ -714,10 +682,9 @@ svg text { font-family: var(--f-ui); }
 .ldesk.docked .ld-brand small, .ldesk.docked .ld-keys, .ldesk.docked #ldBigGo { display: none; } .ldesk.docked .ld-brand h2 { white-space: nowrap; font-size: 15px; } .ldesk.docked .ld-foot > span:last-child { display: none; }
 .ldesk.docked .ld-bar { flex-wrap: wrap; } .ldesk.docked .ld-tipcard { right: 16px; left: 16px; top: auto; bottom: 64px; width: auto; }
 .ldesk.docked .ld-mixrow { grid-template-columns: auto minmax(0, 1fr); }
-.ldesk.compact .ld-top { padding: 8px 14px; gap: 8px 14px; } .ldesk.compact .ld-look { min-width: 96px; padding: 5px 9px; } .ldesk.compact .ld-thumb { height: 24px; width: 76px; }
+.ldesk.compact .ld-top { padding: 8px 14px; gap: 8px 14px; } .ldesk.compact .ld-look { min-width: 96px; padding: 5px 9px; }
 .ldesk.compact .ld-stage { padding: 10px 12px; gap: 8px; } .ldesk.compact .ld-colour { padding: 10px; gap: 8px; } .ldesk.compact .ld-card { padding: 9px 11px; gap: 8px; }
-.ldesk.compact .ld-wheel { width: 112px; } .ldesk.compact .ld-groove, .ldesk.compact .ld-groove input { height: 100px; }
-.ldesk.compact .ldesk .pswatch i, .ldesk.compact .pswatch i { width: 18px; height: 18px; } .ldesk.compact .pswatch span { font-size: 10px; } .ldesk.compact .ld-foot { padding: 6px 14px; }
+.ldesk.compact .ld-wheel { width: 112px; } .ldesk.compact .ld-groove, .ldesk.compact .ld-groove input { height: 100px; } .ldesk.compact .ld-foot { padding: 6px 14px; }
 .ld-viewtog { display: inline-flex; padding: 2px; border-radius: 10px; background: var(--ld-panel); border: 1px solid var(--ld-line); }
 .ld-viewtog button { border: 0; background: none; color: var(--ld-mute); font: inherit; font-size: 12px; font-weight: 650; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
 .ld-viewtog button[aria-pressed="true"] { background: var(--ld-bg); color: var(--ld-ink); box-shadow: var(--shadow-1); }
@@ -734,7 +701,6 @@ svg text { font-family: var(--f-ui); }
 .ld-chip i { width: 10px; height: 10px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
 .ld-chip button { width: 20px; height: 20px; display: grid; place-items: center; border: 0; border-radius: 50%; background: none; color: var(--ld-mute); cursor: pointer; padding: 0; } .ld-chip button:hover { background: var(--ld-raise); color: var(--ld-ink); }
 .ld-chip.more { padding-right: 9px; color: var(--ld-mute); }
-.ldesk .pswatch.mine i { box-shadow: inset 0 0 0 1px rgba(0,0,0,.16), 0 0 0 2px var(--ld-card), 0 0 0 3px var(--ld-acc); }
 .ld-tipcard { position: absolute; z-index: 7; right: 488px; top: 280px; width: 290px; padding: 14px 16px; border-radius: 10px; background: var(--ld-ink); color: var(--ld-bg); box-shadow: var(--shadow-3); display: grid; gap: 6px; }
 .ld-tipcard p { margin: 0; font-size: 13px; opacity: .85; line-height: 1.45; } .ld-tipcard .row { gap: 6px; justify-content: flex-end; margin-top: 4px; }
 .ld-tipcard .ld-mini { background: transparent; color: inherit; border-color: color-mix(in srgb, var(--ld-bg) 35%, transparent); } .ld-tipcard .ld-mini.primary { background: var(--ld-acc); color: var(--accent-ink); border-color: var(--ld-acc); }
@@ -752,12 +718,7 @@ svg text { font-family: var(--f-ui); }
 .lp-no { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 6px; background: var(--surface-2); font-size: 11px; color: var(--muted); }
 .lp-menu .lp-desk { border-top: 1px solid var(--line); border-radius: 0 0 8px 8px; margin-top: 4px; padding-top: 10px; color: var(--accent-text); }
 .ov-houseoff { fill: #03050a; fill-opacity: .66; pointer-events: none; } .ov-glow { mix-blend-mode: screen; pointer-events: none; }
-.ld-thumb { grid-column: 2; display: block; width: 96px; height: 34px; border-radius: 6px; overflow: hidden; background: #0b0e13; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
-.ld-thumbsvg { width: 100%; height: 100%; display: block; } .ld-thumbsvg .ld-deck { fill: #161b24; stroke: none; }
 .ld-look.dropb { box-shadow: -3px 0 0 var(--ld-acc); } .ld-look[draggable="true"] { cursor: pointer; }
-.ld-bigthumb { grid-column: 2; display: block; height: 54px; border-radius: 10px; overflow: hidden; background: #0b0e13; }
-.ld-bigmaster { display: flex; align-items: center; gap: 12px; margin: 12px 18px 0; padding: 10px 14px; border-radius: 12px; background: var(--ld-panel); border: 1px solid var(--ld-line); font-weight: 650; font-size: 14px; }
-.ld-bigmaster input { flex: 1; accent-color: var(--ld-acc); } .ld-bigmaster output { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; color: var(--ld-ink2); }
 .ldesk .ld-faders { grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(0, 1.2fr); gap: 0; } .ld-master { border-left: 1px solid var(--ld-line); padding-left: 6px; } .ld-master .ld-fname { color: var(--ld-acc); }
 .ld-card.ld-pickinfo { grid-template-columns: auto minmax(0, 1fr) auto; padding: 10px 12px; } .ld-card.ld-pickinfo .bigsw { width: 32px; height: 32px; border-radius: 8px; }
 .ld-recent { display: flex; align-items: center; gap: 6px; } .ld-recent .ld-label { margin-right: 4px; }
@@ -827,12 +788,6 @@ svg text { font-family: var(--f-ui); }
 .ld-wheel.off { filter: grayscale(1) opacity(.35); cursor: default; } .ld-wheel:focus-visible { outline: 2px solid var(--ld-acc); outline-offset: 8px; }
 .ld-mark { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.6); pointer-events: none; }
 .ldesk .lpresets { grid-template-columns: repeat(6, 1fr); gap: 8px 4px; margin: 0; }
-.ldesk .pswatch { aspect-ratio: auto; height: auto; background: none; border: 0; display: grid; justify-items: center; gap: 5px; padding: 2px 0; cursor: pointer; transform: none; }
-.ldesk .pswatch i { width: 22px; height: 22px; border-radius: 5px; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(0,0,0,.16); transition: box-shadow .12s; }
-.ldesk .pswatch span { font-size: 10.5px; font-weight: 500; color: var(--ld-mute); text-shadow: none; letter-spacing: .01em; }
-.ldesk .pswatch:hover:not(:disabled) i { box-shadow: inset 0 0 0 1px rgba(0,0,0,.16), 0 0 0 2px var(--ld-card), 0 0 0 3px var(--ld-line2); } .ldesk .pswatch:hover:not(:disabled) span { color: var(--ld-ink); }
-.ldesk .pswatch.off i { background: linear-gradient(135deg, transparent 46%, var(--ld-mute) 46% 54%, transparent 54%), var(--ld-card); box-shadow: inset 0 0 0 1px var(--ld-line2); }
-.ldesk .pswatch:disabled { opacity: .3; cursor: default; }
 .ld-note { margin: 0; font-size: 12px; color: var(--ld-mute); }
 .ld-faders { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; justify-items: center; }
 .ld-fader { display: grid; justify-items: center; gap: 8px; }
@@ -996,9 +951,6 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .cabsum > span:not(.chip) { color: var(--muted); font-size: 13px; }
 .cabsum .chip { margin-left: auto; align-self: center; }
 .glance { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
-.allset { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; padding: 10px 12px; border-radius: var(--r-md); background: var(--ok-soft, rgba(48,164,108,.12)); }
-.allset .mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ok, #30a46c); color: #fff; }
-.allset small { display: block; color: var(--muted); font-size: 12px; }
 .pcoline { display: flex; align-items: center; gap: 8px; width: 100%; border: 1px dashed var(--line-2, var(--line)); background: transparent; border-radius: var(--r-md); padding: 8px 10px; cursor: pointer; color: var(--ink-2); font-size: 13px; text-align: left; }
 .pcoline:hover { border-color: var(--accent); color: var(--ink); }
 @media (max-width: 720px) { .detailseg button { padding: 5px 8px; } }
@@ -1270,9 +1222,9 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .librow:not(:hover) .libtrend { opacity: .8; }
 @media (max-width: 560px) { .libtrend { display: none; } }
 .hlist { display: grid; gap: 6px; }
-:root:not([data-density="comfy"]) .person { padding-block: 3px; gap: 9px; } :root:not([data-density="comfy"]) .person .avatar { width: 32px !important; height: 32px !important; font-size: 12px; }
-:root:not([data-density="comfy"]) .hlist-row { padding: 6px 10px; } :root:not([data-density="comfy"]) .isec { padding-block: 12px; gap: 10px; }
-@media screen { :root:not([data-density="comfy"]) td { padding-block: 6px; } :root:not([data-density="comfy"]) .lgroup .ltask, :root:not([data-density="comfy"]) .ltask { padding-block: 8px; } }
+.person { padding-block: 3px; gap: 9px; } .person .avatar { width: 32px !important; height: 32px !important; font-size: 12px; }
+.hlist-row { padding: 6px 10px; } .isec { padding-block: 12px; gap: 10px; }
+@media screen { td { padding-block: 6px; } .lgroup .ltask, .ltask { padding-block: 8px; } }
 .hlist-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); flex-wrap: wrap; }
 .hlist-row select { max-width: 220px; }
 .hmain { display: grid; gap: 1px; flex: 1; min-width: 160px; }
@@ -1497,17 +1449,7 @@ tr.flag td { color: var(--bad); }
 .lcflag { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border: 1px solid transparent; border-radius: 10px; background: none; color: var(--muted); cursor: pointer; }
 .lcflag:hover { color: var(--bad-ink, var(--bad)); } .lcflag[aria-pressed="true"] { color: #fff; background: var(--bad); }
 .lcdone { display: flex; align-items: center; gap: 6px; margin: 4px 0 0; font-weight: 650; color: var(--ok-ink, var(--ok)); }
-#tour { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
-#tour[hidden] { display: none; }
-.tour-hole { position: fixed; border-radius: 12px; box-shadow: 0 0 0 9999px rgba(8, 10, 14, .55), 0 0 0 2px var(--accent); transition: all .25s ease; pointer-events: none; }
-.tour-card { position: fixed; pointer-events: auto; background: var(--surface); color: var(--ink); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-3); display: grid; gap: 6px; transition: top .25s ease, left .25s ease; }
-.tour-card h2 { margin: 0; font-size: var(--t-title); } .tour-card p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.45; }
-.tour-step { font-size: 12px; font-weight: 650; color: var(--accent); letter-spacing: .04em; text-transform: uppercase; }
-.tour-acts { gap: 6px; margin-top: 6px; }
-@media (prefers-reduced-motion: reduce) { .tour-hole, .tour-card { transition: none; } }
-@media print { #tour { display: none !important; } }
-.tabmore { flex: none; border: 0; background: none; padding: 8px 10px; font: inherit; font-size: 13.5px; color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-.tabmore:hover { color: var(--ink); } @media print { .tabmore { display: none; } }
+@media print { #sec-linecheck { display: none !important; } }
 .cfold > summary { cursor: pointer; font-weight: 600; font-size: 13.5px; padding: 4px 0 10px; color: var(--ink-2); }
 .printpop .pp-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--ink); }
 .storelist { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px 16px; }
@@ -1869,7 +1811,7 @@ td.spare { color: var(--muted); font-style: italic; }
 .light-deck .ov-shadow { fill-opacity: .16; }
 .ov-sightline { stroke: #7dd3fc; stroke-width: var(--cw, .06px); stroke-dasharray: .6 .35; fill: none; opacity: .8; pointer-events: none; }
 .ov-hidden circle { fill: #e5484d; stroke: #fff; stroke-width: .06; } .ov-hidden path { fill: none; stroke: #fff; stroke-width: .07; stroke-linecap: round; }
-.ov-heat { pointer-events: none; }
+
 .s-walk { fill: url(#spHatch); stroke: #f5b544; stroke-width: .07; stroke-dasharray: .45 .25; }
 .s-walk-edge { fill: none; stroke: #f5b544; stroke-opacity: .25; stroke-width: .04; }
 .deck-tex { pointer-events: none; }
@@ -2085,7 +2027,6 @@ body.presenting .toast { display: none; }   /* nothing pops up over the plot on 
     <div class="row" style="gap:8px"><button class="btn" id="aboutKeys">Keyboard shortcuts</button><button class="btn" id="aboutData">Backup &amp; restore</button></div>
   </div>
 </div>
-<div id="tour" hidden><div class="tour-hole" aria-hidden="true"></div><div class="tour-card" role="dialog" aria-labelledby="tourT" aria-describedby="tourB"><div class="tour-step" id="tourN"></div><h2 id="tourT"></h2><p id="tourB"></p><div class="row tour-acts"><button class="btn quiet" id="tourSkip">Close</button><span style="flex:1"></span><button class="btn" id="tourBack">Back</button><button class="btn primary" id="tourNext">Next</button></div></div></div>
 <div class="overlay" id="helpDlg" hidden>
   <div class="modal" role="dialog" aria-labelledby="helpTitle" style="width:min(460px,100%)">
     <div class="row" style="justify-content:space-between"><h2 id="helpTitle">Shortcuts</h2><button class="iconbtn" id="helpClose" aria-label="Close"></button></div>
@@ -2120,7 +2061,6 @@ body.presenting .toast { display: none; }   /* nothing pops up over the plot on 
       <dt><span class="kbd">\</span></dt><dd>Focus: hide both panels</dd>
       <dt>Drag floor</dt><dd>Pan · pinch, or scroll with Alt or Ctrl held, to zoom</dd>
     </dl>
-    <button class="btn block" id="helpTour" style="margin-top:12px">Take the 1-minute tour</button>
   </div>
 </div>
 
@@ -3079,19 +3019,12 @@ function mirrorLight(id) {
   }, `${itemName(it)} mirrored to stage ${nx > cx ? 'left' : 'right'}`);
 }
 // the desk's colour buttons: the standard eleven, with any you've made your own (right-click one) in their place
-const deskPresets = () => DESK_PRESETS.map((p, i) => db.myPresets?.[i] ? [db.myPresets[i].name, db.myPresets[i].c, true] : p);
-function setMyPreset(i) {
-  const ts = deskPicked(); if (!ts.length) { toast('Pick a light showing the colour you want, then right-click a colour button to keep it there'); return; }
-  const f = fxOf(ts[0]), mine = (db.myPresets ||= []), n = mine.filter(Boolean).length + (mine[i] ? 0 : 1), was = DESK_PRESETS[i][0];
-  mine[i] = { name: mine[i]?.name || `Mine ${n}`, c: { r: f.r, g: f.g, b: f.b, w: f.w } }; save(); renderDesk();
-  toast(`${was} is now your colour`, { label: 'Put back', fn: () => { db.myPresets[i] = null; save(); renderDesk(); } });
-}
 const DESK_PRESETS = [['Warm white', { r: 0, g: 0, b: 0, w: 255 }], ['Cool white', { r: 110, g: 150, b: 255, w: 180 }], ['Red', { r: 255, g: 0, b: 0, w: 0 }], ['Amber', { r: 255, g: 110, b: 0, w: 0 }],
   ['Yellow', { r: 255, g: 200, b: 0, w: 0 }], ['Green', { r: 0, g: 255, b: 40, w: 0 }], ['Cyan', { r: 0, g: 210, b: 255, w: 0 }], ['Blue', { r: 0, g: 40, b: 255, w: 0 }],
   ['Congo', { r: 80, g: 0, b: 255, w: 0 }], ['Magenta', { r: 255, g: 0, b: 180, w: 0 }], ['Pink', { r: 255, g: 50, b: 110, w: 40 }]];
 let deskSel = null, fxSnap = null, deskClip = null;   // the lights picked on the desk (null: all of them); the state before a fader or wheel drag
 const deskLights = () => plan.items.filter(isFixture);
-const fxName = (f, it) => { if (!f.d) return 'Off'; if (f.k) return `White ${f.k} K${f.d < 100 ? ` ${f.d}%` : ''}`; if (it && !cat(it).rgbw) return `White${f.d < 100 ? ` ${f.d}%` : ''}`; const p = deskPresets().find(([, c]) => ['r', 'g', 'b', 'w'].every(k => c[k] === f[k])); return `${p ? p[0] : `R${f.r} G${f.g} B${f.b} W${f.w}`}${f.d < 100 ? ` ${f.d}%` : ''}`; };
+const fxName = (f, it) => { if (!f.d) return 'Off'; if (f.k) return `White ${f.k} K${f.d < 100 ? ` ${f.d}%` : ''}`; if (it && !cat(it).rgbw) return `White${f.d < 100 ? ` ${f.d}%` : ''}`; const p = DESK_PRESETS.find(([, c]) => ['r', 'g', 'b', 'w'].every(k => c[k] === f[k])); return `${p ? p[0] : `R${f.r} G${f.g} B${f.b} W${f.w}`}${f.d < 100 ? ` ${f.d}%` : ''}`; };
 const fxSwatch = (f, it) => { const c = fxRGB(f, it); return c ? `rgb(${c.join(',')})` : 'transparent'; };
 function ensureLook() { if (!plan.looks?.length) { plan.looks = [{ id: uid(), name: 'Look 1', fx: {} }]; plan.lookId = plan.looks[0].id; } return curLook(); }
 function setFx(list, patch) { const L = ensureLook(), recol = !('k' in patch) && ['r', 'g', 'b', 'w'].some(k => k in patch); for (const it of list) { const f = { ...fxOf(it), ...patch }; if (recol && cat(it).rgbw) delete f.k; L.fx[it.id] = f; } }
@@ -3105,13 +3038,13 @@ function deskLaunch() {
 /* The lighting desk: a window of its own. Looks across the top; the stage on the left, where you pick lights and see their
    beams; colour on the right: a wheel, presets, and RGBW and dimmer faders. */
 const desk = { open: false, drag: null, box: null };
-try { const v = JSON.parse(localStorage.getItem('stageplot.deskLayout') || '{}'); desk.dock = !!v.dock; desk.nocol = !!v.nocol; desk.compact = v.compact ?? innerHeight < 760; desk.slim = v.slim ?? true; desk.lfold = !!v.lfold; desk.dockw = v.dockw || 440; } catch { /* defaults */ }
-const deskLayoutSave = () => { try { localStorage.setItem('stageplot.deskLayout', JSON.stringify({ dock: !!desk.dock, nocol: !!desk.nocol, compact: !!desk.compact, slim: !!desk.slim, lfold: !!desk.lfold, dockw: desk.dockw || 440 })); } catch { /* memory only */ } };
+try { const v = JSON.parse(localStorage.getItem('stageplot.deskLayout') || '{}'); desk.dock = !!v.dock; desk.lfold = !!v.lfold; desk.dockw = v.dockw || 440; } catch { /* defaults */ }
+const deskLayoutSave = () => { try { localStorage.setItem('stageplot.deskLayout', JSON.stringify({ dock: !!desk.dock, lfold: !!desk.lfold, dockw: desk.dockw || 440 })); } catch { /* memory only */ } };
 try { desk.view = localStorage.getItem('stageplot.deskView') || 'map'; desk.label = localStorage.getItem('stageplot.deskLabel') || 'name'; } catch { desk.view = 'map'; desk.label = 'name'; }
 // three short pointers the first time the desk opens, then never again
 const DESK_TIPS = [['Pick lights', 'Click lights on the stage, or a group above it. Shift-click adds more.', '#ldMapWrap'], ['Choose a colour', 'Use the colour wheel; the beams change as you go. Dim sets how bright, and your recent colours collect below.', '#ldColour'], ['Keep it as a look', 'Changes save to the open look. + Look adds another: a copy, a mood or one from your library.', '[data-addlook]']];
 function deskTipHtml() {
-  if (desk.tip == null || desk.big) return '';
+  if (desk.tip == null) return '';
   const [h, txt] = DESK_TIPS[desk.tip];
   return `<div class="ld-tipcard" role="dialog" aria-label="Tip ${desk.tip + 1} of 3"><b>${h}</b><p>${txt}</p><div class="row"><span class="ld-tipdots">${DESK_TIPS.map((_, k) => `<i class="${k === desk.tip ? 'on' : ''}"></i>`).join('')}</span><button class="ld-mini" data-tip="skip">Skip</button><button class="ld-mini primary" data-tip="${desk.tip < 2 ? 'next' : 'done'}">${desk.tip < 2 ? 'Next' : 'Got it'}</button></div></div>`;
 }
@@ -3148,7 +3081,6 @@ function deskFrame() {   // the desk's view: framed on the stage, the lights and
   return { R, vb: `${f3(fx0)} ${f3(fy0)} ${f3(fx1 - fx0)} ${f3(fy1 - fy0)}`, U: Math.max(fx1 - fx0, (fy1 - fy0) * 1.6) / 100 };   // U: one hundredth of the view, so dots and names keep their size
 }
 // a look as a tiny stage: deck and beams only, for the look buttons
-function lookThumb(L, k) { const { vb } = deskFrame(); return `<svg class="ld-thumbsvg" viewBox="${vb}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path class="ld-deck" d="${polyPath(stagePoly())}"/>${beamsSvg(new Set(), 'lt' + k, 2.4, L)}</svg>`; }
 // the desk's stage: the map, or (List) every light in a row with its colour and level
 // the picked lights as chips under the stage (× lets one go); with none or all picked, a line saying how to pick
 function deskChipsHtml(all, picked) {
@@ -3162,7 +3094,7 @@ function aimLight(it, x, y, free) {
   let a = Math.atan2(dx, -dy) * 180 / Math.PI; if (!free) a = Math.round(a / 5) * 5;
   it.rot = ((Math.round(a) % 360) + 360) % 360; it.throw = r2(Math.max(fromM(.5), L));
 }
-function deskStageHtml() { return desk.big ? deskMapSvg() : desk.view === 'list' ? deskListHtml() : desk.view === 'front' ? deskFrontSvg() : deskMapSvg(); }
+function deskStageHtml() { return desk.view === 'list' ? deskListHtml() : desk.view === 'front' ? deskFrontSvg() : deskMapSvg(); }
 /* Audience view: the stage as the congregation sees it, in perspective from a seat in the middle of the room. The back wall,
    the deck and its front face, the rigging at its real height, each light's shaft through a little haze, its pool on the floor
    and the people: lit from the front they take on the light's colour, lit from behind they get a coloured rim. */
@@ -3281,17 +3213,17 @@ function deskMapSvg() {
   const box = i => { const w = lab(i).length * U * .82 + U * .6, y = i.y + rr + U * 2.1; return [i.x - w / 2, y - U * 1.4, i.x + w / 2, y + U * .3]; }, crowd = new Set();
   lights.forEach((a, k) => { const A = box(a); for (const b of lights.slice(k + 1)) { const B = box(b); if (A[0] < B[2] && B[0] < A[2] && A[1] < B[3] && B[1] < A[3]) { crowd.add(a.id); crowd.add(b.id); } } });
   const dots = lights.map(i => { const f = fxOf(i), sw = fxSwatch(f, i), shape = ldShape(i, sw, rr, U), on = picked.has(i.id);
-    const halo = (on && !desk.big) || desk.flash?.has(i.id) ? `<g class="ld-halo">${shape.replace(/class="[^"]*"/g, '').replace(/style="[^"]*"/g, `style="stroke-width:${f3(U * .7)}"`)}</g>` : '';
+    const halo = on || desk.flash?.has(i.id) ? `<g class="ld-halo">${shape.replace(/class="[^"]*"/g, '').replace(/style="[^"]*"/g, `style="stroke-width:${f3(U * .7)}"`)}</g>` : '';
     return `<g class="ld-fx${on ? ' on' : ''}${desk.flash?.has(i.id) ? ' flashing' : ''}" data-ldfx="${i.id}" role="button" tabindex="0" aria-pressed="${on}" aria-label="${esc(itemName(i))}, ${esc(fxName(f, i))}"><circle class="ld-ring" cx="${f3(i.x)}" cy="${f3(i.y)}" r="${f3(rr + U * .9)}" style="stroke-width:${f3(U * .3)}"/>${halo}${shape}${i.fault ? faultTri(i.x + rr * 1.15, i.y - rr * 1.15, U * .95, i) : ''}<text x="${f3(i.x)}" y="${f3(i.y + rr + U * 2.1)}" text-anchor="middle" style="font-size:${f3(U * 1.55)}px" class="${showAddr ? 'addr' : ''}${crowd.has(i.id) && !on ? ' crowd' : ''}">${esc(lab(i))}</text></g>`; }).join('');
   // where each picked light lands: a target to drag (Shift drags every picked light's target together)
-  const aims = desk.big || weekLocked() || lookPeek ? '' : deskPicked().filter(i => !isUp(i)).map(i => { const g = beamGeom(i), x = f3(g.cx), y = f3(g.cy), r = f3(U * 1.15);
+  const aims = weekLocked() || lookPeek ? '' : deskPicked().filter(i => !isUp(i)).map(i => { const g = beamGeom(i), x = f3(g.cx), y = f3(g.cy), r = f3(U * 1.15);
     return `<g class="ld-aim" data-ldaim="${i.id}" role="button" tabindex="0" aria-label="Aim ${esc(itemName(i))}: drag to move where it lands, or use the arrow keys" title="Drag to aim ${esc(itemName(i))} (Shift: all picked lights, Alt: free angle)"><line class="ld-aimline" x1="${f3(i.x)}" y1="${f3(i.y)}" x2="${x}" y2="${y}" style="stroke-width:${f3(U * .16)};stroke-dasharray:${f3(U * .6)} ${f3(U * .45)}"/><circle class="ld-aimhit" cx="${x}" cy="${y}" r="${f3(U * 2.2)}"/><circle class="ld-aimc" cx="${x}" cy="${y}" r="${r}" style="stroke-width:${f3(U * .28)}"/><path class="ld-aimx" d="M${f3(g.cx - U * 1.9)} ${y}h${f3(U * 1.1)}M${f3(g.cx + U * .8)} ${y}h${f3(U * 1.1)}M${x} ${f3(g.cy - U * 1.9)}v${f3(U * 1.1)}M${x} ${f3(g.cy + U * .8)}v${f3(U * 1.1)}" style="stroke-width:${f3(U * .22)}"/></g>`; }).join('');
   // a picked light that zooms gets a handle on the side of its pool: drag it to make the beam wider or tighter
-  const zooms = desk.big || weekLocked() || lookPeek ? '' : deskPicked().filter(i => cat(i).zoom && !isUp(i)).map(i => { const g = beamGeom(i), x = g.cx - g.uy * g.r, y = g.cy + g.ux * g.r, s = U * .95, ang = Math.atan2(g.ux, -g.uy) * 180 / Math.PI;
+  const zooms = weekLocked() || lookPeek ? '' : deskPicked().filter(i => cat(i).zoom && !isUp(i)).map(i => { const g = beamGeom(i), x = g.cx - g.uy * g.r, y = g.cy + g.ux * g.r, s = U * .95, ang = Math.atan2(g.ux, -g.uy) * 180 / Math.PI;
     return `<g class="ld-zoom" data-ldzoom="${i.id}" role="slider" tabindex="0" aria-label="Beam size of ${esc(itemName(i))}" aria-valuemin="${cat(i).zoom[0]}" aria-valuemax="${cat(i).zoom[1]}" aria-valuenow="${beamOf(i)}" aria-valuetext="${beamOf(i)}°" title="Drag to size the beam of ${esc(itemName(i))}: ${beamOf(i)}° (${cat(i).zoom.join('–')}°; Shift: all picked)"><circle class="ld-aimhit" cx="${f3(x)}" cy="${f3(y)}" r="${f3(U * 2)}"/><g transform="rotate(${f3(ang)} ${f3(x)} ${f3(y)})"><rect class="ld-zoomk" x="${f3(x - s * 1.5)}" y="${f3(y - s * .8)}" width="${f3(s * 3)}" height="${f3(s * 1.6)}" rx="${f3(s * .8)}" style="stroke-width:${f3(U * .22)}"/><path class="ld-aimx" d="M${f3(x - s * .9)} ${f3(y)}h${f3(s * 1.8)}M${f3(x - s * .9)} ${f3(y)}l${f3(s * .5)} ${f3(-s * .4)}M${f3(x - s * .9)} ${f3(y)}l${f3(s * .5)} ${f3(s * .4)}M${f3(x + s * .9)} ${f3(y)}l${f3(-s * .5)} ${f3(-s * .4)}M${f3(x + s * .9)} ${f3(y)}l${f3(-s * .5)} ${f3(s * .4)}" style="stroke-width:${f3(U * .2)}"/></g></g>`; }).join('');
   const L = curLook(), faces = stagePeople().map(p => { const st = faceState(p, L), nm = personById(p.personId)?.name || itemName(p);
     return `<g class="ld-face ${st}"><title>${esc(nm)}: ${st === 'lit' ? 'face lit' : st === 'deep' ? 'lit only in deep colour' : st === 'side' ? 'lit from one side only' : 'in the dark'}</title><circle cx="${f3(p.x)}" cy="${f3(p.y)}" r="${f3(U * 1.5)}" style="stroke-width:${f3(U * .28)}"/><text x="${f3(p.x)}" y="${f3(p.y + U * .5)}" text-anchor="middle" style="font-size:${f3(U * 1.3)}px">${esc(initials(nm))}</text></g>`; }).join('');
-  return `${desk.zoom && !desk.big ? `<button class="ld-fit" id="ldFit" title="Show the whole stage (double-click the map)">${ic('fit', 'sm')}Fit</button>` : ''}<svg class="ld-map" id="ldMap" viewBox="${desk.big ? vb : deskZoomVb(vb)}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
+  return `${desk.zoom ? `<button class="ld-fit" id="ldFit" title="Show the whole stage (double-click the map)">${ic('fit', 'sm')}Fit</button>` : ''}<svg class="ld-map" id="ldMap" viewBox="${deskZoomVb(vb)}" preserveAspectRatio="xMidYMid meet" aria-label="Stage: click a light to pick it, Shift-click to add, drag to pick several">
     <rect class="ld-room" x="${f3(R.x0)}" y="${f3(R.y0)}" width="${f3(R.x1 - R.x0)}" height="${f3(R.y1 - R.y0)}"/><path class="ld-deck" d="${polyPath(stagePoly())}"/><pattern id="ldBoards" width="8" height="1.2" patternUnits="userSpaceOnUse"><path d="M0 .6h8M0 1.2h8M0 0v.6M4 .6v.6" fill="none" stroke="rgba(255,255,255,.035)" stroke-width=".035"/></pattern><path class="ld-planks" d="${polyPath(stagePoly())}" fill="url(#ldBoards)"/>${ms}${fadedBeams(beamsSvg(new Set(), 'lbm', 2.2), 'map')}${faces}${dots}${aims}${zooms}</svg>`;
 }
 /* Changing looks: the beams as they were fade out over the new ones (both on the plot and in the desk), about 0.7 s. */
@@ -3308,21 +3240,6 @@ function fadedBeams(fresh, key) {
   if (!lookFade || el >= LOOK_FADE_MS || !lookFade[key]) return fresh;
   const d = `animation-delay:-${Math.round(el)}ms`;
   return `<g class="lb-fadein" style="${d}">${fresh}</g><g class="lb-fadeout" style="${d}">${lookFade[key]}</g>`;
-}
-/* Mood starters: a new look in one click. Front light stays warm white so faces read; everything else takes the mood's
-   colours, alternating across the stage from left to right. */
-const MOODS = [
-  ['Calm', 80, ['Blue', 'Congo'], 70], ['Celebration', 100, ['Amber', 'Magenta', 'Cyan'], 100], ['Reflective', 55, ['Blue'], 45],
-  ['Christmas', 90, ['Red', 'Amber'], 85], ['Easter', 95, ['Pink', 'Yellow', 'Cyan'], 75],
-];
-const isFrontLight = it => frontAngle(it) != null || (!isUp(it) && !mountOf(it) && it.type !== 'light_stand' && it.y > Math.max(...stagePoly().map(q => q[1])) && aimOf(it, -1)[1] < -.2);
-function moodLook(m) {
-  const [name, frontD, cols, d] = MOODS.find(x => x[0] === m), others = deskLights().filter(i => !isFrontLight(i)).sort((a, b) => a.x - b.x), fx = {};
-  for (const it of deskLights()) if (isFrontLight(it)) fx[it.id] = { ...DESK_PRESETS[0][1], d: frontD };
-  others.forEach((it, k) => { fx[it.id] = { ...DESK_PRESETS.find(p => p[0] === cols[k % cols.length])[1], d }; });
-  fadeLooksFrom(); desk.add = false; desk.prevLook = curLook()?.id;
-  mutate(() => { plan.looks ||= []; const n = plan.looks.filter(l => l.name === name || l.name.startsWith(name + ' ')).length, L = { id: uid(), name: n ? `${name} ${n + 1}` : name, fx }; plan.looks.push(L); plan.lookId = L.id; }, `${name} look added: front light stays warm white`);
-  renderDesk();
 }
 /* The basics every church uses: Walk-in (people arriving: a soft colour on the stage and the walls, front light off), Full
    (everything warm white, for rehearsal and focus) and Blackout (everything off, between moments). */
@@ -3369,13 +3286,6 @@ function libUse(id) {
   renderDesk();
 }
 const libPalette = e => { const n = new Map(); for (const l of e.lights) { const c = fxSwatch(l.fx, { type: l.type }); if (c !== 'transparent') n.set(c, (n.get(c) || 0) + 1); } return [...n].sort((a, b) => b[1] - a[1]).slice(0, 4).map(x => x[0]); };
-/* Big buttons: the looks as large buttons for a phone or tablet at rehearsal, with the stage above showing the open look */
-function renderBig() {
-  const looks = plan.looks || [], cur = curLook();
-  $('ldBody').innerHTML = `<div class="ld-bigtop"><h2 id="ldTitle">${ic('sun')}Looks</h2><span class="ld-faces" id="ldFaces">${facesSummary()}</span><button class="ld-done" id="ldBigExit">${ic('sliders', 'sm')}Full desk</button><button class="ld-icon" id="ldDone" aria-label="Close" title="Close">${ic('x', 'sm')}</button></div>
-    <div class="ld-bigmap" id="ldMapWrap">${deskMapSvg()}</div>${looks.length ? `<label class="ld-bigmaster"><span>Look level</span><input type="range" data-master min="0" max="100" value="${lookMaster(cur)}" aria-label="Look master"><output>${lookMaster(cur)}%</output></label>` : ''}
-    <div class="ld-bigs" role="group" aria-label="Looks">${looks.length ? looks.map((l, k) => { const pal = lookPalette(l); return `<button class="ld-big" data-look="${l.id}" aria-pressed="${l.id === cur?.id}"><span class="ld-bigno">${k + 1}</span><b>${esc(l.name)}</b>${l.note ? `<small class="ld-bignote">${esc(l.note)}</small>` : ''}<span class="ld-bigthumb">${lookThumb(l, 'b' + k)}</span></button>`; }).join('') : '<p class="ld-note">No looks yet. Open the full desk to make some.</p>'}</div>`;
-}
 const DESK_KEYS = [['1–9', 'Switch to that look'], ['↑ ↓', 'Dimmer up or down (Shift: bigger steps)'], ['A', 'Pick every light'], ['C', 'Copy the colour'], ['V', 'Paste it onto the picked lights'], ['Space', 'Hold to peek at the look before'], ['Alt ← →', 'Move the open look'], ['Ctrl Z', 'Undo (Shift for redo)'], ['?', 'Show these keys'], ['Esc', 'Close menus, then the desk']];
 const FADER_COL = { r: '#c9545c', g: '#3f9a6c', b: '#4d6fc4', w: '#b9a77c', d: '#7d8494' };
 const faderPct = (k, v) => f3(v / (k === 'd' ? 100 : 255));   // how full the groove is, 0–1
@@ -3389,7 +3299,7 @@ function deskColourHtml() {
   const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, white = ts.length > 0 && ts.every(i => !cat(i).rgbw), [h, sat] = rgb2hsv(f.r, f.g, f.b), on = f.r + f.g + f.b > 0;
   const mx = 50 + Math.cos(h * Math.PI / 180) * sat * 50, my = 50 + Math.sin(h * Math.PI / 180) * sat * 50, sw = ts.length ? fxSwatch(f, ts[0]) : 'transparent';
   const hex = f.r + f.g + f.b ? '#' + [f.r, f.g, f.b].map(v => v.toString(16).padStart(2, '0')).join('') : '', rec = deskRecent(), L = curLook(), mst = lookMaster(L);
-  return `<div class="ld-card ld-colcard"><div class="ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'Pick lights on the stage'}</b></div><span class="ld-pickacts">${ts.length ? `<button class="ld-mini" data-flash title="Make the picked lights pulse on the stage, to find them">${ic('zap', 'sm')}Flash</button>` : ''}${ui.adv ? `<button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button>` : ''}</span></div>
+  return `<div class="ld-card ld-colcard"><div class="ld-pickinfo"><span class="bigsw${sw === 'transparent' ? ' none' : ''}" style="--c:${sw}"></span><div><b>${ts.length ? (ts.length === 1 ? esc(itemName(ts[0])) : plural(ts.length, 'light')) : 'Pick lights on the stage'}</b></div><span class="ld-pickacts">${ts.length && ui.adv ? `<button class="ld-mini" data-flash title="Make the picked lights pulse on the stage, to find them">${ic('zap', 'sm')}Flash</button>` : ''}${ui.adv ? `<button class="ld-mini" data-fxcopy ${ts.length ? '' : 'disabled'} title="Copy this colour (C)">${ic('copy', 'sm')}Copy</button><button class="ld-mini" data-fxpaste ${ts.length && deskClip ? '' : 'disabled'} title="Paste the copied colour onto the picked lights (V)">${deskClip ? `<i style="background:${fxSwatch(deskClip)}"></i>` : ''}Paste</button>` : ''}</span></div>
       <div class="ld-mixrow${ui.adv ? '' : ' few'}"><div class="ld-wheelwrap"><div class="ld-wheel${white || !ts.length ? ' off' : ''}" id="ldWheel" role="slider" tabindex="${white || !ts.length ? -1 : 0}" aria-label="Colour" aria-valuetext="${on ? `hue ${Math.round(h)}°, ${Math.round(sat * 100)}% colour` : 'no colour'}"><span class="ld-mark" style="left:${f3(mx)}%;top:${f3(my)}%;${on ? '' : 'display:none'}"></span></div></div><div class="ld-faders${ui.adv ? '' : ' few'}">${[['r', 'Red'], ['g', 'Green'], ['b', 'Blue'], ['w', 'White'], ['d', 'Dimmer']].filter(([k]) => ui.adv || k === 'd').map(([k, l]) => `<label class="ld-fader f-${k}" style="--v:${faderPct(k, f[k])};--fc:${FADER_COL[k]}"><output>${f[k]}${k === 'd' ? '%' : ''}</output><span class="ld-groove"><input type="range" data-fx="${k}" min="0" max="${k === 'd' ? 100 : 255}" value="${f[k]}" ${!ts.length || (white && 'rgb'.includes(k)) ? 'disabled' : ''} aria-label="${l}"></span><span class="ld-fname">${k === 'd' ? 'Dim' : k.toUpperCase()}</span></label>`).join('')}<label class="ld-fader ld-master" style="--v:${faderPct('d', mst)};--fc:var(--ld-acc)" title="The whole look's level: every light in it scales together"><output>${mst}%</output><span class="ld-groove"><input type="range" data-master min="0" max="100" value="${mst}" aria-label="Look master" ${lookPeek ? 'disabled' : ''}></span><span class="ld-fname">Look</span></label></div></div>
       <label class="ld-cct" title="Warm (tungsten) to cool (daylight) white"><span class="ld-label">White</span><span class="ld-cctw">Warm</span><input type="range" data-cct min="2700" max="6500" step="100" value="${f.k || CCT_DEF}" ${ts.length ? '' : 'disabled'} aria-label="Colour temperature, warm to cool" aria-valuetext="${f.k ? f.k + ' kelvin' : 'not set'}"><span class="ld-cctw">Cool</span><output>${f.k ? f.k + ' K' : ''}</output></label>
       <div class="ld-recentrow"><span class="ld-label">Recent</span>${rec.length ? `<div class="ld-recent" title="Recent colours">${rec.map((c, i) => `<button class="ld-rsw" data-recent="${i}" style="--sw:${fxSwatch({ ...c, d: 100 })}" aria-label="Recent colour ${esc(fxName({ ...c, d: 100 }))}" title="${esc(fxName({ ...c, d: 100 }))}" ${!ts.length || white ? 'disabled' : ''}></button>`).join('')}</div>` : '<span class="ld-recentnone">Colours you use show here</span>'}<button class="ld-mini ld-offbtn" data-preset="Off" title="Turn the picked lights off" ${ts.length ? '' : 'disabled'}>Off</button>
@@ -3399,14 +3309,11 @@ function deskColourHtml() {
 }
 function renderDesk() {
   if (!desk.open) return;
-  $('ldBody').classList.toggle('big', !!desk.big);
-  $('deskDlg').classList.toggle('docked', !!desk.dock && !desk.big);
-  { const was = $('plotView').classList.contains('deskdock'), now = !!desk.dock && !desk.big; $('plotView').classList.toggle('deskdock', now); if (was !== now) { needFit = true; setTimeout(() => { needFit = true; renderPlot(); }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260); } }   // docked: the plot makes room, once the panels have moved
-  $('ldBody').classList.toggle('docked', !!desk.dock && !desk.big);
-  $('ldBody').classList.toggle('compact', !!desk.compact && !desk.big);
-  $('ldBody').classList.toggle('slim', !!desk.slim && !desk.big);
+  $('deskDlg').classList.toggle('docked', !!desk.dock);
+  { const was = $('plotView').classList.contains('deskdock'), now = !!desk.dock; $('plotView').classList.toggle('deskdock', now); if (was !== now) { needFit = true; setTimeout(() => { needFit = true; renderPlot(); }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260); } }   // docked: the plot makes room, once the panels have moved
+  $('ldBody').classList.toggle('docked', !!desk.dock);
+  $('ldBody').classList.toggle('compact', innerHeight < 760);
   $('ldBody').style.setProperty('--dockw', `${desk.dockw || 440}px`); $('plotView').style.setProperty('--dockw', `${desk.dockw || 440}px`);
-  if (desk.big) { renderBig(); return; }
   renderDeskMain(); deskSelSave();
   document.querySelectorAll('.ld-coach').forEach(e => e.classList.remove('ld-coach'));
   if (desk.tip != null) document.querySelector(DESK_TIPS[desk.tip][2])?.classList.add('ld-coach');
@@ -3416,23 +3323,22 @@ function renderDeskMain() {
   const groups = [['all', 'All'], ...mounts().filter(m => all.some(i => mountOf(i) === m)).map(m => ['m:' + m.id, itemName(m)]), ...(all.some(i => !mountOf(i)) ? [['floor', 'Floor']] : []), ...lgroups().map(g => ['g:' + g.id, g.name])];
   const gOn = k => { const ids = deskGroupIds(k); return ids.length === picked.length && ids.every(i => picked.includes(i)); };
   const myG = lgroups().find(g => gOn('g:' + g.id) && picked.length);
-  const cue = (l, k) => `<button class="ld-look" data-look="${l.id}" draggable="true" aria-pressed="${l.id === cur?.id}" title="${esc(l.name)}${l.note ? ` — ${esc(l.note)}` : ''}: drag to reorder (or Alt + ← →)"><span class="ld-cueno">${k + 1}</span><span class="ld-cuename">${esc(l.name)}${l.note ? '<i class="ld-notedot" aria-hidden="true"></i>' : ''}</span><span class="ld-thumb">${lookThumb(l, k)}</span></button>`;
+  const cue = (l, k) => `<button class="ld-look" data-look="${l.id}" draggable="true" aria-pressed="${l.id === cur?.id}" title="${esc(l.name)}${l.note ? ` — ${esc(l.note)}` : ''}: drag to reorder (or Alt + ← →)"><span class="ld-cueno">${k + 1}</span><span class="ld-cuename">${esc(l.name)}${l.note ? '<i class="ld-notedot" aria-hidden="true"></i>' : ''}</span></button>`;
   const looksHtml = `<div class="ld-looks"><div class="ld-tabs" role="group" aria-label="Looks">${looks.map(cue).join('')}</div><button class="ld-look add" data-addlook aria-expanded="${!!desk.add}">${ic('plus', 'sm')}Look</button><span class="ld-lookacts">${cur ? `<label class="ld-rename"><span class="sr-only">Look name</span>${ic('pen', 'sm')}<input id="ldLookName" type="text" value="${esc(cur.name)}" aria-label="Look name"></label><button class="ld-icon" data-lookmenu aria-expanded="${!!desk.lmenu}" title="More for this look" aria-label="More for ${esc(cur.name)}">${ic('dots', 'sm')}</button><label class="ld-lnote"><span class="sr-only">Note for ${esc(cur.name)}</span><input id="ldLookNote" type="text" maxlength="120" value="${esc(cur.note || '')}" placeholder="Note for whoever runs it, e.g. fade in at verse 2" aria-label="Note for ${esc(cur.name)}"></label>` : ''}</span></div>${desk.add ? `<div class="ld-moods ld-addmenu" role="group" aria-label="Add a look">
         <button data-looknew><span class="ld-pal">${(cur ? lookPalette(cur) : []).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${cur ? `Copy of ${esc(cur.name)}` : 'Start a look'}</button>
-        <small>From a mood · front light stays warm white</small>${MOODS.map(([n, , cols]) => `<button data-mood="${n}"><span class="ld-pal">${['Warm white', ...cols].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}
         <small>The basics</small>${(() => { const miss = BASICS.map(b => b[0]).filter(n => !(plan.looks || []).some(l => l.name === n)); return miss.length > 1 ? `<button data-basics="${miss.join('|')}"><span class="ld-pal"><i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === 'Blue')[1], d: 100 })}"></i><i style="background:${fxSwatch({ ...DESK_PRESETS[0][1], d: 100 })}"></i><i class="dark"></i></span>Add ${miss.length === 3 ? 'all three' : miss.join(' and ')}</button>` : ''; })()}${BASICS.map(([n, sub]) => `<button data-basics="${n}" title="${esc(sub)}"><span class="ld-pal">${n === 'Blackout' ? '<i class="dark"></i>' : n === 'Full' ? `<i style="background:${fxSwatch({ ...DESK_PRESETS[0][1], d: 100 })}"></i>` : ['Blue', 'Congo'].map(c => `<i style="background:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === c)[1], d: 100 })}"></i>`).join('')}</span>${n}</button>`).join('')}
         <small>From your library</small>${lookLib().length ? lookLib().map(e => `<span class="ld-librow"><button data-libuse="${e.id}"><span class="ld-pal">${libPalette(e).map(c => `<i style="background:${c}"></i>`).join('') || '<i class="dark"></i>'}</span>${esc(e.name)}</button><button class="ld-libx" data-libdel="${e.id}" aria-label="Remove ${esc(e.name)} from the library" title="Remove from the library">${ic('x', 'sm')}</button></span>`).join('') : '<small class="ld-empty">Nothing saved yet: open a look, then ⋯ → Save to library.</small>'}</div>` : ''}${desk.lmenu && cur ? `<div class="ld-moods ld-lookmenu" role="group" aria-label="${esc(cur.name)}"><button data-libsave>${ic('save', 'sm')}Save to library<small>Use it in any week</small></button><button data-lookreset>${ic('undo', 'sm')}Reset to warm white</button><button data-lookdel class="bad">${ic('trash', 'sm')}Delete this look</button></div>` : ''}`;
-  $('ldBody').innerHTML = `<div class="ld-top${desk.nocol ? '' : ' nolooks'}">
+  $('ldBody').innerHTML = `<div class="ld-top nolooks">
       <div class="ld-brand"><span class="ld-logo">${ic('sun')}</span><div><h2 id="ldTitle">Lighting desk</h2><small>${plural(all.length, 'light')} · ${esc(longDate(plan.date))}</small></div></div>
-      ${desk.nocol ? looksHtml : ''}${desk.kmenu ? `<div class="ld-moods ld-keysmenu" role="dialog" aria-label="Keyboard shortcuts"><b>Keyboard shortcuts</b><dl>${DESK_KEYS.map(([k, d]) => `<dt>${k.split(' ').map(x => `<kbd>${x}</kbd>`).join('')}</dt><dd>${d}</dd>`).join('')}</dl></div>` : ''}${desk.vmenu ? `<div class="ld-moods ld-viewmenu" role="group" aria-label="Desk layout">${[['dock', desk.dock, 'Dock beside the plot', 'See the stage plot full size while you work'], ['compact', desk.compact, 'Compact', 'Smaller buttons and faders, for small screens'], ['nocol', desk.nocol, 'Hide the colour panel', 'Give the stage the full width'], ['pics', !desk.slim, 'Stage pictures on looks', 'Bigger look buttons with a tiny picture of each']].map(([k, on, l, sub]) => `<button data-vopt="${k}" aria-pressed="${!!on}"><span class="ld-check">${on ? ic('check', 'sm') : ''}</span><span>${l}<small>${sub}</small></span></button>`).join('')}</div>` : ''}
-      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" data-keysmenu aria-expanded="${!!desk.kmenu}" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts"><span class="ld-q" aria-hidden="true">?</span></button><span class="ld-moodwrap"><button class="ld-icon" data-viewmenu aria-expanded="${!!desk.vmenu}" title="Layout: dock beside the plot, compact, hide the colour panel" aria-label="Desk layout">${ic(desk.dock ? 'panelR' : 'sliders', 'sm')}</button></span><button class="ld-icon" id="ldBigGo" title="Big buttons: just the looks, for a phone or tablet" aria-label="Big buttons">${ic('grid', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
-    ${desk.dock ? '<div class="ld-resize" role="separator" aria-orientation="vertical" aria-label="Drag to resize the desk" title="Drag to resize (double-click for the usual width)"></div>' : ''}<div class="ld-body${desk.nocol ? ' nocol' : ''}"><section class="ld-stage" aria-label="Stage">
+      ${desk.kmenu ? `<div class="ld-moods ld-keysmenu" role="dialog" aria-label="Keyboard shortcuts"><b>Keyboard shortcuts</b><dl>${DESK_KEYS.map(([k, d]) => `<dt>${k.split(' ').map(x => `<kbd>${x}</kbd>`).join('')}</dt><dd>${d}</dd>`).join('')}</dl></div>` : ''}
+      <div class="ld-actions"><button class="ld-icon" id="ldUndo" title="Undo (Ctrl+Z)" aria-label="Undo" ${history.length ? '' : 'disabled'}>${ic('undo', 'sm')}</button><button class="ld-icon" id="ldRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" ${future.length ? '' : 'disabled'}>${ic('redo', 'sm')}</button><button class="ld-icon" data-keysmenu aria-expanded="${!!desk.kmenu}" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts"><span class="ld-q" aria-hidden="true">?</span></button><button class="ld-icon" data-dock aria-pressed="${!!desk.dock}" title="${desk.dock ? 'Back to a window' : 'Dock beside the plot'}" aria-label="Dock beside the plot">${ic('panelR', 'sm')}</button><button class="ld-done" id="ldDone">Done</button></div></div>
+    ${desk.dock ? '<div class="ld-resize" role="separator" aria-orientation="vertical" aria-label="Drag to resize the desk" title="Drag to resize (double-click for the usual width)"></div>' : ''}<div class="ld-body"><section class="ld-stage" aria-label="Stage">
       <div class="ld-bar"><span class="ld-viewtog" role="group" aria-label="Show the lights as"><button data-dview="map" aria-pressed="${desk.view !== 'list' && desk.view !== 'front'}">Map</button><button data-dview="list" aria-pressed="${desk.view === 'list'}">List</button><button data-dview="front" aria-pressed="${desk.view === 'front'}" title="The stage as the congregation sees it">Front</button></span>${ui.adv ? `<span class="ld-viewtog" role="group" aria-label="Label the lights with"><button data-dlabel="name" aria-pressed="${desk.label !== 'addr'}">Names</button><button data-dlabel="addr" aria-pressed="${desk.label === 'addr'}" title="DMX addresses, as on the patch sheet">Addresses</button></span>` : ''}<span class="ld-faces" id="ldFaces">${facesSummary()}</span>${desk.view === 'front' && dlCap !== null ? `<button class="ld-mini" data-frontpic title="Save the front view as a picture to share">${ic('save', 'sm')}Save picture</button>` : ''}<div class="ld-groups" role="group" aria-label="Pick lights">${groups.map(([k, n]) => `<button class="ld-seg${k.startsWith('g:') ? ' mine' : ''}" data-dgrp="${k}" aria-pressed="${gOn(k)}">${esc(n)}</button>`).join('')}</div>
         ${desk.naming ? `<span class="ld-gname"><input id="ldGName" type="text" placeholder="Group name, e.g. Front wash" aria-label="Name for the picked lights" maxlength="30"><button class="ld-mini" data-gsave>Save</button><button class="ld-mini" data-gcancel>Cancel</button></span>`
           : `<span class="ld-gtools">${myG ? `<button class="ld-mini" data-gdel="${myG.id}" title="Delete the group “${esc(myG.name)}” (the lights stay)">${ic('trash', 'sm')}${esc(myG.name)}</button>` : ''}<button class="ld-mini" data-gnew ${picked.length ? '' : 'disabled'} title="Save the picked lights as a group of your own">${ic('plus', 'sm')}Group</button></span>`}</div>
       <div class="ld-mapwrap${lookPeek ? ' peeking' : ''}${desk.view === 'list' ? ' listing' : ''}" id="ldMapWrap">${deskStageHtml()}</div>${lookPeek ? `<div class="ld-peekpill" role="status">${ic('eye', 'sm')}Peeking at <b>${esc(curLook()?.name || '')}</b>: let go to return</div>` : ''}${deskCtxHtml()}
       ${deskChipsHtml(all, picked)}</section>${deskTipHtml()}
-      ${desk.nocol ? `<button class="ld-colstrip" data-colshow title="Show the colour panel" aria-label="Show the colour panel">${ic('chevsL', 'sm')}<span>Colour</span></button>` : `<aside class="ld-colour" id="ldColour"><div class="ld-card ld-lookcard${desk.lfold ? ' folded' : ''}"><button class="ld-cardhead ld-foldbtn" data-lookfold aria-expanded="${!desk.lfold}" title="${desk.lfold ? 'Show the looks' : 'Fold the looks away'}"><span class="ld-label">Looks</span>${desk.lfold && cur ? `<span class="ld-foldname"><span class="ld-cueno">${looks.indexOf(cur) + 1}</span>${esc(cur.name)}</span>` : ''}<span class="ld-chev">${ic('chevD', 'sm')}</span></button>${desk.lfold ? '' : looksHtml}</div>${deskColourHtml()}</aside>`}</div>
+      ${`<aside class="ld-colour" id="ldColour"><div class="ld-card ld-lookcard${desk.lfold ? ' folded' : ''}"><button class="ld-cardhead ld-foldbtn" data-lookfold aria-expanded="${!desk.lfold}" title="${desk.lfold ? 'Show the looks' : 'Fold the looks away'}"><span class="ld-label">Looks</span>${desk.lfold && cur ? `<span class="ld-foldname"><span class="ld-cueno">${looks.indexOf(cur) + 1}</span>${esc(cur.name)}</span>` : ''}<span class="ld-chev">${ic('chevD', 'sm')}</span></button>${desk.lfold ? '' : looksHtml}</div>${deskColourHtml()}</aside>`}</div>
     <div class="ld-foot"><span class="ld-live"><i></i>Live preview</span><span>${cur ? `Saving to <b>${esc(cur.name)}</b>` : 'Your first change starts <b>Look 1</b>'} · planning only, nothing is sent to real lights</span></div>`;
 }
 // how many faces the open look lights, for the desk's stage bar
@@ -3444,7 +3350,6 @@ function facesSummary() {
 // while a fader or the wheel moves: the map and readouts follow, the control in your hand stays put
 function deskLive() {
   if (!desk.open) return;
-  if (desk.big) { $('ldMapWrap').innerHTML = deskMapSvg(); if ($('ldFaces')) $('ldFaces').innerHTML = facesSummary(); renderPlot(); return; }
   $('ldMapWrap').innerHTML = deskStageHtml();
   if ($('ldFaces')) $('ldFaces').innerHTML = facesSummary();
   const ts = deskPicked(), f = ts.length ? fxOf(ts[0]) : FX_DEF, info = document.querySelector('.ld-pickinfo');
@@ -3452,7 +3357,7 @@ function deskLive() {
   for (const el of document.querySelectorAll('#ldColour [data-fx]')) { const k = el.dataset.fx; if (el !== document.activeElement) el.value = f[k]; const lab = el.closest('.ld-fader'); lab.style.setProperty('--v', faderPct(k, f[k])); lab.querySelector('output').textContent = f[k] + (k === 'd' ? '%' : ''); }
   { const c = document.querySelector('[data-cct]'); if (c) { if (c !== document.activeElement) c.value = f.k || CCT_DEF; c.parentNode.querySelector('output').textContent = f.k ? f.k + ' K' : ''; } }
   const [h, sat] = rgb2hsv(f.r, f.g, f.b), mk = document.querySelector('.ld-mark'); if (mk) { mk.style.display = f.r + f.g + f.b ? '' : 'none'; mk.style.left = `${50 + Math.cos(h * Math.PI / 180) * sat * 50}%`; mk.style.top = `${50 + Math.sin(h * Math.PI / 180) * sat * 50}%`; }
-  const L = curLook(); if (L) { const th = document.querySelector('.ld-look[aria-pressed="true"] .ld-thumb'); if (th) th.innerHTML = lookThumb(L, 'live'); }
+  const L = curLook();
   for (const el of document.querySelectorAll('[data-master]')) { const m = lookMaster(L); if (el !== document.activeElement) el.value = m; const lab = el.closest('label'); lab.style.setProperty('--v', faderPct('d', m)); const o = lab.querySelector('output'); if (o) o.textContent = m + '%'; }
   renderPlot();
 }
@@ -3486,7 +3391,7 @@ function deskSet(patch, live) {
 const deskMapPt = e => { const svgEl = $('ldMap'), pt = svgEl.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const q = pt.matrixTransform(svgEl.getScreenCTM().inverse()); return { x: q.x, y: q.y }; };
 $('deskDlg').addEventListener('click', e => {
   if (e.target === $('deskDlg')) { closeDesk(); return; }
-  if ((desk.add || desk.lmenu || desk.vmenu || desk.kmenu) && !e.target.closest('.ld-addmenu, .ld-lookmenu, .ld-viewmenu, .ld-keysmenu, [data-addlook], [data-lookmenu], [data-viewmenu], [data-keysmenu]')) { desk.add = desk.lmenu = desk.vmenu = desk.kmenu = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the look menus
+  if ((desk.add || desk.lmenu || desk.kmenu) && !e.target.closest('.ld-addmenu, .ld-lookmenu, .ld-keysmenu, [data-addlook], [data-lookmenu], [data-keysmenu]')) { desk.add = desk.lmenu = desk.kmenu = false; renderDesk(); if (!e.target.closest('button')?.isConnected) return; }   // a click elsewhere closes the look menus
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'ldDone') { closeDesk(); return; }
   if (desk.ctx && !t.closest('.ld-ctx')) { desk.ctx = null; renderDesk(); return; }
@@ -3508,23 +3413,18 @@ $('deskDlg').addEventListener('click', e => {
   if (t.dataset.unpick) { deskSel ||= new Set(deskLights().map(i => i.id)); deskSel.delete(t.dataset.unpick); renderDesk(); return; }
   if (t.dataset.tip) { if (t.dataset.tip === 'next' && desk.tip < 2) desk.tip++; else { desk.tip = null; try { localStorage.setItem('stageplot.deskTips', '1'); } catch { /* ok */ } } renderDesk(); return; }
   if (t.hasAttribute('data-addlook')) { desk.add = !desk.add; desk.lmenu = false; renderDesk(); return; }
-  if (t.hasAttribute('data-lookmenu')) { desk.lmenu = !desk.lmenu; desk.add = desk.vmenu = false; renderDesk(); return; }
-  if (t.hasAttribute('data-viewmenu')) { desk.vmenu = !desk.vmenu; desk.add = desk.lmenu = desk.kmenu = false; renderDesk(); return; }
-  if (t.hasAttribute('data-keysmenu')) { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = desk.vmenu = false; renderDesk(); return; }
-  if (t.dataset.vopt) { const k = t.dataset.vopt === 'pics' ? 'slim' : t.dataset.vopt; desk[k] = !desk[k]; desk.vmenu = false; if (k === 'dock' && desk.dock) desk.view = 'list'; deskLayoutSave(); renderDesk(); if (k === 'dock') { needFit = true; renderPlot(); } return; }
+  if (t.hasAttribute('data-lookmenu')) { desk.lmenu = !desk.lmenu; desk.add = false; renderDesk(); return; }
+  if (t.hasAttribute('data-keysmenu')) { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = false; renderDesk(); return; }
+  if (t.hasAttribute('data-dock')) { desk.dock = !desk.dock; desk.add = desk.lmenu = desk.kmenu = false; if (desk.dock) desk.view = 'list'; deskLayoutSave(); renderDesk(); needFit = true; renderPlot(); return; }
   if (t.dataset.basics) { if (deskLights().length) basicLooks(t.dataset.basics.split('|')); return; }
   if (t.hasAttribute('data-frontpic')) { withBusy(t, frontPicture); return; }
   if (t.hasAttribute('data-lookfold')) { desk.lfold = !desk.lfold; desk.add = desk.lmenu = false; deskLayoutSave(); renderDesk(); return; }
-  if (t.hasAttribute('data-colshow')) { desk.nocol = false; deskLayoutSave(); renderDesk(); return; }
   if (t.dataset.libuse) { libUse(t.dataset.libuse); return; }
   if (t.dataset.libdel) { const e = lookLib().find(x => x.id === t.dataset.libdel); if (e) { db.lookLib = lookLib().filter(x => x !== e); save(); toast(`“${e.name}” removed from the library`); renderDesk(); } return; }
   if (t.hasAttribute('data-libsave')) { desk.lmenu = false; libSave(); return; }
   if (t.hasAttribute('data-lookreset')) { desk.lmenu = false; const cur = curLook(); if (cur) { fadeLooksFrom(); mutate(() => { cur.fx = {}; delete cur.master; }, `${cur.name} reset to warm white`); renderDesk(); } return; }
-  if (t.id === 'ldBigGo') { desk.big = true; desk.add = desk.lmenu = false; renderDesk(); return; }
-  if (t.id === 'ldBigExit') { desk.big = false; renderDesk(); return; }
-  if (t.dataset.mood) { moodLook(t.dataset.mood); return; }
   if (t.hasAttribute('data-fxpaste')) { deskPaste(); return; }
-  if (t.dataset.preset) { const c = deskPresets().find(p => p[0] === t.dataset.preset)?.[1], ts = deskPicked(); if (ts.length) deskSet(c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); return; }
+  if (t.dataset.preset) { const c = DESK_PRESETS.find(p => p[0] === t.dataset.preset)?.[1], ts = deskPicked(); if (ts.length) deskSet(c ? { ...c, d: fxOf(ts[0]).d || 100 } : { d: 0 }); return; }
   if (t.dataset.dgrp) { const k = t.dataset.dgrp; deskSel = k === 'all' ? null : new Set(deskGroupIds(k).map(i => i.id)); renderDesk(); return; }
   if (t.hasAttribute('data-gnew')) { if (!deskPicked().length) return; desk.naming = true; renderDesk(); setTimeout(() => $('ldGName')?.focus(), 20); return; }
   if (t.hasAttribute('data-gsave')) { saveDeskGroup(); return; }
@@ -3549,10 +3449,10 @@ $('deskDlg').addEventListener('input', e => {
   if (e.target.hasAttribute?.('data-cct')) { const K = Number(e.target.value); deskSet({ k: K, ...kelvinMix(K) }, true); return; }
   if (e.target.hasAttribute?.('data-master')) { if (lookPeek || weekLocked()) return; if (!fxSnap) fxSnap = snapState(); ensureLook().master = Number(e.target.value); deskLive(); }
 });
-$('deskDlg').addEventListener('contextmenu', e => { const ps = e.target.closest('.pswatch[data-pi]'); if (ps) { e.preventDefault(); setMyPreset(+ps.dataset.pi); return; } const g = e.target.closest('[data-ldfx]'); if (!g) return; e.preventDefault(); openDeskCtx(g.dataset.ldfx, e.clientX, e.clientY); });
+$('deskDlg').addEventListener('contextmenu', e => { const g = e.target.closest('[data-ldfx]'); if (!g) return; e.preventDefault(); openDeskCtx(g.dataset.ldfx, e.clientX, e.clientY); });
 // the desk's map zooms with Ctrl/Alt + scroll (or a pinch), pans with scroll once zoomed in; a double-click fits it again
 $('deskDlg').addEventListener('wheel', e => {
-  const map = e.target.closest('#ldMap'); if (!map || desk.big || !desk.base) return;
+  const map = e.target.closest('#ldMap'); if (!map || !desk.base) return;
   const [bx, by, bw, bh] = desk.base, z = desk.zoom || { k: 1, x: bx, y: by };
   if (e.ctrlKey || e.altKey || e.metaKey) {
     e.preventDefault(); const p = deskMapPt(e), k = clamp(z.k * Math.exp(-e.deltaY * .0025), 1, 8);
@@ -3612,7 +3512,7 @@ function deskCtxHtml() {
   const ts = deskCtxTargets(), m = mountOf(it), white = ts.every(i => !cat(i).rgbw);
   return `<div class="ld-ctx" role="menu" aria-label="${esc(itemName(it))}" style="left:${c.x}px;top:${c.y}px"><div class="ld-ctxhead">${ts.length > 1 ? plural(ts.length, 'light') : esc(itemName(it))}</div>
     <div class="ld-ctxsw">${CTX_PRESETS.map(n => `<button role="menuitem" data-ctxpre="${n}" title="${n}" aria-label="${n}" style="--sw:${fxSwatch({ ...DESK_PRESETS.find(p => p[0] === n)[1], d: 100 })}" ${white && n !== 'Warm white' ? 'disabled' : ''}></button>`).join('')}<button role="menuitem" class="off" data-ctxpre="Off" title="Off" aria-label="Off"></button></div>
-    <button role="menuitem" data-ctxonly>Only this one</button><button role="menuitem" data-ctxtype>Every ${esc(cat(it).short.toLowerCase())}</button><button role="menuitem" data-ctxmount>${m ? `Everything on ${esc(itemName(m))}` : 'Every floor light'}</button><button role="menuitem" data-ctxflash>${ic('zap', 'sm')}Flash</button>${it.fault ? `<button role="menuitem" data-ctxfaultclear>${ic('check', 'sm')}Fixed: ${esc(it.fault)}</button>` : c.faults ? `<div class="ld-ctxhead">Problem with ${esc(itemName(it))}</div>${FAULTS.map(f => `<button role="menuitem" data-ctxfault="${esc(f)}">${esc(f)}</button>`).join('')}` : `<button role="menuitem" data-ctxfaults>${ic('alert', 'sm')}Mark a problem…</button>`}</div>`;
+    <button role="menuitem" data-ctxonly>Only this one</button><button role="menuitem" data-ctxtype>Every ${esc(cat(it).short.toLowerCase())}</button><button role="menuitem" data-ctxmount>${m ? `Everything on ${esc(itemName(m))}` : 'Every floor light'}</button>${ui.adv ? `<button role="menuitem" data-ctxflash>${ic('zap', 'sm')}Flash</button>` : ''}${it.fault ? `<button role="menuitem" data-ctxfaultclear>${ic('check', 'sm')}Fixed: ${esc(it.fault)}</button>` : c.faults ? `<div class="ld-ctxhead">Problem with ${esc(itemName(it))}</div>${FAULTS.map(f => `<button role="menuitem" data-ctxfault="${esc(f)}">${esc(f)}</button>`).join('')}` : `<button role="menuitem" data-ctxfaults>${ic('alert', 'sm')}Mark a problem…</button>`}</div>`;
 }
 function openDeskCtx(id, cx, cy) { const r = $('ldBody').getBoundingClientRect(); desk.ctx = { id, x: Math.round(Math.min(cx - r.left, r.width - 220)), y: Math.round(Math.min(cy - r.top, r.height - 230)) }; renderDesk(); setTimeout(() => document.querySelector('.ld-ctx button')?.focus(), 20); }
 function flashLights(ids) { desk.flash = new Set(ids); renderPlot(); if (desk.open) $('ldMapWrap').innerHTML = deskStageHtml(); clearTimeout(desk.flashT); desk.flashT = setTimeout(() => { desk.flash = null; renderPlot(); if (desk.open && $('ldMapWrap')) $('ldMapWrap').innerHTML = deskStageHtml(); }, 1700); }
@@ -3629,7 +3529,7 @@ function deskKey(e) {
   const looks = plan.looks || [];
   if (/^[1-9]$/.test(e.key) && looks[+e.key - 1]) { switchLook(looks[+e.key - 1].id); return true; }
   if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.target.id !== 'ldWheel') { const ts = deskPicked(); if (!ts.length) return true; const d = clamp(fxOf(ts[0]).d + (e.key === 'ArrowUp' ? 1 : -1) * (e.shiftKey ? 25 : 5), 0, 100); deskSet({ d }); return true; }
-  if (e.key === '?') { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = desk.vmenu = false; renderDesk(); return true; }
+  if (e.key === '?') { desk.kmenu = !desk.kmenu; desk.add = desk.lmenu = false; renderDesk(); return true; }
   if (e.key.toLowerCase() === 'a') { deskSel = null; renderDesk(); return true; }
   if (e.key.toLowerCase() === 'c') { deskCopy(); return true; }
   if (e.key.toLowerCase() === 'v') { deskPaste(); return true; }
@@ -6368,10 +6268,7 @@ function renderInspector() {
     steps[5].done = steps.slice(0, 5).every(x => x.done) && !w.length;
     const nowIdx = steps.findIndex(x => !x.done), nDone = steps.filter(x => x.done).length;
     const hide = `<button class="iconbtn" data-insp-hide aria-label="Hide panel" title="Hide panel ( ] )" style="margin:-6px -6px -6px 0">${ic('chevsR', 'sm')}</button>`;
-    const guide = !ui.guide ? '' : nowIdx < 0 ? `<section class="isec">
-        <h3>Ready <span style="display:flex;gap:6px;align-items:center">${hide}</span></h3>
-        <div class="allset"><span class="mark">${ic('check', 'sm')}</span><div><b>All set for ${esc(new Date(plan.date + 'T12:00').toLocaleDateString(undefined, { weekday: 'long' }))}</b><small>Stage, team, gear, audio and power all check out.</small></div></div>
-        <button class="btn primary block" data-go="paper">${ic('sheet', 'sm')}Open the paperwork</button></section>`
+    const guide = !ui.guide || nowIdx < 0 ? ''   // once everything checks out, the status pill says so; the panel stays clear
       : `<section class="isec setupguide"><h3 title="Do these in any order. Ticks follow what's on the plan">Set up this week <span style="display:flex;gap:4px;align-items:center"><span class="gprog" role="img" aria-label="${nDone} of 6 done">${steps.map(x => `<i class="${x.done ? 'on' : ''}"></i>`).join('')}</span><button class="iconbtn" id="guideOff" aria-label="Hide the guide" title="Hide the guide (bring it back from ⋯)" style="margin:-6px -2px">${ic('x', 'sm')}</button>${hide}</span></h3>
         <ol class="steps">${steps.map((x, i) => `<li class="${x.done ? 'done' : i === nowIdx ? 'now' : ''}${x.done && guideSeen && !guideSeen.has(x.k) ? ' pop' : ''}"><span class="mark">${x.done ? ic('check', 'sm') : i + 1}</span><div><button class="steplink" data-step="${x.k}" title="Go to ${esc(x.t)}"><b>${esc(x.t)}</b><span class="sub">${esc(x.sub)}</span></button>${i === nowIdx ? `<div class="stepact">${x.act}</div>` : ''}</div></li>`).join('')}</ol>
       </section>`;
@@ -6608,8 +6505,8 @@ function lineProgress(ins = inputSheet()) { const st = plan.linecheck || {}, liv
 const sheetEmpty = (icon, title, line, go, label) => `<div class="empty-state sheet-empty">${ic(icon)}<strong>${title}</strong><span>${line}</span>${go ? `<button class="btn" data-goto="${go}">${label}</button>` : ''}</div>`;
 function lineCheckHtml(ins) {
   const st = lineState(), live = ins.filter(r => !r.spare), g = lineProgress(ins), pct = g.total ? Math.round((g.done + g.issue) / g.total * 100) : 0;
-  if (!live.length) return `<section class="sheet" id="sec-linecheck" data-sheet="linecheck"><header><div><h2>Line check</h2></div></header>${sheetEmpty('mic', 'Nothing to line-check yet', 'Once there are mics and DIs on stage, each channel shows here to tick off during soundcheck.', 'team', 'Build from the team')}</section>`;
-  return `<section class="sheet linecheck" id="sec-linecheck" data-sheet="linecheck"><header><div><h2>Line check</h2><p class="hint">At soundcheck, have each source played and tick it when it’s heard at the desk. Flag anything that isn’t right.</p></div></header>
+  if (!live.length) return `<section class="sheet" id="sec-linecheck" data-sheet="inputs"><header><div><h2>Line check</h2></div></header>${sheetEmpty('mic', 'Nothing to line-check yet', 'Once there are mics and DIs on stage, each channel shows here to tick off during soundcheck.', 'team', 'Build from the team')}</section>`;
+  return `<section class="sheet linecheck" id="sec-linecheck" data-sheet="inputs"><header><div><h2>Line check</h2><p class="hint">At soundcheck, have each source played and tick it when it’s heard at the desk. Flag anything that isn’t right.</p></div></header>
     <div class="lprog"><div class="lbar" role="progressbar" aria-valuemin="0" aria-valuemax="${g.total}" aria-valuenow="${g.done}" aria-label="Line check progress"><span style="width:${pct}%"></span></div><b>${g.done} of ${g.total} heard${g.issue ? ` · ${plural(g.issue, 'problem')}` : ''}</b>${g.done || g.issue ? '<button class="btn quiet" id="lineReset">Start again</button>' : ''}</div>
     <div class="lclist">${live.map(r => { const v = st[r.key] || ''; return `<div class="lcrow${v ? ' ' + v : ''}">
       <button class="lctick" data-line="${esc(r.key)}" aria-pressed="${v === 'ok'}" aria-label="Channel ${r.ch} ${esc(r.name)} heard">${v === 'ok' ? ic('check') : ''}</button>
@@ -6682,13 +6579,9 @@ function chEditHtml(ins) {
     <p class="hint">Typing a number another input already has swaps the two. Mic, stand and 48V changes follow the input to every week.</p>`;
 }
 // the sheet tabs: plain words in groups (the event, the audio, the day), the open one underlined; only Overview flags checks
-const DOC_GROUPS = [['overview', 'rider', 'spots'], ['inputs', 'linecheck', 'outputs', 'mixes', 'rf', 'cables', 'power', 'racks', 'lighting'], ['team', 'loadin', 'floor'], ['all']];
-const CORE_TABS = new Set(['overview', 'spots', 'inputs', 'linecheck', 'cables', 'lighting', 'loadin', 'all']);
-let moreTabs = false;
+const DOC_GROUPS = [['overview', 'rider', 'spots'], ['inputs', 'outputs', 'rf', 'cables', 'power', 'racks', 'lighting'], ['team', 'loadin'], ['all']];
+const TAB_ALIAS = { linecheck: 'inputs', mixes: 'outputs', floor: 'overview' };   // sheets that now live inside another
 function docTabs(list, checks) {
-  const clash = rfClashes().length > 0;   // a channel clash points to Wireless, so it stays in reach
-  const hidden = ui.adv || moreTabs ? [] : list.filter(t => !CORE_TABS.has(t[0]) && t[0] !== paperTab && !(clash && t[0] === 'rf'));   // Simple keeps the everyday sheets in the row; the open one always shows
-  list = list.filter(t => !hidden.includes(t));
   const by = new Map(list.map(t => [t[0], t]));
   return DOC_GROUPS.map(g => g.filter(id => by.has(id)).map(id => { const [, l] = by.get(id), warn = id === 'overview' && checks;
     return `<button role="tab" data-ptab="${id}" aria-selected="${paperTab === id}"${warn ? ` title="${plural(checks, 'thing')} to check"` : ''}>${l}${warn ? `<i class="dwarn" aria-hidden="true"></i><span class="sr-only">, ${plural(checks, 'thing')} to check</span>` : ''}</button>`; }).join('')).filter(Boolean).join('<span class="dsep" aria-hidden="true"></span>');
@@ -6724,7 +6617,7 @@ function printBlank() {
 }
 function printOpts() { let o; try { o = JSON.parse(localStorage.getItem('stageplot.printOpts') || '{}'); } catch { o = {}; } return { skip: Array.isArray(o.skip) ? o.skip : [], scale: Number(o.scale) || 0 }; }
 function setPrintOpts(o) { try { localStorage.setItem('stageplot.printOpts', JSON.stringify(o)); } catch { /* memory only */ } applyPrintPick(); }
-const PRINT_SHEETS = () => [['overview', 'Stage plot'], ['inputs', 'Inputs'], ['outputs', 'Outputs'], ['mixes', 'Monitor mixes'], ...(plan.items.some(i => cat(i).wireless) ? [['rf', 'Wireless']] : []), ['cables', 'Cable pull list'], ['power', 'Power'], ['team', 'Team'], ...(plan.items.some(i => i.type === 'rack') ? [['racks', 'Racks']] : []), ...(plan.items.some(isDmx) ? [['lighting', 'Lighting']] : []), ['floor', 'Floor marks'], ['loadin', 'Load-in']];
+const PRINT_SHEETS = () => [['overview', 'Stage plot'], ['inputs', 'Inputs'], ['outputs', 'Outputs'], ...(plan.items.some(i => cat(i).wireless) ? [['rf', 'Wireless']] : []), ['cables', 'Cable pull list'], ['power', 'Power'], ['team', 'Team'], ...(plan.items.some(i => i.type === 'rack') ? [['racks', 'Racks']] : []), ...(plan.items.some(isDmx) ? [['lighting', 'Lighting']] : []), ['loadin', 'Load-in']];
 const printScales = () => imperial() ? [[0, 'Fit the page'], [48, '¼″ = 1′ (1:48)'], [96, '⅛″ = 1′ (1:96)']] : [[0, 'Fit the page'], [50, '1:50'], [100, '1:100']];
 function printPopHtml() {
   const o = printOpts(), skip = new Set(o.skip);
@@ -6761,6 +6654,7 @@ function pageFooter() {
   if (el.textContent !== css) el.textContent = css;
 }
 function renderPaper() {
+  if (TAB_ALIAS[paperTab]) paperTab = TAB_ALIAS[paperTab];
   pageFooter();
   if (view !== 'paper') return;
   $('paperView').classList.toggle('pages', pageView);
@@ -6805,13 +6699,13 @@ function renderPaper() {
       ${loads.map((wt, k) => { const pct = wt / cap; return `<tr class="${pct > 1 ? 'flag' : ''}"><td><span class="ch">${k + 1}</span></td><td class="mono">${Math.round(wt)} W · ${(wt / (Number(prop(src, 'volts')) || 230)).toFixed(1)} A</td><td><div class="meter"><span class="${pct > 1 ? 'bad' : pct > .8 ? 'warn' : ''}" style="width:${Math.min(100, pct * 100)}%"></span></div></td><td>${esc(items[k].map(itemName).join(', ')) || '<span class="hint">—</span>'}</td></tr>`; }).join('')}
       </tbody></table></div></div>`;
   }).join('') || sheetEmpty('zap', 'No power on stage yet', 'Add a power distro or wall socket, plug gear into it, and each circuit’s load shows here.', 'gear', 'Add power');
-  const nav = [['overview', 'Overview', w.length ? `${w.length} to check` : undefined], ['rider', 'Rider'], ['spots', 'My spot', plan.team.length || undefined], ['inputs', 'Inputs', ins.length], ['outputs', 'Outputs', outs.length], ['linecheck', 'Line check', (() => { const g = lineProgress(ins); return g.total ? `${g.done}/${g.total}` : undefined; })()], ['mixes', 'Mixes', mixes.length], ...(plan.items.some(i => cat(i).wireless) ? [['rf', 'Wireless', plan.items.filter(i => cat(i).wireless).length]] : []), ['cables', 'Cables', pull.reduce((s, r) => s + r.n, 0)], ['power', 'Power'], ['team', 'Team', plan.team.length], ['loadin', 'Load-in', (() => { const g = loadinProgress(); return g.total ? `${g.done}/${g.total}` : undefined; })()], ['floor', 'Floor marks', floorMarks().length || undefined]].filter(n => n[0] !== 'checks' || w.length);
+  const nav = [['overview', 'Overview', w.length ? `${w.length} to check` : undefined], ['rider', 'Rider'], ['spots', 'My spot', plan.team.length || undefined], ['inputs', 'Inputs', ins.length], ['outputs', 'Outputs', outs.length], ...(plan.items.some(i => cat(i).wireless) ? [['rf', 'Wireless', plan.items.filter(i => cat(i).wireless).length]] : []), ['cables', 'Cables', pull.reduce((s, r) => s + r.n, 0)], ['power', 'Power'], ['team', 'Team', plan.team.length], ['loadin', 'Load-in', (() => { const g = loadinProgress(); return g.total ? `${g.done}/${g.total}` : undefined; })()]].filter(n => n[0] !== 'checks' || w.length);
   $('paperInner').innerHTML = `
     ${printDiffHtml()}
     <header class="doc-head${inkSave ? ' ink' : ''}">${db.defaults?.logo ? `<img class="doclogo" src="${db.defaults.logo}" alt="">` : ''}<div class="eyebrow">${[defaultsOf().org, multiVenue() ? venueOf(plan)?.name : ''].filter(Boolean).map(esc).join(' · ')}${defaultsOf().org || multiVenue() ? ' · ' : ''}${esc(longDate(plan.date))}</div><h1>${esc(plan.name || 'Untitled service')}</h1>
       <div class="doc-meta"><span>Stage <b>${uDim(plan.stage.w, plan.stage.d)}</b></span><span>Team <b>${plan.team.length}</b></span><span>Inputs <b>${t.ins}</b></span><span>Cable <b>${fmtLen(t.cab, 0)}</b></span><span>Power <b>${(t.watts / 1000).toFixed(1)} kW</b></span></div>
       ${plan.notes ? `<p class="doc-notes">${esc(plan.notes)}</p>` : ''}</header>
-    <div class="docnav"><nav role="tablist" aria-label="Sheets">${docTabs([...nav, ...(plan.items.some(i => i.type === 'rack') ? [['racks', 'Racks']] : []), ...(plan.items.some(isDmx) ? [['lighting', 'Lighting', plan.items.filter(isDmx).length]] : []), ['all', 'Everything']], w.length)}</nav>${ui.adv ? '' : `<button class="tabmore" id="tabMore" aria-expanded="${moreTabs}">${moreTabs ? 'Fewer sheets' : `More sheets ${ic('chevD', 'sm')}`}</button>`}<span class="printbar"><span class="splitbtn"><button class="btn" id="printBtn" title="${printOpts().skip.length ? 'Print the sheets you picked' : 'Print every sheet'}, or choose Save as PDF in the print dialog">${ic('sheet', 'sm')}Print or PDF</button><button class="btn" id="printMore" aria-haspopup="dialog" aria-expanded="${!!printPop}" aria-label="Choose sheets and plot scale" title="Choose sheets and plot scale">${ic('chevD', 'sm')}</button></span>${printPop ? printPopHtml() : ''}</span></div>
+    <div class="docnav"><nav role="tablist" aria-label="Sheets">${docTabs([...nav, ...(plan.items.some(i => i.type === 'rack') ? [['racks', 'Racks']] : []), ...(plan.items.some(isDmx) ? [['lighting', 'Lighting', plan.items.filter(isDmx).length]] : []), ['all', 'Everything']], w.length)}</nav><span class="printbar"><span class="splitbtn"><button class="btn" id="printBtn" title="${printOpts().skip.length ? 'Print the sheets you picked' : 'Print every sheet'}, or choose Save as PDF in the print dialog">${ic('sheet', 'sm')}Print or PDF</button><button class="btn" id="printMore" aria-haspopup="dialog" aria-expanded="${!!printPop}" aria-label="Choose sheets and plot scale" title="Choose sheets and plot scale">${ic('chevD', 'sm')}</button></span>${printPop ? printPopHtml() : ''}</span></div>
     <div class="viewbar"><span class="vb-view"><span class="vb-l" id="vbLabel">View</span><span class="seg" role="group" aria-labelledby="vbLabel"><button data-pageview="1" aria-pressed="${pageView}" title="Each sheet as a white A4 page, the way it prints">${ic('sheet', 'sm')}Pages</button><button data-pageview="0" aria-pressed="${!pageView}" title="One continuous list of sheets">${ic('layers', 'sm')}Scroll</button></span></span><button class="btn quiet" id="picBtn" data-needs-dl title="The stage plot as an image, for a group chat or email">${ic('plot', 'sm')}Save plot as picture</button><button class="btn quiet" id="summaryBtn" title="A short message for the team chat: date, times, who's on and what's different">${ic('copy', 'sm')}Copy summary</button></div>
     <div class="sheetgrid${inkSave ? ' ink' : ''}" id="sheetGrid" data-tab="${paperTab}">
     <section class="sheet" id="sec-overview" data-sheet="overview">${head('Stage plot', '', `${plural(plan.items.filter(i => cat(i).shape !== 'person' && cat(i).shape !== 'platform').length, 'item')} · ${plural(plan.cables.length, 'cable run')}`)}<div class="snapwrap">${cropToStage(inkSave ? whiteDeckSnapshot() : plotSnapshot())}</div>${titleBlock()}${(() => { const foh = plan.items.find(i => i.type === 'foh'); return foh && foh.y > plan.stage.d + fromM(2.5) ? `<p class="hint snapnote">${ic('fit', 'sm')}FOH desk ${uLen(foh.y - plan.stage.d)} out from the front edge, ${foh.x < plan.stage.w / 3 ? 'house right' : foh.x > plan.stage.w * 2 / 3 ? 'house left' : 'centre'} (not shown). The full room is on the plot.</p>` : ''; })()}</section>
@@ -6824,12 +6718,11 @@ function renderPaper() {
     ${(() => { const sh = shortages(); return sh.length ? `<section class="sheet" id="sec-borrow" data-sheet="overview">${head('To borrow', '', 'More than you own (Home → Gear)')}<div class="tablewrap"><table><thead><tr><th>Gear</th><th style="text-align:right">Needed</th><th style="text-align:right">Own</th><th style="text-align:right">Borrow</th></tr></thead><tbody>${sh.map(x => `<tr><td>${esc(CAT[x.t].name)}</td><td class="num">${x.need}</td><td class="num">${x.own}</td><td class="num"><b>${x.short}</b></td></tr>`).join('')}</tbody></table></div></section>` : ''; })()}
     ${(() => { const nt = plan.items.filter(i => i.note); return nt.length ? `<section class="sheet" id="sec-notes" data-sheet="overview">${head('Notes', '', 'Pinned to people and gear on the plot')}<ul class="notelist">${nt.map(i => `<li><b>${esc(itemName(i))}</b><span>${esc(i.note)}</span></li>`).join('')}</ul></section>` : ''; })()}
     ${paperTab === 'spots' ? `<section class="sheet" id="sec-spots" data-sheet="spots"><header><div><h2>My spot</h2><p class="hint">A card for each person: where they stand, their channels, monitor, power and notes. Copy it into a message, or print one per page.</p></div><button class="btn primary" id="printSpots">${ic('sheet', 'sm')}Print every card</button><label class="spots4" for="spots4"><input type="checkbox" id="spots4" ${spots4 ? 'checked' : ''}> 4 to a page</label></header>${plan.team.length ? spotsHtml() : sheetEmpty('users', 'No one on the team yet', 'Add this week’s team and each person gets a card: where they stand, their channels, monitor and power.', 'team', 'Add the team')}</section>` : ''}
-    ${paperTab === 'linecheck' ? lineCheckHtml(ins) : ''}
     ${paperTab === 'rider' ? `<section class="sheet" id="sec-rider" data-sheet="rider"><header><div><h2>Rider</h2><p class="hint">One black-and-white page for the venue: plot, scale, legend and inputs.</p></div><button class="btn primary" id="printRider">${ic('sheet', 'sm')}Print the rider</button></header>${riderHtml(ins)}</section>` : ''}
-    <section class="sheet" id="sec-inputs" data-sheet="inputs">${head('Input list', '', `${plural(ins.length, 'channel')}. ${chans_().fixed !== false ? 'Channel numbers stay the same every week' + (spareChannels(ins).length ? `; ${plural(spareChannels(ins).length, 'spare channel')} this week` : '') : 'Numbered in band order'}. ${ins.filter(r => r.p48).length} need phantom power.${dIns.n || dIns.c ? ` Since ${shortDate(dIns.date)}: ${[dIns.n && `${dIns.n} new`, dIns.c && `${dIns.c} changed`].filter(Boolean).join(', ')}.` : ''}`).replace('</header>', `<div class="row" style="gap:6px"><button class="btn${chEdit ? ' primary' : ''}" id="chEditBtn" aria-pressed="${chEdit}">${ic('pen', 'sm')}${chEdit ? 'Done' : 'Edit channels'}</button><button class="btn" data-copy="inputs">${ic('copy', 'sm')}Copy</button><button class="btn" data-exp="inputs" data-needs-dl>${ic('save', 'sm')}CSV</button><button class="btn" data-exp="names" data-needs-dl title="Channel, short name, colour and phantom for your desk's scribble strips">${ic('save', 'sm')}Desk names</button></div></header>`)}${chEdit ? chEditHtml(ins) : table([...ins, ...spareChannels(ins).map(x => ({ ch: x.ch, name: 'Spare', mic: x.usual ? `usually ${x.usual}` : '', stand: '', spare: true }))].sort((a, b) => a.ch - b.ch), inCols, 'flag', emptyBox('mic', 'No inputs yet', 'Mics, DIs and anything else that needs a channel shows up here.', 'team', 'Build from the team'))}${chEdit ? '' : boxKey(ins)}</section>
+    <section class="sheet" id="sec-inputs" data-sheet="inputs">${head('Input list', '', `${plural(ins.length, 'channel')}. ${chans_().fixed !== false ? 'Channel numbers stay the same every week' + (spareChannels(ins).length ? `; ${plural(spareChannels(ins).length, 'spare channel')} this week` : '') : 'Numbered in band order'}. ${ins.filter(r => r.p48).length} need phantom power.${dIns.n || dIns.c ? ` Since ${shortDate(dIns.date)}: ${[dIns.n && `${dIns.n} new`, dIns.c && `${dIns.c} changed`].filter(Boolean).join(', ')}.` : ''}`).replace('</header>', `<div class="row" style="gap:6px"><button class="btn${chEdit ? ' primary' : ''}" id="chEditBtn" aria-pressed="${chEdit}">${ic('pen', 'sm')}${chEdit ? 'Done' : 'Edit channels'}</button><button class="btn" data-copy="inputs">${ic('copy', 'sm')}Copy</button><button class="btn" data-exp="inputs" data-needs-dl>${ic('save', 'sm')}CSV</button><button class="btn" data-exp="names" data-needs-dl title="Channel, short name, colour and phantom for your desk's scribble strips">${ic('save', 'sm')}Desk names</button></div></header>`)}${chEdit ? chEditHtml(ins) : table([...ins, ...spareChannels(ins).map(x => ({ ch: x.ch, name: 'Spare', mic: x.usual ? `usually ${x.usual}` : '', stand: '', spare: true }))].sort((a, b) => a.ch - b.ch), inCols, 'flag', emptyBox('mic', 'No inputs yet', 'Mics, DIs and anything else that needs a channel shows up here.', 'team', 'Build from the team'))}${chEdit ? '' : boxKey(ins)}</section>${paperTab === 'inputs' && ins.some(r => !r.spare) ? lineCheckHtml(ins) : ''}
     <div class="sheets2">
       <section class="sheet" id="sec-outputs" data-sheet="outputs">${head('Outputs', 'outputs', 'Wedges, mains, subs and IEM transmitters.')}${table(outs, outCols, 'flag', emptyBox('zap', 'No outputs yet', 'Add wedges, in-ears or main speakers and they’re patched here.', 'gear', 'Add monitors and speakers'))}${boxKey(outs)}</section>
-      <section class="sheet" id="sec-mixes" data-sheet="mixes">${head('Monitor mixes', 'mixes')}${table(mixes, mixCols, '', emptyBox('users', 'No monitor mixes yet', 'Each wedge or in-ear pack on stage gets its own mix here.', 'gear', 'Add monitors'))}</section>
+      <section class="sheet" id="sec-mixes" data-sheet="outputs">${head('Monitor mixes', 'mixes')}${table(mixes, mixCols, '', emptyBox('users', 'No monitor mixes yet', 'Each wedge or in-ear pack on stage gets its own mix here.', 'gear', 'Add monitors'))}</section>
     </div>
     <div class="sheets2">
       <section class="sheet" id="sec-cables" data-sheet="cables">${head('Cable pull list', 'pull', `Stock lengths to pull. Includes ${plan.settings.slack}% slack and ${uLen(plan.settings.ends)} each end.`)}${table(pull, pullCols, 'short', emptyBox('cable', 'No cables to pull', 'Build the stage from the team, or run cables on the plot.', 'team', 'Build from the team'))}</section>
@@ -6841,7 +6734,7 @@ function renderPaper() {
     ${(() => { const rf = plan.items.filter(i => cat(i).wireless).sort((a, b) => rfKind(a).localeCompare(rfKind(b)) || itemName(a).localeCompare(itemName(b))); if (!rf.length) return ''; const bad = new Set(rfClashes().flat().map(i => i.id));
       return `<section class="sheet" id="sec-rf" data-sheet="rf">${head('Wireless', '', `Give each mic and in-ear pack its own channel or frequency, and match it on the receiver or transmitter. ${bad.size ? `<b class="rfbad">${plural(bad.size, 'pack')} share a channel.</b>` : 'No two share one.'}`)}
       <div class="tablewrap"><table class="rftbl"><thead><tr><th>Pack</th><th>Type</th><th>Who</th><th>Channel or frequency</th></tr></thead><tbody>${rf.map(i => `<tr class="${bad.has(i.id) ? 'flag' : ''}"><td>${esc(itemName(i))}</td><td>${rfKind(i)}</td><td>${esc(personById(i.personId)?.name || '')}</td><td><input type="text" data-rf="${i.id}" value="${esc(rfOf(i))}" placeholder="e.g. Ch 3 or 606.500" aria-label="Channel or frequency for ${esc(itemName(i))}" autocomplete="off">${bad.has(i.id) ? `<span class="rfdup">${ic('alert', 'sm')}Same as another</span>` : ''}<span class="rfprint">${esc(rfOf(i))}</span></td></tr>`).join('')}</tbody></table></div></section>`; })()}
-    ${(() => { const fm = floorMarks(); return `<section class="sheet" id="sec-floor" data-sheet="floor">${head('Floor marks', '', `Where to put tape before anything goes on stage. Measured from the stage-right edge (the left as you look from the house) and back from the front edge. Risers are marked by their front stage-right corner; everything else by its centre.`)}
+    ${(() => { const fm = floorMarks(); return `<section class="sheet" id="sec-floor" data-sheet="overview">${head('Floor marks', '', `Where to put tape before anything goes on stage. Measured from the stage-right edge (the left as you look from the house) and back from the front edge. Risers are marked by their front stage-right corner; everything else by its centre.`)}
       ${fm.length ? `<div class="tablewrap"><table class="floortbl"><thead><tr><th>#</th><th>Mark</th><th style="text-align:right">From stage right</th><th style="text-align:right">Back from front</th><th>Size</th></tr></thead><tbody>${fm.map((m, k) => `<tr><td><span class="ch">${k + 1}</span></td><td>${esc(itemName(m.i))}${m.riser ? '<small class="hint" style="display:block">front stage-right corner</small>' : ''}</td><td class="mono" style="text-align:right">${uLen(m.across)}</td><td class="mono" style="text-align:right">${uLen(m.back)}</td><td class="mono">${m.size}</td></tr>`).join('')}</tbody></table></div>` : emptyBox('fit', 'Nothing on stage yet', 'Build the stage from the team and the marks appear here.', 'team', 'Build from the team')}</section>`; })()}
     ${(() => { const groups = loadinTasks(), g = loadinProgress(), st = loadinState(), store = inStorage(); if (!g.total && !store.length && powerOrder().length < 2) return `<section class="sheet loadin" id="sec-loadin" data-sheet="loadin">${head('Load-in checklist', '', 'Tick things off as they’re set up. Saved with this week.')}${sheetEmpty('check', 'Nothing to set up yet', 'Every mic, stand, cable and battery on stage becomes a tick box here for the day.', 'team', 'Build from the team')}</section>`; const pct = g.total ? Math.round(g.done / g.total * 100) : 0;
       return `<section class="sheet loadin" id="sec-loadin" data-sheet="loadin">${head('Load-in checklist', '', 'Tick things off as they’re set up. Saved with this week.')}${boxKey([...inputList(), ...outputList()])}
@@ -7590,7 +7483,7 @@ document.addEventListener('keydown', e => {
   if (!$('histDlg').hidden) { if (e.key === 'Escape') $('histDlg').hidden = true; return; }
   if (!$('cmdk').hidden) return;
   if (!$('deskDlg').hidden && desk.dock && !e.target.closest?.('#deskDlg') && e.key !== 'Escape') { /* docked: the plot keeps its keys */ }
-  else if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.add || desk.lmenu || desk.vmenu || desk.kmenu || desk.naming || desk.ctx)) { desk.add = desk.lmenu = desk.vmenu = desk.kmenu = desk.naming = false; desk.ctx = null; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
+  else if (!$('deskDlg').hidden) { if (e.key === 'Escape' && (desk.add || desk.lmenu || desk.kmenu || desk.naming || desk.ctx)) { desk.add = desk.lmenu = desk.kmenu = desk.naming = false; desk.ctx = null; renderDesk(); } else if (e.key === 'Escape') closeDesk(); else if (deskKey(e)) e.preventDefault(); return; }
   if (!$('rackDlg').hidden) {
     const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
     if (e.key === 'Escape') closeRack();
@@ -7669,14 +7562,10 @@ function renderMoreMenu() {
     <p class="hint" style="margin:-8px 0 0">${ui.adv ? 'Every setting and tool is showing.' : 'Everyday controls up front; fine settings under “More settings”.'}</p>
     <div class="mm-row"><span>Theme</span><div class="seg detailseg">${th('system', 'Auto')}${th('light', 'Light')}${th('dark', 'Dark')}</div></div>
     <div class="mm-list">
-      <button data-mm="library">${ic('calendar', 'sm')}Home: library &amp; settings</button>
       <button data-mm="present">${ic('screen', 'sm')}Present on a screen <span class="kbd">F</span></button>
-      <button data-mm="picture"${dlCap === null ? ' hidden' : ''}>${ic('plot', 'sm')}Save plot as picture</button>
       <button data-mm="guide">${ic('check', 'sm')}${ui.guide ? 'Hide' : 'Show'} the setup guide</button>
       <button data-mm="help">${ic('keyboard', 'sm')}Keyboard shortcuts<span class="kbd">?</span></button>
-      <button data-mm="tour">${ic('wand', 'sm')}Take the tour</button>
       <button data-mm="about">${ic('sheet', 'sm')}About Stagehand</button>
-      <button data-mm="data">${ic('save', 'sm')}Backup &amp; restore</button>
     </div>`;
 }
 function toggleMoreMenu(open = $('moreMenu').hidden) {
@@ -7691,11 +7580,7 @@ $('moreMenu').addEventListener('click', e => {
   if (m.dataset.mm === 'guide') { setGuide(!ui.guide); if (ui.guide) { sel = null; group = null; togglePanel('insp', true); renderAll(); } }
   if (m.dataset.mm === 'help') $('helpBtn').click();
   if (m.dataset.mm === 'about') openAbout();
-  if (m.dataset.mm === 'tour') startTour();
   if (m.dataset.mm === 'present') setPresent(true);
-  if (m.dataset.mm === 'picture') plotPicture();
-  if (m.dataset.mm === 'library') openLibrary2();
-  if (m.dataset.mm === 'data') $('dataBtn').click();
 });
 document.addEventListener('pointerdown', e => { if (!$('moreMenu').hidden && !e.target.closest('.menuwrap')) toggleMoreMenu(false); });
 document.addEventListener('click', e => { const b = e.target.closest('[data-detail]'); if (b) setDetail(b.dataset.detail === 'adv'); });
@@ -8015,7 +7900,6 @@ $('paperInner').addEventListener('click', e => {
   if (e.target.closest('#chRenumber')) { renumberChannels(); return; }
   const j = e.target.closest('[data-jump]'); if (j) $(j.dataset.jump)?.scrollIntoView({ block: 'start' });
   if (e.target.closest('#printBtn') || e.target.closest('#printGo')) { printPop = false; renderPaper(); printNow(); return; }
-  if (e.target.closest('#tabMore')) { moreTabs = !moreTabs; renderPaper(); $('tabMore')?.focus(); return; }
   if (e.target.closest('#printBlank')) { printBlank(); return; }
   if (e.target.closest('#printMore')) { printPop = !printPop; renderPaper(); if (printPop) document.querySelector('.printpop input')?.focus(); return; }
   { const a = e.target.closest('[data-pall]'); if (a) { const o = printOpts(); o.skip = a.dataset.pall === '1' ? [] : PRINT_SHEETS().map(([k]) => k); setPrintOpts(o); renderPaper(); return; } }
@@ -8358,8 +8242,8 @@ const LAYERS = [['people', 'People', 'users'], ['gear', 'Gear', 'box'], ['beams'
 /* ===================================================================
    Views: overlays you switch on in Layers (never saved into the week, never printed)
    =================================================================== */
-const OVERLAYS = [['owners', 'Whose gear', 'users', 'A colour halo around each person’s gear'], ['dark', 'House lights off', 'moon', 'The room dark, so the lighting shows'], ['bright', 'Brightness', 'sun', 'Where the open look is bright or dim'],
-  ['sight', 'Sightlines from FOH', 'eye', 'What the desk can’t see past'], ['heat', 'Sound coverage', 'zap', 'Loudest red, quietest blue']];
+const OVERLAYS = [['owners', 'Whose gear', 'users', 'A colour halo around each person’s gear'], ['dark', 'House lights off', 'moon', 'The room dark, so the lighting shows'],
+  ['sight', 'Sightlines from FOH', 'eye', 'What the desk can’t see past']];
 const overOn = k => !layersBypass && !!cableView.over?.has(k);
 // the room's walls: the back of the stage, the sides of the house (or the stage, if it's wider) and the back of the house
 function roomRect() { const { w, d, house, houseW } = plan.stage, hw = Math.max(w, houseW); return { x0: Math.min(0, (w - hw) / 2), x1: Math.max(w, (w + hw) / 2), y0: 0, y1: d + house }; }
@@ -8414,11 +8298,8 @@ const aimOf = (it, s) => { const r = (it.rot || 0) * Math.PI / 180; return [-s *
 const footCorners = it => { const w = Number(prop(it, 'w')) / 2, d = Number(prop(it, 'd')) / 2, r = (it.rot || 0) * Math.PI / 180, c = Math.cos(r), sn = Math.sin(r);
   return [[-w, -d], [w, -d], [w, d], [-w, d]].map(([x, y]) => [it.x + x * c - y * sn, it.y + x * sn + y * c]); };
 const SIGHT_BLOCKERS = new Set(['main_spk', 'drum_shield', 'light_stand', 'camera', 'pulpit', 'iem_rack', 'rack']);
-const LOUD = { main_spk: [104, 1, 'wide'], la_main: [108, 1, 'wide'], sub: [100, 0, 'omni'], wedge: [96, -1, 'narrow'] };   // level at 1 m, which way it faces, pattern
 function overlaySvg(deckD) {
   let s = '';
-  if (overOn('heat')) s += heatSvg();
-  if (overOn('bright')) s += brightSvg();
   if (overOn('sight')) s += sightSvg(deckD);
   if (overOn('owners')) s += ownersSvg();
   return s;
@@ -8448,39 +8329,6 @@ function houseOffSvg(selSet) {
   if (!overOn('dark') || !plan.items.some(isFixture)) return '';
   const b = bounds();
   return `<rect class="ov-houseoff" x="${f3(b.x0 - 50)}" y="${f3(b.y0 - 50)}" width="${f3(b.vw + 100)}" height="${f3(b.vh + 100)}"/><g class="ov-glow">${beamsSvg(selSet, 'lbd', 1.6)}</g>`;
-}
-function brightSvg() {
-  const lights = plan.items.filter(i => isFixture(i) && !isUp(i)); if (!lights.length) return '';
-  const sp = stagePoly(), xs = sp.map(q => q[0]), ys = sp.map(q => q[1]), step = Math.max(.6, (Math.max(...xs) - Math.min(...xs)) / 40), L = curLook();
-  const geo = lights.map(it => { const f = fxEff(it, L), col = fxRGB(f, it); return col && { ...beamGeom(it), hung: !!mountOf(it), k: f.d / 100 * Math.max(.25, (.2126 * col[0] + .7152 * col[1] + .0722 * col[2]) / 255) }; }).filter(Boolean);
-  let s = `<filter id="brBlur" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="${f3(step * .8)}"/></filter><g class="ov-bright" clip-path="url(#deckclip)"><g filter="url(#brBlur)">`;
-  for (let y = Math.min(...ys) + step / 2; y < Math.max(...ys); y += step) for (let x = Math.min(...xs) + step / 2; x < Math.max(...xs); x += step) {
-    let I = 0;
-    for (const g of geo) { const dx = x - g.cx, dy = y - g.cy, a = dx * g.ux + dy * g.uy, c = -dx * g.uy + dy * g.ux, q2 = (a / g.rl) ** 2 + (c / g.r) ** 2; if (q2 < 1.3) I += g.k * Math.max(0, 1 - .75 * q2); }
-    const v = Math.max(0, .62 * (1 - Math.min(1, I)));
-    if (v > .02) s += `<rect x="${f3(x - step / 2)}" y="${f3(y - step / 2)}" width="${f3(step + .02)}" height="${f3(step + .02)}" style="fill-opacity:${f3(v)}"/>`;
-  }
-  return s + '</g></g>';
-}
-function heatSvg() {
-  const src = plan.items.filter(i => LOUD[i.type]); if (!src.length) return '';
-  const b = bounds(), step = Math.max(.8, b.vw / 90), cells = [];
-  let top = -Infinity;
-  for (let y = b.y0 + step / 2; y < b.y0 + b.vh; y += step) for (let x = b.x0 + step / 2; x < b.x0 + b.vw; x += step) {
-    let sum = 0;
-    for (const it of src) {
-      const [L0, face, pat] = LOUD[it.type], dx = x - it.x, dy = y - it.y, r = Math.max(fromM(.6), Math.hypot(dx, dy)), rm = r * .3048;
-      let off = 0;
-      if (face) { const [ax, ay] = aimOf(it, face), cos = (dx * ax + dy * ay) / r, th = Math.acos(Math.max(-1, Math.min(1, cos))) * 180 / Math.PI, half = pat === 'narrow' ? 30 : 45;
-        off = th < half ? 0 : th < 90 ? (th - half) / (90 - half) * 9 : 9 + (th - 90) / 90 * 12; }
-      sum += Math.pow(10, (L0 - 20 * Math.log10(Math.max(rm, .3)) - off) / 10);
-    }
-    const db = 10 * Math.log10(sum); top = Math.max(top, db); cells.push([x, y, db]);
-  }
-  let s = `<filter id="heatBlur" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="${f3(step * .9)}"/></filter><g class="ov-heat" filter="url(#heatBlur)">`;
-  for (const [x, y, db] of cells) { const rel = db - top; if (rel < -27) continue; const t = Math.max(0, Math.min(1, (rel + 24) / 24)), hue = Math.round(220 - 220 * t);   // 24 dB from the loudest spot down to quiet
-    s += `<rect x="${f3(x - step / 2)}" y="${f3(y - step / 2)}" width="${f3(step + .02)}" height="${f3(step + .02)}" style="fill:hsl(${hue} 90% 55%);fill-opacity:${f3(.12 + t * .3)}"/>`; }
-  return s + '</g>';
 }
 /* Whose gear: each person's things become one soft blob. Shapes are blurred and re-thresholded (a "goo" filter), so gear
    that sits close together melts into one outline, and pulls apart again as you drag it away. Necks between near neighbours
@@ -9221,7 +9069,7 @@ function cmdItems() {
     ['Add a custom rack', 'box', () => { if (view !== 'plot') { view = 'plot'; renderAll(); } addGear('rack', snapTo(plan.stage.w - fromM(1)), snapTo(fromM(1))); }],
     [cableView.all ? 'Hide all cables' : 'Show cables', 'eye', () => setCableView(() => { cableView.all = !cableView.all; })],
     ['Open paperwork', 'sheet', () => openPaper()],
-    ...(plan.items.some(isFixture) ? [['Open the lighting desk', 'sun', () => openDesk()], ['Looks as big buttons', 'fit', () => { openDesk(); desk.big = true; renderDesk(); }]] : []),
+    ...(plan.items.some(isFixture) ? [['Open the lighting desk', 'sun', () => openDesk()]] : []),
     ['Draw or edit stage shape', 'pen', () => openDesigner(false)],
     ['Import team from Planning Center', 'calendar', () => { railTab = 'team'; togglePanel('rail', true); setTimeout(() => $('pcoStart')?.click(), 60); }],
     ['Add a person to the team', 'users', () => { railTab = 'team'; togglePanel('rail', true); setTimeout(() => $('addPerson')?.click(), 60); }],
@@ -9243,7 +9091,6 @@ function cmdItems() {
     ['Switch theme', 'auto', () => $('themeBtn').click()],
     ['Backup & restore', 'save', () => $('dataBtn').click()],
     ['Keyboard shortcuts', 'keyboard', () => { $('helpDlg').hidden = false; }],
-    ['Take the tour', 'wand', () => startTour()],
   ].map(([label, icon, run]) => ({ group: 'Actions', label, icon, run }));
   const gear = Object.entries(CAT).filter(([, c]) => !c.hidden).map(([t, c]) => ({ group: 'Add gear', label: `Add ${c.name}`, glyph: t, run: () => { if (view !== 'plot') { view = 'plot'; renderAll(); } addGear(t, snapTo(plan.stage.w / 2), snapTo(plan.stage.d / 2)); } }));
   const find = plan.items.filter(i => cat(i).shape !== 'platform').map(it => {
@@ -9335,56 +9182,6 @@ const loadRing = (done, total) => { const r = 6.5, c = 2 * Math.PI * r, k = tota
   return `<svg class="ldring${k >= 1 ? ' full' : ''}" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="${r}"/><circle class="ldfill" cx="8" cy="8" r="${r}" stroke-dasharray="${(c * k).toFixed(2)} ${c.toFixed(2)}" transform="rotate(-90 8 8)"/></svg>`; };
 /* Home for someone who hasn't planned a real week yet (only the example, or nothing with a team): a calm start card,
    the welcome screen's stage drawing and three steps that tick as they're done. Hidden for good once a week has a team. */
-// a one-minute walk round the app for a new volunteer: each stop lights up the real control and says what it's for
-const TOUR = [
-  ['tTeam', 'team', 'Your team', 'Add this week’s people here, paste a list, or import from Planning Center. Everyone gets a spot on stage and their usual gear.'],
-  ['tGear', 'gear', 'Gear', 'Tap something, then tap the stage to place it, or drag it on. What you added recently sits at the top.'],
-  ['@canvas', 'team', 'The stage', 'Drag anything to move it, click it to see its details on the right. Right-click, or press and hold on a tablet, for more.'],
-  ['@dock', '', 'Tools', 'Run cables, measure, show or hide layers and zoom. Advanced (in the ⋯ menu) adds more, like locking the setup or seeing it from the stage.'],
-  ['checksBtn', '', 'What to check', 'Anything that needs a look before Sunday: unpatched inputs, power, gear on top of other gear. Click it for the list.'],
-  ['vPaper', '', 'Paperwork', 'Input list, rider, load-in, line check and My spot cards. Print, save a PDF, or copy a summary for the team chat.'],
-  ['vHome', '', 'Home', 'Every week you’ve planned, your venues, setups, the gear you own and settings. On a service day it opens with Today.'],
-  ['moreBtn', '', 'On the day', 'Show mode (F) puts the plot full screen for an iPad on stage. This tour is here too, whenever you want it again.'],
-];
-let tourAt = -1;
-const tourEl = k => k === '@canvas' ? document.querySelector('#plotView .canvas') : k === '@dock' ? $('ftools')?.firstElementChild : $(k);
-function startTour() { closePops?.(); $('helpDlg').hidden = true; view = 'plot'; tourAt = 0; renderAll(); showTour(); }
-function endTour() { tourAt = -1; $('tour').hidden = true; try { localStorage.setItem('stageplot.toured', '1'); } catch { /* ignore */ } }
-function showTour() {
-  const [k, rail, title, text] = TOUR[tourAt], body = innerWidth < 761 ? text.replace('on the right', 'below the plot') : text;
-  if (rail && railTab !== rail) { railTab = rail; renderRail(); }
-  const el = tourEl(k), box = $('tour'); box.hidden = false;
-  el?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-  const r = el?.getBoundingClientRect() || { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0, right: innerWidth / 2, bottom: innerHeight / 2 }, pad = 6;
-  const hole = box.querySelector('.tour-hole');
-  Object.assign(hole.style, { left: `${r.left - pad}px`, top: `${r.top - pad}px`, width: `${r.width + pad * 2}px`, height: `${r.height + pad * 2}px` });
-  $('tourN').textContent = `${tourAt + 1} of ${TOUR.length}`; $('tourT').textContent = title; $('tourB').textContent = body;
-  $('tourBack').disabled = tourAt === 0; $('tourNext').textContent = tourAt === TOUR.length - 1 ? 'Done' : 'Next';
-  const card = box.querySelector('.tour-card'), cw = Math.min(340, innerWidth - 24), big = r.height > innerHeight * .5;
-  card.style.width = `${cw}px`;
-  const ch = card.offsetHeight, below = r.bottom + 14 + ch < innerHeight, above = r.top - 14 - ch > 0;
-  const top = big ? r.top + r.height / 2 - ch / 2 : below ? r.bottom + 14 : above ? r.top - 14 - ch : innerHeight - ch - 12;
-  card.style.top = `${Math.max(12, Math.min(innerHeight - ch - 12, top))}px`;
-  card.style.left = `${Math.max(12, Math.min(innerWidth - cw - 12, (big ? r.left + r.width / 2 : r.left + r.width / 2) - cw / 2))}px`;
-  $('tourNext').focus();
-}
-$('tourNext').onclick = () => { if (tourAt >= TOUR.length - 1) { endTour(); toast('That’s the tour. Have a go: everything can be undone'); return; } tourAt++; showTour(); };
-$('tourBack').onclick = () => { if (tourAt > 0) { tourAt--; showTour(); } };
-$('tourSkip').onclick = endTour;
-$('helpTour').onclick = startTour;
-document.addEventListener('keydown', e => { if (tourAt < 0) return; if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); endTour(); } else if (e.key === 'ArrowRight') { e.preventDefault(); $('tourNext').click(); } else if (e.key === 'ArrowLeft') { e.preventDefault(); $('tourBack').click(); } }, true);
-addEventListener('resize', () => { if (tourAt >= 0) showTour(); });
-function firstRunCard() {
-  const real = Object.values(db.plans).filter(p => !/^Example week/.test(p.name || ''));
-  if (real.some(p => p.team.length)) return '';
-  try { if (localStorage.getItem('stageplot.startHidden')) return ''; } catch { /* show it */ }
-  const drawn = real.some(p => p.stage.set), steps = [[drawn, 'Draw your stage', 'Pick a shape and set the size'], [false, 'Add this week’s team', 'From Planning Center, by hand, or paste a list'], [false, 'Build it and print', 'Gear, cables and power are placed for you; then the paperwork']];
-  return `<section class="startcard"><div class="startart" aria-hidden="true"><svg viewBox="0 0 120 50"><path d="M10 8H110V34H76V44H44V34H10Z" fill="none" stroke="#f0b429" stroke-width="1.6" stroke-dasharray="4 2.4"/><circle cx="42" cy="22" r="4" fill="#f0b429"/><circle cx="60" cy="18" r="4" fill="#8f7cd4"/><circle cx="78" cy="22" r="4" fill="#f0b429"/></svg></div>
-    <div class="startmain"><div class="eyebrow">Getting started</div><h2>Plan your first service</h2>
-      <ol class="startsteps">${steps.map(([done, t, sub], i) => `<li class="${done ? 'done' : ''}"><span class="sn">${done ? ic('check', 'sm') : i + 1}</span><span><b>${t}</b><small>${sub}</small></span></li>`).join('')}</ol>
-      <div class="row" style="gap:8px">${drawn ? `<button class="btn primary" data-startgo="team">${ic('users', 'sm')}Add the team</button>` : `<button class="btn primary" data-startgo="draw">${ic('pen', 'sm')}Draw my stage</button>`}<button class="btn quiet" data-startgo="tour">Take the 1-minute tour</button><button class="btn quiet" data-startgo="hide">Hide this</button></div>
-      ${drawn ? '' : '<p class="hint">Drawing your stage replaces the example week.</p>'}</div></section>`;
-}
 function calStrip() {
   const vid = venues()[lib.venue] ? lib.venue : null, start = nextServiceDay(), DAY = DAYS[defaultsOf().day] || 'service day';
   const cells = Array.from({ length: 8 }, (_, i) => {
@@ -9463,10 +9260,6 @@ $('homeView').addEventListener('click', e => {
   if (t.dataset.vdel) { const id = t.dataset.vdel, V = venues()[id]; if (!V || venueWeekIds(id).length || venueList().length < 2) return;
     if (venueDelArmed !== id) { venueDelArmed = id; renderHome(); return; }
     venueDelArmed = ''; delete venues()[id]; if (lib.venue === id) lib.venue = ''; save(); renderAll(); toast(`Deleted ${V.name}`, { label: 'Undo', fn: () => { venues()[id] = V; save(); renderAll(); } }); return; }
-  if (t.dataset.startgo === 'draw') { view = 'plot'; renderAll(); openDesigner(true); return; }
-  if (t.dataset.startgo === 'team') { const w = Object.values(db.plans).find(p => p.stage.set && !/^Example week/.test(p.name || '')); view = 'plot'; railTab = 'team'; if (w) switchWeek(w.id); else renderAll(); return; }
-  if (t.dataset.startgo === 'tour') { startTour(); return; }
-  if (t.dataset.startgo === 'hide') { try { localStorage.setItem('stageplot.startHidden', '1'); } catch { /* ignore */ } renderHome(); return; }
   if (t.dataset.calopen) { view = 'plot'; switchWeek(t.dataset.calopen); return; }
   if (t.dataset.calnew) { const vid = venues()[lib.venue] ? lib.venue : venueOf(plan)?.id, np = blankPlan(t.dataset.calnew, vid); db.plans[np.id] = np; view = 'plot'; railTab = 'team'; switchWeek(np.id); toast(`Started ${longDate(np.date)}${multiVenue() ? ` at ${venues()[vid]?.name}` : ''}`); return; }
   if (t.dataset.libvenue !== undefined) { lib.venue = t.dataset.libvenue; renderHome(); return; }
@@ -9491,7 +9284,7 @@ $('homeView').addEventListener('click', e => {
   if (t.id === 'libResetGo') { resetAll(); return; }
   if (t.id === 'libRestore') { restoreBeforeReset(); return; }
   if (t.dataset.today) { const id = t.dataset.week; if (id !== plan.id) switchWeek(id); const k = t.dataset.today;
-    if (k === 'show') { view = 'plot'; renderAll(); setPresent(true); } else if (k === 'loadin' || k === 'linecheck') { view = 'paper'; paperTab = k; renderAll(); } else { view = 'plot'; if (k === 'team') railTab = 'team'; renderAll(); }
+    if (k === 'show') { view = 'plot'; renderAll(); setPresent(true); } else if (k === 'loadin' || k === 'linecheck') { view = 'paper'; paperTab = TAB_ALIAS[k] || k; renderAll(); } else { view = 'plot'; if (k === 'team') railTab = 'team'; renderAll(); }
     return; }
   if (t.dataset.merge) { mergeNames(t.dataset.merge); return; }
   if (t.dataset.mergeskip) { (db.nameSkip ||= []).push(t.dataset.mergeskip); save(); renderHome(); return; }
@@ -9641,7 +9434,7 @@ function homeLibrary() {
       </div>
     </section>` : '';
   const tc = todayCard();
-  return firstRunCard() + (tc && todayWeek()?.id === next?.id ? tc : tc + hero) + dupesCard() + hsec('Library', `${plural(Object.keys(db.plans).length, 'week')} saved ${SAVED_WHERE}`, '<div id="libBody"></div>',
+  return (tc && todayWeek()?.id === next?.id ? tc : tc + hero) + dupesCard() + hsec('Library', `${plural(Object.keys(db.plans).length, 'week')} saved ${SAVED_WHERE}`, '<div id="libBody"></div>',
     `<div class="row" style="gap:6px"><button class="btn" id="homeNewCopy" title="Copy the latest week to the next free ${esc(DAYS[defaultsOf().day])}">${ic('copy', 'sm')}Copy latest</button><button class="btn primary" id="homeNewBlank" title="A fresh week from your stage defaults">${ic('plus', 'sm')}New week</button></div>`);
 }
 function nextFreeDate(from, vid) { let d = from || nextServiceDay(); while (Object.values(db.plans).some(p => p.date === d && (!vid || p.venueId === vid))) d = addDays(d, 7); return d; }
@@ -9861,9 +9654,6 @@ const autoRole = pos => matchRole(pos.split(' · ')[0]) || matchRole(pos.split('
 function posRole(pos, team) { const m = db?.pcoPrefs?.map || {}, k = [pos, team].filter(Boolean).join(' · '); if (m[k] === '-' ) return ''; if (m[k]) return m[k]; return null; }
 
 /* ----- Preferences ----- */
-let density = (() => { try { return localStorage.getItem('stageplot.density') === 'comfy' ? 'comfy' : ''; } catch { return ''; } })();
-function setDensity(v) { density = v === 'comfy' ? 'comfy' : ''; if (density) document.documentElement.dataset.density = 'comfy'; else delete document.documentElement.dataset.density; try { localStorage.setItem('stageplot.density', density); } catch { /* memory only */ } }
-setDensity(density);
 let textSize = (() => { try { const v = localStorage.getItem('stageplot.text'); return v === 'l' || v === 'xl' ? v : ''; } catch { return ''; } })();
 const textScale = () => textSize === 'xl' ? 1.3 : textSize === 'l' ? 1.15 : 1;
 function setTextSize(v) { textSize = v === 'l' || v === 'xl' ? v : ''; if (textSize) document.documentElement.dataset.text = textSize; else delete document.documentElement.dataset.text; try { localStorage.setItem('stageplot.text', textSize); } catch { /* memory only */ } needFit = true; renderAll(); }
@@ -9873,7 +9663,6 @@ function homePrefs() {
   return hsec('Look', '', `<div class="hpref"><span><b>Theme</b><small>Match your device, or always light or dark</small></span>${seg('theme', themePref, [['system', 'Auto'], ['light', 'Light'], ['dark', 'Dark']])}</div>
       <div class="hpref"><span><b>Detail</b><small>Simple shows everyday controls; Advanced shows every setting and tool</small></span>${seg('detail', ui.adv ? 'adv' : 'simple', [['simple', 'Simple'], ['adv', 'Advanced']])}</div>
       <div class="hpref"><span><b>Text size</b><small>Bigger words in the panels, menus and plot labels, on this device</small></span>${seg('textsize', textSize || 'n', [['n', 'Normal'], ['l', 'Large'], ['xl', 'Extra large']])}</div>
-      <div class="hpref"><span><b>Spacing</b><small>Compact fits more rows on a laptop; comfortable gives lists more room</small></span>${seg('density', density || 'compact', [['compact', 'Compact'], ['comfy', 'Comfortable']])}</div>
       <div class="hpref"><span><b>Units</b><small>Sizes, distances and cable lengths on the plot and the paperwork</small></span>${seg('units', imperial() ? 'ft' : 'm', [['m', 'Metres'], ['ft', 'Feet & inches']])}</div>`) +
     hsec('Working on the plot', '', `<div class="hpref"><span><b>Snap gear to</b><small>Rounds positions as you move gear (hold Alt to move freely)</small></span><select id="hp-snap" aria-label="Snap gear to">${(() => { const o = snapOpts(), near = ui.snap ? o.filter(([v]) => v).reduce((a, b) => Math.abs(b[0] - ui.snap) < Math.abs(a[0] - ui.snap) ? b : a)[0] : 0; return [o[3], ...o.slice(0, 3)].map(([v, l]) => `<option value="${v}" ${near === v ? 'selected' : ''}>${l}</option>`).join(''); })()}</select></div>
       ${hcheck('hp-guide', 'Show the setup guide on the plot', ui.guide)}
@@ -9940,7 +9729,6 @@ $('homeView').addEventListener('click', e => {
   if (t.id === 'hp-connect') { pcoConnectKey(); return; }
   if (t.id === 'hp-disconnect') { pcoDisconnect(); return; }
   if (t.id === 'hp-install' && installPrompt) { installPrompt.prompt(); installPrompt.userChoice.finally(() => { installPrompt = null; renderHome(); }); return; }
-  if (t.dataset.pref === 'density') { setDensity(t.dataset.v); renderAll(); return; }
   if (t.dataset.pref === 'textsize') { setTextSize(t.dataset.v === 'n' ? '' : t.dataset.v); renderHome(); return; }
   if (t.dataset.pref === 'theme') { setTheme(t.dataset.v); renderHome(); return; }
   if (t.dataset.pref === 'detail') { setDetail(t.dataset.v === 'adv'); renderHome(); return; }
