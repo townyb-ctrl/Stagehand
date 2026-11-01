@@ -13,17 +13,17 @@ Open `index.html` in a modern browser. No install, no account, no server.
 
 ## The screens
 
-- **Home**: every week you've planned, a calendar of the next Sundays, venues, reusable setups, the gear and cables you own, Planning Center and preferences. On a service day it leads with that day: Show mode, load-in and line check.
+- **Home**: every week you've planned, a calendar of the next Sundays, venues, reusable setups, the gear and cables you own, and preferences (including Planning Center). On a service day it leads with that day: Show mode, load-in and line check.
 - **Plot**: the stage from above. Team, Gear and Room on the left; the details of whatever is picked on the right. Drag to move, right-click for more, `Ctrl+K` to search for any action. The status pill says what still needs a look.
-- **Paperwork**: Overview (plot, things to check, floor marks), My spot cards, Inputs (with line check), Outputs (with monitor mixes), Wireless, Cables, Power, Team, Load-in, Racks and Lighting when used, and Everything. Click a row to find it on the plot. The **Print** menu also prints the tech rider and spot cards, saves the plot as a picture and copies a text summary.
+- **Paperwork**: Overview (plot, things to check, floor marks), My spot cards, Inputs (with line check and wireless), Outputs (with monitor mixes), Cables, Power (with racks), Team (with the load-in checklist), Lighting when used, and Everything. Click a row to find it on the plot. The **Print** menu also prints the tech rider and spot cards, saves the plot as a picture and copies a text summary.
 - **Lighting desk** (pick the lighting console, or `Ctrl+K`): looks, a stage map you can aim lights on, a front view from the room, colour wheel and dimmer. Planning only: nothing is sent to real lights.
 
 ## Good to know
 
 - **Simple and Advanced** (⋯ menu): Simple keeps everyday controls; Advanced shows every setting, DMX detail and extra tools.
 - **Show mode** (`F`): the plot full screen for an iPad on stage. Tap a person to see their channels and monitor.
-- **Undo** everything with `Ctrl/Cmd+Z`; version history is in the ⋯ menu.
-- **Light and dark** themes follow your device, or pick one in Preferences. Text size and feet-and-inches are there too.
+- **Undo** everything with `Ctrl/Cmd+Z` (redo: add Shift, or `Ctrl+K` → Redo); version history is in the ⋯ menu.
+- **Light and dark** themes follow your device, or pick one in Preferences. Text size, feet-and-inches and whether building the stage adds everyone's gear are there too.
 
 ## Saving
 
@@ -40,3 +40,7 @@ Weeks save automatically in this browser. **Home → Preferences** copies or dow
 ## Status
 
 What has been tested, and what's still open before a public launch, is in [LAUNCH.md](LAUNCH.md).
+
+## Release build
+
+`tools/build.mjs` writes a minified copy to `dist/` for hosting and for the desktop installer: `cd tools && npm install && npm run build`. `index.html` stays the readable source.
