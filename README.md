@@ -15,19 +15,19 @@ Open `index.html` in a modern browser. No install, no account, no server.
 
 - **Home**: every week you've planned, a calendar of the next Sundays, venues, reusable setups, the gear and cables you own, Planning Center and preferences. On a service day it leads with that day: Show mode, load-in and line check.
 - **Plot**: the stage from above. Team, Gear and Room on the left; the details of whatever is picked on the right. Drag to move, right-click for more, `Ctrl+K` to search for any action. The status pill says what still needs a look.
-- **Paperwork**: Overview (plot, things to check, floor marks), Rider, My spot cards, Inputs (with line check), Outputs (with monitor mixes), Wireless, Cables, Power, Team, Load-in, Racks and Lighting when used, and Everything. Click a row to find it on the plot.
-- **Lighting desk** (pick the lighting console, or `Ctrl+K`): looks, a stage map you can aim lights on, a front view from the room, colour wheel, dimmer and warm-to-cool white. Planning only: nothing is sent to real lights.
+- **Paperwork**: Overview (plot, things to check, floor marks), My spot cards, Inputs (with line check), Outputs (with monitor mixes), Wireless, Cables, Power, Team, Load-in, Racks and Lighting when used, and Everything. Click a row to find it on the plot. The **Print** menu also prints the tech rider and spot cards, saves the plot as a picture and copies a text summary.
+- **Lighting desk** (pick the lighting console, or `Ctrl+K`): looks, a stage map you can aim lights on, a front view from the room, colour wheel and dimmer. Planning only: nothing is sent to real lights.
 
 ## Good to know
 
 - **Simple and Advanced** (⋯ menu): Simple keeps everyday controls; Advanced shows every setting, DMX detail and extra tools.
 - **Show mode** (`F`): the plot full screen for an iPad on stage. Tap a person to see their channels and monitor.
-- **Undo** everything with `Ctrl/Cmd+Z`; version history is in the week menu.
+- **Undo** everything with `Ctrl/Cmd+Z`; version history is in the ⋯ menu.
 - **Light and dark** themes follow your device, or pick one in Preferences. Text size and feet-and-inches are there too.
 
 ## Saving
 
-Weeks save automatically in this browser. **Home → Data & backup** copies or downloads everything as a file, to keep safe or move to another computer.
+Weeks save automatically in this browser. **Home → Preferences** copies or downloads everything as a file, to keep safe or move to another computer.
 
 ## Mac and Windows app
 
