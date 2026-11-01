@@ -297,6 +297,19 @@ th .thshort { display: none; text-decoration: none; } @media (max-width: 560px) 
 .calday.cur { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); box-shadow: inset 0 -2px 0 var(--accent); }
 .calday em { position: absolute; top: 4px; right: 5px; font: 600 9.5px/1 var(--f-mono); font-style: normal; color: var(--muted); }
 @media (max-width: 560px) { .caldays { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.ined { cursor: text; border-radius: 4px; padding: 1px 3px; margin: -1px -3px; } .ined:hover { background: var(--accent-soft); box-shadow: inset 0 -1px 0 var(--accent); } .ineditbox { width: 100%; padding: 3px 6px; font: inherit; } @media print { .ined:hover { background: none; box-shadow: none; } }
+.pp-preview { position: absolute; right: calc(100% + 10px); top: 0; width: 210px; height: 290px; overflow: hidden; border-radius: var(--r-sm); background: #fff; box-shadow: var(--shadow-2); border: 1px solid var(--line); opacity: 0; visibility: hidden; transition: opacity .12s; pointer-events: none; }
+.pp-preview.on { opacity: 1; visibility: visible; } .pp-preview .ppclone { display: block !important; width: 794px; padding: 40px 46px; transform: scale(.264); transform-origin: 0 0; background: #fff; color: #111; margin: 0; box-shadow: none; }
+@media (max-width: 900px) { .pp-preview { display: none; } }
+.rail, .inspector { transition: opacity .25s ease; } body.dragging-gear .rail, body.dragging-gear .inspector { opacity: .45; } @media (prefers-reduced-motion: reduce) { .rail, .inspector { transition: none; } }
+.rulcur path { stroke: var(--accent); stroke-width: .05; } .rulcur text { fill: var(--accent-text, var(--accent)); font-weight: 600; font-family: var(--f-mono); paint-order: stroke; stroke: var(--bg); stroke-width: .15; } @media print { .rulcur { display: none; } }
+.person[draggable="true"] { cursor: grab; } .person.lifting { opacity: .5; } .person.dropabove { box-shadow: inset 0 2px 0 var(--accent); } .person.dropbelow { box-shadow: inset 0 -2px 0 var(--accent); }
+.backchip { position: absolute; top: 76px; left: 50%; transform: translateX(-50%); z-index: 8; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px 7px 10px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); font: 600 13px var(--f-ui); box-shadow: var(--shadow-2); cursor: pointer; animation: toastIn .18s ease-out; } .backchip:hover { border-color: var(--accent); color: var(--accent-text, var(--accent)); }
+.docnav { position: sticky; } .navarr { display: none; position: absolute; top: 50%; transform: translateY(-50%); z-index: 7; width: 28px; height: 28px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2); place-items: center; cursor: pointer; box-shadow: var(--shadow-1, 0 1px 4px rgba(0,0,0,.08)); padding: 0; }
+.docnav.arr-l .navarr.l, .docnav.arr-r .navarr.r { display: grid; }  .docnav nav { scroll-behavior: smooth; }
+@media print { .navarr { display: none !important; } }
+.copied { color: var(--ok-ink, var(--ok)) !important; border-color: var(--ok) !important; } .copied .ic { color: var(--ok); }
+.field label[for] { cursor: ew-resize; } .field:has(input[type="text"], select, textarea) label[for], .field:has(input:disabled) label[for] { cursor: default; } body.scrubbing, body.scrubbing * { cursor: ew-resize !important; user-select: none; }
 .alltoc { position: fixed; top: 150px; left: max(12px, calc(50% - 540px - 172px)); width: 156px; display: grid; gap: 2px; padding: 10px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); box-shadow: var(--shadow-1, 0 2px 8px rgba(0,0,0,.06)); z-index: 4; max-height: calc(100vh - 190px); overflow-y: auto; }
 .alltoc b { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 2px 8px 6px; } .alltoc button { text-align: left; border: 0; background: none; padding: 5px 8px; border-radius: var(--r-sm); font: inherit; font-size: 13px; color: var(--ink-2); cursor: pointer; } .alltoc button:hover { background: var(--surface-2); color: var(--ink); }
 @media (max-width: 1400px), print { .alltoc { display: none; } }
@@ -929,7 +942,7 @@ svg text { font-family: var(--f-ui); }
 /* ---------- inspector ---------- */
 .inspector { background: var(--surface); border-left: 1px solid var(--line); overflow-x: hidden; overflow-y: auto; scrollbar-gutter: stable; min-width: 0; }   /* a scrollbar never pushes the panel sideways */
 .insp { display: grid; gap: 0; grid-template-columns: minmax(0, 1fr); }
-.insp-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto; column-gap: 12px; row-gap: 0; align-items: center; padding: 12px 10px 12px 16px; border-bottom: 1px solid var(--line); }
+.insp-head { position: sticky; top: 0; z-index: 4; background: var(--surface); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto; column-gap: 12px; row-gap: 0; align-items: center; padding: 12px 10px 12px 16px; border-bottom: 1px solid var(--line); }
 .insp-head > :first-child { grid-row: 1 / 3; align-self: center; } .insp-head > div:nth-child(2) { display: contents; }
 .insp-head > div:nth-child(2) > .eyebrow { grid-column: 2; grid-row: 1; align-self: end; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .insp-head > div:nth-child(2) > :not(.eyebrow) { grid-column: 2 / 4; grid-row: 2; min-width: 0; padding-right: 4px; }
@@ -2306,14 +2319,20 @@ function toast(msg, withUndo) {
   t.addEventListener('mouseenter', () => { clearTimeout(timer); left -= performance.now() - start; t.classList.add('held'); });   // pointing at it holds it, so there's time to press Undo
   t.addEventListener('mouseleave', () => { start = performance.now(); t.classList.remove('held'); timer = setTimeout(() => t.remove(), Math.max(800, left)); });
 }
-async function copyText(text, fallbackEl) {
-  try { await navigator.clipboard.writeText(text); toast('Copied'); }
+async function copyText(text, fallbackEl, btn) {
+  try { await navigator.clipboard.writeText(text); if (btn?.isConnected) copiedOn(btn); else toast('Copied'); }
   catch {
     if (fallbackEl) { fallbackEl.value = text; fallbackEl.focus(); fallbackEl.select(); toast('Selected — press Ctrl+C to copy'); }
     else toast('Copy was blocked by the browser');
   }
 }
 
+// the button you pressed says "Copied" for a moment, instead of a message somewhere else
+function copiedOn(btn) {
+  if (btn.dataset.was == null) btn.dataset.was = btn.innerHTML; clearTimeout(btn._ct);
+  btn.classList.add('copied'); btn.innerHTML = `${ic('check', 'sm')}Copied`; btn.setAttribute('aria-live', 'polite');
+  btn._ct = setTimeout(() => { if (btn.dataset.was != null) btn.innerHTML = btn.dataset.was; delete btn.dataset.was; btn.classList.remove('copied'); }, 1500);
+}
 /* item property lookups (per-item overrides fall back to catalog) */
 const cat = it => CAT[it.type] || { name: it.type, cat: 'infra', w: 1, d: 1, shape: 'rect' };
 const RACK_KEYS = new Set(['ins', 'outsMax', 'outs', 'watts']);
@@ -3853,7 +3872,7 @@ function inputList() {
         }
       } else flag = true;
       const person = it.personId ? personById(it.personId) : null;
-      rows.push({ ch, name, source: cat(it).name, person: person?.name || '', port, flag, unpatched: !patch, itemId: it.id });
+      rows.push({ inIdx: inputsOf(it).indexOf(name), ch, name, source: cat(it).name, person: person?.name || '', port, flag, unpatched: !patch, itemId: it.id });
     }
   }
   return fixChannels(rows);
@@ -5591,7 +5610,7 @@ function renderPlot() {
   const tr = tracing && selItem === tracing && !layersBypass ? traceSets(tracing) : null;   // signal trace runs while its source stays picked
   svg.classList.toggle('tracing', !!tr);
   // a performer picked on their own: their things and cables stay, everything else steps back
-  const fp = !tr && solo && selItem && !layersBypass ? itemById(selItem) : null, fpid = presenting ? presPid : fp && cat(fp).shape === 'person' && fp.personId;   // show mode: the tapped person steps forward
+  const fp = !tr && solo && selItem && !layersBypass ? itemById(selItem) : null, fpid = presenting ? presPid : (!drag && hoverPid && plan.team.some(t => t.id === hoverPid) ? hoverPid : fp && cat(fp).shape === 'person' && fp.personId);   // show mode: the tapped person steps forward
   const fset = fpid ? new Set(plan.items.filter(i => i.personId === fpid).map(i => i.id).concat(fp ? [fp.id] : [])) : null;
   svg.classList.toggle('focusing', !!fset);
   for (const k of ['calm', 'full', 'mono']) svg.classList.toggle('style-' + k, !layersBypass && (cableView.style || 'calm') === k);
@@ -6025,7 +6044,7 @@ function renderRail() {
       ${plan.team.length && !pcoBusy ? (pcoAvail() && pco.mcp ? `<button class="pcoline" id="pcoStart">${ic('calendar', 'sm')}Update the team from Planning Center</button>` : '') : pcoHtml()}
       <div class="sechead"><h2>This week's team</h2></div>
       ${plan.team.length ? `<div class="people">${teamGroups().map(([g, list]) => `${plan.team.length > 1 ? `<h3 class="pgroup">${esc(g)} <span>${list.length}</span></h3>` : ''}${list.map(p => `
-        <div class="person" data-pid="${p.id}">
+        <div class="person" data-pid="${p.id}" draggable="true">
           <span class="avatar tone-${roleTone(p.role)}${hueStyle(p.id)}">${esc(initials(p.name) || '?')}${photoImg(p)}${roleMark(p.role)}</span>
           <div class="pmain">
             <input type="text" id="pn-${p.id}" value="${esc(p.name)}" aria-label="Name" data-f="name" placeholder="Name" list="pastPeople" autocomplete="off">
@@ -6709,7 +6728,7 @@ const PRINT_SHEETS = () => [['overview', 'Stage plot'], ['inputs', 'Inputs'], ['
 const printScales = () => imperial() ? [[0, 'Fit the page'], [48, '¼″ = 1′ (1:48)'], [96, '⅛″ = 1′ (1:96)']] : [[0, 'Fit the page'], [50, '1:50'], [100, '1:100']];
 function printPopHtml() {
   const o = printOpts(), skip = new Set(o.skip);
-  return `<div class="printpop" role="dialog" aria-label="Print options"><h2>Sheets to print</h2><div class="pp-sheets">${PRINT_SHEETS().map(([k, l]) => `<label><input type="checkbox" data-psheet="${k}" ${skip.has(k) ? '' : 'checked'}> ${l}</label>`).join('')}</div>
+  return `<div class="printpop" role="dialog" aria-label="Print options"><h2>Sheets to print</h2><div class="pp-preview" id="ppPreview" aria-hidden="true"></div><div class="pp-sheets">${PRINT_SHEETS().map(([k, l]) => `<label data-ppv="${k}"><input type="checkbox" data-psheet="${k}" ${skip.has(k) ? '' : 'checked'}> ${l}</label>`).join('')}</div>
     <div class="row" style="gap:10px"><button class="tlink" data-pall="1">All</button><button class="tlink" data-pall="0">None</button></div>
     <h2>Stage plot size</h2><div class="pp-scale">${printScales().map(([v, l]) => `<label><input type="radio" name="pscale" value="${v}" ${o.scale === v ? 'checked' : ''}> ${l}</label>`).join('')}</div>
     ${o.scale ? `<p class="hint">${scaleFit(o.scale).note}</p>` : ''}
@@ -6766,6 +6785,7 @@ function renderPaper() {
     if (c[0] === 'Ch' || c[0] === 'Mix') return `<td><span class="ch">${esc(v)}</span></td>`;
     if (c[0] === 'Group') return `<td><span class="grptag" style="--g:${r.colour}">${esc(v)}</span></td>`;
     if (c[0] === '48V') return `<td>${v ? '<span class="p48">48V</span>' : '<span class="hint">—</span>'}</td>`;
+    if (c[0] === 'Input' && r.itemId && r.inIdx >= 0 && !weekLocked()) return `<td><span class="ined" data-inedit="${r.itemId}|${r.inIdx}" role="button" tabindex="0" title="Click to rename">${esc(v)}</span>${r.delta ? '' : ''}</td>`;
     if (c[0] === 'Cable') return `<td><span class="row" style="gap:8px;flex-wrap:nowrap"><span class="dot bg-${r.type}"></span>${esc(v)}</span></td>`;
     if (c[0] === 'Input' && r.delta) return `<td>${esc(v)} <span class="chtag ${r.delta}" title="${esc(r.deltaWhy)}">${r.delta}</span></td>`;
     if (c[0] === 'Qty') return `<td class="num">${esc(v)}</td>`;
@@ -6835,13 +6855,87 @@ function renderPaper() {
   applyPrintPick();
 }
 // beside "Everything": a short list of the sheets on the page, to jump between them
+// after jumping from a paperwork row to the plot: a chip to go straight back to the same place on the sheet
+let hoverPid = null;   // a person pointed at in the team list: their gear and cables step forward on the plot
+let backTo = null;
+document.addEventListener('pointerover', e => { if (view !== 'plot' || e.pointerType === 'touch') return; const row = e.target.closest?.('.person[data-pid]'); const pid = row?.dataset.pid || null; if (pid === hoverPid) return; hoverPid = pid; renderPlot(); });
+function renameInput(itemId, idx, v) {
+  const it = itemById(itemId); v = (v || '').replace(/\s+/g, ' ').trim().slice(0, 60); if (!it || !v) return;
+  const list = [...inputsOf(it)]; if (list[idx] === v) return;
+  const before = inputSheet().find(r => r.itemId === itemId && r.inIdx === idx);
+  mutate(() => { list[idx] = v; it.inputs = list; it.inputsEdited = true;
+    const after = inputSheet().find(r => r.itemId === itemId && r.inIdx === idx), C = chans_();   // the channel number (and any edits) follow the new name
+    if (before && after && before.key !== after.key) for (const o of Object.values(C)) if (o && typeof o === 'object' && before.key in o) { o[after.key] = o[before.key]; delete o[before.key]; }
+  }, `Input renamed to ${v}`);
+}
+function startInEdit(span) {
+  const [id, k] = span.dataset.inedit.split('|'), inp = document.createElement('input'); inp.type = 'text'; inp.className = 'ineditbox'; inp.value = span.textContent; inp.setAttribute('aria-label', 'Input name');
+  span.replaceWith(inp); inp.focus(); inp.select(); let done = false;
+  const end = keep => { if (done) return; done = true; if (keep) renameInput(id, Number(k), inp.value); else renderPaper(); };
+  inp.onkeydown = ev => { if (ev.key === 'Enter') { ev.preventDefault(); end(true); } else if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); end(false); } };
+  inp.onblur = () => end(true);
+}
+// the Print menu: pointing at a sheet shows a small picture of it beside the menu
+function ppShow(k) {
+  const box = $('ppPreview'); if (!box) return; const src = document.querySelector(`#sheetGrid .sheet[data-sheet="${k}"]`);
+  if (!src) { box.classList.remove('on'); return; }
+  const c = src.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(x => x.removeAttribute('id')); c.classList.add('ppclone');
+  box.replaceChildren(c); box.classList.add('on');
+}
+document.addEventListener('pointerover', e => { const l = e.target.closest?.('.printpop [data-ppv]'); if (l) ppShow(l.dataset.ppv); else if (!e.target.closest?.('.printpop')) $('ppPreview')?.classList.remove('on'); });
+document.addEventListener('focusin', e => { const l = e.target.closest?.('.printpop [data-ppv]'); if (l) ppShow(l.dataset.ppv); });
+// a faint marker on both rulers follows the pointer, with how far it is from stage right and from the front edge
+function rulerCursor(p) {
+  let g = svg.querySelector('#rulCur'); const W = plan.stage.w, D = plan.stage.d;
+  if (!p || layerOff('dims') || p.x < -1 || p.x > W + 1 || p.y < -1 || p.y > D + 1) { g?.remove(); return; }
+  if (!g) { g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.id = 'rulCur'; g.setAttribute('class', 'rulcur'); g.setAttribute('aria-hidden', 'true'); svg.append(g); }
+  const x = clamp(p.x, 0, W), y = clamp(p.y, 0, D), k = 1 / (scale || 30);
+  g.innerHTML = `<path d="M${f3(x)} -.95V-.1M-.95 ${f3(y)}H-.1"/><text x="${f3(x)}" y="${f3(-1.1)}" text-anchor="middle" style="font-size:${f3(11 * k)}px">${esc(uLen(x))}</text><text x="${f3(-1.1)}" y="${f3(y)}" text-anchor="end" dominant-baseline="middle" style="font-size:${f3(11 * k)}px">${esc(uLen(D - y))}</text>`;
+}
+svg.addEventListener('pointerleave', () => svg.querySelector('#rulCur')?.remove());
+{ let sx = 0, sy = 0; const wk = $('weekBtn').parentElement;   // swipe the week bar on a phone: left for the next week, right for the one before
+  wk.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  wk.addEventListener('touchend', e => { const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) { e.preventDefault(); $(dx < 0 ? 'nextWeekBtn' : 'prevWeek').click(); } }); }
+// drag people up and down the team list; the order carries through to the Team sheet and My spot
+{ let dragPid = null; const rail = document.querySelector('.rail');
+  rail.addEventListener('dragstart', e => { const r = e.target.closest?.('.person[data-pid]'); if (!r || e.target.closest('input, select, button, textarea')) return; dragPid = r.dataset.pid; r.classList.add('lifting'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', 'person'); } catch { /* ok */ } });
+  rail.addEventListener('dragover', e => { const r = e.target.closest?.('.person[data-pid]'); if (!dragPid || !r) return; e.preventDefault(); rail.querySelectorAll('.person.dropabove, .person.dropbelow').forEach(x => x.classList.remove('dropabove', 'dropbelow')); const b = r.getBoundingClientRect(); r.classList.add(e.clientY < b.top + b.height / 2 ? 'dropabove' : 'dropbelow'); });
+  rail.addEventListener('drop', e => { const r = e.target.closest?.('.person[data-pid]'), from = dragPid; dragPid = null; if (!r || !from || r.dataset.pid === from) { renderRail(); return; } e.preventDefault();
+    const below = r.classList.contains('dropbelow'), to = r.dataset.pid;
+    mutate(() => { const i = plan.team.findIndex(t => t.id === from), [p] = plan.team.splice(i, 1); let j = plan.team.findIndex(t => t.id === to); if (below) j++; plan.team.splice(j, 0, p); }, `${personById(from)?.name || 'Person'} moved`); });
+  rail.addEventListener('dragend', () => { dragPid = null; rail.querySelectorAll('.person.lifting, .person.dropabove, .person.dropbelow').forEach(x => x.classList.remove('lifting', 'dropabove', 'dropbelow')); }); }
+function backChip() {
+  $('backChip')?.remove(); if (!backTo || view !== 'plot') { if (view !== 'plot') backTo = null; return; }
+  $('plotView').insertAdjacentHTML('beforeend', `<button class="backchip" id="backChip">${ic('chevL', 'sm')}Back to ${esc(backTo.label)}</button>`);
+  $('backChip').onclick = () => { const b = backTo; backTo = null; view = 'paper'; paperTab = b.tab; renderAll(); requestAnimationFrame(() => $('paperView').scrollTo(0, b.top)); };
+}
+// sheet tabs that don't fit: a soft fade and an arrow at whichever end has more
+function navFades() {
+  const dn = document.querySelector('.docnav'), nav = dn?.querySelector('nav'); if (!nav) return;
+  if (!dn.querySelector('.navarr')) { nav.insertAdjacentHTML('beforebegin', `<button class="navarr l" tabindex="-1" aria-hidden="true">${ic('chevL', 'sm')}</button>`); nav.insertAdjacentHTML('afterend', `<button class="navarr r" tabindex="-1" aria-hidden="true">${ic('chevR', 'sm')}</button>`);
+    dn.querySelector('.navarr.l').onclick = () => nav.scrollBy({ left: -200, behavior: 'smooth' }); dn.querySelector('.navarr.r').onclick = () => nav.scrollBy({ left: 200, behavior: 'smooth' }); nav.addEventListener('scroll', navFades, { passive: true }); }
+  const over = nav.scrollWidth > nav.clientWidth + 2, ra = dn.querySelector('.navarr.r'), la = dn.querySelector('.navarr.l'); const ny = `${nav.offsetTop + nav.offsetHeight / 2}px`; ra.style.left = `${nav.offsetLeft + nav.clientWidth - 30}px`; la.style.left = `${nav.offsetLeft + 2}px`; ra.style.top = la.style.top = ny;
+  edgeFade(nav); dn.classList.toggle('arr-l', over && nav.scrollLeft > 2); dn.classList.toggle('arr-r', over && nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 2);
+}
+addEventListener('resize', () => { if (view === 'paper') navFades(); });
+// drag sideways on a number's label to change it, like a design tool: one step per few pixels (Shift: ten), one undo step at the end
+document.addEventListener('pointerdown', e => {
+  const lab = e.target.closest?.('label[for]'); if (!lab || e.button !== 0 || e.pointerType === 'touch') return;
+  const inp = document.getElementById(lab.htmlFor); if (!inp || inp.type !== 'number' || inp.disabled || inp.readOnly) return;
+  const x0 = e.clientX, v0 = Number(inp.value) || 0, st = Number(inp.step) || 1, lo = inp.min === '' ? -Infinity : Number(inp.min), hi = inp.max === '' ? Infinity : Number(inp.max), dp = (String(st).split('.')[1] || '').length;
+  let moved = false;
+  const mv = ev => { const dx = ev.clientX - x0; if (!moved && Math.abs(dx) < 4) return; moved = true; document.body.classList.add('scrubbing');
+    const v = clamp(v0 + Math.round(dx / 4) * st * (ev.shiftKey ? 10 : 1), lo, hi); inp.value = v.toFixed(dp); inp.dispatchEvent(new Event('input', { bubbles: true })); };
+  const up = () => { removeEventListener('pointermove', mv); document.body.classList.remove('scrubbing'); if (moved && Number(inp.value) !== v0) inp.dispatchEvent(new Event('change', { bubbles: true })); };
+  addEventListener('pointermove', mv); addEventListener('pointerup', up, { once: true });
+});
 function allToc() {
   $('allToc')?.remove(); if (view !== 'paper' || paperTab !== 'all') return;
   const secs = [...document.querySelectorAll('#sheetGrid .sheet[id]')].filter(x => x.offsetParent && x.querySelector('h2'));
   if (secs.length > 2) $('paperInner').insertAdjacentHTML('beforeend', `<nav class="alltoc" id="allToc" aria-label="Sheets on this page"><b>On this page</b>${secs.map(x => `<button data-tocgo="${x.id}">${esc(x.querySelector('h2').textContent)}</button>`).join('')}</nav>`);
 }
 function renderAll() { if (view !== 'plot' && $('hoverCard')) $('hoverCard').hidden = true;   // a plot hover card never follows you to Home or the paperwork
-  renderHeader(); renderRail(); renderPlot(); renderInspector(); renderPaper(); allToc(); renderHome(); }
+  renderHeader(); renderRail(); renderPlot(); renderInspector(); renderPaper(); allToc(); backChip(); navFades(); renderHome(); }
 
 /* ===================================================================
    Planning Center panel
@@ -7071,6 +7165,8 @@ svg.addEventListener('pointermove', e => {
   hoverPt = toFt(e);
   if (placing && !drag) { renderPlot(); return; }
   if (mode === 'measure' && measure?.live === 'click' && !drag) { measure.b = measurePt(e, measure.a); renderPlot(); return; }
+  rulerCursor(hoverPt);
+  if (drag?.kind === 'item' && drag.moved && !document.body.classList.contains('dragging-gear')) document.body.classList.add('dragging-gear');   // panels step back while gear is in hand
   if (drag?.kind === 'measure' && !measure) drag = null;   // measuring was cancelled mid-drag (Esc, or another tool)
   if (drag?.kind === 'measure') { measure.b = measurePt(e, measure.a); if (Math.hypot(measure.b[0] - measure.a[0], measure.b[1] - measure.a[1]) > .15) drag.moved = true; renderPlot(); return; }
   if (drag?.kind === 'zoom') {   // the pool's edge follows the pointer, within what the light can zoom to (whole degrees, Alt for halves)
@@ -7154,7 +7250,7 @@ svg.addEventListener('pointermove', e => {
   }
 });
 function endDrag() {
-  scroller.classList.remove('panning');
+  scroller.classList.remove('panning'); document.body.classList.remove('dragging-gear');
   const d = drag; drag = null;
   if (!d) return;
   if (d.kind === 'item' && d.moved) {   // set down: a small settle, once
@@ -7908,11 +8004,12 @@ $('inspector').addEventListener('click', e => {
 });
 
 /* paperwork */
+$('paperInner').addEventListener('keydown', e => { const ie = e.target.closest?.('[data-inedit]'); if (ie && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); startInEdit(ie); } });
 $('paperInner').addEventListener('click', e => {
-  const t = e.target.closest('[data-copy]'); if (t) { copyText(paperData[t.dataset.copy], $('copyFallback')); return; }
+  const t = e.target.closest('[data-copy]'); if (t) { copyText(paperData[t.dataset.copy], $('copyFallback'), t); return; }
   const ex = e.target.closest('[data-exp]'); if (ex) { exportInputs(ex.dataset.exp); return; }
   const sp = e.target.closest('[data-spot]'); if (sp) { spotSel = sp.dataset.spot; renderPaper(); return; }
-  const sc = e.target.closest('[data-spotcopy]'); if (sc) { const p = plan.team.find(t => t.id === sc.dataset.spotcopy); if (p) copyText(spotText(spotData(p)), $('copyFallback')); return; }
+  const sc = e.target.closest('[data-spotcopy]'); if (sc) { const p = plan.team.find(t => t.id === sc.dataset.spotcopy); if (p) copyText(spotText(spotData(p)), $('copyFallback'), sc); return; }
   if (e.target.closest('#printSpots')) { const was = spotSel; spotSel = 'all'; renderPaper(); document.body.classList.add('print-spots'); document.body.classList.toggle('spots4', spots4); const done = () => { document.body.classList.remove('print-spots', 'spots4'); removeEventListener('afterprint', done); spotSel = was; renderPaper(); }; addEventListener('afterprint', done); printNow('print-spots', 'my-spot-cards'); setTimeout(done, 1500); return; }
   if (e.target.closest('#chEditBtn')) { chEdit = !chEdit; renderPaper(); return; }
   if (e.target.closest('#chRenumber')) { renumberChannels(); return; }
@@ -7935,11 +8032,12 @@ $('paperInner').addEventListener('click', e => {
   if (e.target.closest('#lineReset')) { plan.linecheck = {}; save(); renderPaper(); toast('Line check cleared'); return; }
   if (e.target.closest('#loadinReset')) { plan.loadin = {}; save(); renderPaper(); toast('Ticks cleared'); return; }
   if (e.target.closest('#picBtn')) { withBusy(e.target.closest('#picBtn'), plotPicture); return; }
-  if (e.target.closest('#summaryBtn')) { copyText(weekSummary(), $('copyFallback')); return; }
+  if (e.target.closest('#summaryBtn')) { copyText(weekSummary(), $('copyFallback'), e.target.closest('#summaryBtn')); return; }
   if (e.target.closest('#sheetsBtn')) { const sb = e.target.closest('#sheetsBtn'); withBusy(sb, async () => { await new Promise(r => setTimeout(r, 30)); return offerFile(`stagehand-${plan.date}-sheets.html`, paperworkHtml(), 'text/html'); }); return; }
   const pt = e.target.closest('[data-ptab]'); if (pt) { paperTab = pt.dataset.ptab; renderPaper(); $('paperView').scrollTop = 0; }
+  const ie = e.target.closest('[data-inedit]'); if (ie) { startInEdit(ie); return; }
   const tg = e.target.closest('[data-tocgo]'); if (tg) { const el = document.getElementById(tg.dataset.tocgo); if (el) { const pv = $('paperView'); pv.scrollTo({ top: pv.scrollTop + el.getBoundingClientRect().top - pv.getBoundingClientRect().top - 70, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); el.querySelector('h2')?.setAttribute('tabindex', '-1'); } return; }
-  const sh = e.target.closest('tr[data-showitem]'); if (sh && !e.target.closest('button, input, select, a, textarea')) { const it = itemById(sh.dataset.showitem); if (it) { view = 'plot'; sel = { kind: 'item', id: it.id }; renderAll(); focusItem(it.id); } return; }
+  const sh = e.target.closest('tr[data-showitem]'); if (sh && !e.target.closest('button, input, select, a, textarea, [data-inedit]')) { const it = itemById(sh.dataset.showitem); if (it) { backTo = { tab: paperTab, top: $('paperView').scrollTop, label: sh.closest('.sheet')?.querySelector('h2')?.textContent || 'the paperwork' }; view = 'plot'; sel = { kind: 'item', id: it.id }; renderAll(); focusItem(it.id); } return; }
   const go = e.target.closest('[data-goto]'); if (go) { view = 'plot'; railTab = go.dataset.goto; needFit = !zoom; togglePanel('rail', true); renderAll(); }
 });
 
@@ -7948,8 +8046,8 @@ $('dataBtn').onclick = () => { $('dataText').value = ''; $('dataDlg').hidden = f
 $('dataClose').onclick = () => { $('dataDlg').hidden = true; };
 $('dataDlg').addEventListener('click', e => { if (e.target.id === 'dataDlg') $('dataDlg').hidden = true; });
 const backup = all => JSON.stringify({ app: 'stageplot', version: 1, plans: all ? db.plans : { [plan.id]: plan }, ...(all && db.setups ? { setups: db.setups } : {}), ...(all ? { defaults: db.defaults, gear: db.gear, pcoPrefs: db.pcoPrefs, channels: db.channels, venues: db.venues } : {}) }, null, 1);
-$('copyAll').onclick = () => { const s = backup(true); $('dataText').value = s; copyText(s, $('dataText')); };
-$('copyOne').onclick = () => { const s = backup(false); $('dataText').value = s; copyText(s, $('dataText')); };
+$('copyAll').onclick = () => { const s = backup(true); $('dataText').value = s; copyText(s, $('dataText'), $('copyAll')); };
+$('copyOne').onclick = () => { const s = backup(false); $('dataText').value = s; copyText(s, $('dataText'), $('copyOne')); };
 /* files out: inside Claude the viewer confirms each save; on a plain web page it's an ordinary download */
 let dlCap;   // undefined until known; null = this view can't save files (the buttons hide)
 if (window.claude?.use) window.claude.use('downloads').then(d => { dlCap = d; if (!d) document.querySelectorAll('[data-needs-dl]').forEach(b => b.hidden = true); }, () => { dlCap = null; });
