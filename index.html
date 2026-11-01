@@ -3214,6 +3214,8 @@ function fadedBeams(fresh, key) {
   const d = `animation-delay:-${Math.round(el)}ms`;
   return `<g class="lb-fadein" style="${d}">${fresh}</g><g class="lb-fadeout" style="${d}">${lookFade[key]}</g>`;
 }
+// a front light: one that lights faces from the house side (it keeps warm white in the basics and is matched as front light by the library)
+const isFrontLight = it => frontAngle(it) != null || (!isUp(it) && !mountOf(it) && it.type !== 'light_stand' && it.y > Math.max(...stagePoly().map(q => q[1])) && aimOf(it, -1)[1] < -.2);
 /* The basics every church uses: Walk-in (people arriving: a soft colour on the stage and the walls, front light off), Full
    (everything warm white, for rehearsal and focus) and Blackout (everything off, between moments). */
 const BASICS = [['Walk-in', 'Soft blue on the stage and walls, front light off'], ['Full', 'Every light warm white at full'], ['Blackout', 'Everything off']];
