@@ -1505,6 +1505,7 @@ tr.flag .ch { background: var(--bad-soft); color: var(--bad); }
 /* the canvas, not the window, decides when the tool dock drops its labels (iPad portrait, panels open) */
 .canvas { container-type: inline-size; }
 @container (max-width: 780px) { .tool .tl, .zoomval { display: none; } .f-dock .panel { gap: 2px; } }
+.f-dock.tight .tool .tl, .f-dock.tight .zoomval { display: none; } .f-dock.tight .panel { gap: 2px; }   /* Advanced adds tools: drop labels whenever the dock would overflow */
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
 
 .grptag { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; } .grptag::before { content: ''; width: 9px; height: 9px; border-radius: 3px; background: var(--g); }
@@ -5709,6 +5710,11 @@ function togglePanel(which, open) {
   if (which === 'rail') railOpen = open ?? !railOpen; else inspOpen = open ?? !inspOpen;
   applyPanels();
 }
+function fitDock() {   // labels go when the tools would spill past the canvas into a side panel
+  const d = $('ftools'), pn = d.firstElementChild; if (!pn) return;
+  d.classList.remove('tight'); if (pn.scrollWidth > pn.clientWidth + 1) d.classList.add('tight');
+}
+if (window.ResizeObserver) new ResizeObserver(() => fitDock()).observe($('canvas'));
 function renderFloat() {
   renderQuick();
   renderEmpty();
@@ -5729,6 +5735,7 @@ function renderFloat() {
       ${ui.adv || plan.setupLock ? `<button class="iconbtn" id="setupLock" aria-pressed="${!!plan.setupLock}" aria-label="${plan.setupLock ? 'Unlock the setup' : 'Lock the setup'}" title="${plan.setupLock ? 'Setup locked: risers, stage box, speakers and power stay put. Click to unlock' : 'Lock the setup: risers, stage box, speakers and power stay put while you move band gear'}">${ic(plan.setupLock ? 'lock' : 'unlock')}</button>` : ''}
       ${ui.adv || flipped ? `<button class="iconbtn" id="flipView" aria-pressed="${flipped}" aria-label="${flipped ? 'See it from the house' : 'See it from the stage'}" title="${flipped ? 'Back to the view from the house' : 'Turn the plot round: the band’s view, looking out at the audience'}">${ic('rotate')}</button>` : ''}
     </div>`;
+  fitDock();
   $('fzoom').innerHTML = mode === 'channel' ? `<div class="panel">${chDraft?.extend ? `<span class="chip accent">Extending ${esc(chans().find(x => x.id === chDraft.extend.id)?.name || '')}</span>` : Object.entries(CH_KINDS).map(([k, v]) => `<button class="ctype" data-chdraftkind="${k}" aria-pressed="${k === chDraftKind}">${v.level ? '↑ ' : ''}${esc(v.name)}</button>`).join('')}<span class="dock-sep"></span><span class="toolhint">${chDraft?.pts.length ? 'Click to add bends · click the last point again or press Enter to finish · Alt for angles' : 'Click where the channel starts'}</span>${chDraft?.pts.length >= 2 ? `<button class="btn primary" id="chFinish" style="padding:5px 10px">Finish</button>` : ''}<button class="btn quiet" data-mode="select" style="padding:5px 10px">Cancel</button></div>` : mode === 'cable' ? `<div class="panel">${`<button class="ctype" data-ctype="auto" aria-pressed="${cableType === 'auto'}" title="Pick the type from the two ends">${ic('wand', 'sm')}Auto</button>` + Object.keys(CABLES).map(k => `<button class="ctype" data-ctype="${k}" aria-pressed="${k === cableType}"><span class="sw bg-${k}"></span>${SHORT[k]}</button>`).join('')}
       <span class="dock-sep"></span><span class="toolhint">${pending ? `Click to pivot · click a channel to enter it · click gear to finish · <span class="kbd">⌫</span> undo pivot · <span class="kbd">Esc</span> cancel` : 'Click the gear where the cable starts'}</span></div>`
     : placing && CAT[placing] ? `<div class="panel" style="display:flex;align-items:center;flex-wrap:nowrap"><span class="toolhint" style="white-space:nowrap">Click the stage to place <b>${esc(CAT[placing].name)}</b> · Shift-click for several</span><button class="btn quiet" id="placeCancel" style="padding:5px 10px">Cancel</button></div>`
