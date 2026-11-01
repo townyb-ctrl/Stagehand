@@ -4,7 +4,7 @@ const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto(require('./app.js').url); await p.waitForTimeout(500); await p.click('#welcomeExample'); await p.waitForTimeout(300);
 await p.click('#vPaper'); await p.waitForTimeout(300);
 const [d1] = await Promise.all([p.waitForEvent('download'), p.click('#printMore').then(() => p.click('#sheetsBtn'))]);
-const path = __dirname + '/sheets-export.html'; await d1.saveAs(path); console.log('sheets file', d1.suggestedFilename());
+const path = process.cwd() + '/sheets-export.html'; await d1.saveAs(path); console.log('sheets file', d1.suggestedFilename());
 console.log('tab restored', await p.evaluate(() => paperTab));
 await p.evaluate(() => { $('dataBtn').click(); });
 const [d2] = await Promise.all([p.waitForEvent('download'), p.click('#dlAll')]); console.log('backup file', d2.suggestedFilename());

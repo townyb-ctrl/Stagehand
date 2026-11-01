@@ -7,7 +7,7 @@ name: Stagehand desktop
 on:
   push:
     branches: ['**']
-    paths: ['index.html', 'manifest.webmanifest', 'icons/**', 'desktop/**', '.github/workflows/desktop.yml']
+    paths: ['index.html', 'manifest.webmanifest', 'icons/**', 'desktop/**', 'tools/**', '.github/workflows/desktop.yml']
     tags: ['v*']
   workflow_dispatch:
     inputs:
@@ -40,6 +40,9 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: desktop/package-lock.json
+      - name: Minify the app (tools/build.mjs writes dist/)
+        working-directory: tools
+        run: npm ci && npm run build
       - run: npm ci
       - name: Build installer
         run: npm run dist:${{ matrix.target }}

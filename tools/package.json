@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "description": "Release build for Stagehand: npm install, then npm run build (writes ../dist/)",
+  "type": "module",
+  "scripts": { "build": "node build.mjs" },
+  "devDependencies": { "esbuild": "0.24.2" }
+}

@@ -22,7 +22,7 @@ await p.evaluate(() => { document.querySelectorAll('.toast').forEach(t => t.remo
 await p.click('#printBtn'); await p.waitForTimeout(800);
 console.log('no note when printing works', !/blocked/i.test(await p.evaluate(() => document.querySelector('.toast')?.textContent || '')));
 // the downloaded file prints: open it and check its button calls print
-const out = __dirname + '/dl-sheets.html'; await dl.saveAs(out); const p2 = await ctx.newPage(); await p2.goto('file://' + out); await p2.waitForTimeout(400);
+const out = process.cwd() + '/dl-sheets.html'; await dl.saveAs(out); const p2 = await ctx.newPage(); await p2.goto('file://' + out); await p2.waitForTimeout(400);
 console.log('file opens', await p2.evaluate(() => !!document.querySelector('.fileprint') && (!document.querySelector('.viewbar') || getComputedStyle(document.querySelector('.viewbar')).display === 'none')));
 await p2.emulateMedia({ media: 'print' }); console.log('button hidden on paper', await p2.evaluate(() => getComputedStyle(document.querySelector('.fileprint')).display === 'none'));
 console.log('errors', errs); await b.close(); })();
