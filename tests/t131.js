@@ -1,12 +1,12 @@
-// turning the view: quarter turns and the flip, in Simple; clicks and drags land where they look; remembered after a reload
+// the flip, in Simple: clicks and drags land where they look, words stay upright, remembered after a reload; no quarter turns
 const { chromium } = require(require('./app.js').pw);
 (async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } }); const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto(require('./app.js').url); await p.waitForTimeout(500); await p.click('#welcomeExample'); await p.waitForTimeout(400);
 await p.evaluate(() => { view = 'plot'; sel = null; renderAll(); document.querySelectorAll('.toast').forEach(t => t.remove()); });
-console.log('simple has both', await p.evaluate(() => [!ui.adv, !!$('flipView'), !!$('rotView')]));
+console.log('simple has flip only', await p.evaluate(() => [!ui.adv, !!$('flipView'), !$('rotView')]));
 const pid = await p.evaluate(() => plan.items.find(i => i.type === 'person')?.id);
-for (const turns of [1, 2, 3, 4]) {
-  await p.click('#rotView'); await p.waitForTimeout(300);
+for (const turns of [1, 2]) {
+  await p.click('#flipView'); await p.waitForTimeout(300);
   const st = await p.evaluate(() => [viewRot, $('plot').getAttribute('class'), $('canvas').dataset.turn]);
   // click the item where it is drawn: it gets picked
   await p.evaluate(() => { sel = null; renderAll(); });
@@ -25,10 +25,11 @@ for (const turns of [1, 2, 3, 4]) {
   await p.keyboard.press('Control+z'); await p.waitForTimeout(100);
 }
 await p.click('#flipView'); await p.waitForTimeout(200); console.log('flip', await p.evaluate(() => [viewRot, $('canvas').dataset.turn]));
-await p.click('#rotView'); await p.waitForTimeout(200);
+await p.evaluate(() => localStorage.setItem('stageplot.viewRot', '90')); await p.reload(); await p.waitForTimeout(500); console.log('old quarter turn opens straight', await p.evaluate(() => viewRot));
+await p.click('#welcomeExample').catch(() => {}); await p.evaluate(() => { view = 'plot'; setRot(180); });
 await p.reload(); await p.waitForTimeout(500); await p.evaluate(() => { view = 'plot'; renderAll(); });
-console.log('remembered', await p.evaluate(() => [viewRot, $('plot').classList.contains('rot270')]));
-console.log('picture unturned', await p.evaluate(() => { snapCache.key = ''; const s = plotSnapshotDraw(10); return !/^<svg[^>]*><g transform="rotate\(/.test(s) && viewRot === 270; }), 'screen still turned', await p.evaluate(() => !!document.querySelector('#rotg') && $('plot').classList.contains('rot270')));
+console.log('remembered', await p.evaluate(() => [viewRot, $('plot').classList.contains('rot180')]));
+console.log('picture unturned', await p.evaluate(() => { snapCache.key = ''; const s = plotSnapshotDraw(10); return !/^<svg[^>]*><g transform="rotate\(/.test(s) && viewRot === 180; }), 'screen still turned', await p.evaluate(() => !!document.querySelector('#rotg') && $('plot').classList.contains('rot180')));
 await p.screenshot({ path: 't131-270.png' });
-await p.setViewportSize({ width: 400, height: 860 }); await p.waitForTimeout(300); console.log('phone buttons', await p.evaluate(() => [getComputedStyle($('flipView')).display !== 'none', getComputedStyle($('rotView')).display !== 'none', document.documentElement.scrollWidth <= innerWidth]));
+await p.setViewportSize({ width: 400, height: 860 }); await p.waitForTimeout(300); console.log('phone buttons', await p.evaluate(() => [getComputedStyle($('flipView')).display !== 'none', document.documentElement.scrollWidth <= innerWidth]));
 console.log('errors', errs); await b.close(); })();

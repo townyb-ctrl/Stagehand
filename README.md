@@ -21,11 +21,11 @@ Open `index.html` in a modern browser. No install, no account, no server.
 ## Good to know
 
 - **Simple and Advanced** (⋯ menu): Simple keeps everyday controls; Advanced shows every setting, DMX detail and extra tools.
-- **Turn the view**: the flip button shows the stage from the band's side; the turn button rotates the plot a quarter at a time. Labels stay upright, and this device remembers the turn. Paperwork and pictures are always drawn straight.
+- **Flip** (button by the zoom tools): the plot from the band's side, audience at the top. Labels stay upright, and this device remembers it. Paperwork and pictures are always drawn from the house.
 - **Show mode** (`F`): the plot full screen for an iPad on stage. Tap a person to see their channels and monitor.
 - **Stage boxes**: a digital stage box on Cat6, or an analog snake (8, 12, 16, 24 or 32 inputs) on a multicore. Inputs and outputs patch to the nearest one with room, and the checks say when a snake is full.
 - **Wireless and in-ears**: wireless mics go through rack receivers or single receivers on stage (each with its own XLR to the stage box); in-ear packs can be wireless (transmitter) or wired (a stage box output).
-- **Power**: an extension lead plugs in with its own 3-pin plug, which doesn't use one of its sockets. Placing one plugs it into the nearest power point or distro, or asks you to click one.
+- **Power**: an extension lead plugs in with its own cord and 3-pin plug (drawn as a loose lead that follows the board), which doesn't use one of its sockets. Placing one plugs it into the nearest power point or distro, or asks you to click one.
 - **Undo** everything with `Ctrl/Cmd+Z` (redo: add Shift, or `Ctrl+K` → Redo); version history is in the ⋯ menu.
 - **Light and dark** themes follow your device, or pick one in Preferences. Text size, feet-and-inches and whether building the stage adds everyone's gear are there too.
 

@@ -450,6 +450,7 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .fl-out { fill: var(--deck); stroke-width: .07; stroke-linejoin: round; }
 .flowg.dim { opacity: .18; }
 .cab.k-inst.quiet { opacity: .9; stroke-width: var(--cl, .2); }   /* leads stay visible, they're the fun ones */
+.mainsplug rect { stroke: rgba(0,0,0,.5); stroke-width: .035; } .mainsplug path { fill: none; stroke: #d6dbe0; stroke-width: .04; stroke-linecap: round; } .mainsplug .mp-grip { stroke: rgba(0,0,0,.3); stroke-width: .03; } .mainsplug .mp-boot { stroke: rgba(0,0,0,.45); stroke-width: .03; filter: brightness(.8); } .mainsplug.dim { opacity: .35; }
 .lead-shadow { fill: none; stroke: rgba(0,0,0,.45); stroke-width: var(--cl2, .3); stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
 .light-deck .lead-shadow { stroke: rgba(0,0,0,.16); }
 .cab.k-inst { stroke-width: var(--cl, .2); opacity: 1; }   /* jack leads are the chunky ones */
@@ -1328,7 +1329,7 @@ tr.flag td { color: var(--bad); }
 #plot.rot90 #rotg text:not([transform]), #plot.rot180 #rotg text:not([transform]), #plot.rot270 #rotg text:not([transform]) { transform-box: fill-box; transform-origin: center; }
 #plot.rot90 #rotg text:not([transform]) { rotate: -90deg; } #plot.rot180 #rotg text:not([transform]) { rotate: 180deg; } #plot.rot270 #rotg text:not([transform]) { rotate: 90deg; }   /* side labels already turned sideways read fine either way */
 #plotView.turned .canvas::after { content: attr(data-turn); position: absolute; left: 50%; top: 12px; translate: -50% 0; padding: 4px 10px; border-radius: 99px; background: var(--ink); color: var(--surface); font-size: 12px; font-weight: 600; pointer-events: none; z-index: 5; }
-#setupLock[aria-pressed="true"], #flipView[aria-pressed="true"], #rotView[aria-pressed="true"] { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+#setupLock[aria-pressed="true"], #flipView[aria-pressed="true"] { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .selmore { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; }
 .libmain mark { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--ink); border-radius: var(--r-xs); padding: 0 2px; }
 .spots4 { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); margin-left: 10px; white-space: nowrap; } .pp-spots { gap: 4px; flex-wrap: nowrap; } .pp-spots .spots4 { margin-left: 6px; } .spots4 input { accent-color: var(--accent); }
@@ -4506,7 +4507,6 @@ const SYM_CSS = `
 .s-line{fill:none;stroke:rgba(255,255,255,.55);stroke-width:.05;stroke-linecap:round;stroke-linejoin:round}
 .s-thin{fill:none;stroke:rgba(255,255,255,.32);stroke-width:.035;stroke-linecap:round}
 .s-cord{fill:none;stroke:#2b2f35;stroke-width:.07;stroke-linecap:round}
-.s-pin{fill:none;stroke:#c9ced4;stroke-width:.03;stroke-linecap:round}
 .s-boom{fill:none;stroke:#e8ecef;stroke-width:.06;stroke-linecap:round}
 .s-edge{stroke:rgba(0,0,0,.45);stroke-width:.05}
 .s-dark{fill:#14181c}
@@ -4538,12 +4538,10 @@ const SYM = (() => {
   const rect = (x, y, w, h, cls, rx = .06) => `<rect class="${cls}" x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" rx="${rx}"/>`;
   const circ = (cx, cy, r, cls) => `<circle class="${cls}" cx="${f(cx)}" cy="${f(cy)}" r="${f(r)}"/>`;
   const line = (x1, y1, x2, y2, cls = 's-line') => `<path class="${cls}" d="M${f(x1)} ${f(y1)}L${f(x2)} ${f(y2)}"/>`;
-  // an extension lead's own cord and 3-pin plug, off its left end: it plugs in with this, not with one of its sockets
   const snakeBox = (w, ins, outs) => { const hw = w / 2, cols = Math.ceil(ins / 2), dx = (w - .3) / cols; let g = rect(-hw, -.45, w, .9, 's-cab2 s-edge', .08) + line(0, -.45, 0, -.75, 's-cord') + rect(-.12, -.82, .24, .12, 's-dark', .03);   // the multicore leaves the back
     for (let k = 0; k < ins; k++) g += circ(-hw + .15 + dx * (k % cols + .5), k < cols ? -.22 : 0, Math.min(.07, dx * .35), 's-dark');
     for (let k = 0; k < outs; k++) g += circ(-hw + .15 + (w - .3) / outs * (k + .5), .27, Math.min(.06, (w - .3) / outs * .3), 's-white');
     return g; };
-  const extPlug = x0 => line(x0, 0, x0 - .28, 0, 's-cord') + rect(x0 - .5, -.11, .22, .22, 'body c-power', .04) + [-.06, 0, .06].map(y => line(x0 - .5, y, x0 - .58, y, 's-pin')).join('');
   const box = (w, d, c, rx = .08) => rect(-w / 2, -d / 2, w, d, `body c-${c} s-edge`, rx);
   const tripod = (r, cls = 's-line') => [90, 210, 330].map(a => line(0, 0, r * Math.cos(a * Math.PI / 180), r * Math.sin(a * Math.PI / 180), cls)).join('');
   const diBox = (w, ys) => { const h = w / 2, jx = -h + .19, xx = h - .22, xr = ys.length > 1 ? .095 : .12;
@@ -4808,9 +4806,9 @@ const SYM = (() => {
     distro: rect(-1, -.75, 2, 1.5, 's-cab2 s-edge', .1) + rect(-.92, -.67, 1.84, 1.34, 's-cabtop2', .06) + rect(-.92, -.67, 1.84, .14, 's-pstripe', .04) +   // an orange-topped power box: breakers, six outlets, a lit switch
       [-.66, -.4, -.14, .12, .38, .64].map(x => rect(x - .09, -.44, .18, .22, 's-breaker', .03) + rect(x - .04, -.42, .08, .08, 's-btip', .01)).join('') +
       socket(-.55, .02) + socket(0, .02) + socket(.55, .02) + socket(-.55, .43) + socket(0, .43) + socket(.55, .43) + circ(.82, -.6, .045, 's-ledr'),
-    pboard2: rect(-.45, -.22, .9, .44, 's-white s-edge', .1) + [-.15, .2].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.36, 0, .035, 's-red') + extPlug(-0.45),
-    pboard4: rect(-.7, -.22, 1.4, .44, 's-white s-edge', .1) + [-.45, -.15, .15, .45].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.62, 0, .035, 's-red') + extPlug(-0.7),
-    pboard6: rect(-.95, -.22, 1.9, .44, 's-white s-edge', .1) + [-.7, -.42, -.14, .14, .42, .7].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.87, 0, .035, 's-red') + extPlug(-0.95),
+    pboard2: rect(-.45, -.22, .9, .44, 's-white s-edge', .1) + [-.15, .2].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.36, 0, .035, 's-red'),
+    pboard4: rect(-.7, -.22, 1.4, .44, 's-white s-edge', .1) + [-.45, -.15, .15, .45].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.62, 0, .035, 's-red'),
+    pboard6: rect(-.95, -.22, 1.9, .44, 's-white s-edge', .1) + [-.7, -.42, -.14, .14, .42, .7].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.87, 0, .035, 's-red'),
     wall_outlet: rect(-.35, -.25, .7, .5, 's-white s-edge', .06) + circ(0, 0, .17, 'body c-power') + circ(-.06, 0, .03, 's-dark') + circ(.06, 0, .03, 's-dark'),
     camera: tripod(.95, 's-line') + rect(-.32, -.28, .64, .62, 'body c-video s-edge', .08) + rect(-.18, -.62, .36, .36, 's-dark', .05) + circ(0, -.62, .15, 's-glass') + rect(-.12, .34, .24, .2, 's-dark', .03),
     // floor screen tilted up at the stage, lyrics showing, on a low wedge stand
@@ -4851,13 +4849,13 @@ document.body.insertAdjacentHTML('afterbegin', `<svg aria-hidden="true" focusabl
    Rendering: plot
    =================================================================== */
 const svg = $('plot'), scroller = $('scroller');
-// turning the view round the stage in quarter turns (a half turn is the band's view, audience at the top); every word stays upright.
+// the flip: the band's view, the plot turned round with the audience at the top; every word stays upright.
 // Only the screen changes, never the plan or the paperwork, and this device remembers the turn.
-let viewRot = (r => [0, 90, 180, 270].includes(r) ? r : 0)(Number(lsGet('stageplot.viewRot')));
+let viewRot = Number(lsGet('stageplot.viewRot')) === 180 ? 180 : 0;   // a quarter turn saved by an earlier version opens straight
 const rotNow = () => capturing || layersBypass ? 0 : viewRot,   // pictures and the paperwork are always drawn straight
   sideways = () => rotNow() % 180 !== 0;
-function setRot(r) { viewRot = ((r % 360) + 360) % 360; lsSet('stageplot.viewRot', String(viewRot)); zoom = null; needFit = true; renderAll(); }
-const ROT_LABEL = { 90: 'Turned: audience on the left', 180: 'Seen from the stage', 270: 'Turned: audience on the right' };
+function setRot(r) { viewRot = r === 180 ? 180 : 0; lsSet('stageplot.viewRot', String(viewRot)); zoom = null; needFit = true; renderAll(); }
+const ROT_LABEL = { 180: 'Seen from the stage' };
 const plotCTM = () => (svg.querySelector('#rotg') || svg).getScreenCTM();   // plan feet to screen pixels, turn included
 const scrPt = (m, x, y) => ({ x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f });
 function bounds() {
@@ -5161,8 +5159,12 @@ function leadEnd(it, oth, q, first) {
     return isIn ? at(k.w / 2, 0, 1, 0) : at(-k.w / 2, 0, -1, 0);
   }
   if (it.type === 'di_mono' || it.type === 'di_stereo') return at(-k.w / 2, 0, -1, 0);
+  if (isExt(it) && first) return at(-k.w / 2, 0, -1, 0);   // an extension lead's own cord leaves its end
   return { p: q, dir: null };
 }
+// cables drawn as loose, flowing leads: jack leads, and an extension lead's own cord to the power point (it's part of the lead)
+const extCord = c => c.type === 'power' && isExt(itemById(c.from)) && isPowerSource(itemById(c.to));
+const isLead = c => c.type === 'inst' || extCord(c);
 function naturalLead(pts, c) {
   if (pts.length < 2) return pts;
   if ((c.points || []).some(isHop) || routeInfo(c)?.via) return smoothRun(pts);   // in a channel: follow it, just without corners
@@ -5235,7 +5237,7 @@ function flowMarks(c, o, cls, animOnly = false) {
   if (cableView.anim && f.dir !== 0) {
     const pts = f.dir < 0 ? o.slice().reverse() : o;
     // every cable shares one clock (and restarts from it on each redraw), so the pulses march in step
-    s += `<path class="flowanim" d="${c.type === 'inst' ? smoothPath(pts) : roundPath(pts)}" style="stroke:${col};stroke-dasharray:${f3(sz * .9)} ${f3(2 - sz * .9)};animation-delay:-${(performance.now() / 1000 % 1.1).toFixed(3)}s"/>`;
+    s += `<path class="flowanim" d="${isLead(c) ? smoothPath(pts) : roundPath(pts)}" style="stroke:${col};stroke-dasharray:${f3(sz * .9)} ${f3(2 - sz * .9)};animation-delay:-${(performance.now() / 1000 % 1.1).toFixed(3)}s"/>`;
   }
   return `<g class="flowg${cls}">${s}</g>`;
 }
@@ -5612,12 +5614,12 @@ function renderPlot() {
     const rel = isHov ? ' hl' : tr ? (tr.cables.has(c.id) ? ' hl' : ' dim') : selItem || fset ? ((fset ? fset.has(c.from) || fset.has(c.to) : selSet.has(c.from) || selSet.has(c.to)) ? ' hl' : ' dim') : (sel?.kind === 'cable' && !isSel ? ' dim' : quiet ? ' quiet' : '');
     // with "inside channels" hidden, only the stretches on the open stage are drawn (a selected cable still shows all of it)
     const parts = cableView.hideInCh ? cableParts(c) : null;
-    const segs = parts?.inside && !isSel ? parts.exposed : [c.type === 'inst' ? naturalLead(o, c) : o];
+    const segs = parts?.inside && !isSel ? parts.exposed : [isLead(c) ? naturalLead(o, c) : o];
     let out = '';
     for (const seg of segs) {
       if (seg.length < 2) continue;
       const sp = seg.map(p => p.join(',')).join(' ');
-      const lead = c.type === 'inst', d = lead ? smoothPath(seg) : roundPath(seg), st = isSel ? ' sel' : rel;
+      const lead = isLead(c), d = lead ? smoothPath(seg) : roundPath(seg), st = isSel ? ' sel' : rel;
       if (isSel) out += `<path class="cab-glow" d="${d}" style="stroke:var(${KVAR[c.type]})"/>`;
       if (lead && c.level !== 'ceiling' && rel !== ' dim') out += `<path class="lead-shadow" d="${d}"/>`;   // a dark edge so the lead reads crisply on any deck
       // a deck-coloured sheath under each floor run: where cables cross, the one on top reads cleanly over the other
@@ -5629,7 +5631,13 @@ function renderPlot() {
       if (tr?.cables.has(c.id)) out += `<path class="tracepulse" d="${d}" pathLength="100" style="animation-delay:-${(traceOrder(tr, c) * 260) % 1600}ms"/>`;
       if (seg === segs[0] || seg === segs[segs.length - 1]) for (const [end, id] of [[0, c.from], [seg.length - 1, c.to]]) {
         if ((end === 0 && seg !== segs[0]) || (end && seg !== segs[segs.length - 1])) continue;
-        const q = plugPoint(seg, end, itemById(id)); if (q) out += `<circle class="plug${st}" cx="${f3(q[0])}" cy="${f3(q[1])}" r="${f3(Math.max(.08, 2.4 / scale))}" style="fill:var(${KVAR[c.type]})"/>`;
+        const q = plugPoint(seg, end, itemById(id));
+        if (q && end && extCord(c)) {   // the cord ends in a 3-pin plug, turned the way the cord comes in
+          const pt = itemById(id), [hw, hd] = halfExt(pt), inside = p => Math.abs(p[0] - pt.x) < hw && Math.abs(p[1] - pt.y) < hd;
+          let k = seg.length - 1; while (k > 0 && inside(seg[k])) k--; while (k > 0 && Math.hypot(seg[k][0] - q[0], seg[k][1] - q[1]) < .25) k--;   // the stretch just outside the socket sets its angle
+          const b = seg[k], a = Math.atan2(q[1] - b[1], q[0] - b[0]) * 180 / Math.PI, z = Math.min(1.25, Math.max(.75, 18 / scale));
+          out += `<g class="mainsplug${st}" transform="translate(${f3(q[0])} ${f3(q[1])}) rotate(${f3(a)}) scale(${f3(z)})"><path class="mp-boot" d="M-.78 -.06h.2v.12h-.2z" style="fill:var(${KVAR[c.type]})"/><rect x="-.6" y="-.2" width=".52" height=".4" rx=".08" style="fill:var(${KVAR[c.type]})"/><path class="mp-grip" d="M-.48 -.12v.24M-.4 -.12v.24"/><path d="M-.08 -.1h.1M-.08 0h.12M-.08 .1h.1"/></g>`;
+        } else if (q) out += `<circle class="plug${st}" cx="${f3(q[0])}" cy="${f3(q[1])}" r="${f3(Math.max(.08, 2.4 / scale))}" style="fill:var(${KVAR[c.type]})"/>`;
       }
       out += flowMarks(c, seg, isSel ? '' : rel, rel === ' quiet' || (rel === ' dim' && cableView.quiet !== false));   // quiet cables keep the animation, not the arrows
       hits += `<polyline class="cabhit" data-cid="${c.id}" points="${sp}"><title>${esc(CABLES[c.type].name)} · ${fmtLen(cableLen(c))}</title></polyline>`;
@@ -5788,7 +5796,6 @@ function renderFloat() {
       <button class="iconbtn" data-fit="${!zoom && fitMode === 'stage' ? 'room' : 'stage'}" aria-label="Fit" title="${!zoom && fitMode === 'stage' ? 'Show the whole room' : 'Fit the stage (0)'}">${ic('fit')}</button>
       ${ui.adv || plan.setupLock ? `<button class="iconbtn" id="setupLock" aria-pressed="${!!plan.setupLock}" aria-label="${plan.setupLock ? 'Unlock the setup' : 'Lock the setup'}" title="${plan.setupLock ? 'Setup locked: risers, stage box, speakers and power stay put. Click to unlock' : 'Lock the setup: risers, stage box, speakers and power stay put while you move band gear'}">${ic(plan.setupLock ? 'lock' : 'unlock')}</button>` : ''}
       <button class="iconbtn" id="flipView" aria-pressed="${viewRot === 180}" aria-label="${viewRot === 180 ? 'See it from the house' : 'See it from the stage'}" title="${viewRot === 180 ? 'Back to the view from the house' : 'Flip: the band’s view, looking out at the audience'}">${ic('flip')}</button>
-      <button class="iconbtn" id="rotView" aria-pressed="${viewRot % 180 !== 0}" aria-label="Turn the view a quarter" title="Turn the view a quarter round the stage">${ic('rotate')}</button>
     </div>`;
   fitDock();
   $('fzoom').innerHTML = mode === 'channel' ? `<div class="panel">${chDraft?.extend ? `<span class="chip accent">Extending ${esc(chans().find(x => x.id === chDraft.extend.id)?.name || '')}</span>` : Object.entries(CH_KINDS).map(([k, v]) => `<button class="ctype" data-chdraftkind="${k}" aria-pressed="${k === chDraftKind}">${v.level ? '↑ ' : ''}${esc(v.name)}</button>`).join('')}<span class="dock-sep"></span><span class="toolhint">${chDraft?.pts.length ? 'Click to add bends · click the last point again or press Enter to finish · Alt for angles' : 'Click where the channel starts'}</span>${chDraft?.pts.length >= 2 ? `<button class="btn primary" id="chFinish" style="padding:5px 10px">Finish</button>` : ''}<button class="btn quiet" data-mode="select" style="padding:5px 10px">Cancel</button></div>` : mode === 'cable' ? `<div class="panel">${`<button class="ctype" data-ctype="auto" aria-pressed="${cableType === 'auto'}" title="Pick the type from the two ends">${ic('wand', 'sm')}Auto</button>` + Object.keys(CABLES).map(k => `<button class="ctype" data-ctype="${k}" aria-pressed="${k === cableType}"><span class="sw bg-${k}"></span>${SHORT[k]}</button>`).join('')}
@@ -6976,7 +6983,7 @@ svg.addEventListener('pointerdown', e => {
         const pts = pending.points, from = pending.from, lvl = pending.level; pending = null; cursorPt = null; pendHover = null; pendChan = null;
         mutate(() => {
           const c = addCable(ct, from, id, { points: pts });
-          if (ct === 'inst') freshLeads.set(c.id, performance.now());
+          if (isLead(c)) freshLeads.set(c.id, performance.now());
           if (lvl) c.level = lvl;
           if (ct === 'power') {
             const src = [itemById(from), itemById(id)].find(isPowerSource);
@@ -7325,7 +7332,6 @@ $('ftools').addEventListener('click', e => {
   if (f) fit(f.dataset.fit);
   if (e.target.closest('#zIn')) zoomCenter(1.25);
   if (e.target.closest('#flipView')) setRot(viewRot === 180 ? 0 : 180);
-  if (e.target.closest('#rotView')) setRot(viewRot + 90);
   if (e.target.closest('#setupLock')) { const on = !plan.setupLock; mutate(() => { if (on) plan.setupLock = true; else delete plan.setupLock; }, on ? `Setup locked: ${plural(plan.items.filter(isFixed).length, 'item')} stay put` : 'Setup unlocked'); }
   if (e.target.closest('#zOut')) zoomCenter(1 / 1.25);
 });
@@ -9063,8 +9069,6 @@ function cmdItems() {
     ['Save the plot as a picture', 'plot', () => plotPicture()],
     ['Copy a summary for the team chat', 'copy', () => copyText(weekSummary(), $('copyFallback'))],
     [viewRot === 180 ? 'See the plot from the house' : 'See the plot from the stage (flip)', 'flip', () => { view = 'plot'; setRot(viewRot === 180 ? 0 : 180); }],
-    ['Turn the plot a quarter', 'rotate', () => { view = 'plot'; setRot(viewRot + 90); }],
-    ...(viewRot ? [['Straighten the plot (audience at the bottom)', 'rotate', () => { view = 'plot'; setRot(0); }]] : []),
     ...(ui.adv ? [[plan.setupLock ? 'Unlock the setup' : 'Lock the setup (risers, stage box, speakers, power)', plan.setupLock ? 'unlock' : 'lock', () => { $('setupLock') ? $('setupLock').click() : mutate(() => { if (plan.setupLock) delete plan.setupLock; else plan.setupLock = true; }, plan.setupLock ? 'Setup unlocked' : 'Setup locked'); }]] : []),
     ...(pco.mcp ? [['Next plan from Planning Center', 'calendar', () => nextFromPco()]] : []),
     ['Switch theme', 'auto', cycleTheme],
