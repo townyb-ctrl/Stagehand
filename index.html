@@ -50,7 +50,7 @@
   --ok: #16a34a; --ok-soft: rgba(22,163,74,.11); --ok-ink: #146c35; --warn-ink: #8a4a00; --bad-ink: #b31d1d;   /* chip text: 4.5:1 on the soft tints */
   --warn: #d97706; --warn-soft: rgba(217,119,6,.13);
   --bad: #dc2626; --bad-soft: rgba(220,38,38,.10);
-  --k-xlr: #3b82f6; --k-cat: #a855f7; --k-pow: #f97316; --k-inst: #22c55e; --k-spk: #14b8a6; --k-vid: #ec4899; --k-usb: #94a3b8; --k-dmx: #ca8a04;
+  --k-xlr: #3b82f6; --k-cat: #a855f7; --k-multi: #6d28d9; --k-pow: #f97316; --k-inst: #22c55e; --k-spk: #14b8a6; --k-vid: #ec4899; --k-usb: #94a3b8; --k-dmx: #ca8a04;
   --shadow-1: 0 1px 2px rgba(16,24,32,.06), 0 1px 1px rgba(16,24,32,.04);
   --shadow-2: 0 8px 24px rgba(16,24,32,.10), 0 2px 6px rgba(16,24,32,.06);
   --shadow-3: 0 24px 60px rgba(16,24,32,.22), 0 6px 18px rgba(16,24,32,.10);
@@ -66,7 +66,7 @@
   --line: #20232a; --line-2: #2a2e37; --accent: #8b80ff; --accent-ink: #0b0a1a; --accent-text: #a69dff; --accent-soft: rgba(139,128,255,.15); --tape: #f7c04a;
   --deck: #22252e; --deck-edge: #000; --house: #0d0f13; --house-dot: rgba(255,255,255,.06); --house-ink: #8b91a1;
   --ok: #4ade80; --ok-soft: rgba(74,222,128,.13); --ok-ink: #4ade80; --warn-ink: #fbbf24; --bad-ink: #f87171; --warn: #fbbf24; --warn-soft: rgba(251,191,36,.13); --bad: #f87171; --bad-soft: rgba(248,113,113,.13);
-  --k-xlr: #60a5fa; --k-cat: #c084fc; --k-pow: #fb923c; --k-inst: #4ade80; --k-spk: #2dd4bf; --k-vid: #f472b6; --k-usb: #cbd5e1; --k-dmx: #facc15;
+  --k-xlr: #60a5fa; --k-cat: #c084fc; --k-multi: #a78bfa; --k-pow: #fb923c; --k-inst: #4ade80; --k-spk: #2dd4bf; --k-vid: #f472b6; --k-usb: #cbd5e1; --k-dmx: #facc15;
   --shadow-1: 0 1px 2px rgba(0,0,0,.4); --shadow-2: 0 10px 28px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.3); --shadow-3: 0 28px 70px rgba(0,0,0,.6);
   --glass: rgba(20,22,28,.86);
   color-scheme: dark;
@@ -826,9 +826,9 @@ svg text { font-family: var(--f-ui); }
 .cab.hl { stroke-width: var(--cwh, .22); opacity: 1; }
 .cab.sel { stroke-width: var(--cws, .3); opacity: 1; }
 .cabhit { fill: none; stroke: transparent; stroke-width: .8; cursor: pointer; }
-.k-xlr { stroke: var(--k-xlr); } .k-cat6 { stroke: var(--k-cat); } .k-power { background: #b85a22; stroke: var(--k-pow); }
+.k-xlr { stroke: var(--k-xlr); } .k-cat6 { stroke: var(--k-cat); } .k-multi { stroke: var(--k-multi); } .k-power { background: #b85a22; stroke: var(--k-pow); }
 .k-inst { stroke: var(--k-inst); } .k-speakon { stroke: var(--k-spk); } .k-video { stroke: var(--k-vid); } .k-usb { stroke: var(--k-usb); } .k-dmx { stroke: var(--k-dmx); }
-.bg-xlr { background: var(--k-xlr); } .bg-cat6 { background: var(--k-cat); } .bg-power { background: var(--k-pow); }
+.bg-xlr { background: var(--k-xlr); } .bg-cat6 { background: var(--k-cat); } .bg-multi { background: var(--k-multi); } .bg-power { background: var(--k-pow); }
 .bg-inst { background: var(--k-inst); } .bg-speakon { background: var(--k-spk); } .bg-video { background: var(--k-vid); } .bg-usb { background: var(--k-usb); } .bg-dmx { background: var(--k-dmx); }
 .cablen { font: 600 var(--lab, .46px) var(--f-mono); fill: #fff; paint-order: stroke; stroke: rgba(0,0,0,.8); stroke-width: .14px; pointer-events: none; }
 .wp { fill: var(--accent); stroke: #000; stroke-width: .05; cursor: move; touch-action: none; }
@@ -1700,7 +1700,7 @@ html, body { height: auto !important; overflow: visible !important; display: blo
     --line: #20232a; --line-2: #2a2e37; --accent: #8b80ff; --accent-ink: #0b0a1a; --accent-text: #a69dff; --accent-soft: rgba(139,128,255,.15); --tape: #f7c04a;
     --deck: #22252e; --deck-edge: #000; --house: #0d0f13; --house-dot: rgba(255,255,255,.06); --house-ink: #8b91a1;
     --ok: #4ade80; --ok-soft: rgba(74,222,128,.13); --ok-ink: #4ade80; --warn-ink: #fbbf24; --bad-ink: #f87171; --warn: #fbbf24; --warn-soft: rgba(251,191,36,.13); --bad: #f87171; --bad-soft: rgba(248,113,113,.13);
-    --k-xlr: #60a5fa; --k-cat: #c084fc; --k-pow: #fb923c; --k-inst: #4ade80; --k-spk: #2dd4bf; --k-vid: #f472b6; --k-usb: #cbd5e1; --k-dmx: #facc15;
+    --k-xlr: #60a5fa; --k-cat: #c084fc; --k-multi: #a78bfa; --k-pow: #fb923c; --k-inst: #4ade80; --k-spk: #2dd4bf; --k-vid: #f472b6; --k-usb: #cbd5e1; --k-dmx: #facc15;
     --shadow-1: 0 1px 2px rgba(0,0,0,.4); --shadow-2: 0 10px 28px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.3); --shadow-3: 0 28px 70px rgba(0,0,0,.6);
     --glass: rgba(20,22,28,.86);
     color-scheme: dark;
@@ -2059,6 +2059,12 @@ const CAT = {
   iem:         { name: 'IEM pack (wireless)', short: 'IEM', cat: 'audio', w: .6, d: .6, shape: 'rect', wireless: true, iem: true },
   iem_wired:   { name: 'IEM pack (wired)', short: 'Wired IEM', cat: 'audio', w: .6, d: .6, shape: 'rect', outs: 1, iem: true },   // a belt pack on an XLR from a stage box output: no transmitter, no frequency
   iem_rack:    { name: 'IEM transmitter rack', short: 'IEM rack', cat: 'infra', w: 2, d: 2, shape: 'rack', outs: 8, watts: 120 },
+  // analog snakes: a stage box of XLR sockets on a multicore to the desk; no power, and a fixed number of ins and outs
+  snake8:     { name: 'Analog snake (8 in · 4 out)', short: 'Snake', cat: 'infra', w: 1.2, d: .9, shape: 'rect', ins: 8, outsMax: 4, snake: true },
+  snake12:    { name: 'Analog snake (12 in · 4 out)', short: 'Snake', cat: 'infra', w: 1.2, d: .9, shape: 'rect', ins: 12, outsMax: 4, snake: true },
+  snake16:    { name: 'Analog snake (16 in · 4 out)', short: 'Snake', cat: 'infra', w: 1.6, d: .9, shape: 'rect', ins: 16, outsMax: 4, snake: true },
+  snake24:    { name: 'Analog snake (24 in · 8 out)', short: 'Snake', cat: 'infra', w: 2, d: .9, shape: 'rect', ins: 24, outsMax: 8, snake: true },
+  snake32:    { name: 'Analog snake (32 in · 8 out)', short: 'Snake', cat: 'infra', w: 2, d: .9, shape: 'rect', ins: 32, outsMax: 8, snake: true },
   stagebox:    { name: 'Stage box / digital snake', short: 'Stage box', cat: 'infra', w: 2, d: 1.4, shape: 'rack', ins: 32, outsMax: 16, watts: 120 },
   foh:         { name: 'FOH console', short: 'FOH', cat: 'infra', w: 6, d: 3, shape: 'desk', watts: 250, desk: true },
   mon_desk:    { name: 'Monitor console', short: 'Monitors', cat: 'infra', w: 4, d: 2.5, shape: 'desk', watts: 200, desk: true },
@@ -2132,7 +2138,7 @@ const GEAR_GROUPS = [
   ['Amps & FX', ['gtr_amp', 'bass_amp', 'pedalboard', 'bass_pedal', 'multifx', 'ac_preamp', 'midi_fs'], 'gtr_amp'],
   ['Mics & DI', ['vox_mic', 'vox_wl', 'headset', 'rx_single', 'inst_mic', 'di_mono', 'di_stereo', 'usb_if'], 'vox_mic'],
   ['Monitors & PA', ['wedge', 'iem', 'iem_wired', 'iem_rack', 'main_spk', 'sub', 'la_main', 'la_sub'], 'wedge'],
-  ['Desks & tech', ['stagebox', 'rack', 'foh', 'mon_desk', 'mt_ipad', 'laptop', 'camera', 'conf_mon'], 'foh'],
+  ['Desks & tech', ['stagebox', 'snake8', 'snake12', 'snake16', 'snake24', 'snake32', 'rack', 'foh', 'mon_desk', 'mt_ipad', 'laptop', 'camera', 'conf_mon'], 'foh'],
   ['Lighting', ['par_led', 'wash_led', 'bar_led', 'bar_up', 'spot_mh', 'wash_mh', 'profile', 'fresnel', 'uplight', 'light_stand', 'hazer', 'light_desk', 'dmx_split', 'truss', 'light_pipe', 'foh_bar'], 'par_led'],
   ['Stage & power', ['riser', 'drum_riser', 'walkway', 'drum_shield', 'pulpit', 'music_stand', 'ipad_stand', 'distro', 'wall_outlet', 'pboard2', 'pboard4', 'pboard6'], 'distro'],
 ];
@@ -2144,6 +2150,7 @@ const CABLES = {
   // stock lengths in metres
   xlr:     { name: 'XLR (mic / line)', stock: [1, 2, 3, 5, 10, 15, 20, 30], stockFt: [3, 6, 10, 15, 25, 50, 75, 100] },
   cat6:    { name: 'Cat6 (digital snake)', stock: [10, 20, 30, 50, 75, 100], stockFt: [25, 50, 100, 150, 200, 300] },
+  multi:   { name: 'Multicore (analog snake)', stock: [10, 15, 20, 30, 50], stockFt: [30, 50, 75, 100, 150] },
   power:   { name: 'Power lead', stock: [2, 3, 5, 10, 15, 25], stockFt: [3, 6, 10, 15, 25, 50, 100] },
   inst:    { name: 'Jack instrument', stock: [1, 3, 5, 6, 10], stockFt: [3, 10, 15, 20, 25] },
   speakon: { name: 'Speakon', stock: [5, 10, 15, 20, 30], stockFt: [10, 25, 50, 75, 100] },
@@ -2885,10 +2892,11 @@ function autoCable() {
   // the snake to an off-stage desk leaves by the nearer side of the stage and runs along the front, never across the deck
   const sp = stagePoly(), minX = Math.min(...sp.map(q => q[0])), maxX = Math.max(...sp.map(q => q[0])), maxY = Math.max(...sp.map(q => q[1]));
   for (const b of boxes) for (const d of desks) {
-    if (plan.cables.some(c => c.type === 'cat6' && touches(c, b.id) && touches(c, d.id))) continue;
+    const run = cat(b).snake ? 'multi' : 'cat6';
+    if (plan.cables.some(c => c.type === run && touches(c, b.id) && touches(c, d.id))) continue;
     // a drawn cable channel takes over the routing
     const offStage = d.y > maxY + 1 && b.y < maxY && !chans().length, ex = b.x > (minX + maxX) / 2 ? maxX + .8 : minX - .8, fy = maxY + 1.2;
-    addCable('cat6', b.id, d.id, { auto: true, ...(offStage ? { points: [[r2(ex), r2(b.y)], [r2(ex), r2(fy)], [r2(d.x), r2(fy)]], edge: true } : {}) });
+    addCable(run, b.id, d.id, { auto: true, ...(offStage ? { points: [[r2(ex), r2(b.y)], [r2(ex), r2(fy)], [r2(d.x), r2(fy)]], edge: true } : {}) });
   }
   // speaker and sub feeds fly overhead unless the room setting says otherwise
   if (plan.settings.overheadSpk !== false) for (const c of plan.cables) if (c.auto && [itemById(c.from), itemById(c.to)].some(i => i && OVERHEAD_TYPES.includes(i.type))) c.level = 'ceiling';
@@ -4339,8 +4347,8 @@ const ic = (n, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hid
    =================================================================== */
 let railOpen = true, inspOpen = true;
 let fitMode = 'stage', scale = 10, needFit = true, gearQuery = '', gearTab = (() => { const t = lsGet('stageplot.gearTab'); return GEAR_GROUPS.some(([g]) => g === t) ? t : 'Instruments'; })(), themePref = 'system';
-const SHORT = { xlr: 'XLR', cat6: 'Cat6', power: 'Power', inst: 'Jack', speakon: 'Speakon', video: 'Video', usb: 'USB', dmx: 'DMX' };
-const KVAR = { xlr: '--k-xlr', cat6: '--k-cat', power: '--k-pow', inst: '--k-inst', speakon: '--k-spk', video: '--k-vid', usb: '--k-usb', dmx: '--k-dmx' };
+const SHORT = { xlr: 'XLR', cat6: 'Cat6', multi: 'Multicore', power: 'Power', inst: 'Jack', speakon: 'Speakon', video: 'Video', usb: 'USB', dmx: 'DMX' };
+const KVAR = { xlr: '--k-xlr', cat6: '--k-cat', multi: '--k-multi', power: '--k-pow', inst: '--k-inst', speakon: '--k-spk', video: '--k-vid', usb: '--k-usb', dmx: '--k-dmx' };
 // a small picture of the item as it's drawn on the plot, on this stage's colour (details panel, hover card)
 function itemPreview(it, cls) {
   const w = Number(prop(it, 'w')), d = Number(prop(it, 'd')), m = Math.max(w, d) / 2 + .3;
@@ -4531,6 +4539,10 @@ const SYM = (() => {
   const circ = (cx, cy, r, cls) => `<circle class="${cls}" cx="${f(cx)}" cy="${f(cy)}" r="${f(r)}"/>`;
   const line = (x1, y1, x2, y2, cls = 's-line') => `<path class="${cls}" d="M${f(x1)} ${f(y1)}L${f(x2)} ${f(y2)}"/>`;
   // an extension lead's own cord and 3-pin plug, off its left end: it plugs in with this, not with one of its sockets
+  const snakeBox = (w, ins, outs) => { const hw = w / 2, cols = Math.ceil(ins / 2), dx = (w - .3) / cols; let g = rect(-hw, -.45, w, .9, 's-cab2 s-edge', .08) + line(0, -.45, 0, -.75, 's-cord') + rect(-.12, -.82, .24, .12, 's-dark', .03);   // the multicore leaves the back
+    for (let k = 0; k < ins; k++) g += circ(-hw + .15 + dx * (k % cols + .5), k < cols ? -.22 : 0, Math.min(.07, dx * .35), 's-dark');
+    for (let k = 0; k < outs; k++) g += circ(-hw + .15 + (w - .3) / outs * (k + .5), .27, Math.min(.06, (w - .3) / outs * .3), 's-white');
+    return g; };
   const extPlug = x0 => line(x0, 0, x0 - .28, 0, 's-cord') + rect(x0 - .5, -.11, .22, .22, 'body c-power', .04) + [-.06, 0, .06].map(y => line(x0 - .5, y, x0 - .58, y, 's-pin')).join('');
   const box = (w, d, c, rx = .08) => rect(-w / 2, -d / 2, w, d, `body c-${c} s-edge`, rx);
   const tripod = (r, cls = 's-line') => [90, 210, 330].map(a => line(0, 0, r * Math.cos(a * Math.PI / 180), r * Math.sin(a * Math.PI / 180), cls)).join('');
@@ -4716,6 +4728,11 @@ const SYM = (() => {
     iem_rack: rect(-1.08, -1, .14, 2, 's-ear', .03) + rect(.94, -1, .14, 2, 's-ear', .03) + rect(-.96, -1, 1.92, 2, 's-cab2 s-edge', .1) +   // two transmitters in a rack: screens, a knob, link lights, antennas out the back
       [-.5, .38].map(y => rect(-.86, y - .34, 1.72, .62, 's-cabtop2', .05) + rect(-.74, y - .22, .62, .3, 's-screen', .03) + rect(-.68, y - .16, .3, .05, 's-scrbar', .01) + circ(.2, y - .07, .11, 's-knob2') + circ(.5, y - .16, .035, 's-ledg') + circ(.5, y, .035, 's-ledb') + rect(.36, y + .12, .42, .06, 's-lbl', .02)).join('') +
       line(-.7, -1, -.95, -1.4, 's-boom') + line(.7, -1, .95, -1.4, 's-boom') + circ(-.95, -1.4, .06, 's-white') + circ(.95, -1.4, .06, 's-white'),
+    snake8: snakeBox(1.2, 8, 4),
+    snake12: snakeBox(1.2, 12, 4),
+    snake16: snakeBox(1.6, 16, 4),
+    snake24: snakeBox(2, 24, 8),
+    snake32: snakeBox(2, 32, 8),
     stagebox: rect(-1.08, -.6, .14, 1.2, 's-ear', .03) + rect(.94, -.6, .14, 1.2, 's-ear', .03) + circ(-1.01, -.45, .03, 's-dark') + circ(-1.01, .45, .03, 's-dark') + circ(1.01, -.45, .03, 's-dark') + circ(1.01, .45, .03, 's-dark') +   // rack ears, a labelled face, inputs in two rows, outputs, a network port and a status light
       rect(-.96, -.7, 1.92, 1.4, 's-cab2 s-edge', .1) + rect(-.88, -.62, 1.76, 1.24, 's-cabtop2', .06) + rect(-.82, -.58, .7, .1, 's-lbl', .02) +
       grid(-.72, -.36, 8, 2, .205, .24, .075, 's-xlr') + grid(-.72, -.36, 8, 2, .205, .24, .028, 's-xlrpin') + grid(-.72, .2, 8, 1, .205, 0, .055, 's-xlrout') +
@@ -5079,7 +5096,7 @@ function guessCable(a, b) {
   const dmxy = x => isDmx(x) || cat(x).ldesk || cat(x).dmxOuts;
   if (dmxy(a) && dmxy(b)) return 'dmx';
   if (has(['midi_keys', 'midi_fs']) && has(['usb_if', 'mt_ipad', 'laptop'])) return 'usb';
-  if (isHub(a) && isHub(b)) return 'cat6';
+  if (isHub(a) && isHub(b)) return cat(a).snake || cat(b).snake ? 'multi' : 'cat6';
   if (has(['ac_guitar', 'el_guitar', 'bass_guitar'])) return 'inst';
   if (has(['pedalboard', 'bass_pedal', 'multifx', 'ac_preamp']) && has(['gtr_amp', 'bass_amp', 'pedalboard', 'bass_pedal', 'multifx', 'ac_preamp', 'di_mono', 'di_stereo'])) return 'inst';
   if (has(['keys', 'midi_keys']) && has(['di_mono', 'di_stereo'])) return 'inst';
@@ -5089,7 +5106,7 @@ function guessCable(a, b) {
 function flowOf(c) {
   const a = itemById(c.from), b = itemById(c.to);
   if (!a || !b) return { dir: 1, kind: 'signal' };
-  if (c.type === 'cat6') return { dir: 0, kind: 'link' };
+  if (c.type === 'cat6' || c.type === 'multi') return { dir: 0, kind: 'link' };
   if (c.type === 'dmx') return { dir: cat(b).ldesk || (cat(b).dmxOuts && !cat(a).ldesk) ? -1 : 1, kind: 'signal' };   // away from the console
   if (c.type === 'power' && c.link) return { dir: 1, kind: 'power' };   // light to light, away from the plug
   if (c.type === 'power') {
@@ -5242,7 +5259,7 @@ function midpoint(pts) {
 }
 const f3 = n => +n.toFixed(3);
 // Cables sharing a run are drawn side by side, metro-map style, instead of stacked on one line
-const LANE_ORDER = { power: 0, xlr: 1, inst: 2, usb: 3, speakon: 4, cat6: 5, video: 6, dmx: 7 };
+const LANE_ORDER = { power: 0, xlr: 1, inst: 2, usb: 3, speakon: 4, cat6: 5, multi: 5, video: 6, dmx: 7 };
 // where a run leaves its gear's outline: walk in from the end until the point is clear of the footprint
 function plugPoint(seg, end, it) {
   if (!it || ['person', 'platform'].includes(cat(it).shape)) return null;
@@ -6101,6 +6118,8 @@ function renderInspector() {
     let basic = '';
     const adv = [];   // fine-grained settings: inline in Advanced, folded under "More settings" in Simple
     const meter = (n, w, cap) => { const pct = w / cap; return `<div class="circ"><span class="n">${n}</span><div class="meter"><span class="${pct > 1 ? 'bad' : pct > .8 ? 'warn' : ''}" style="width:${Math.min(100, pct * 100)}%"></span></div><span class="w">${Math.round(w)} W</span></div>`; };
+    if (cat(it).snake) { const nm = itemName(it), ui_ = inputList().filter(r => r.port.startsWith(nm + ' · in')).length, uo = outputList().filter(r => r.port.startsWith(nm + ' · out')).length;
+      basic += `<section class="isec"><h3>Analog snake <span>${ui_}/${prop(it, 'ins')} in · ${uo}/${prop(it, 'outsMax')} out</span></h3><p class="hint">XLR sockets on stage and a multicore to the desk. No power needed.</p></section>`; }
     if (it.type === 'stagebox') adv.push(`<section class="isec"><h3>Ports</h3><div class="grid2">${field('iIns', 'Inputs', prop(it, 'ins'), 'number', 'min="1" max="128"')}${field('iOuts', 'Outputs', prop(it, 'outsMax'), 'number', 'min="0" max="64"')}</div></section>`);
     if (isExt(it)) {
       const f = feedOf(it), load = extLoad(it), cap = (Number(prop(it, 'amps')) || 10) * (Number(prop(it, 'volts')) || 230);
@@ -6157,7 +6176,7 @@ function renderInspector() {
       </section>` : ''}
       ${basic}
       <section class="isec"><div class="field"><label for="iNote">Note</label><textarea id="iNote" rows="2" placeholder="${C.shape === 'person' ? 'e.g. Bring a 9V battery, uses the left IEM pack' : 'e.g. Borrowed from youth room, needs fresh strings'}">${esc(it.note || '')}</textarea></div></section>
-      ${ui.adv && plan.cables.some(x => touches(x, it.id) && ['inst', 'xlr', 'usb', 'cat6'].includes(x.type)) ? `<section class="isec"><button class="btn block" id="iTrace" aria-pressed="${tracing === it.id}" title="Follow this signal from the stage to the desk and back to the monitors">${ic('zap', 'sm')}${tracing === it.id ? 'Stop tracing' : 'Trace the signal'}</button></section>` : ''}
+      ${ui.adv && plan.cables.some(x => touches(x, it.id) && ['inst', 'xlr', 'usb', 'cat6', 'multi'].includes(x.type)) ? `<section class="isec"><button class="btn block" id="iTrace" aria-pressed="${tracing === it.id}" title="Follow this signal from the stage to the desk and back to the monitors">${ic('zap', 'sm')}${tracing === it.id ? 'Stop tracing' : 'Trace the signal'}</button></section>` : ''}
       <section class="isec"><div class="actions actions4"><button class="btn" id="iRotate" title="Rotate 90° (R)">${ic('rotate', 'sm')}Rotate</button><button class="btn" id="iLock" aria-pressed="${!!it.locked}" title="${it.locked ? 'Locked: can’t be moved by accident (L)' : 'Lock in place (L)'}">${ic(it.locked ? 'lock' : 'unlock', 'sm')}${it.locked ? 'Locked' : 'Lock'}</button><button class="btn" id="iDup" title="Duplicate (D)">${ic('copy', 'sm')}Duplicate</button><button class="btn danger" id="iDel" title="Delete (Del)">${ic('trash', 'sm')}Delete</button></div>
       ${(() => { const same = plan.items.filter(i => i.type === it.type).length, own = it.personId ? plan.items.filter(i => i.personId === it.personId).length : 0, who = personById(it.personId);   // a way into "several at once"
         return ui.adv && (same > 1 || own > 1) ? `<div class="selmore">${same > 1 ? `<button class="tlink" data-selall="type">Select all ${same} ${esc(manyOf(CAT[it.type].short || CAT[it.type].name))}</button>` : ''}${own > 1 ? `<button class="tlink" data-selall="person">Select all of ${esc(firstName(who?.name) || 'their')}’s gear (${own})</button>` : ''}</div>` : ''; })()}</section>
@@ -6454,7 +6473,7 @@ function loadinTasks() {   // what the crew does on the day, in the order they d
   const by = (c, end) => itemById(c[end]);
   const power = plan.cables.filter(c => c.type === 'power').map(c => { const src = [by(c, 'from'), by(c, 'to')].find(isPowerSource) || by(c, 'to'), load = other(c, src.id);
     return load && { key: `pw:${c.id}`, text: `${itemName(load)}`, sub: `into ${itemName(src)}${c.circuit ? ` · circuit ${c.circuit}` : ''} · ${fmtLen(cableLen(c))} lead` }; }).filter(Boolean);
-  const snake = plan.cables.filter(c => c.type === 'cat6').map(c => ({ key: `sn:${c.id}`, text: `${itemName(by(c, 'from'))} ↔ ${itemName(by(c, 'to'))}`, sub: `Cat6 · ${fmtLen(cableLen(c))}` }));
+  const snake = plan.cables.filter(c => c.type === 'cat6' || c.type === 'multi').map(c => ({ key: `sn:${c.id}`, text: `${itemName(by(c, 'from'))} ↔ ${itemName(by(c, 'to'))}`, sub: `${c.type === 'multi' ? 'Multicore' : 'Cat6'} · ${fmtLen(cableLen(c))}` }));
   const codes = boxCodes(), ins = inputList().map(r => ({ key: `in:${r.name}:${r.source}`, text: `${r.ch}. ${r.name}`, sub: `${r.source} → ${shortPort(r.port, codes)}` }));
   const leads = plan.cables.filter(c => c.type === 'inst').map(c => ({ key: `ld:${c.id}`, text: `${itemName(by(c, 'from'))} → ${itemName(by(c, 'to'))}`, sub: `jack lead · ${fmtLen(cableLen(c))}` }));
   const outs = outputList().map(r => ({ key: `out:${r.dest}:${r.port}`, text: r.dest, sub: `${r.type ? r.type + ' · ' : ''}${shortPort(r.port, codes)}` }));
@@ -7236,6 +7255,7 @@ function addGear(type, x, y, hit) {
     if (hit && canSitInChannel(it)) placeInChannel(it, hit);
     freshGear.add(it.id);
     if (type === 'stagebox') it.label = `Stage box ${String.fromCharCode(65 + n)}`;
+    if (CAT[type].snake) it.label = `Snake ${String.fromCharCode(65 + plan.items.filter(i => cat(i).snake).length - 1)}`;
     if (type === 'light_stand' && !inPoly(it.x, it.y, stagePoly())) { const [cx, cy] = deckCentre(); it.rot = Math.round(Math.atan2(cx - it.x, -(cy - it.y)) * 180 / Math.PI / 15) * 15; }   // a light out front comes aimed at the stage
     if (type === 'distro') it.label = `Distro ${n + 1}`;
     if (isDmx(it) || CAT[type].mount) it.label = `${CAT[type].short} ${n + 1}`;   // lights are called by number on the patch sheet
@@ -8356,13 +8376,13 @@ const segX = (p, q, r, s2) => { const d = (a, b, c) => (b[0] - a[0]) * (c[1] - a
 let tracing = false;
 function traceSets(id) {
   const it = itemById(id); if (!it) return null;
-  const cables = new Set(), items = new Set([id]), q = [id], SIG = ['inst', 'xlr', 'usb', 'cat6', 'speakon', 'dmx'];
+  const cables = new Set(), items = new Set([id]), q = [id], SIG = ['inst', 'xlr', 'usb', 'cat6', 'multi', 'speakon', 'dmx'];
   while (q.length) {
     const cur = itemById(q.shift()); if (!cur) continue;
     for (const c of plan.cables) {
       if (!SIG.includes(c.type) || !touches(c, cur.id) || cables.has(c.id)) continue;
       const o = other(c, cur.id); if (!o) continue;
-      if ((isBox(cur) || cat(cur).desk) && c.type !== 'cat6') continue;   // at the stage box only the snake carries on
+      if ((isBox(cur) || cat(cur).desk) && c.type !== 'cat6' && c.type !== 'multi') continue;   // at the stage box only the snake carries on
       cables.add(c.id); if (!items.has(o.id)) { items.add(o.id); if (!cat(o).desk) q.push(o.id); }
     }
   }
@@ -8503,7 +8523,7 @@ function cableMenuHtml() {
   // only cable types that are on this plot (or that you've hidden) are listed
   const types = Object.keys(CABLES).filter(k => counts[k] || cableView.hidden.has(k));
   const onlyOf = keys => cableView.all && Object.keys(CABLES).every(k => keys.includes(k) === !cableView.hidden.has(k));
-  const preset = onlyOf(Object.keys(CABLES)) ? 'all' : onlyOf(['xlr', 'cat6', 'inst', 'speakon', 'usb']) ? 'audio' : onlyOf(['power']) ? 'power' : '';
+  const preset = onlyOf(Object.keys(CABLES)) ? 'all' : onlyOf(['xlr', 'cat6', 'multi', 'inst', 'speakon', 'usb']) ? 'audio' : onlyOf(['power']) ? 'power' : '';
   const sw = on => `<span class="cm-switch" aria-hidden="true" data-on="${!!on}"></span>`;
   const tog = (id, on, label, sub, dis = false) => `<button class="cm-row cm-tog" id="${id}" role="menuitemcheckbox" aria-checked="${!!on}" ${dis ? 'disabled' : ''}><span class="cm-lbl">${label}${sub ? `<small>${sub}</small>` : ''}</span>${sw(on)}</button>`;
   const eye = on => ic(on ? 'eye' : 'eyeOff', 'sm');
@@ -8574,7 +8594,7 @@ function rackStat(it) {
   }
   return s;
 }
-const isBox = it => it && (it.type === 'stagebox' || (it.type === 'rack' && rackStat(it).ins > 0));
+const isBox = it => it && (it.type === 'stagebox' || cat(it).snake || (it.type === 'rack' && rackStat(it).ins > 0));
 function devMeta(d) {
   const sp = devSpec(d), b = [];
   if (sp.ins) b.push(`${sp.ins} in · ${sp.outs} out`);
