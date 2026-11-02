@@ -21,7 +21,9 @@ Open `index.html` in a modern browser. No install, no account, no server.
 ## Good to know
 
 - **Simple and Advanced** (⋯ menu): Simple keeps everyday controls; Advanced shows every setting, DMX detail and extra tools.
+- **Turn the view**: the flip button shows the stage from the band's side; the turn button rotates the plot a quarter at a time. Labels stay upright, and this device remembers the turn. Paperwork and pictures are always drawn straight.
 - **Show mode** (`F`): the plot full screen for an iPad on stage. Tap a person to see their channels and monitor.
+- **Power**: an extension lead plugs in with its own 3-pin plug, which doesn't use one of its sockets. Placing one plugs it into the nearest power point or distro, or asks you to click one.
 - **Undo** everything with `Ctrl/Cmd+Z` (redo: add Shift, or `Ctrl+K` → Redo); version history is in the ⋯ menu.
 - **Light and dark** themes follow your device, or pick one in Preferences. Text size, feet-and-inches and whether building the stage adds everyone's gear are there too.
 

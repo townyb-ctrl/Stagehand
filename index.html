@@ -941,7 +941,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .legend button[aria-pressed="false"] { color: var(--muted); text-decoration: line-through; }
 .legend button[aria-pressed="false"] .sw { opacity: .3; }
 .cabwrap { position: static; }   /* the Layers menu centres over the whole dock, so it never runs off a phone screen */
-@media (max-width: 600px) { #zOut, #zIn, .zoomval, #flipView, #setupLock { display: none; } }   /* phones pinch to zoom; flip and the setup lock are in search (Ctrl+K) */   /* phones pinch to zoom; keeps the dock on screen in Advanced */
+@media (max-width: 600px) { #zOut, #zIn, .zoomval, #setupLock { display: none; } }   /* phones pinch to zoom; flip and the setup lock are in search (Ctrl+K) */   /* phones pinch to zoom; keeps the dock on screen in Advanced */
 .cabmenu { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); width: min(290px, calc(100vw - 24px)); max-height: min(70vh, 560px); overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: var(--shadow-3); padding: 6px; display: grid; gap: 1px; z-index: 6; }
 .cm-row { display: grid; grid-template-columns: 18px 1fr auto 18px; gap: 10px; align-items: center; border: 0; background: transparent; padding: 6px 8px; border-radius: var(--r-sm); cursor: pointer; text-align: left; font-size: 13px; color: var(--ink); }
 .cm-row:hover:not(:disabled) { background: var(--surface-2); }
@@ -1325,10 +1325,10 @@ tr.flag td { color: var(--bad); }
 .cstock-lens { display: flex; flex-wrap: wrap; gap: 6px; } .cstock-lens label { display: grid; gap: 2px; font-size: 12px; color: var(--muted); text-align: center; }
 .cstock-lens input { width: 56px; text-align: center; padding: 4px 4px; }
 .storelist small { color: var(--muted); }
-#plot.flipped { rotate: 180deg; }
-#plot.flipped text:not([transform]) { transform-box: fill-box; transform-origin: center; rotate: 180deg; }   /* side labels already turned sideways read fine either way */
-#plotView.flipview .canvas::after { content: 'Seen from the stage'; position: absolute; left: 50%; top: 12px; translate: -50% 0; padding: 4px 10px; border-radius: 99px; background: var(--ink); color: var(--surface); font-size: 12px; font-weight: 600; pointer-events: none; z-index: 5; }
-#setupLock[aria-pressed="true"], #flipView[aria-pressed="true"] { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+#plot.rot90 #rotg text:not([transform]), #plot.rot180 #rotg text:not([transform]), #plot.rot270 #rotg text:not([transform]) { transform-box: fill-box; transform-origin: center; }
+#plot.rot90 #rotg text:not([transform]) { rotate: -90deg; } #plot.rot180 #rotg text:not([transform]) { rotate: 180deg; } #plot.rot270 #rotg text:not([transform]) { rotate: 90deg; }   /* side labels already turned sideways read fine either way */
+#plotView.turned .canvas::after { content: attr(data-turn); position: absolute; left: 50%; top: 12px; translate: -50% 0; padding: 4px 10px; border-radius: 99px; background: var(--ink); color: var(--surface); font-size: 12px; font-weight: 600; pointer-events: none; z-index: 5; }
+#setupLock[aria-pressed="true"], #flipView[aria-pressed="true"], #rotView[aria-pressed="true"] { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .selmore { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; }
 .libmain mark { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--ink); border-radius: var(--r-xs); padding: 0 2px; }
 .spots4 { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); margin-left: 10px; white-space: nowrap; } .pp-spots { gap: 4px; flex-wrap: nowrap; } .pp-spots .spots4 { margin-left: 6px; } .spots4 input { accent-color: var(--accent); }
@@ -2051,11 +2051,13 @@ const CAT = {
   vox_mic:     { name: 'Vocal mic (wired)', short: 'Vox mic', cat: 'audio', w: .9, d: .9, shape: 'round', inputs: ['Vox'] },
   vox_wl:      { name: 'Vocal mic (wireless)', short: 'RF mic', cat: 'audio', w: .9, d: .9, shape: 'round', inputs: ['Vox RF'], wireless: true },
   headset:     { name: 'Headset (wireless)', short: 'Headset', cat: 'audio', w: .9, d: .9, shape: 'round', inputs: ['Headset RF'], wireless: true },
+  rx_single:   { name: 'Wireless mic receiver (single)', short: 'RF receiver', cat: 'audio', w: .9, d: .6, shape: 'rect', watts: 10, rx: 1 },   // one wireless mic in; an XLR out to the stage box
   inst_mic:    { name: 'Instrument mic', short: 'Inst mic', cat: 'audio', w: .9, d: .9, shape: 'round', inputs: ['Inst'] },
   di_mono:     { name: 'Mono DI box', short: 'DI', cat: 'audio', w: .8, d: .6, shape: 'rect', inputs: ['DI'] },
   di_stereo:   { name: 'Stereo DI box', short: 'Stereo DI', cat: 'audio', w: 1, d: .6, shape: 'rect', inputs: ['DI L', 'DI R'] },
   wedge:       { name: 'Wedge monitor', short: 'Wedge', cat: 'audio', w: 2, d: 1.4, shape: 'wedge', outs: 1, watts: 300 },
-  iem:         { name: 'IEM pack', short: 'IEM', cat: 'audio', w: .6, d: .6, shape: 'rect', wireless: true, iem: true },
+  iem:         { name: 'IEM pack (wireless)', short: 'IEM', cat: 'audio', w: .6, d: .6, shape: 'rect', wireless: true, iem: true },
+  iem_wired:   { name: 'IEM pack (wired)', short: 'Wired IEM', cat: 'audio', w: .6, d: .6, shape: 'rect', outs: 1, iem: true },   // a belt pack on an XLR from a stage box output: no transmitter, no frequency
   iem_rack:    { name: 'IEM transmitter rack', short: 'IEM rack', cat: 'infra', w: 2, d: 2, shape: 'rack', outs: 8, watts: 120 },
   stagebox:    { name: 'Stage box / digital snake', short: 'Stage box', cat: 'infra', w: 2, d: 1.4, shape: 'rack', ins: 32, outsMax: 16, watts: 120 },
   foh:         { name: 'FOH console', short: 'FOH', cat: 'infra', w: 6, d: 3, shape: 'desk', watts: 250, desk: true },
@@ -2128,8 +2130,8 @@ const CAT = {
 const GEAR_GROUPS = [
   ['Instruments', ['drum_kit', 'edrums', 'cajon', 'keys', 'midi_keys', 'up_piano', 'grand_piano', 'ac_guitar', 'el_guitar', 'bass_guitar', 'trumpet'], 'keys'],
   ['Amps & FX', ['gtr_amp', 'bass_amp', 'pedalboard', 'bass_pedal', 'multifx', 'ac_preamp', 'midi_fs'], 'gtr_amp'],
-  ['Mics & DI', ['vox_mic', 'vox_wl', 'headset', 'inst_mic', 'di_mono', 'di_stereo', 'usb_if'], 'vox_mic'],
-  ['Monitors & PA', ['wedge', 'iem', 'iem_rack', 'main_spk', 'sub', 'la_main', 'la_sub'], 'wedge'],
+  ['Mics & DI', ['vox_mic', 'vox_wl', 'headset', 'rx_single', 'inst_mic', 'di_mono', 'di_stereo', 'usb_if'], 'vox_mic'],
+  ['Monitors & PA', ['wedge', 'iem', 'iem_wired', 'iem_rack', 'main_spk', 'sub', 'la_main', 'la_sub'], 'wedge'],
   ['Desks & tech', ['stagebox', 'rack', 'foh', 'mon_desk', 'mt_ipad', 'laptop', 'camera', 'conf_mon'], 'foh'],
   ['Lighting', ['par_led', 'wash_led', 'bar_led', 'bar_up', 'spot_mh', 'wash_mh', 'profile', 'fresnel', 'uplight', 'light_stand', 'hazer', 'light_desk', 'dmx_split', 'truss', 'light_pipe', 'foh_bar'], 'par_led'],
   ['Stage & power', ['riser', 'drum_riser', 'walkway', 'drum_shield', 'pulpit', 'music_stand', 'ipad_stand', 'distro', 'wall_outlet', 'pboard2', 'pboard4', 'pboard6'], 'distro'],
@@ -2794,7 +2796,7 @@ function autoCable() {
     if (c.type !== 'xlr') continue;
     const b = [itemById(c.from), itemById(c.to)].find(isBox); if (!b) continue;
     const o = other(c, b.id); if (!o) continue;
-    portUse.get(b.id).ins += inputsOf(o).length; portUse.get(b.id).outs += Number(prop(o, 'outs')) || 0;
+    portUse.get(b.id).ins += inputsOf(o).length + (cat(o).rx || 0); portUse.get(b.id).outs += Number(prop(o, 'outs')) || 0;
   }
   const pickBox = (it, need, key) => {
     const sorted = boxes.slice().sort((a, b) => dist(it, a) - dist(it, b));
@@ -2803,7 +2805,7 @@ function autoCable() {
   const order = plan.items.slice().sort((a, b) => rankItem(a) - rankItem(b));
   for (const it of order) {
     if (isBox(it) || cat(it).desk) continue;
-    const ins = inputsOf(it).length, outs = Number(prop(it, 'outs')) || 0;
+    const ins = inputsOf(it).length + (cat(it).rx || 0), outs = Number(prop(it, 'outs')) || 0;
     if (boxes.length && ins && !cat(it).wireless && !has(it, 'xlr')) {
       const b = pickBox(it, ins, 'ins'); portUse.get(b.id).ins += ins; addCable('xlr', it.id, b.id, { auto: true });
     }
@@ -3704,8 +3706,15 @@ function rankItem(it) {
   const voc = ['vox_mic', 'vox_wl', 'headset'].includes(it.type) ? .5 : 0;
   return roleRank + voc + it.x / 1000;
 }
+const rxMics = () => plan.items.filter(i => cat(i).wireless && inputsOf(i).length).sort((a, b) => rankItem(a) - rankItem(b));
+const rxUnits = () => plan.items.filter(i => cat(i).rx).sort((a, b) => a.x - b.x || a.y - b.y);
+function rxFor(mic) { const k = rxMics().indexOf(mic), rx = rxUnits(); return k >= 0 && k < rx.length ? rx[k] : null; }   // receivers on stage take the mics in band order; the rest are on rack receivers
 function patchOf(it) {
-  if (cat(it).wireless) return { kind: 'rf' };
+  if (cat(it).wireless) {
+    const rx = inputsOf(it).length && rxFor(it); if (!rx) return { kind: 'rf' };
+    const c = plan.cables.find(c => c.type === 'xlr' && touches(c, rx.id) && (() => { const o = other(c, rx.id); return o && (isBox(o) || cat(o).desk); })());
+    return c ? { kind: 'box', box: other(c, rx.id), via: rx } : { kind: 'rf', via: rx };
+  }
   const c = plan.cables.find(c => c.type === 'xlr' && touches(c, it.id) && (() => { const o = other(c, it.id); return o && (isBox(o) || cat(o).desk); })());
   if (!c) return null;
   return { kind: 'box', box: other(c, it.id) };
@@ -3719,7 +3728,7 @@ function inputList() {
     for (const name of inputsOf(it)) {
       ch++;
       let port = '—', flag = false;
-      if (patch?.kind === 'rf') port = 'RF receiver';
+      if (patch?.kind === 'rf') { port = patch.via ? `${itemName(patch.via)} (not patched)` : 'RF receiver'; flag = !!patch.via; }
       else if (patch?.box) {
         const b = patch.box;
         if (cat(b).desk) port = `${itemName(b)} local`;
@@ -3974,7 +3983,9 @@ function warnings() {
     const W = chainW(h), n = chainOf(h).length, cap = linkCapW();
     if (W > cap) out.push({ lvl: W > cap / .8 ? 'bad' : 'warn', id: h.id, msg: `${itemName(h)} feeds ${n - 1} more ${n === 2 ? 'light' : 'lights'} on a power link (${Math.round(W)} W). That's more than one link should carry (${Math.round(cap)} W): start a new chain.` });
   }
-  const unp = plan.items.filter(i => inputsOf(i).length && !patchOf(i));
+  const unp = plan.items.filter(i => (inputsOf(i).length && !patchOf(i)) || (cat(i).rx && !plan.cables.some(c => c.type === 'xlr' && touches(c, i.id))));
+  { const mics = rxMics().length, rx = rxUnits().length, rack = plan.items.filter(i => i.type === 'rack').reduce((a, r) => a + rackStat(r).rf, 0);
+    if (rx && mics > rx + rack) out.push({ lvl: 'warn', id: rxUnits()[0].id, msg: `${plural(mics, 'wireless mic')} but receivers for ${rx + rack}. Add a receiver for each one.` }); }
   for (const i of unp) out.push({ lvl: 'warn', id: i.id, fix: 'cable', msg: `${itemName(i)} isn't patched to a stage box or desk.` });
   for (const i of plan.items.filter(i => needsPower(i) && !plan.cables.some(c => c.type === 'power' && touches(c, i.id))))
     out.push({ lvl: 'warn', id: i.id, fix: 'cable', msg: `${itemName(i)} needs power (${prop(i, 'watts')} W) and has no power run.` });
@@ -4290,6 +4301,7 @@ const ICONS = {
   trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
   copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/>',
   rotate: '<path d="M20 12a8 8 0 11-2.4-5.7"/><path d="M20 4v5h-5"/>',
+  flip: '<path d="M7 4v16M7 4L3.5 7.5M7 4l3.5 3.5"/><path d="M17 20V4M17 20l-3.5-3.5M17 20l3.5-3.5"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   moon: '<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',
   auto: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 000-17z" fill="currentColor" stroke="none"/>',
@@ -4485,6 +4497,8 @@ const SYM_CSS = `
 .s-valve{fill:#f0d27a;stroke:#8a6a1f;stroke-width:.02}
 .s-line{fill:none;stroke:rgba(255,255,255,.55);stroke-width:.05;stroke-linecap:round;stroke-linejoin:round}
 .s-thin{fill:none;stroke:rgba(255,255,255,.32);stroke-width:.035;stroke-linecap:round}
+.s-cord{fill:none;stroke:#2b2f35;stroke-width:.07;stroke-linecap:round}
+.s-pin{fill:none;stroke:#c9ced4;stroke-width:.03;stroke-linecap:round}
 .s-boom{fill:none;stroke:#e8ecef;stroke-width:.06;stroke-linecap:round}
 .s-edge{stroke:rgba(0,0,0,.45);stroke-width:.05}
 .s-dark{fill:#14181c}
@@ -4516,6 +4530,8 @@ const SYM = (() => {
   const rect = (x, y, w, h, cls, rx = .06) => `<rect class="${cls}" x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" rx="${rx}"/>`;
   const circ = (cx, cy, r, cls) => `<circle class="${cls}" cx="${f(cx)}" cy="${f(cy)}" r="${f(r)}"/>`;
   const line = (x1, y1, x2, y2, cls = 's-line') => `<path class="${cls}" d="M${f(x1)} ${f(y1)}L${f(x2)} ${f(y2)}"/>`;
+  // an extension lead's own cord and 3-pin plug, off its left end: it plugs in with this, not with one of its sockets
+  const extPlug = x0 => line(x0, 0, x0 - .28, 0, 's-cord') + rect(x0 - .5, -.11, .22, .22, 'body c-power', .04) + [-.06, 0, .06].map(y => line(x0 - .5, y, x0 - .58, y, 's-pin')).join('');
   const box = (w, d, c, rx = .08) => rect(-w / 2, -d / 2, w, d, `body c-${c} s-edge`, rx);
   const tripod = (r, cls = 's-line') => [90, 210, 330].map(a => line(0, 0, r * Math.cos(a * Math.PI / 180), r * Math.sin(a * Math.PI / 180), cls)).join('');
   const diBox = (w, ys) => { const h = w / 2, jx = -h + .19, xx = h - .22, xr = ys.length > 1 ? .095 : .12;
@@ -4666,6 +4682,7 @@ const SYM = (() => {
     inst_mic: circ(0, 0, .45, 'body c-audio s-bg') + tripod(.38) + `<g transform="rotate(-35)">${line(0, 0, 0, -.25, 's-boom')}${rect(-.05, -.38, .1, .18, 's-dark', .04)}${circ(0, -.4, .06, 's-white')}</g>` + circ(0, 0, .05, 's-dark'),
     // passive DI from above: steel bookend caps, blue top, the jack input at the left end, the XLR out at the right, ground-lift and pad toggles
     di_mono: diBox(.8, [.03]),
+    rx_single: rect(-.45, -.3, .9, .6, 'body c-audio s-edge', .06) + rect(-.32, -.18, .34, .16, 's-glass', .02) + circ(.2, -.1, .07, 's-white') + circ(.2, .14, .035, 's-led') + line(-.36, -.3, -.42, -.52, 's-boom') + line(.36, -.3, .42, -.52, 's-boom'),   // a half-rack receiver: screen, a knob, two antennas
     di_stereo: diBox(1, [-.09, .14]),
     // speakers, top-down: cabinet top with handles, grille band on the face that points where the sound goes, faint coverage
     wedge: '<path class="s-covup" d="M-.7 -.7L-1.6 -2Q0 -2.45 1.6 -2L.7 -.7Z"/>' +
@@ -4695,6 +4712,7 @@ const SYM = (() => {
       '<path class="s-mesh" d="M-2.07 .62H2.07V1Q2.07 1.17 1.9 1.17H-1.9Q-2.07 1.17 -2.07 1Z"/>' + grid(-1.98, .7, 40, 4, .1, .11, .022, 's-dot') +
       rect(-1.8, .72, .7, .34, 's-blk', .05) + rect(1.1, .72, .7, .34, 's-blk', .05),
     iem: rect(-.18, -.26, .36, .52, 'body c-audio s-edge', .06) + line(.1, -.26, .1, -.4, 's-boom') + rect(-.11, -.16, .22, .13, 's-glass', .02) + circ(0, .12, .05, 's-white') + '<path class="s-line" d="M-.12 .26q-.05 .12 -.16 .08"/>',
+    iem_wired: rect(-.18, -.26, .36, .52, 'body c-audio s-edge', .06) + rect(-.11, -.16, .22, .13, 's-glass', .02) + circ(0, .12, .05, 's-white') + '<path class="s-line" d="M-.12 .26q-.05 .12 -.16 .08"/>' + line(.06, -.26, .06, -.42, 's-cord') + rect(-.01, -.5, .14, .1, 's-dark', .02),   // no antenna: an XLR lead out of the top instead
     iem_rack: rect(-1.08, -1, .14, 2, 's-ear', .03) + rect(.94, -1, .14, 2, 's-ear', .03) + rect(-.96, -1, 1.92, 2, 's-cab2 s-edge', .1) +   // two transmitters in a rack: screens, a knob, link lights, antennas out the back
       [-.5, .38].map(y => rect(-.86, y - .34, 1.72, .62, 's-cabtop2', .05) + rect(-.74, y - .22, .62, .3, 's-screen', .03) + rect(-.68, y - .16, .3, .05, 's-scrbar', .01) + circ(.2, y - .07, .11, 's-knob2') + circ(.5, y - .16, .035, 's-ledg') + circ(.5, y, .035, 's-ledb') + rect(.36, y + .12, .42, .06, 's-lbl', .02)).join('') +
       line(-.7, -1, -.95, -1.4, 's-boom') + line(.7, -1, .95, -1.4, 's-boom') + circ(-.95, -1.4, .06, 's-white') + circ(.95, -1.4, .06, 's-white'),
@@ -4773,9 +4791,9 @@ const SYM = (() => {
     distro: rect(-1, -.75, 2, 1.5, 's-cab2 s-edge', .1) + rect(-.92, -.67, 1.84, 1.34, 's-cabtop2', .06) + rect(-.92, -.67, 1.84, .14, 's-pstripe', .04) +   // an orange-topped power box: breakers, six outlets, a lit switch
       [-.66, -.4, -.14, .12, .38, .64].map(x => rect(x - .09, -.44, .18, .22, 's-breaker', .03) + rect(x - .04, -.42, .08, .08, 's-btip', .01)).join('') +
       socket(-.55, .02) + socket(0, .02) + socket(.55, .02) + socket(-.55, .43) + socket(0, .43) + socket(.55, .43) + circ(.82, -.6, .045, 's-ledr'),
-    pboard2: rect(-.45, -.22, .9, .44, 's-white s-edge', .1) + [-.15, .2].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.36, 0, .035, 's-red'),
-    pboard4: rect(-.7, -.22, 1.4, .44, 's-white s-edge', .1) + [-.45, -.15, .15, .45].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.62, 0, .035, 's-red'),
-    pboard6: rect(-.95, -.22, 1.9, .44, 's-white s-edge', .1) + [-.7, -.42, -.14, .14, .42, .7].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.87, 0, .035, 's-red'),
+    pboard2: rect(-.45, -.22, .9, .44, 's-white s-edge', .1) + [-.15, .2].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.36, 0, .035, 's-red') + extPlug(-0.45),
+    pboard4: rect(-.7, -.22, 1.4, .44, 's-white s-edge', .1) + [-.45, -.15, .15, .45].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.62, 0, .035, 's-red') + extPlug(-0.7),
+    pboard6: rect(-.95, -.22, 1.9, .44, 's-white s-edge', .1) + [-.7, -.42, -.14, .14, .42, .7].map(x => circ(x, 0, .11, 'body c-power') + circ(x - .04, 0, .02, 's-dark') + circ(x + .04, 0, .02, 's-dark')).join('') + circ(-.87, 0, .035, 's-red') + extPlug(-0.95),
     wall_outlet: rect(-.35, -.25, .7, .5, 's-white s-edge', .06) + circ(0, 0, .17, 'body c-power') + circ(-.06, 0, .03, 's-dark') + circ(.06, 0, .03, 's-dark'),
     camera: tripod(.95, 's-line') + rect(-.32, -.28, .64, .62, 'body c-video s-edge', .08) + rect(-.18, -.62, .36, .36, 's-dark', .05) + circ(0, -.62, .15, 's-glass') + rect(-.12, .34, .24, .2, 's-dark', .03),
     // floor screen tilted up at the stage, lyrics showing, on a low wedge stand
@@ -4816,9 +4834,15 @@ document.body.insertAdjacentHTML('afterbegin', `<svg aria-hidden="true" focusabl
    Rendering: plot
    =================================================================== */
 const svg = $('plot'), scroller = $('scroller');
-// the band's view: the whole plot turned round (audience at the top, stage left on the left), every word kept upright; only the screen changes, never the plan or the paperwork
-let flipped = false;
-function setFlip(on) { flipped = on; svg.classList.toggle('flipped', on); $('plotView').classList.toggle('flipview', on); renderAll(); }
+// turning the view round the stage in quarter turns (a half turn is the band's view, audience at the top); every word stays upright.
+// Only the screen changes, never the plan or the paperwork, and this device remembers the turn.
+let viewRot = (r => [0, 90, 180, 270].includes(r) ? r : 0)(Number(lsGet('stageplot.viewRot')));
+const rotNow = () => capturing || layersBypass ? 0 : viewRot,   // pictures and the paperwork are always drawn straight
+  sideways = () => rotNow() % 180 !== 0;
+function setRot(r) { viewRot = ((r % 360) + 360) % 360; lsSet('stageplot.viewRot', String(viewRot)); zoom = null; needFit = true; renderAll(); }
+const ROT_LABEL = { 90: 'Turned: audience on the left', 180: 'Seen from the stage', 270: 'Turned: audience on the right' };
+const plotCTM = () => (svg.querySelector('#rotg') || svg).getScreenCTM();   // plan feet to screen pixels, turn included
+const scrPt = (m, x, y) => ({ x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f });
 function bounds() {
   const { w, d, house, houseW } = plan.stage, hw = Math.max(w, houseW);
   const x0 = Math.min(0, (w - hw) / 2), x1 = Math.max(w, (w + hw) / 2);
@@ -4830,7 +4854,8 @@ const deckCentre = () => { const p = stagePoly(), xs = p.map(q => q[0]), ys = p.
 function viewBoxFor(b) {
   if (layersBypass || capturing) return b;
   const [cx, cy] = fitMode === 'room' && !zoom ? [b.x0 + b.vw / 2, b.y0 + b.vh / 2] : deckCentre(), pad = 32 / scale;   // "whole room" centres the room instead
-  const hw = Math.max(cx - b.x0, b.x0 + b.vw - cx, (scroller.clientWidth / scale - pad) / 2), hh = Math.max(cy - b.y0, b.y0 + b.vh - cy, (scroller.clientHeight / scale - pad) / 2);
+  const [cw, chh] = sideways() ? [scroller.clientHeight, scroller.clientWidth] : [scroller.clientWidth, scroller.clientHeight];
+  const hw = Math.max(cx - b.x0, b.x0 + b.vw - cx, (cw / scale - pad) / 2), hh = Math.max(cy - b.y0, b.y0 + b.vh - cy, (chh / scale - pad) / 2);
   return { x0: cx - hw, y0: cy - hh, vw: hw * 2, vh: hh * 2 };
 }
 /* Smart guides while dragging. Centres and edges line up with other gear and the stage (centre line and edges); a gap equal to
@@ -4893,9 +4918,9 @@ function smartSnap(it, px, py, moving, nx, ny) {
 /* the FOH desk often sits out in the house, past the edge of the screen: a small pointer says where and how far, and takes you there */
 function placeFohPointer() {
   const el = $('ffoh'); if (!el) return;
-  const foh = view === 'plot' && !presenting && ui.adv && plan.items.find(i => i.type === 'foh'), m = foh && svg.getScreenCTM();
+  const foh = view === 'plot' && !presenting && ui.adv && plan.items.find(i => i.type === 'foh'), m = foh && plotCTM();
   if (!foh || !m) { el.hidden = true; return; }
-  const r = scroller.getBoundingClientRect(), x = foh.x * m.a + m.e, y = foh.y * m.d + m.f, pad = 24;
+  const r = scroller.getBoundingClientRect(), { x, y } = scrPt(m, foh.x, foh.y), pad = 24;
   const dir = y > r.bottom - pad ? 'down' : y < r.top + pad ? 'up' : x > r.right - pad ? 'right' : x < r.left + pad ? 'left' : '';
   el.hidden = !dir; if (!dir) return;
   const dist = uLen(Math.max(0, foh.y - plan.stage.d));
@@ -4906,8 +4931,8 @@ function placeFohPointer() {
 let fohRaf = 0;
 scroller.addEventListener('scroll', () => { if (!fohRaf) fohRaf = requestAnimationFrame(() => { fohRaf = 0; placeFohPointer(); }); }, { passive: true });
 $('ffoh').addEventListener('click', () => {
-  const foh = plan.items.find(i => i.type === 'foh'), m = foh && svg.getScreenCTM(); if (!m) return;
-  const r = scroller.getBoundingClientRect(), x = foh.x * m.a + m.e, y = foh.y * m.d + m.f;
+  const foh = plan.items.find(i => i.type === 'foh'), m = foh && plotCTM(); if (!m) return;
+  const r = scroller.getBoundingClientRect(), { x, y } = scrPt(m, foh.x, foh.y);
   scroller.scrollBy({ left: x - (r.left + r.width / 2), top: y - (r.top + r.height * .6), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 });
 // Planning Center plan times → arrive by (the earliest time of the day), soundcheck (the first rehearsal) and service (the first service)
@@ -4942,7 +4967,7 @@ function stageRegion() {
   return { x: -mx, y: -fromM(.9), w: w + mx * 2, h: d + fromM(2.4) };
 }
 function fitScale() {
-  const narrow = scroller.clientWidth < 600, b = bounds(), aw = Math.max(200, scroller.clientWidth - (narrow ? 14 : 48)), ah = Math.max(200, scroller.clientHeight - (narrow ? 130 : 150));   // room for the floating bars; phones use every pixel of width
+  const narrow = scroller.clientWidth < 600, b = bounds(), sw = Math.max(200, scroller.clientWidth - (narrow ? 14 : 48)), sh = Math.max(200, scroller.clientHeight - (narrow ? 130 : 150)), [aw, ah] = sideways() ? [sh, sw] : [sw, sh];   // room for the floating bars; phones use every pixel of width
   if (fitMode === 'room') return Math.max(3, Math.min(aw / b.vw, ah / b.vh));
   const r = stageRegion(); return Math.max(3, Math.min(aw / r.w, ah / r.h));
 }
@@ -5286,7 +5311,7 @@ svg.addEventListener('pointermove', e => {
   hoverRaf = requestAnimationFrame(() => { const id = on ? (cablesAt(pt)[0] || on.dataset.cid) : null; if (id !== hoverCid) { hoverCid = id; renderPlot(); } });
 });
 svg.addEventListener('pointerleave', () => { if (hoverCid) { hoverCid = null; renderPlot(); } });
-const TUCK_TYPES = new Set(['di_mono', 'di_stereo', 'iem']);   // passive boxes only: anything someone plays or plugs into stays drawn
+const TUCK_TYPES = new Set(['di_mono', 'di_stereo', 'iem', 'iem_wired']);   // passive boxes only: anything someone plays or plugs into stays drawn
 const freshGear = new Set();   // gear added this session never folds away, so it can't vanish the moment it's placed
 const lastPos = new Map(); let lastPlanId = '';
 function glide() {
@@ -5392,9 +5417,10 @@ function renderPlot() {
   if (view !== 'plot') return;
   const b = bounds();
   scale = zoom || fitScale();
-  const v = viewBoxFor(b);
-  svg.style.width = `${f3(v.vw * scale)}px`; svg.style.height = `${f3(v.vh * scale)}px`;
-  svg.setAttribute('viewBox', `${f3(v.x0)} ${f3(v.y0)} ${f3(v.vw)} ${f3(v.vh)}`);
+  const v = viewBoxFor(b), R = rotNow(), rcx = v.x0 + v.vw / 2, rcy = v.y0 + v.vh / 2;
+  const vb = R % 180 ? { x0: rcx - v.vh / 2, y0: rcy - v.vw / 2, vw: v.vh, vh: v.vw } : v;   // the drawing turns about the middle of the view
+  svg.style.width = `${f3(vb.vw * scale)}px`; svg.style.height = `${f3(vb.vh * scale)}px`;
+  svg.setAttribute('viewBox', `${f3(vb.x0)} ${f3(vb.y0)} ${f3(vb.vw)} ${f3(vb.vh)}`);
   $('scroller').classList.toggle('cabling', mode === 'cable' || mode === 'measure' || mode === 'box');
   $('scroller').classList.toggle('placing', !!placing);
   const { w, d, house } = plan.stage;
@@ -5481,7 +5507,7 @@ function renderPlot() {
     const C = cat(it), iw = Number(prop(it, 'w')), id = Number(prop(it, 'd')), L = layerOf(it);
     const g = `<g class="item${C.shape === 'person' ? ' is-person' : C.shape === 'platform' ? ' is-floor' : C.cat === 'inst' ? ' is-inst' : ''}${selSet.has(it.id) ? ' picked' : ''}${it.chan ? ' inchan' : ''}${frozen(it) ? ' locked' : ''}${tr?.items.has(it.id) ? ' intrace' : ''}${fset?.has(it.id) ? ' infocus' : ''}${lifted?.has(it.id) && C.shape !== 'platform' ? ' lifting' : settling.has(it.id) ? ' settle' : ''}" data-id="${it.id}" transform="translate(${it.x} ${it.y}) rotate(${it.rot || 0})" role="img" aria-label="${esc(itemName(it))}${it.note ? ' — ' + esc(it.note) : ''}"><g class="liftg">${shapeSvg(it, iw, id)}</g></g>`;
     if (L < 1) s += g; else top += g;
-    if ((C.wireless || C.iem) && !layersBypass) { const [rw, rh] = halfExt(it), k = 1 / scale; top += `<g class="rfmark" transform="translate(${f3(it.x + rw * .7)} ${f3(it.y - rh * .7)}) scale(${f3(k)})" aria-hidden="true"><circle r="5.5"/><path d="M-2.6 -.6a3.7 3.7 0 0 1 5.2 0M-1.3 .9a1.85 1.85 0 0 1 2.6 0"/><circle class="rfdot" cy="2.2" r=".9"/></g>`; }   // wireless: a little signal mark instead of a plug
+    if (C.wireless && !layersBypass) { const [rw, rh] = halfExt(it), k = 1 / scale; top += `<g class="rfmark" transform="translate(${f3(it.x + rw * .7)} ${f3(it.y - rh * .7)}) scale(${f3(k)})" aria-hidden="true"><circle r="5.5"/><path d="M-2.6 -.6a3.7 3.7 0 0 1 5.2 0M-1.3 .9a1.85 1.85 0 0 1 2.6 0"/><circle class="rfdot" cy="2.2" r=".9"/></g>`; }   // wireless: a little signal mark instead of a plug
     if (it.fault && (isFixture(it) || isDmx(it))) { const m = Math.max(iw, id) / 2 * .72; top += faultTri(it.x - m, it.y - m, .9, it); }   // a light with a problem
     if (it.note && !layerOff('labels')) { const m = Math.max(iw, id) / 2 * .72; top += `<g class="notebadge" data-id="${it.id}" transform="translate(${f3(it.x + m)} ${f3(it.y - m)})"><title>${esc(it.note)}</title><circle r=".45"/><path d="M-.2 -.14h.4M-.2 0h.4M-.2 .14h.26"/></g>`; }   // a note pinned to the gear   // cables run under the gear, so plugs disappear beneath it instead of crossing it
     if (C.shape === 'platform') { const r = (it.rot || 0) % 180 === 90, hw = (r ? id : iw) / 2, hd = (r ? iw : id) / 2; risers.push([it.x - hw, it.y - hd, it.x + hw, it.y + hd]); }
@@ -5669,8 +5695,10 @@ function renderPlot() {
   if (compare && !capturing && db.plans[compare]) s += beforeSvg(b);
   if (compare) s += compareSvg();
   s += measureSvg();
-  svg.innerHTML = s;
+  svg.innerHTML = R ? `<g id="rotg" transform="rotate(${R} ${f3(rcx)} ${f3(rcy)})">${s}</g>` : s;
+  for (const r of [90, 180, 270]) svg.classList.toggle(`rot${r}`, R === r);
   if (capturing) return;
+  if (!layersBypass) { $('plotView').classList.toggle('turned', !!R); $('canvas').dataset.turn = ROT_LABEL[R] || ''; }
   glide();
   const fs = $('fside'); fs.hidden = !sideOpen || presenting; if (sideOpen && !presenting) fs.innerHTML = `<div class="panel sidepanel"><div class="sv-head"><b>Side view</b><span class="hint">from the house · heights in metres</span><button class="iconbtn" id="sideClose" aria-label="Close side view" title="Close (E)">${ic('x', 'sm')}</button></div>${sideSvg()}</div>`;
   $('fpresent').hidden = !presenting; if (presenting) $('fpresent').innerHTML = `<div class="pres-title"><div class="eyebrow">${esc(defaultsOf().org || 'Stage plot')} · ${esc(longDate(plan.date))}</div><h1>${esc(plan.name || 'Sunday service')}</h1>${plan.team.length ? `<p class="pres-tip">Tap someone to see their channels and monitor</p>` : ''}</div><div class="pres-right"><div class="pres-clock" aria-live="off"><b id="presTime"></b><small id="presNext"></small></div><button class="btn pres-exit" id="presExit">${ic('x', 'sm')}Exit · Esc</button></div>${presCard()}`;
@@ -5678,9 +5706,9 @@ function renderPlot() {
   if (needFit && !zoom) {
     needFit = false;
     if (fitMode === 'stage') {
-      const [dx, dy] = deckCentre(), m = svg.getScreenCTM(), sr = scroller.getBoundingClientRect();
+      const [dx, dy] = deckCentre(), m = plotCTM(), sr = scroller.getBoundingClientRect();
       if (m) {
-        const cx = dx * m.a + m.e, cy = dy * m.d + m.f;
+        const { x: cx, y: cy } = scrPt(m, dx, dy);
         scroller.scrollLeft += cx - (sr.left + sr.width / 2);
         scroller.scrollTop += cy - (sr.top + sr.height / 2);
       }
@@ -5742,7 +5770,8 @@ function renderFloat() {
       ${ui.adv ? `<button class="iconbtn" id="zIn" aria-label="Zoom in" title="Zoom in (+)">${ic('plus')}</button>` : ''}
       <button class="iconbtn" data-fit="${!zoom && fitMode === 'stage' ? 'room' : 'stage'}" aria-label="Fit" title="${!zoom && fitMode === 'stage' ? 'Show the whole room' : 'Fit the stage (0)'}">${ic('fit')}</button>
       ${ui.adv || plan.setupLock ? `<button class="iconbtn" id="setupLock" aria-pressed="${!!plan.setupLock}" aria-label="${plan.setupLock ? 'Unlock the setup' : 'Lock the setup'}" title="${plan.setupLock ? 'Setup locked: risers, stage box, speakers and power stay put. Click to unlock' : 'Lock the setup: risers, stage box, speakers and power stay put while you move band gear'}">${ic(plan.setupLock ? 'lock' : 'unlock')}</button>` : ''}
-      ${ui.adv || flipped ? `<button class="iconbtn" id="flipView" aria-pressed="${flipped}" aria-label="${flipped ? 'See it from the house' : 'See it from the stage'}" title="${flipped ? 'Back to the view from the house' : 'Turn the plot round: the band’s view, looking out at the audience'}">${ic('rotate')}</button>` : ''}
+      <button class="iconbtn" id="flipView" aria-pressed="${viewRot === 180}" aria-label="${viewRot === 180 ? 'See it from the house' : 'See it from the stage'}" title="${viewRot === 180 ? 'Back to the view from the house' : 'Flip: the band’s view, looking out at the audience'}">${ic('flip')}</button>
+      <button class="iconbtn" id="rotView" aria-pressed="${viewRot % 180 !== 0}" aria-label="Turn the view a quarter" title="Turn the view a quarter round the stage">${ic('rotate')}</button>
     </div>`;
   fitDock();
   $('fzoom').innerHTML = mode === 'channel' ? `<div class="panel">${chDraft?.extend ? `<span class="chip accent">Extending ${esc(chans().find(x => x.id === chDraft.extend.id)?.name || '')}</span>` : Object.entries(CH_KINDS).map(([k, v]) => `<button class="ctype" data-chdraftkind="${k}" aria-pressed="${k === chDraftKind}">${v.level ? '↑ ' : ''}${esc(v.name)}</button>`).join('')}<span class="dock-sep"></span><span class="toolhint">${chDraft?.pts.length ? 'Click to add bends · click the last point again or press Enter to finish · Alt for angles' : 'Click where the channel starts'}</span>${chDraft?.pts.length >= 2 ? `<button class="btn primary" id="chFinish" style="padding:5px 10px">Finish</button>` : ''}<button class="btn quiet" data-mode="select" style="padding:5px 10px">Cancel</button></div>` : mode === 'cable' ? `<div class="panel">${`<button class="ctype" data-ctype="auto" aria-pressed="${cableType === 'auto'}" title="Pick the type from the two ends">${ic('wand', 'sm')}Auto</button>` + Object.keys(CABLES).map(k => `<button class="ctype" data-ctype="${k}" aria-pressed="${k === cableType}"><span class="sw bg-${k}"></span>${SHORT[k]}</button>`).join('')}
@@ -6075,8 +6104,8 @@ function renderInspector() {
     if (it.type === 'stagebox') adv.push(`<section class="isec"><h3>Ports</h3><div class="grid2">${field('iIns', 'Inputs', prop(it, 'ins'), 'number', 'min="1" max="128"')}${field('iOuts', 'Outputs', prop(it, 'outsMax'), 'number', 'min="0" max="64"')}</div></section>`);
     if (isExt(it)) {
       const f = feedOf(it), load = extLoad(it), cap = (Number(prop(it, 'amps')) || 10) * (Number(prop(it, 'volts')) || 230);
-      basic += `<section class="isec"><h3>Extension lead <span>${extUsed(it)}/${prop(it, 'outlets')} used</span></h3>${meter('Load', load, cap)}
-        <p class="hint">${f ? `Plugged into ${esc(itemName(other(f, it.id)))}${f.circuit ? ` · circuit ${f.circuit}` : ''}.` : 'Not plugged in yet. Run an extension lead from a power point or distro, or press Re-run cabling.'}</p></section>`;
+      basic += `<section class="isec"><h3>Extension lead <span>${extUsed(it)}/${prop(it, 'outlets')} sockets used</span></h3>${meter('Load', load, cap)}
+        <p class="hint">${f ? `Its own 3-pin plug goes into ${esc(itemName(other(f, it.id)))}${f.circuit ? ` · circuit ${f.circuit}` : ''}. That lead doesn't use a socket.` : 'Its own 3-pin plug isn’t in anything yet.'}</p>${f ? '' : `<button class="btn primary block" data-plugext="${it.id}">${ic('zap', 'sm')}Plug it in</button>`}</section>`;
       adv.push(`<section class="isec"><h3>Lead rating</h3><div class="grid2">${field('iOutlets', 'Outlets', prop(it, 'outlets'), 'number', 'min="1" max="12"')}${field('iAmps', 'Rating', prop(it, 'amps'), 'number', 'min="1" max="32"', 'A')}</div></section>`);
     } else if (isPowerSource(it)) {
       const { loads, cap } = circuitLoads(it);
@@ -6721,7 +6750,7 @@ document.addEventListener('focusin', e => { const l = e.target.closest?.('.print
 function rulerCursor(p) {
   let g = svg.querySelector('#rulCur'); const W = plan.stage.w, D = plan.stage.d;
   if (!p || layerOff('dims') || p.x < -1 || p.x > W + 1 || p.y < -1 || p.y > D + 1) { g?.remove(); return; }
-  if (!g) { g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.id = 'rulCur'; g.setAttribute('class', 'rulcur'); g.setAttribute('aria-hidden', 'true'); svg.append(g); }
+  if (!g) { g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.id = 'rulCur'; g.setAttribute('class', 'rulcur'); g.setAttribute('aria-hidden', 'true'); (svg.querySelector('#rotg') || svg).append(g); }
   const x = clamp(p.x, 0, W), y = clamp(p.y, 0, D), k = 1 / (scale || 30);
   g.innerHTML = `<path d="M${f3(x)} -.95V-.1M-.95 ${f3(y)}H-.1"/><text x="${f3(x)}" y="${f3(-1.1)}" text-anchor="middle" style="font-size:${f3(11 * k)}px">${esc(uLen(x))}</text><text x="${f3(-1.1)}" y="${f3(y)}" text-anchor="end" dominant-baseline="middle" style="font-size:${f3(11 * k)}px">${esc(uLen(D - y))}</text>`;
 }
@@ -6817,15 +6846,15 @@ function pcoHtml() {
    =================================================================== */
 function toFt(e) {
   const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
-  const m = svg.getScreenCTM(); if (!m) return { x: 0, y: 0 };
+  const m = plotCTM(); if (!m) return { x: 0, y: 0 };
   const p = pt.matrixTransform(m.inverse()); return { x: p.x, y: p.y };
 }
 function zoomAt(f, cx, cy) {
   const before = toFt({ clientX: cx, clientY: cy });
   zoom = clamp(scale * f, 3, 200); renderPlot();
-  const m = svg.getScreenCTM(); if (!m) return;
-  scroller.scrollLeft += before.x * m.a + m.e - cx;
-  scroller.scrollTop += before.y * m.d + m.f - cy;
+  const m = plotCTM(); if (!m) return; const q = scrPt(m, before.x, before.y);
+  scroller.scrollLeft += q.x - cx;
+  scroller.scrollTop += q.y - cy;
 }
 let zoomAnim = null;
 function zoomCenter(f) {   // buttons and keys ease into the new zoom instead of jumping; reduced motion jumps
@@ -7218,6 +7247,16 @@ function addGear(type, x, y, hit) {
   const it = itemById(sel?.id), who = it?.personId && personById(it.personId);
   if (who && !(hit && canSitInChannel({ type }))) toast(`${itemName({ ...it, label: '' })} is ${firstName(who.name)}’s`, { label: 'Not theirs', fn: () => mutate(() => { delete itemById(it.id).personId; }) });
   if (type === 'rack') openRack(sel.id);
+  if (it && isExt(it)) plugExt(it);
+}
+// an extension lead goes nowhere until its own 3-pin plug is in a power point or distro: placing one asks for that straight away
+function plugExt(it) {
+  const f = feedOf(it), n = Number(prop(it, 'outlets')) || 4;
+  if (f) { const free = n - extUsed(it); toast(`${itemName(it)} plugged into ${itemName(other(f, it.id))} with its own 3-pin plug · ${free === n ? `all ${n} sockets free` : `${free} of ${n} sockets free`}`); return; }
+  const mains = plan.items.filter(x => isPowerSource(x) && !isExt(x));
+  if (!mains.length) { toast(`${itemName(it)} needs a power point or distro to plug into`, { label: 'Add a power point', fn: () => { setMode('select'); placing = 'wall_outlet'; renderPlot(); renderRail(); } }); return; }
+  setMode('cable'); pending = { from: it.id, points: [] }; renderPlot();
+  toast(`Plug ${itemName(it)} in: click the power point or distro its 3-pin plug goes into`);
 }
 $('ftools').addEventListener('click', e => {
   if (e.target.closest('#addTool')) { if (placing) { placing = null; renderPlot(); } else if (railOpen && railTab === 'gear' && view === 'plot') { togglePanel('rail', false); } else openLibrary(); return; }
@@ -7265,7 +7304,8 @@ $('ftools').addEventListener('click', e => {
   const f = e.target.closest('[data-fit]');
   if (f) fit(f.dataset.fit);
   if (e.target.closest('#zIn')) zoomCenter(1.25);
-  if (e.target.closest('#flipView')) setFlip(!flipped);
+  if (e.target.closest('#flipView')) setRot(viewRot === 180 ? 0 : 180);
+  if (e.target.closest('#rotView')) setRot(viewRot + 90);
   if (e.target.closest('#setupLock')) { const on = !plan.setupLock; mutate(() => { if (on) plan.setupLock = true; else delete plan.setupLock; }, on ? `Setup locked: ${plural(plan.items.filter(isFixed).length, 'item')} stay put` : 'Setup unlocked'); }
   if (e.target.closest('#zOut')) zoomCenter(1 / 1.25);
 });
@@ -7746,6 +7786,7 @@ $('inspector').addEventListener('click', e => {
   if (t.dataset.selitem) { if (itemById(t.dataset.selitem)) { sel = { kind: 'item', id: t.dataset.selitem }; group = null; focusItem(t.dataset.selitem); renderPlot(); renderInspector(); } return; }
   if (t.dataset.selc) { sel = { kind: 'cable', id: t.dataset.selc }; renderPlot(); renderInspector(); return; }
   if (t.id === 'iReaddr') { mutate(() => assignDmx(true), 'Every light re-addressed'); return; }
+  if (t.dataset.plugext) { const it = itemById(t.dataset.plugext); if (it) plugExt(it); return; }
   if (t.dataset.look) { switchLook(t.dataset.look); return; }
   if (t.hasAttribute('data-opendesk')) { openDesk(t.dataset.opendesk || null); return; }
   if (t.dataset.mirror) { mirrorLight(t.dataset.mirror); return; }
@@ -8326,7 +8367,7 @@ function traceSets(id) {
     }
   }
   const pid = it.personId || (cat(it).shape === 'person' ? it.personId : null);
-  if (pid) for (const m of plan.items.filter(i => i.personId === pid && ['iem', 'wedge'].includes(i.type))) {
+  if (pid) for (const m of plan.items.filter(i => i.personId === pid && ['iem', 'iem_wired', 'wedge'].includes(i.type))) {
     items.add(m.id); for (const c of plan.cables) if (c.type === 'xlr' && touches(c, m.id)) { cables.add(c.id); const o = other(c, m.id); if (o) items.add(o.id); }
   }
   return { cables, items };
@@ -8505,6 +8546,7 @@ const RACK_DEV = {
   iem1: { name: 'IEM transmitter', u: 1, kind: 'iem', mixes: 1, watts: 15 },
   iem2: { name: 'IEM transmitter (dual)', u: 1, kind: 'iem', mixes: 2, watts: 25 },
   combiner: { name: 'IEM antenna combiner', u: 1, kind: 'iem', watts: 15 },
+  rx1: { name: 'Wireless mic receiver (single)', u: 1, kind: 'rf', ch: 1, watts: 10 },
   rx2: { name: 'Wireless mic receiver (dual)', u: 1, kind: 'rf', ch: 2, watts: 20 },
   rx4: { name: 'Wireless mic receiver (quad)', u: 1, kind: 'rf', ch: 4, watts: 35 },
   antdist: { name: 'Antenna distribution', u: 1, kind: 'rf', watts: 15 },
@@ -9000,7 +9042,9 @@ function cmdItems() {
     ...(ui.adv ? [['Re-run cabling', 'wand', () => mutate(autoCable, 'Cabling re-run')]] : []),
     ['Save the plot as a picture', 'plot', () => plotPicture()],
     ['Copy a summary for the team chat', 'copy', () => copyText(weekSummary(), $('copyFallback'))],
-    ...(ui.adv ? [[flipped ? 'See the plot from the house' : 'See the plot from the stage (flip)', 'rotate', () => { view = 'plot'; setFlip(!flipped); }]] : []),
+    [viewRot === 180 ? 'See the plot from the house' : 'See the plot from the stage (flip)', 'flip', () => { view = 'plot'; setRot(viewRot === 180 ? 0 : 180); }],
+    ['Turn the plot a quarter', 'rotate', () => { view = 'plot'; setRot(viewRot + 90); }],
+    ...(viewRot ? [['Straighten the plot (audience at the bottom)', 'rotate', () => { view = 'plot'; setRot(0); }]] : []),
     ...(ui.adv ? [[plan.setupLock ? 'Unlock the setup' : 'Lock the setup (risers, stage box, speakers, power)', plan.setupLock ? 'unlock' : 'lock', () => { $('setupLock') ? $('setupLock').click() : mutate(() => { if (plan.setupLock) delete plan.setupLock; else plan.setupLock = true; }, plan.setupLock ? 'Setup unlocked' : 'Setup locked'); }]] : []),
     ...(pco.mcp ? [['Next plan from Planning Center', 'calendar', () => nextFromPco()]] : []),
     ['Switch theme', 'auto', cycleTheme],
@@ -9017,8 +9061,8 @@ function cmdItems() {
 function focusItem(id) {
   if (view !== 'plot') { view = 'plot'; renderAll(); }
   sel = { kind: 'item', id }; renderPlot(); renderInspector();
-  const it = itemById(id), m = svg.getScreenCTM(), r = scroller.getBoundingClientRect();
-  if (it && m) { scroller.scrollLeft += it.x * m.a + m.e - (r.left + r.width / 2); scroller.scrollTop += it.y * m.d + m.f - (r.top + r.height / 2); }
+  const it = itemById(id), m = plotCTM(), r = scroller.getBoundingClientRect();
+  if (it && m) { const q = scrPt(m, it.x, it.y); scroller.scrollLeft += q.x - (r.left + r.width / 2); scroller.scrollTop += q.y - (r.top + r.height / 2); }
 }
 function openCmdk() { cmdk.q = ''; cmdk.i = 0; $('cmdk').hidden = false; $('cmdkInput').value = ''; renderCmdk(); $('cmdkInput').focus(); }
 function closeCmdk() { $('cmdk').hidden = true; }

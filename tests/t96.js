@@ -15,5 +15,5 @@ const moved = await where();
 console.log('drag follows mouse', Math.abs(moved[0] - (after[0] + 100)) < 12, 'plan x went down (towards stage right)', await p.evaluate(([id, x0]) => itemById(id).x < x0, [id, x0]));
 console.log('text upright', await p.evaluate(() => { const t = [...document.querySelectorAll('#plot text')].find(t => t.textContent.trim().length > 3); const m = t.getScreenCTM(); return [t.textContent.trim(), m.a > 0, m.d > 0]; }));
 console.log('label', await p.evaluate(() => getComputedStyle(document.querySelector('#plotView .canvas'), '::after').content), 'pressed', await p.getAttribute('#flipView', 'aria-pressed'));
-await p.click('#flipView'); await p.waitForTimeout(200); console.log('back', await p.evaluate(() => !$('plot').classList.contains('flipped')));
+await p.click('#flipView'); await p.waitForTimeout(200); console.log('back', await p.evaluate(() => !$('plot').classList.contains('rot180') && viewRot === 0));
 console.log('errors', errs); await b.close(); })();
