@@ -1119,13 +1119,12 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .hero { grid-template-columns: 1fr; } .heropic { border-right: 0; border-bottom: 1px solid var(--line); min-height: 0; }
 }
 /* wide screens: Home uses the room; settings pages keep a readable measure */
-@media (min-width: 1500px) { .home .home-in { max-width: 1440px; grid-template-columns: 252px minmax(0, 1fr); gap: 40px; } }
-.homebody:not([data-tab="library"]) { max-width: 980px; }
+@media (min-width: 1500px) { .home .home-in { grid-template-columns: 252px minmax(0, 1fr); gap: 40px; } }   /* Home fills the window at every width */
 
 .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; letter-spacing: -.01em; font-stretch: 110%; border: 0; background: none; padding: 4px 6px; margin-left: -6px; border-radius: var(--r-md); cursor: pointer; color: inherit; font: inherit; }
 .brand:hover { background: var(--surface-2); }
 .home { flex: 1 1 0; min-height: 0; overflow: auto; background: var(--bg); }
-.home-in { max-width: 1120px; margin: 0 auto; padding: 28px 20px 80px; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 28px; align-items: start; }
+.home-in { padding: 28px clamp(20px, 3vw, 48px) 80px; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 28px; align-items: start; }
 .homenav { position: sticky; top: 0; display: grid; gap: 4px; }
 .homehello { padding: 0 10px 12px; }
 .homehello h1 { margin: 2px 0 0; font-size: var(--t-page); letter-spacing: -.01em; }
@@ -5165,6 +5164,12 @@ function leadEnd(it, oth, q, first) {
 // cables drawn as loose, flowing leads: jack leads, and an extension lead's own cord to the power point (it's part of the lead)
 const extCord = c => c.type === 'power' && isExt(itemById(c.from)) && isPowerSource(itemById(c.to));
 const isLead = c => c.type === 'inst' || extCord(c);
+function mainsPlug(seg, q, sock, st = '') {   // a 3-pin plug at q, turned along the last stretch of the cord outside the socket (or the cursor)
+  const inside = p => { if (!sock) return false; const [hw, hd] = halfExt(sock); return Math.abs(p[0] - sock.x) < hw && Math.abs(p[1] - sock.y) < hd; };
+  let k = seg.length - 1; while (k > 0 && inside(seg[k])) k--; while (k > 0 && Math.hypot(seg[k][0] - q[0], seg[k][1] - q[1]) < .25) k--;
+  const b = seg[k], a = Math.atan2(q[1] - b[1], q[0] - b[0]) * 180 / Math.PI, z = Math.min(1.25, Math.max(.75, 18 / scale));
+  return `<g class="mainsplug${st}" transform="translate(${f3(q[0])} ${f3(q[1])}) rotate(${f3(a)}) scale(${f3(z)})"><path class="mp-boot" d="M-.78 -.06h.2v.12h-.2z" style="fill:var(--k-pow)"/><rect x="-.6" y="-.2" width=".52" height=".4" rx=".08" style="fill:var(--k-pow)"/><path class="mp-grip" d="M-.48 -.12v.24M-.4 -.12v.24"/><path d="M-.08 -.1h.1M-.08 0h.12M-.08 .1h.1"/></g>`;
+}
 function naturalLead(pts, c) {
   if (pts.length < 2) return pts;
   if ((c.points || []).some(isHop) || routeInfo(c)?.via) return smoothRun(pts);   // in a channel: follow it, just without corners
@@ -5632,12 +5637,8 @@ function renderPlot() {
       if (seg === segs[0] || seg === segs[segs.length - 1]) for (const [end, id] of [[0, c.from], [seg.length - 1, c.to]]) {
         if ((end === 0 && seg !== segs[0]) || (end && seg !== segs[segs.length - 1])) continue;
         const q = plugPoint(seg, end, itemById(id));
-        if (q && end && extCord(c)) {   // the cord ends in a 3-pin plug, turned the way the cord comes in
-          const pt = itemById(id), [hw, hd] = halfExt(pt), inside = p => Math.abs(p[0] - pt.x) < hw && Math.abs(p[1] - pt.y) < hd;
-          let k = seg.length - 1; while (k > 0 && inside(seg[k])) k--; while (k > 0 && Math.hypot(seg[k][0] - q[0], seg[k][1] - q[1]) < .25) k--;   // the stretch just outside the socket sets its angle
-          const b = seg[k], a = Math.atan2(q[1] - b[1], q[0] - b[0]) * 180 / Math.PI, z = Math.min(1.25, Math.max(.75, 18 / scale));
-          out += `<g class="mainsplug${st}" transform="translate(${f3(q[0])} ${f3(q[1])}) rotate(${f3(a)}) scale(${f3(z)})"><path class="mp-boot" d="M-.78 -.06h.2v.12h-.2z" style="fill:var(${KVAR[c.type]})"/><rect x="-.6" y="-.2" width=".52" height=".4" rx=".08" style="fill:var(${KVAR[c.type]})"/><path class="mp-grip" d="M-.48 -.12v.24M-.4 -.12v.24"/><path d="M-.08 -.1h.1M-.08 0h.12M-.08 .1h.1"/></g>`;
-        } else if (q) out += `<circle class="plug${st}" cx="${f3(q[0])}" cy="${f3(q[1])}" r="${f3(Math.max(.08, 2.4 / scale))}" style="fill:var(${KVAR[c.type]})"/>`;
+        if (q && end && extCord(c)) out += mainsPlug(seg, q, itemById(id), st);   // the cord ends in a 3-pin plug, turned the way the cord comes in
+        else if (q) out += `<circle class="plug${st}" cx="${f3(q[0])}" cy="${f3(q[1])}" r="${f3(Math.max(.08, 2.4 / scale))}" style="fill:var(${KVAR[c.type]})"/>`;
       }
       out += flowMarks(c, seg, isSel ? '' : rel, rel === ' quiet' || (rel === ' dim' && cableView.quiet !== false));   // quiet cables keep the animation, not the arrows
       hits += `<polyline class="cabhit" data-cid="${c.id}" points="${sp}"><title>${esc(CABLES[c.type].name)} · ${fmtLen(cableLen(c))}</title></polyline>`;
@@ -5700,7 +5701,11 @@ function renderPlot() {
       s += `<circle class="pend-start" cx="${a.x}" cy="${a.y}" r="${Math.max(prop(a, 'w'), prop(a, 'd')) / 2 + .3}"/>`;
       if (tgt) s += `<circle class="pend-target" cx="${tgt.x}" cy="${tgt.y}" r="${Math.max(prop(tgt, 'w'), prop(tgt, 'd')) / 2 + .3}"/>`;
       const pt = cableType === 'auto' ? (tgt ? guessCable(a, tgt) : null) : cableType, pcol = pt ? `var(${KVAR[pt]})` : 'var(--ink-2)';
-      s += `<polyline class="pending pending-${pt || 'auto'}" points="${geo.map(p => p.join(',')).join(' ')}" style="stroke:${pcol}"/>`;
+      if (isExt(a) && (pt === 'power' || (!tgt && (cableType === 'auto' || cableType === 'power')))) {   // an extension lead's own cord: drawn as the cable itself, loose, with its plug on the end
+        const seg = naturalLead(pts, { id: 'pending-cord', type: 'power', from: a.id, to: tgt?.id, points: pending.points }), d = smoothPath(seg);
+        const q = (tgt && plugPoint(seg, seg.length - 1, tgt)) || seg[seg.length - 1];
+        s += `<path class="lead-shadow" d="${d}"/><path class="cab k-power hl" d="${d}"/><path class="cab-sheen hl" d="${d}"/>${mainsPlug(seg, q, tgt)}`;
+      } else s += `<polyline class="pending pending-${pt || 'auto'}" points="${geo.map(p => p.join(',')).join(' ')}" style="stroke:${pcol}"/>`;
       const r = Math.max(.14, 4 / scale);
       for (const q of pending.points) if (!isHop(q)) s += `<circle class="pivot" cx="${q[0]}" cy="${q[1]}" r="${f3(r)}"/>`;
       for (const [i0, i1] of ex.ranges) for (const k of [i0, i1]) s += `<circle class="chport" cx="${f3(pts[k][0])}" cy="${f3(pts[k][1])}" r="${f3(r)}" style="fill:${pcol}"/>`;
@@ -6980,7 +6985,7 @@ svg.addEventListener('pointerdown', e => {
       else if (id !== pending.from && ct === 'power' && isMains(itemById(id)) && isMains(itemById(pending.from))) {
         pending = null; cursorPt = null; toast('Distros are fed from the board; no lead needed'); renderPlot(); return;
       } else if (id !== pending.from) {
-        const pts = pending.points, from = pending.from, lvl = pending.level; pending = null; cursorPt = null; pendHover = null; pendChan = null;
+        const pts = pending.points, from = pending.from, lvl = pending.level, plugIn = pending.plug; pending = null; cursorPt = null; pendHover = null; pendChan = null;
         mutate(() => {
           const c = addCable(ct, from, id, { points: pts });
           if (isLead(c)) freshLeads.set(c.id, performance.now());
@@ -6994,6 +6999,7 @@ svg.addEventListener('pointerdown', e => {
         if (!cableView.all || cableView.hidden.has(ct)) setCableView(() => { cableView.all = true; cableView.hidden.delete(ct); });
         // a gentle heads-up when the two ends don't make sense for this cable (never blocks: the plan is yours)
         const ends = [itemById(from), itemById(id)], unpowered = ct === 'power' && ends.find(x => !isPowerSource(x) && !needsPower(x));
+        if (plugIn) { setMode('select'); toast(`${itemName(itemById(from))} plugged into ${itemName(itemById(id))}`, true); return; }   // plugging a lead in is one step: back to moving gear
         toast(unpowered ? `Heads up: ${itemName(unpowered)} doesn't draw power. Change the type if this is a signal run` : `${SHORT[ct]} run added${cableType === 'auto' ? ' · change the type in its details if needed' : ''}`, true);
         return;
       }
@@ -7083,7 +7089,7 @@ svg.addEventListener('pointermove', e => {
     const p = toFt(e), g = e.target.closest('[data-id]');
     pendHover = g && g.dataset.id !== pending.from && cableEnd(itemById(g.dataset.id)) ? g.dataset.id : null;
     pendChan = pendHover ? null : channelAt(p);
-    cursorPt = pendChan ? pendChan.pt : pivotSnap(p, pendingLast());
+    cursorPt = pendChan ? pendChan.pt : pending.plug ? [p.x, p.y] : pivotSnap(p, pendingLast());   // a lead's own cord follows the pointer freely
     renderPlot(); return;
   }
   if (mode === 'channel' && chDraft?.pts.length) { cursorPt = chSnap(toFt(e), chDraft.pts[chDraft.pts.length - 1], e.altKey); renderPlot(); return; }
@@ -7282,7 +7288,7 @@ function plugExt(it) {
   if (f) { const free = n - extUsed(it); toast(`${itemName(it)} plugged into ${itemName(other(f, it.id))} with its own 3-pin plug · ${free === n ? `all ${n} sockets free` : `${free} of ${n} sockets free`}`); return; }
   const mains = plan.items.filter(x => isPowerSource(x) && !isExt(x));
   if (!mains.length) { toast(`${itemName(it)} needs a power point or distro to plug into`, { label: 'Add a power point', fn: () => { setMode('select'); placing = 'wall_outlet'; renderPlot(); renderRail(); } }); return; }
-  setMode('cable'); pending = { from: it.id, points: [] }; renderPlot();
+  setMode('cable'); pending = { from: it.id, points: [], plug: true }; cursorPt = [it.x - prop(it, 'w') / 2 - fromM(.6), it.y + fromM(.3)]; renderPlot();
   toast(`Plug ${itemName(it)} in: click the power point or distro its 3-pin plug goes into`);
 }
 $('ftools').addEventListener('click', e => {
