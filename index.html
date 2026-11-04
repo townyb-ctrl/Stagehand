@@ -480,7 +480,8 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .flowlegend svg { width: 13px; height: 13px; }
 .cab.ceil { stroke-dasharray: var(--cd, .55 .3); opacity: .8; }
 .ceilsw { background: repeating-linear-gradient(90deg, var(--ink-2) 0 5px, transparent 5px 8px) !important; }
-.ch-draft { fill: none; stroke: var(--accent); opacity: .45; stroke-linejoin: round; stroke-linecap: square; pointer-events: none; }
+.ch-drafting { opacity: .78; pointer-events: none; }
+.ch-joinmark { fill: color-mix(in srgb, var(--accent) 25%, transparent); stroke: var(--accent); stroke-width: .06; pointer-events: none; }
 /* rack builder */
 .rk { width: min(1180px, 100%); height: min(860px, 100%); background: var(--surface); border-radius: var(--r-lg); border: 1px solid var(--line); box-shadow: var(--shadow-3); display: grid; grid-template-rows: auto minmax(0,1fr); overflow: hidden; }
 .rk-body { display: grid; grid-template-columns: 290px minmax(0,1fr) 290px; min-height: 0; }
@@ -6205,9 +6206,12 @@ function renderInspector() {
         ${field('chName', 'Name', ch.name)}
         <div class="field"><span>Type</span><div class="chips">${Object.entries(CH_KINDS).map(([key, v]) => `<button class="ctype" data-chkind="${key}" aria-pressed="${ch.kind === key}">${esc(v.name)}</button>`).join('')}</div></div>
         <div class="grid2">${field('chW', 'Width', mVal(fromM(ch.w ?? k.w)), 'number', 'step=".05" min=".1"', 'm')}<div class="field"><span>Length</span><b style="font:500 14px var(--f-mono);padding:8px 0">${fmtLen(runLen(ch.pts))}</b></div></div>
-        <p class="hint">${k.level ? 'Overhead: only ceiling runs use it. ' : ''}Drag the square handles to reshape it. Click a + on an edge to add a bend, or past an end to extend it.</p>
+        ${(() => { const net = chNet(chLevel(ch)), ids = new Set(net.links.flatMap(([A, , B]) => A === ch.id ? [B] : B === ch.id ? [A] : [])), joined = chans().filter(x => ids.has(x.id));
+          return joined.length ? `<div class="field"><span>Joined to</span><div class="chips">${joined.map(x => `<button class="ctype" data-selch="${x.id}">${esc(x.name)}</button>`).join('')}</div></div>` : ''; })()}
+        <p class="hint">${k.level ? 'Overhead: only ceiling runs use it. ' : ''}Drag the square handles to reshape it. Click a + on an edge to add a bend, or past an end to extend it. Channels that meet join up, and cables run through them as one.</p>
         <button class="btn" id="chToggleIn">${ic(cableView.hideInCh ? 'eye' : 'eyeOff', 'sm')}${cableView.hideInCh ? 'Show cables inside channels' : 'Hide cables inside channels'}</button>
-        <div class="grid2"><button class="btn" data-chextbtn="0">${ic('plus', 'sm')}Extend start</button><button class="btn" data-chextbtn="1">${ic('plus', 'sm')}Extend end</button></div></section>
+        <div class="grid2"><button class="btn" data-chextbtn="0">${ic('plus', 'sm')}Extend start</button><button class="btn" data-chextbtn="1">${ic('plus', 'sm')}Extend end</button></div>
+        <button class="btn" id="chBranch">${ic('trench', 'sm')}Add a branch</button></section>
       <section class="isec"><h3>Cables inside <span>${using.length}</span></h3>${using.length ? `<ul class="conns">${using.map(x => `<li><button data-selc="${x.id}"><span class="dot bg-${x.type}"></span><span>${esc(itemName(itemById(x.from)))} → ${esc(itemName(itemById(x.to)))}<small>${esc(CABLES[x.type].name)}</small></span><span class="len">${fmtLen(cableLen(x))}</span></button></li>`).join('')}</ul>` : '<p class="hint">No cables use it yet. Cables route through a channel when it keeps more of the run off the open floor.</p>'}</section>
       <section class="isec"><div class="actions"><button class="btn danger" id="chDel">${ic('trash', 'sm')}Delete channel</button></div></section>
     </div>`;
@@ -6958,8 +6962,18 @@ svg.addEventListener('pointerdown', e => {
         if (Math.abs(q[0] - p.x) + Math.abs(q[1] - p.y) < tol) { startExtend(ch.id, end !== 0); toast(`Extending ${ch.name}. Click to add points, Enter to finish.`); return; }
       }
       chDraft = { pts: [] };
+      const hit = chJoinAt(p);
+      if (hit) { chDraft.pts.push(hit.pt); chDraft.joinA = { id: hit.ch.id, s: hit.s }; chHover = null; toast(`Branching off ${hit.ch.name}. Click to add bends; end on a channel to join it, or press Enter.`); renderPlot(); return; }
     }
-    const last = chDraft.pts[chDraft.pts.length - 1], q = chSnap(p, last, e.altKey);
+    const last = chDraft.pts[chDraft.pts.length - 1];
+    if (last) {   // landing on another channel ends the draft there, joined to it
+      const hit = chJoinAt(p, chDraft.extend?.id);
+      if (hit && !(chDraft.joinA && hit.ch.id === chDraft.joinA.id && chDraft.pts.length === 1)) {
+        const sq = e.altKey ? { pt: hit.pt, s: hit.s, elbow: null } : squareJoin(chDraft.pts, hit); if (sq.elbow) chDraft.pts.push(sq.elbow);
+        chDraft.pts.push(sq.pt); chDraft.joinB = { id: hit.ch.id, s: sq.s }; chHover = null; finishChannel(); return;
+      }
+    }
+    const q = chSnap(p, last, e.altKey);
     if (last && Math.abs(last[0] - q[0]) + Math.abs(last[1] - q[1]) < .05) { finishChannel(); return; }   // click the last point again to finish
     chDraft.pts.push(q); renderPlot(); return;
   }
@@ -7092,7 +7106,13 @@ svg.addEventListener('pointermove', e => {
     cursorPt = pendChan ? pendChan.pt : pending.plug ? [p.x, p.y] : pivotSnap(p, pendingLast());   // a lead's own cord follows the pointer freely
     renderPlot(); return;
   }
-  if (mode === 'channel' && chDraft?.pts.length) { cursorPt = chSnap(toFt(e), chDraft.pts[chDraft.pts.length - 1], e.altKey); renderPlot(); return; }
+  if (mode === 'channel') {   // the draft follows the pointer, snapping onto a channel it can join
+    const p = toFt(e), last = chDraft?.pts[chDraft.pts.length - 1], hit = chJoinAt(p, chDraft?.extend?.id), was = chHover;
+    chHover = hit && !(chDraft?.joinA && hit.ch.id === chDraft.joinA.id && chDraft.pts.length === 1) ? hit : null;
+    if (last) { const sq = chHover && !e.altKey ? squareJoin(chDraft.pts, chHover) : null; if (sq) chHover = { ...chHover, pt: sq.pt };
+      cursorPt = chHover ? chHover.pt : chSnap(p, last, e.altKey); chDraft.elbow = sq?.elbow || null; renderPlot(); return; }
+    if ((was?.pt + '') !== (chHover?.pt + '')) renderPlot();
+  }
   if (drag?.kind === 'resize') {
     const p = toFt(e), it = itemById(drag.id), { cs, sn, sx, sy, fx, fy } = drag;
     const dx = p.x - fx, dy = p.y - fy, lx = dx * cs + dy * sn, ly = -dx * sn + dy * cs;
@@ -7104,7 +7124,11 @@ svg.addEventListener('pointermove', e => {
   }
   if (drag?.kind === 'chp') {
     const ch = chans().find(x => x.id === drag.cid); if (!ch) return;
-    const p = toFt(e); ch.pts[drag.k] = [snapTo(p.x, .25), snapTo(p.y, .25)]; drag.moved = true; renderPlot(); return;
+    const p = toFt(e), end = drag.k === 0 ? 'a' : drag.k === ch.pts.length - 1 ? 'b' : null;
+    const j = end && ch.joins?.[end], par = j && chans().find(x => x.id === j.id), n = par && nearestOn(par.pts, p.x, p.y);
+    if (n && n.dist < Math.max(.8, 16 / scale)) j.s = n.s;   // a joined end slides along the channel it joins
+    else { if (j) delete ch.joins[end]; ch.pts[drag.k] = [snapTo(p.x, .25), snapTo(p.y, .25)]; }   // pulled clear: it lets go
+    settleJoins(); drag.moved = true; renderPlot(); return;
   }
   if (!drag) return;
   if (drag.kind === 'pan') {
@@ -7361,7 +7385,7 @@ function deleteSelected() {
   const ids = selIds();
   const name = ids.length > 1 ? plural(ids.length, 'item') : sel.kind === 'item' ? itemName(itemById(sel.id)) : sel.kind === 'channel' ? 'Channel' : 'Cable';
   mutate(() => {
-    if (sel.kind === 'channel') plan.channels = chans().filter(x => x.id !== sel.id);
+    if (sel.kind === 'channel') { plan.channels = chans().filter(x => x.id !== sel.id); settleJoins(); }
     else if (sel.kind === 'item') { const gone = new Set(ids); plan.items = plan.items.filter(i => !gone.has(i.id)); plan.cables = plan.cables.filter(c => !gone.has(c.from) && !gone.has(c.to)); }
     else plan.cables = plan.cables.filter(c => c.id !== sel.id);
     sel = null; group = null;
@@ -7442,7 +7466,7 @@ function toggleLock(ids) {
   const lock = !its.every(i => i.locked);
   mutate(() => { for (const i of its) { if (lock) i.locked = true; else delete i.locked; } }, `${its.length > 1 ? plural(its.length, 'item') : itemName(its[0])} ${lock ? 'locked in place' : 'unlocked'}`);
 }
-function setMode(m) { mode = m; measure = null; placing = null; pending = null; cursorPt = null; pendHover = null; pendChan = null; if (m !== 'channel') chDraft = null; renderPlot(); }
+function setMode(m) { mode = m; measure = null; placing = null; pending = null; cursorPt = null; pendHover = null; pendChan = null; chHover = null; if (m !== 'channel') chDraft = null; renderPlot(); }
 function openPaper(anchor) {
   if (anchor) paperTab = anchor === 'sec-checks' ? 'overview' : anchor.replace(/^sec-/, '');
   view = 'paper'; pending = null; renderAll();
@@ -7835,6 +7859,8 @@ $('inspector').addEventListener('click', e => {
   if (t.dataset.boxes) { const it = itemById(sel.id); mutate(() => { it.boxes = clamp(laBoxes(it) + Number(t.dataset.boxes), 1, LA_BOXES[it.type].max); delete it.watts; }); return; }
   if (t.dataset.chkind) { const ch = chans().find(x => x.id === sel.id); mutate(() => { ch.kind = t.dataset.chkind; }); return; }
   if (t.id === 'chDel') { deleteSelected(); return; }
+  if (t.id === 'chBranch') { const ch = chans().find(x => x.id === sel?.id); chDraftKind = ch?.kind || chDraftKind; setMode('channel'); toast(`Click on ${ch?.name || 'the channel'} where the branch starts`); return; }
+  if (t.dataset.selch) { sel = { kind: 'channel', id: t.dataset.selch }; renderPlot(); renderInspector(); return; }
   if (t.id === 'chToggleIn') { setCableView(() => { cableView.hideInCh = !cableView.hideInCh; }); return; }
   if (t.dataset.chextbtn) { startExtend(sel.id, t.dataset.chextbtn === '1'); return; }
   if (t.dataset.settype) { const c = plan.cables.find(x => x.id === sel.id); mutate(() => { c.type = t.dataset.settype; c.auto = false; }); return; }
@@ -8732,7 +8758,7 @@ const CH_KINDS = { trench: { name: 'Floor trench', w: .3 }, tray: { name: 'Cable
 const chLevel = ch => (CH_KINDS[ch.kind] || CH_KINDS.trench).level || 'floor';
 let chDraftKind = 'trench';
 const chans = () => (plan.channels ||= []);
-let chDraft = null;   // { pts: [] } while drawing a channel
+let chDraft = null, chHover = null;   // { pts: [] } while drawing a channel; the channel a click would join
 function nearestOn(pts, x, y) {
   let best = null, acc = 0;
   for (let i = 1; i < pts.length; i++) {
@@ -8771,25 +8797,82 @@ function expandRoute(start, points, end) {
   if (end) pts.push(end);
   return { pts, straight, ranges, vias, via: vias[0] || null };
 }
+/* The channel network. Channels that touch join up: a branch that starts or ends on another channel, two that cross, an end
+   that meets another. A cable can then travel through several of them as one run, entering at the point nearest where it
+   starts and leaving at the point nearest where it ends, on whichever channels make the shortest way. */
+const polyLen = pts => { let L = 0; for (let i = 1; i < pts.length; i++) L += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); return L; };
+function segCross(a, b, c, d) {   // where two segments cross, as fractions along each
+  const rx = b[0] - a[0], ry = b[1] - a[1], sx = d[0] - c[0], sy = d[1] - c[1], den = rx * sy - ry * sx; if (Math.abs(den) < 1e-9) return null;
+  const t = ((c[0] - a[0]) * sy - (c[1] - a[1]) * sx) / den, u = ((c[0] - a[0]) * ry - (c[1] - a[1]) * rx) / den;
+  return t >= -1e-6 && t <= 1 + 1e-6 && u >= -1e-6 && u <= 1 + 1e-6 ? [t, u] : null;
+}
+const JOIN_TOL = .35;   // an end this close to another channel counts as joined to it
+let netCache = { key: '', nets: {} };
+function chNet(lvl) {
+  const key = JSON.stringify(chans()); if (netCache.key !== key) netCache = { key, nets: {} };
+  if (netCache.nets[lvl]) return netCache.nets[lvl];
+  const list = chans().filter(ch => ch.pts.length >= 2 && chLevel(ch) === lvl), cum = new Map(), stops = new Map(), links = [];
+  for (const ch of list) { const c = [0]; for (let i = 1; i < ch.pts.length; i++) c.push(c[i - 1] + Math.hypot(ch.pts[i][0] - ch.pts[i - 1][0], ch.pts[i][1] - ch.pts[i - 1][1])); cum.set(ch.id, c); stops.set(ch.id, new Set([0, c[c.length - 1]])); }
+  const link = (A, sA, B, sB) => { stops.get(A.id).add(sA); stops.get(B.id).add(sB); links.push([A.id, sA, B.id, sB]); };
+  for (const A of list) for (const B of list) {
+    if (A === B) continue;
+    const LA = cum.get(A.id).at(-1);
+    for (const [p, sA] of [[A.pts[0], 0], [A.pts[A.pts.length - 1], LA]]) { const n = nearestOn(B.pts, p[0], p[1]); if (n.dist < JOIN_TOL) link(A, sA, B, n.s); }
+    if (A.id < B.id) for (let i = 1; i < A.pts.length; i++) for (let j = 1; j < B.pts.length; j++) {   // crossings
+      const x = segCross(A.pts[i - 1], A.pts[i], B.pts[j - 1], B.pts[j]); if (!x) continue;
+      link(A, cum.get(A.id)[i - 1] + x[0] * (cum.get(A.id)[i] - cum.get(A.id)[i - 1]), B, cum.get(B.id)[j - 1] + x[1] * (cum.get(B.id)[j] - cum.get(B.id)[j - 1]));
+    }
+  }
+  return (netCache.nets[lvl] = { list, stops, links });
+}
+function routeNet(a, b, lvl) {   // the best way through the channel network from a to b, or null when going direct is as good
+  const net = chNet(lvl); if (!net.list.length) return null;
+  const nodes = [], idx = new Map(), key = (id, s) => `${id}@${s.toFixed(3)}`;
+  const node = (id, s) => { const k = key(id, s); if (!idx.has(k)) { idx.set(k, nodes.length); nodes.push({ id, s, adj: [] }); } return idx.get(k); };
+  const ends = net.list.map(ch => ({ ch, e: nearestOn(ch.pts, a.x, a.y), x: nearestOn(ch.pts, b.x, b.y) }));
+  for (const { ch, e, x } of ends) {
+    const ss = [...new Set([...net.stops.get(ch.id), e.s, x.s])].sort((p, q) => p - q);
+    for (let i = 0; i < ss.length; i++) { node(ch.id, ss[i]); if (i) { const u = idx.get(key(ch.id, ss[i - 1])), v = idx.get(key(ch.id, ss[i])), w = .25 * (ss[i] - ss[i - 1]); nodes[u].adj.push([v, w]); nodes[v].adj.push([u, w]); } }
+  }
+  for (const [A, sA, B, sB] of net.links) { const u = node(A, sA), v = node(B, sB); nodes[u].adj.push([v, .05]); nodes[v].adj.push([u, .05]); }   // stepping across a joint costs a little, so runs don't hop needlessly
+  const dist = nodes.map(() => Infinity), prev = nodes.map(() => -1), done = nodes.map(() => false);
+  for (const { ch, e } of ends) { const k = idx.get(key(ch.id, e.s)); if (e.dist < dist[k]) dist[k] = e.dist; }
+  for (;;) {
+    let u = -1; for (let i = 0; i < nodes.length; i++) if (!done[i] && dist[i] < Infinity && (u < 0 || dist[i] < dist[u])) u = i;
+    if (u < 0) break; done[u] = true;
+    for (const [v, w] of nodes[u].adj) if (dist[u] + w < dist[v]) { dist[v] = dist[u] + w; prev[v] = u; }
+  }
+  let best = null, bestCost = Math.abs(a.x - b.x) + Math.abs(a.y - b.y) - .5;
+  for (const { ch, x } of ends) { const k = idx.get(key(ch.id, x.s)), cst = dist[k] + x.dist; if (cst < bestCost) { bestCost = cst; best = k; } }
+  if (best == null) return null;
+  const path = []; for (let k = best; k >= 0; k = prev[k]) path.unshift(nodes[k]);
+  const byId = id => net.list.find(ch => ch.id === id), out = [], vias = [];
+  let last = null;
+  for (const n of path) {
+    const ch = byId(n.id), P = chLenAt(ch.pts, n.s);
+    if (last && last.id === n.id) out.push(...subpath(ch.pts, { s: last.s, i: chLenAt(ch.pts, last.s).i }, { s: n.s, i: P.i }));
+    out.push(P.pt); if (!vias.includes(ch)) vias.push(ch); last = n;
+  }
+  const inside = out.filter((q, i) => !i || Math.abs(q[0] - out[i - 1][0]) + Math.abs(q[1] - out[i - 1][1]) > 1e-6);
+  if (inside.length < 2) inside.push(inside[0].slice());
+  const pts = [[a.x, a.y], ...inside, [b.x, b.y]], straight = new Set(); for (let k = 2; k <= inside.length; k++) straight.add(k);   // inside, the run follows the channels exactly
+  return { pts, straight, via: vias[0], vias, ranges: [[1, inside.length]] };
+}
+let routeCache = { key: '', map: new Map() };
 function routeInfo(c) {
   const a = itemById(c.from), b = itemById(c.to);
   if (!a || !b) return null;
   if (c.points.some(isHop)) return expandRoute([a.x, a.y], c.points, [b.x, b.y]);
   const direct = { pts: [[a.x, a.y], ...c.points, [b.x, b.y]], straight: new Set(), via: null, vias: [], ranges: [] };
   if (c.points.length || c.route === 'direct' || !chans().length) return direct;
-  let best = direct, bestCost = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-  const lvl = c.level === 'ceiling' ? 'ceiling' : 'floor';
-  for (const ch of chans()) {
-    if (ch.pts.length < 2 || chLevel(ch) !== lvl) continue;   // floor cables use floor channels, ceiling cables use overhead ones
-    const ea = nearestOn(ch.pts, a.x, a.y), eb = nearestOn(ch.pts, b.x, b.y);
-    const cost = ea.dist + eb.dist + .25 * Math.abs(eb.s - ea.s);
-    if (cost < bestCost - .5) {
-      const mid = subpath(ch.pts, ea, eb), pts = [[a.x, a.y], ea.pt, ...mid, eb.pt, [b.x, b.y]];
-      const straight = new Set(); for (let k = 2; k <= mid.length + 2; k++) straight.add(k);   // segments inside the channel follow it exactly
-      best = { pts, straight, via: ch, vias: [ch], ranges: [[1, pts.length - 2]] }; bestCost = cost;
-    }
-  }
-  return best;
+  const lvl = c.level === 'ceiling' ? 'ceiling' : 'floor';   // floor cables use floor channels, ceiling cables use overhead ones
+  const ck = JSON.stringify(chans()); if (routeCache.key !== ck) routeCache = { key: ck, map: new Map() };
+  const k = `${lvl}|${a.x},${a.y}|${b.x},${b.y}`;
+  if (!routeCache.map.has(k)) routeCache.map.set(k, routeNet(a, b, lvl));
+  const r = routeCache.map.get(k);
+  if (!r) return direct;
+  const vias = r.vias.map(v => chans().find(x => x.id === v.id)).filter(Boolean);   // the live channels, even after an undo swapped the plan
+  return { ...r, pts: r.pts.map(q => q.slice()), straight: new Set(r.straight), vias, via: vias[0] || null };
 }
 // split a channel-routed cable into its open-stage stretches and the stretch inside the channel
 function cableParts(c) {
@@ -8809,10 +8892,15 @@ function cableParts(c) {
 function renderChannels(selId) {
   const counts = new Map();
   for (const c of plan.cables) { if (!cableShown(c)) continue; for (const v of new Set(routeInfo(c)?.vias || [])) counts.set(v.id, (counts.get(v.id) || 0) + 1); }
-  let s = '', hits = '', handles = '', over = '';
+  let s = '', hits = '', handles = '', over = '', rims = '', bands = '';
   for (const ch of chans()) {
     if (ch.pts.length < 2) continue;
     const k = CH_KINDS[ch.kind] || CH_KINDS.trench, w = fromM(ch.w ?? k.w), ps = ch.pts.map(p => p.join(',')).join(' ');
+    // a joined end stops half a width short, so its square end meets the channel it joins flush instead of poking past it
+    const net = chNet(chLevel(ch)), L = polyLen(ch.pts), at = s0 => net.links.some(([A, sA, B, sB]) => (A === ch.id && Math.abs(sA - s0) < 1e-6) || (B === ch.id && Math.abs(sB - s0) < 1e-6));
+    const trim = (pts, end) => { const i = end ? pts.length - 1 : 0, j = end ? pts.length - 2 : 1, d = Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]), c = Math.min(w / 2, d * .9); if (!d) return; pts[i] = [pts[i][0] + (pts[j][0] - pts[i][0]) / d * c, pts[i][1] + (pts[j][1] - pts[i][1]) / d * c]; };
+    const shown = ch.pts.map(q => q.slice()); if (at(0)) trim(shown, 0); if (at(L)) trim(shown, 1);
+    const pd = shown.map(q => q.map(f3).join(',')).join(' ');
     const isSel = ch.id === selId;
     const nIn = counts.get(ch.id) || 0, nGear = plan.items.filter(i => i.chan?.id === ch.id).length;
     const m = midpoint(ch.pts), lab = scale >= 11 ? `<text class="ch-label${k.level ? ' over' : ''}" x="${f3(m[0])}" y="${f3(m[1] - w / 2 - .25)}" text-anchor="middle">${esc(ch.name || k.name)}${nIn ? ` · ${nIn} cable${nIn === 1 ? '' : 's'}` : ''}${nGear ? ` · ${nGear} item${nGear === 1 ? '' : 's'}` : ''}</text>` : '';
@@ -8822,7 +8910,7 @@ function renderChannels(selId) {
       if (lab) s += lab.replace('class="ch-label', 'class="ch-label faint');
     }
     else if (k.level === 'ceiling') over += `<polyline class="ch-over${isSel ? ' sel' : ''}" points="${ps}" style="stroke-width:${f3(w)}"/>` + lab;   // overhead: drawn above the gear
-    else s += `<polyline class="ch-edge ch-${ch.kind}${isSel ? ' sel' : ''}" points="${ps}" style="stroke-width:${f3(w + .14)}"/><polyline class="ch-band ch-${ch.kind}" points="${ps}" style="stroke-width:${f3(w)}"/>` + lab;
+    else { rims += `<polyline class="ch-edge ch-${ch.kind}${isSel ? ' sel' : ''}" points="${pd}" style="stroke-width:${f3(w + .14)}"/>`; bands += `<polyline class="ch-band ch-${ch.kind}" points="${pd}" style="stroke-width:${f3(w)}"/>`; s += lab; }
     hits += `<polyline class="chhit" data-chid="${ch.id}" points="${ps}" style="stroke-width:${f3(Math.max(w, .8))}"><title>${esc(ch.name || k.name)}</title></polyline>`;
     if (isSel) {
       const plus = (x, y, attr, r) => `<g class="chplus" ${attr}><circle cx="${f3(x)}" cy="${f3(y)}" r="${f3(r)}"/><path d="M${f3(x - r * .5)} ${f3(y)}H${f3(x + r * .5)}M${f3(x)} ${f3(y - r * .5)}V${f3(y + r * .5)}"/></g>`;
@@ -8838,10 +8926,13 @@ function renderChannels(selId) {
       }
     }
   }
-  if (chDraft?.pts.length) {
-    const pts = chDraft.pts.concat(cursorPt ? [cursorPt] : []);
-    s += `<polyline class="ch-draft" points="${pts.map(p => p.join(',')).join(' ')}" style="stroke-width:${f3(fromM(.3))}"/>`;
+  s = rims + bands + s;   // labels last
+  if (chDraft?.pts.length) {   // the draft drawn as the channel it will be, so a joint looks finished before you click
+    const kd = chDraft.extend ? chans().find(x => x.id === chDraft.extend.id) : null, kind = kd?.kind || chDraftKind, k = CH_KINDS[kind] || CH_KINDS.trench, w = fromM(kd?.w ?? k.w);
+    const ps = chDraft.pts.concat(chDraft.elbow ? [chDraft.elbow] : [], cursorPt ? [cursorPt] : []).map(p => p.join(',')).join(' ');
+    s += k.level ? `<polyline class="ch-over ch-drafting" points="${ps}" style="stroke-width:${f3(w)}"/>` : `<g class="ch-drafting"><polyline class="ch-edge sel" points="${ps}" style="stroke-width:${f3(w + .14)}"/><polyline class="ch-band ch-${kind}" points="${ps}" style="stroke-width:${f3(w)}"/></g>`;
   }
+  if (mode === 'channel' && chHover) s += `<circle class="ch-joinmark" cx="${f3(chHover.pt[0])}" cy="${f3(chHover.pt[1])}" r="${f3(Math.max(.3, 8 / scale))}"/>`;   // where a click joins
   return { s, hits, handles, over };
 }
 function chSnap(p, prev, free) {
@@ -8856,12 +8947,49 @@ function finishChannel() {
   if (d.extend) {
     const ch = chans().find(x => x.id === d.extend.id); if (!ch) { renderPlot(); return; }
     const add = pts.slice(1);
-    mutate(() => { ch.pts = d.extend.atStart ? [...add.reverse(), ...ch.pts] : [...ch.pts, ...add]; sel = { kind: 'channel', id: ch.id }; mode = 'select'; }, `${ch.name} extended`);
+    mutate(() => {
+      const grow = d.extend.atStart ? polyLen([...add.slice().reverse(), ch.pts[0]]) : 0;
+      ch.pts = d.extend.atStart ? [...add.reverse(), ...ch.pts] : [...ch.pts, ...add];
+      if (grow) for (const o of chans()) for (const j of Object.values(o.joins || {})) if (j.id === ch.id) j.s += grow;   // branches stay where they were
+      if (d.joinB) { ch.joins ||= {}; ch.joins[d.extend.atStart ? 'a' : 'b'] = d.joinB; }
+      settleJoins(); sel = { kind: 'channel', id: ch.id }; mode = 'select';
+    }, d.joinB ? `${ch.name} extended and joined to ${chans().find(x => x.id === d.joinB.id)?.name}` : `${ch.name} extended`);
     return;
   }
   const k = CH_KINDS[chDraftKind] || CH_KINDS.trench, n = chans().filter(x => x.kind === chDraftKind).length + 1;
-  mutate(() => { const ch = { id: uid(), name: `${k.name} ${n}`, kind: chDraftKind, pts }; plan.channels.push(ch); for (const c of plan.cables) if (c.edge && c.auto) { c.points = []; delete c.edge; } sel = { kind: 'channel', id: ch.id };   /* a channel now carries the snake */ mode = 'select'; },
-    k.level ? 'Overhead path added. Ceiling runs nearby route along it.' : 'Channel added. Cables nearby now route through it.');
+  const joins = { ...(d.joinA ? { a: d.joinA } : {}), ...(d.joinB ? { b: d.joinB } : {}) }, onto = [d.joinA, d.joinB].filter(Boolean).map(j => chans().find(x => x.id === j.id)?.name).filter(Boolean);
+  mutate(() => { const ch = { id: uid(), name: `${k.name} ${n}`, kind: chDraftKind, pts, ...(onto.length ? { joins } : {}) }; plan.channels.push(ch); settleJoins(); for (const c of plan.cables) if (c.edge && c.auto) { c.points = []; delete c.edge; } sel = { kind: 'channel', id: ch.id };   /* a channel now carries the snake */ mode = 'select'; },
+    onto.length ? `Branch added, joined to ${[...new Set(onto)].join(' and ')}. Cables can run through both.` : k.level ? 'Overhead path added. Ceiling runs nearby route along it.' : 'Channel added. Cables nearby now route through it.');
+}
+// a branch keeps its joined ends on the channel it joins (stored as distance along it), whatever happens to that channel
+function settleJoins() {
+  for (const ch of chans()) for (const end of ['a', 'b']) {
+    const j = ch.joins?.[end]; if (!j) continue;
+    const par = chans().find(x => x.id === j.id);
+    if (!par || par === ch || par.pts.length < 2) { delete ch.joins[end]; continue; }
+    const P = chLenAt(par.pts, Math.min(j.s, polyLen(par.pts))).pt; ch.pts[end === 'a' ? 0 : ch.pts.length - 1] = [r2(P[0]), r2(P[1])];
+  }
+}
+// the channel under the pointer to join, for the kind being drawn (never the channel being extended)
+function chJoinAt(p, skip) {
+  const lvl = chDraft?.extend ? chLevel(chans().find(x => x.id === chDraft.extend.id) || {}) : ((CH_KINDS[chDraftKind] || {}).level || 'floor');
+  const tol = Math.max(.5, 12 / scale); let best = null;
+  for (const ch of chans()) { if (ch.id === skip || ch.pts.length < 2 || chLevel(ch) !== lvl) continue; const n = nearestOn(ch.pts, p.x, p.y); if (n.dist < tol && (!best || n.dist < best.dist)) best = { ch, s: n.s, pt: [r2(n.pt[0]), r2(n.pt[1])], dist: n.dist, i: n.i }; }
+  return best;
+}
+// arriving at a channel: meet it square on. If the joint can slide a little along it to line up with the last leg, it does;
+// otherwise one elbow, never doubling back on the leg before. Alt joins exactly where you point.
+function squareJoin(pts, hit) {
+  const last = pts[pts.length - 1], prev = pts[pts.length - 2], a = hit.ch.pts[hit.i - 1], b = hit.ch.pts[hit.i];
+  const plain = { pt: hit.pt, s: hit.s, elbow: null }, horiz = Math.abs(b[1] - a[1]) < 1e-6, vert = Math.abs(b[0] - a[0]) < 1e-6;
+  if (!last || (!horiz && !vert)) return plain;
+  const v = horiz ? last[0] : last[1], lo = Math.min(horiz ? a[0] : a[1], horiz ? b[0] : b[1]), hi = Math.max(horiz ? a[0] : a[1], horiz ? b[0] : b[1]);
+  const foot = horiz ? [last[0], a[1]] : [a[0], last[1]];
+  if (v >= lo && v <= hi && Math.hypot(foot[0] - hit.pt[0], foot[1] - hit.pt[1]) <= Math.max(2, 48 / scale)) { const n = nearestOn(hit.ch.pts, foot[0], foot[1]); return { pt: [r2(foot[0]), r2(foot[1])], s: n.s, elbow: null }; }
+  const e = horiz ? [hit.pt[0], last[1]] : [last[0], hit.pt[1]];
+  if (Math.abs(e[0] - last[0]) + Math.abs(e[1] - last[1]) < .05 || Math.abs(e[0] - hit.pt[0]) + Math.abs(e[1] - hit.pt[1]) < .05) return plain;
+  if (prev && (last[0] - prev[0]) * (e[0] - last[0]) + (last[1] - prev[1]) * (e[1] - last[1]) < 0) return plain;   // the elbow would double back
+  return { ...plain, elbow: e };
 }
 function startExtend(id, atEnd) {
   const ch = chans().find(x => x.id === id); if (!ch) return;
