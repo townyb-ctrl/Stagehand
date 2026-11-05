@@ -5713,7 +5713,7 @@ function renderPlot() {
       const end = geo[geo.length - 1];
       if (geo.length > 1) {
         const len = runLen(geo) * (1 + plan.settings.slack / 100) + 2 * (Number(plan.settings.ends) || 0);
-        const oh = openHop(), note = tgt ? ` · ${cableType === 'auto' ? SHORT[pt] + ' to ' : ''}${esc(itemName(tgt))}` : pendChan ? (oh && oh.ch === pendChan.ch.id ? ` · come out of ${esc(pendChan.ch.name)} here` : ` · click to enter ${esc(pendChan.ch.name)}`) : '';
+        const oh = openHop(), note = tgt ? ` · ${cableType === 'auto' ? SHORT[pt] + ' to ' : ''}${esc(itemName(tgt))}` : pendChan ? (oh && chGroup(chans().find(x => x.id === oh.ch)).some(g => g.id === pendChan.ch.id) ? ` · come out of ${esc(pendChan.ch.name)} here` : ` · click to enter ${esc(pendChan.ch.name)}`) : '';
         s += `<text class="cablen" x="${f3(end[0] + 10 / scale)}" y="${f3(end[1] - 10 / scale)}">${fmtLen(len)}${note}</text>`;
       }
     }
@@ -7017,14 +7017,16 @@ svg.addEventListener('pointerdown', e => {
       }
     } else if (pending) {
       const hit = channelAt(p, pending.level === 'ceiling' ? null : null), oh = openHop();
-      if (hit && oh && oh.ch === hit.ch.id) { oh.s1 = hit.s; toast(`Leaves ${hit.ch.name} here`); }   // second click on the same channel: come out here
+      const sameCh = hit && oh && chGroup(chans().find(x => x.id === oh.ch)).some(g => g.id === hit.ch.id);
+      const leave = (h, pt) => { const e = hopExit(h, pt); if (e) { h.s1 = e.s; if (e.id !== h.ch) h.ch1 = e.id; else delete h.ch1; } };
+      if (sameCh) { oh.s1 = hit.s; if (hit.ch.id !== oh.ch) oh.ch1 = hit.ch.id; toast(`Leaves ${hit.ch.name} here`); }   // clicking the channel it's already in, on any of its runs: come out here
       else if (hit) {
-        if (oh) oh.s1 = nearestOn(chans().find(x => x.id === oh.ch).pts, hit.pt[0], hit.pt[1]).s;
+        if (oh) leave(oh, hit.pt);
         pending.points.push({ ch: hit.ch.id, s0: hit.s, s1: null });
         if (chLevel(hit.ch) === 'ceiling') pending.level = 'ceiling';
         toast(`Into ${hit.ch.name}. Click where it leaves`);
       } else {
-        if (oh) oh.s1 = nearestOn(chans().find(x => x.id === oh.ch).pts, p.x, p.y).s;
+        if (oh) leave(oh, [p.x, p.y]);
         const prev = pendingLast(), q = pivotSnap(p, prev);
         if (Math.abs(q[0] - prev[0]) + Math.abs(q[1] - prev[1]) > .05) pending.points.push(q);
       }
@@ -8785,11 +8787,15 @@ function expandRoute(start, points, end) {
     if (!isHop(q)) { pts.push(q); return; }
     const ch = chans().find(x => x.id === q.ch); if (!ch || ch.pts.length < 2) return;
     let next = end; for (let j = k + 1; j < points.length; j++) { const n = points[j]; if (!isHop(n)) { next = n; break; } const nc = chans().find(x => x.id === n.ch); if (nc) { next = chLenAt(nc.pts, n.s0).pt; break; } }
-    const s1 = q.s1 ?? (next ? nearestOn(ch.pts, next[0], next[1]).s : q.s0);
-    const A = chLenAt(ch.pts, q.s0), B = chLenAt(ch.pts, s1);
-    const mid = subpath(ch.pts, { s: q.s0, i: A.i }, { s: s1, i: B.i });
+    const ex = q.s1 != null ? { id: q.ch1 || q.ch, s: q.s1 } : next ? hopExit(q, next) : { id: q.ch, s: q.s0 };
     const i0 = pts.length;
-    pts.push(A.pt, ...mid, B.pt);
+    const thru = ex && ex.id !== q.ch ? netBetween(chLevel(ch), { id: q.ch, s: q.s0 }, ex) : null;   // out of another run of the same channel: through the joints
+    if (thru) { pts.push(...thru.pts); for (const v of thru.vias) if (v !== ch) vias.push(v); }
+    else {
+      const s1 = ex && ex.id === q.ch ? ex.s : nearestOn(ch.pts, (next || chLenAt(ch.pts, q.s0).pt)[0], (next || chLenAt(ch.pts, q.s0).pt)[1]).s;
+      const A = chLenAt(ch.pts, q.s0), B = chLenAt(ch.pts, s1);
+      pts.push(A.pt, ...subpath(ch.pts, { s: q.s0, i: A.i }, { s: s1, i: B.i }), B.pt);
+    }
     for (let k2 = i0 + 1; k2 < pts.length; k2++) straight.add(k2);   // inside the channel the run follows it exactly
     ranges.push([i0, pts.length - 1]); vias.push(ch);
   });
@@ -8875,6 +8881,33 @@ function routeNet(a, b, lvl) {   // the best way through the channel network fro
   if (inside.length < 2) inside.push(inside[0].slice());
   const pts = [[a.x, a.y], ...inside, [b.x, b.y]], straight = new Set(); for (let k = 2; k <= inside.length; k++) straight.add(k);   // inside, the run follows the channels exactly
   return { pts, straight, via: vias[0], vias, ranges: [[1, inside.length]] };
+}
+function netBetween(lvl, A, B) {   // inside points from (A.id, A.s) to (B.id, B.s) through joined runs; null if they don't connect
+  const net = chNet(lvl), nodes = [], idx = new Map(), key = (id, s) => `${id}@${s.toFixed(3)}`;
+  const node = (id, s) => { const k = key(id, s); if (!idx.has(k)) { idx.set(k, nodes.length); nodes.push({ id, s, adj: [] }); } return idx.get(k); };
+  for (const ch of net.list) {
+    const ss = [...new Set([...net.stops.get(ch.id), ...(ch.id === A.id ? [A.s] : []), ...(ch.id === B.id ? [B.s] : [])])].sort((p, q) => p - q);
+    for (let i = 0; i < ss.length; i++) { node(ch.id, ss[i]); if (i) { const u = idx.get(key(ch.id, ss[i - 1])), v = idx.get(key(ch.id, ss[i])), w = ss[i] - ss[i - 1]; nodes[u].adj.push([v, w]); nodes[v].adj.push([u, w]); } }
+  }
+  for (const [a, sA, b, sB] of net.links) { const u = node(a, sA), v = node(b, sB); nodes[u].adj.push([v, .05]); nodes[v].adj.push([u, .05]); }
+  const src = idx.get(key(A.id, A.s)), dst = idx.get(key(B.id, B.s)); if (src == null || dst == null) return null;
+  const dist = nodes.map(() => Infinity), prev = nodes.map(() => -1), done = nodes.map(() => false); dist[src] = 0;
+  for (;;) { let u = -1; for (let i = 0; i < nodes.length; i++) if (!done[i] && dist[i] < Infinity && (u < 0 || dist[i] < dist[u])) u = i; if (u < 0 || u === dst) break; done[u] = true; for (const [v, w] of nodes[u].adj) if (dist[u] + w < dist[v]) { dist[v] = dist[u] + w; prev[v] = u; } }
+  if (dist[dst] === Infinity) return null;
+  const path = []; for (let k = dst; k >= 0; k = prev[k]) path.unshift(nodes[k]);
+  const out = [], vias = []; let last = null;
+  for (const n of path) {
+    const ch = net.list.find(x => x.id === n.id), P = chLenAt(ch.pts, n.s);
+    if (last && last.id === n.id) out.push(...subpath(ch.pts, { s: last.s, i: chLenAt(ch.pts, last.s).i }, { s: n.s, i: P.i }));
+    out.push(P.pt); if (!vias.includes(ch)) vias.push(ch); last = n;
+  }
+  return { pts: out.filter((q, i) => !i || Math.abs(q[0] - out[i - 1][0]) + Math.abs(q[1] - out[i - 1][1]) > 1e-6), vias };
+}
+// where a cable inside a channel comes out, nearest a point: on whichever run of that channel is closest
+function hopExit(hop, pt) {
+  const ch = chans().find(x => x.id === hop.ch); let best = null;
+  for (const g of chGroup(ch)) { if (g.pts.length < 2) continue; const n = nearestOn(g.pts, pt[0], pt[1]); if (!best || n.dist < best.dist) best = { id: g.id, s: n.s, dist: n.dist }; }
+  return best;
 }
 let routeCache = { key: '', map: new Map() };
 function routeInfo(c) {
