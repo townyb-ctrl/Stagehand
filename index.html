@@ -455,6 +455,14 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .plughalo { fill: #fff; stroke: #fff; stroke-linejoin: round; } .plughead { fill: var(--k-pow); stroke: var(--k-pow); stroke-linejoin: round; } .plugcord { fill: none; stroke: var(--k-pow); stroke-linecap: round; } .pluggrip { fill: none; stroke: rgba(0,0,0,.35); stroke-linecap: round; }
 .txon { fill: #4ade80; filter: drop-shadow(0 0 .04px #4ade80); } .txoff { fill: rgba(255,255,255,.12); } .stripoff { fill: rgba(8,10,14,.62); }
 .cab.k-multi { stroke-width: calc(var(--cw, .14) * 2.4); } .cab.k-multi.quiet { stroke-width: calc(var(--cwq, .1) * 2.4); } .cab.k-multi.hl { stroke-width: calc(var(--cwh, .22) * 2); } .cab.k-multi.sel { stroke-width: calc(var(--cws, .3) * 1.8); } .fantail { fill: none; stroke: var(--k-multi); stroke-width: .07; stroke-linecap: round; } .fanboot { fill: var(--k-multi); stroke: rgba(255,255,255,.7); stroke-width: .04; } .fanlab { fill: var(--k-multi); font-weight: 700; paint-order: stroke; stroke: rgba(0,0,0,.6); stroke-width: .06; } .multifan.dim { opacity: .3; }   /* a multicore and its fan of tails */
+.patchgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 4px; }
+.ptile { display: grid; grid-template-columns: auto 1fr; column-gap: 6px; align-items: baseline; text-align: left; padding: 4px 6px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface-2); color: var(--muted); font: 500 11px var(--f-ui); min-height: 34px; cursor: default; }
+.ptile b { grid-row: span 2; font: 700 12px var(--f-mono); color: var(--muted); } .ptile small { grid-column: 2; font-size: 10px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ptile span { color: var(--ink); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ptile.on { cursor: pointer; border-color: color-mix(in srgb, var(--k-xlr) 55%, var(--line)); background: color-mix(in srgb, var(--k-xlr) 10%, var(--surface)); } .ptile.on b { color: var(--k-xlr); }
+.ptile.on:hover { border-color: var(--k-xlr); } .ptile.bad { border-color: var(--bad); } .ptile.bad b { color: var(--bad); }
+.socktag rect { fill: var(--k-xlr); stroke: #fff; stroke-width: .03; } .socktag text { fill: #fff; font-weight: 700; font-family: var(--f-mono); } .socktag.bad rect { fill: var(--bad); }
+.socktag.ptfind rect { stroke: var(--accent); stroke-width: .1; } #plot .item.ptfind { filter: drop-shadow(0 0 .35px var(--accent)) drop-shadow(0 0 .35px var(--accent)); }
 .lead-shadow { fill: none; stroke: rgba(0,0,0,.45); stroke-width: var(--cl2, .3); stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
 .light-deck .lead-shadow { stroke: rgba(0,0,0,.16); }
 .cab.k-inst { stroke-width: var(--cl, .2); opacity: 1; }   /* jack leads are the chunky ones */
@@ -3818,7 +3826,9 @@ function fixChannels(rows) {
 function boxCodes() {
   const boxes = plan.items.filter(i => isBox(i) || cat(i).desk).map(i => itemName(i)).sort(), codes = new Map(), used = new Set();
   for (const n of boxes) {
-    let c = (/\b([A-Z])\b/.exec(n.replace(/\d+×\d+/g, '')) || [])[1] || n.split(/\s+/).filter(w => /^[A-Za-z]/.test(w)).map(w => w[0].toUpperCase()).join('').slice(0, 3) || 'B';
+    const letter = (/\b([A-Z])\b/.exec(n.replace(/\d+×\d+/g, '')) || [])[1];
+    let c = (/^snake\b/i.test(n) && letter ? 'S' + letter : letter) ||   // snakes read SA, SB… beside stage boxes A, B…
+      n.split(/\s+/).filter(w => /^[A-Za-z]/.test(w)).map(w => w[0].toUpperCase()).join('').slice(0, 3) || 'B';
     for (let k = 2; used.has(c); k++) c = c.replace(/\d+$/, '') + k;
     used.add(c); codes.set(n, c);
   }
@@ -5268,24 +5278,69 @@ function leadEnd(it, oth, q, first) {
 const extCord = c => c.type === 'power' && isExt(itemById(c.from)) && isPowerSource(itemById(c.to));
 const isLead = c => c.type === 'inst' || extCord(c);
 // an analog snake's multicore fans out at the far end: one XLR tail per channel it carries, each plugged into that box's inputs
+/* The patch of one box, socket by socket. A snake: what's in each socket and which stage box input its tail goes to.
+   A stage box: what's in each input (straight in, or through a snake's tail) and its desk channel. A desk: every
+   channel in order and where it comes from. Outputs the same way, with the mix each one carries. */
+function patchOf_(it) {
+  const nm = itemName(it), ins = inputList(), outs = outputList(), num = (v, word) => { const m = /^(.*) · (in|out) (\d+)$/.exec(v || ''); return m && m[1] === nm && m[2] === word ? Number(m[3]) : null; };
+  const inRow = r => { const src = itemById(r.itemId); return { title: src?.label && inputsOf(src).length === 1 ? src.label : r.name, item: r.itemId, ch: r.ch, flag: r.flag, soft: r.soft }; };   // your own name for it when you've given one
+  if (cat(it).desk) {
+    const local = ins.filter(r => r.port === `${nm} local`), linked = plan.cables.some(x => (x.type === 'cat6' || x.type === 'multi') && touches(x, it.id)), list = linked ? ins : local;
+    const size = Math.max(8, Math.ceil(Math.max(0, ...list.map(r => r.ch)) / 8) * 8);
+    return { kind: 'desk', ins: Array.from({ length: size }, (_, k) => { const r = list.find(x => x.ch === k + 1); return { n: k + 1, ...(r ? { ...inRow(r), sub: (r.port === `${nm} local` ? 'local' : shortPort(r.port)) + (r.snake ? ` · ${shortPort(r.snake)}` : '') } : {}) }; }),
+      outs: monitorMixes().map(m => ({ n: m.mix, title: `${m.person.split(' ')[0]} · ${m.kind}`, item: m.itemId, sub: shortPort(outs.find(o => o.mix === m.mix)?.port || '') })), inWord: 'Ch', outWord: 'Mix' };
+  }
+  const snake = !!cat(it).snake, field = r => snake ? r.snake : r.port, nIn = Number(prop(it, 'ins')) || 0, nOut = Number(prop(it, 'outsMax')) || 0;
+  return { kind: snake ? 'snake' : 'box', inWord: 'In', outWord: 'Out',
+    ins: Array.from({ length: nIn }, (_, k) => { const r = ins.find(x => num(field(x), 'in') === k + 1); return { n: k + 1, ...(r ? { ...inRow(r), sub: snake ? `→ ${shortPort(r.port)} · Ch ${r.ch}` : `Ch ${r.ch}${r.snake ? ` · from ${shortPort(r.snake)}` : ''}${r.soft ? ' · soft patch' : ''}` } : {}) }; }),
+    outs: Array.from({ length: nOut }, (_, k) => { const r = outs.find(x => num(field(x), 'out') === k + 1); return { n: k + 1, ...(r ? { title: r.mix ? `Mix ${r.mix}` : r.dest, item: r.itemId, flag: r.flag, soft: r.soft, sub: (r.mix ? r.dest : r.type) + (snake ? ` · ← ${shortPort(r.port)}` : r.snake ? ` · to ${shortPort(r.snake)}` : '') } : {}) }; }) };
+}
+function patchPanelHtml(it) {
+  const P = patchOf_(it), tile = (t, word) => `<button class="ptile${t.item ? ' on' : ''}${t.flag ? ' bad' : ''}" ${t.item ? `data-ptsrc="${t.item}"` : 'disabled'} title="${t.item ? esc(`${word} ${t.n}: ${t.title} · ${t.sub}`) : `${word} ${t.n} free`}"><b>${t.n}</b>${t.item ? `<span>${esc(t.title)}</span><small>${esc(t.sub)}</small>` : '<small>free</small>'}</button>`;
+  const used = l => l.filter(t => t.item).length;
+  const head = P.kind === 'desk' ? 'Channels' : 'Inputs', ohead = P.kind === 'desk' ? 'Mixes' : P.kind === 'snake' ? 'Returns' : 'Outputs';
+  return `<section class="isec patchpanel"><h3>${head} <span>${used(P.ins)}/${P.ins.length}</span></h3><div class="patchgrid">${P.ins.map(t => tile(t, P.inWord)).join('')}</div>
+    ${P.outs.length ? `<h3 style="margin-top:12px">${ohead} <span>${used(P.outs)}/${P.outs.length}</span></h3><div class="patchgrid">${P.outs.map(t => tile(t, P.outWord)).join('')}</div>` : ''}
+    <p class="hint">Point at a socket to find what's in it on the plot; click to pick it. While this is picked, the plot tags everything plugged into it with its number.</p></section>`;
+}
+function patchTagsSvg() {   // with a box, snake or desk picked: each thing plugged into it carries its socket number
+  const it = sel?.kind === 'item' && itemById(sel.id); if (!it || !(isBox(it) || cat(it).desk) || layersBypass || capturing) return '';
+  const P = patchOf_(it), by = new Map();
+  for (const t of [...P.ins.map(t => ({ ...t, w: P.inWord })), ...P.outs.map(t => ({ ...t, w: P.outWord }))]) if (t.item) (by.get(t.item) || by.set(t.item, []).get(t.item)).push(t);
+  const fs = Math.max(.34, 10.5 / scale); let out = '';
+  for (const [id, list] of by) {
+    const src = itemById(id); if (!src || src.id === it.id) continue;
+    const [hw, hd] = halfExt(src), txt = `${list[0].w} ${list.map(t => t.n).join(', ')}`, tw = txt.length * fs * .58 + fs * .9, x = src.x + hw * .6, y = src.y - hd - fs * .4;
+    out += `<g class="socktag${list.some(t => t.flag) ? ' bad' : ''}" data-ptsrc="${id}"><rect x="${f3(x - tw / 2)}" y="${f3(y - fs * .95)}" width="${f3(tw)}" height="${f3(fs * 1.3)}" rx="${f3(fs * .65)}"/><text x="${f3(x)}" y="${f3(y)}" text-anchor="middle" style="font-size:${f3(fs)}px">${esc(txt)}</text></g>`;
+  }
+  return out;
+}
 function multiFan(c, seg, segs, rel) {
   const a = itemById(c.from), b = itemById(c.to), atTo = !!cat(a || {}).snake, sn = atTo ? a : b, dest = atTo ? b : a;
   if (!sn || !dest || (atTo ? seg !== segs[segs.length - 1] : seg !== segs[0])) return '';
   const end = atTo ? seg.length - 1 : 0, q = plugPoint(seg, end, dest) || seg[end], pts = atTo ? seg : seg.slice().reverse();
-  let k = pts.length - 1; while (k > 0 && Math.hypot(pts[k][0] - q[0], pts[k][1] - q[1]) < 3.2) k--;
-  const back = pts[k], L0 = Math.hypot(q[0] - back[0], q[1] - back[1]) || 1, ux = (q[0] - back[0]) / L0, uy = (q[1] - back[1]) / L0, nx = -uy, ny = ux;
-  const u = boxUse().get(sn.id) || { ins: 0, outs: 0 }, n = Math.max(1, Math.min(16, u.ins + u.outs)), L = Math.min(L0 * .85, Math.max(1.8, 52 / scale));
+  // walk back along the run itself from where it reaches the box: the split sits on the cable, however short or bent the run is
+  const [hw, hd] = halfExt(dest), inside = p => Math.abs(p[0] - dest.x) < hw - .02 && Math.abs(p[1] - dest.y) < hd - .02;
+  let k = pts.length - 1; while (k > 0 && inside(pts[k])) k--;
+  const back = [q]; for (let i = k; i >= 0; i--) if (Math.hypot(pts[i][0] - back[back.length - 1][0], pts[i][1] - back[back.length - 1][1]) > 1e-6) back.push(pts[i]);
+  let avail = 0; for (let i = 1; i < back.length; i++) avail += Math.hypot(back[i][0] - back[i - 1][0], back[i][1] - back[i - 1][1]);
+  const L = Math.max(.4, Math.min(avail * .6, Math.max(1.8, 52 / scale)));
+  let S = back[back.length - 1], left = L;
+  for (let i = 1; i < back.length; i++) { const d = Math.hypot(back[i][0] - back[i - 1][0], back[i][1] - back[i - 1][1]); if (d >= left) { const t = left / d; S = [back[i - 1][0] + (back[i][0] - back[i - 1][0]) * t, back[i - 1][1] + (back[i][1] - back[i - 1][1]) * t]; break; } left -= d; }
+  const p1 = back[1] || S, L1 = Math.hypot(q[0] - p1[0], q[1] - p1[1]) || 1, ux = (q[0] - p1[0]) / L1, uy = (q[1] - p1[1]) / L1, nx = -uy, ny = ux;   // the way the run comes into the box
+  const u = boxUse().get(sn.id) || { ins: 0, outs: 0 }, n = Math.max(1, Math.min(16, u.ins + u.outs));
   const side = Math.abs(ux) > Math.abs(uy) ? prop(dest, 'd') : prop(dest, 'w');   // the face of the box the tails plug into
-  const S = [q[0] - ux * L, q[1] - uy * L], W = Math.min(side * .9, Math.max(n * .3, Math.min(n, 4) * 10 / scale)), r = Math.min(W / n * .42, Math.max(.08, 4 / scale));
+  const W = Math.min(side * .9, Math.max(n * .3, Math.min(n, 4) * 10 / scale)), r = Math.min(W / n * .42, Math.max(.08, 4 / scale));
   const t0 = (q[0] - dest.x) * nx + (q[1] - dest.y) * ny, lim = Math.max(0, side / 2 - W / 2), shift = clamp(t0, -lim, lim) - t0;   // tails land on the box's face, not past its corner
+  const reach = Math.min(L * .55, Math.hypot(S[0] - q[0], S[1] - q[1]) * .6);
   let g = `<g class="multifan${rel}">`;
   for (let i = 0; i < n; i++) {
     const off = shift - W / 2 + W * (i + .5) / n, E = [q[0] + nx * off - ux * r * 1.15, q[1] + ny * off - uy * r * 1.15],   // each XLR plug sits right at the box, outside it so it shows
-      C = [S[0] + ux * L * .55, S[1] + uy * L * .55];
+      C = [E[0] - ux * reach, E[1] - uy * reach];   // each tail arrives square on to the box
     g += `<path class="fantail" d="M${f3(S[0])} ${f3(S[1])}Q${f3(C[0])} ${f3(C[1])} ${f3(E[0])} ${f3(E[1])}" style="stroke-width:${f3(Math.max(.07, 2.4 / scale))}"/><circle class="plugin xlr" cx="${f3(E[0])}" cy="${f3(E[1])}" r="${f3(r)}"/>`;
   }
-  const fs = Math.max(.32, 10 / scale);   // the boot where the multicore splits, with how many tails leave it
-  return g + `<circle class="fanboot" cx="${f3(S[0])}" cy="${f3(S[1])}" r="${f3(Math.max(.18, 6.5 / scale))}"/><text class="fanlab" x="${f3(S[0] - ux * fs * 1.6)}" y="${f3(S[1] - uy * fs * 1.6 + fs * .35)}" text-anchor="middle" style="font-size:${f3(fs)}px">${u.ins + u.outs}</text></g>`;
+  const fs = Math.max(.32, 10 / scale), bx = back[Math.min(2, back.length - 1)], bl = Math.hypot(bx[0] - S[0], bx[1] - S[1]) || 1, vx = (bx[0] - S[0]) / bl, vy = (bx[1] - S[1]) / bl;   // the count sits just up the cable from the split
+  return g + `<circle class="fanboot" cx="${f3(S[0])}" cy="${f3(S[1])}" r="${f3(Math.max(.18, 6.5 / scale))}"/><text class="fanlab" x="${f3(S[0] + vx * fs * 1.6 + vy * fs * .9)}" y="${f3(S[1] + vy * fs * 1.6 - vx * fs * .9 + fs * .35)}" text-anchor="middle" style="font-size:${f3(fs)}px">${u.ins + u.outs}</text></g>`;
 }
 function mainsPlug(seg, q, sock, st = '') {   // a 3-pin plug at q, turned along the last stretch of the cord outside the socket (or the cursor)
   const inside = p => { if (!sock) return false; const [hw, hd] = halfExt(sock); return Math.abs(p[0] - sock.x) < hw && Math.abs(p[1] - sock.y) < hd; };
@@ -5850,6 +5905,7 @@ function renderPlot() {
   if (compare && !capturing && db.plans[compare]) s += beforeSvg(b);
   if (compare) s += compareSvg();
   s += measureSvg();
+  s += patchTagsSvg();
   svg.innerHTML = R ? `<g id="rotg" transform="rotate(${R} ${f3(rcx)} ${f3(rcy)})">${s}</g>` : s;
   for (const r of [90, 180, 270]) svg.classList.toggle(`rot${r}`, R === r);
   if (capturing) return;
@@ -6254,6 +6310,7 @@ function renderInspector() {
     let basic = '';
     const adv = [];   // fine-grained settings: inline in Advanced, folded under "More settings" in Simple
     const meter = (n, w, cap) => { const pct = w / cap; return `<div class="circ"><span class="n">${n}</span><div class="meter"><span class="${pct > 1 ? 'bad' : pct > .8 ? 'warn' : ''}" style="width:${Math.min(100, pct * 100)}%"></span></div><span class="w">${Math.round(w)} W</span></div>`; };
+    if (isBox(it) || cat(it).desk) basic += patchPanelHtml(it);
     if (cat(it).snake) { const nm = itemName(it), on = r => (r.snake || r.port).startsWith(nm + ' · '), ui_ = inputList().filter(on).length, uo = outputList().filter(on).length, end = snakeEnd(it);
       basic += `<section class="isec"><h3>Analog snake <span>${ui_}/${prop(it, 'ins')} in · ${uo}/${prop(it, 'outsMax')} out</span></h3><p class="hint">${end ? `Its multicore fans out into XLR tails plugged into ${esc(itemName(end))}: each socket here is one of ${esc(itemName(end))}'s ${cat(end).desk ? 'channels' : 'inputs'}.` : 'Run its multicore to a stage box or desk: the tails at the far end plug into its inputs.'} No power needed.</p></section>`; }
     if (it.type === 'stagebox') adv.push(`<section class="isec"><h3>Ports</h3><div class="grid2">${field('iIns', 'Inputs', prop(it, 'ins'), 'number', 'min="1" max="128"')}${field('iOuts', 'Outputs', prop(it, 'outsMax'), 'number', 'min="0" max="64"')}</div></section>`);
@@ -7958,7 +8015,10 @@ $('inspector').addEventListener('change', e => {
     if (t.id === 'cSlack') c.slack = t.value === '' ? undefined : Math.max(0, Number(t.value));
   });
 });
+$('inspector').addEventListener('pointerover', e => { const t = e.target.closest('[data-ptsrc]'); document.querySelectorAll('#plot .ptfind').forEach(x => x.classList.remove('ptfind')); if (t) document.querySelectorAll(`#plot .item[data-id="${t.dataset.ptsrc}"], #plot .socktag[data-ptsrc="${t.dataset.ptsrc}"]`).forEach(x => x.classList.add('ptfind')); });
+$('inspector').addEventListener('pointerleave', () => document.querySelectorAll('#plot .ptfind').forEach(x => x.classList.remove('ptfind')));
 $('inspector').addEventListener('click', e => {
+  { const t = e.target.closest('[data-ptsrc]'); if (t && itemById(t.dataset.ptsrc)) { sel = { kind: 'item', id: t.dataset.ptsrc }; group = null; renderPlot(); renderInspector(); return; } }
   { const sa = e.target.closest('[data-selall]'); if (sa && sel?.kind === 'item') { const it = itemById(sel.id); setGroup(plan.items.filter(i => sa.dataset.selall === 'type' ? i.type === it.type : i.personId && i.personId === it.personId).map(i => i.id)); renderPlot(); renderInspector(); return; } }
   const t = e.target.closest('button'); if (!t) return;
   if (t.dataset.selitem) { if (itemById(t.dataset.selitem)) { sel = { kind: 'item', id: t.dataset.selitem }; group = null; focusItem(t.dataset.selitem); renderPlot(); renderInspector(); } return; }
