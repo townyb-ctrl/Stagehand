@@ -454,7 +454,7 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .plugin { stroke: rgba(0,0,0,.55); stroke-width: .02; } .plugin.xlr { fill: var(--k-xlr); } .plugin.dmx { fill: var(--k-dmx); } .plugface { fill: rgba(0,0,0,.35); stroke: none; }   /* a plug sitting in a socket */
 .plughalo { fill: #fff; stroke: #fff; stroke-linejoin: round; } .plughead { fill: var(--k-pow); stroke: var(--k-pow); stroke-linejoin: round; } .plugcord { fill: none; stroke: var(--k-pow); stroke-linecap: round; } .pluggrip { fill: none; stroke: rgba(0,0,0,.35); stroke-linecap: round; }
 .txon { fill: #4ade80; filter: drop-shadow(0 0 .04px #4ade80); } .txoff { fill: rgba(255,255,255,.12); } .stripoff { fill: rgba(8,10,14,.62); }
-.cab.k-multi { stroke-width: calc(var(--cw, .14) * 2.4); } .cab.k-multi.quiet { stroke-width: calc(var(--cwq, .1) * 2.4); } .cab.k-multi.hl { stroke-width: calc(var(--cwh, .22) * 2); } .cab.k-multi.sel { stroke-width: calc(var(--cws, .3) * 1.8); } .fantail { fill: none; stroke: var(--k-multi); stroke-width: .045; stroke-linecap: round; } .fanboot { fill: var(--k-multi); stroke: rgba(0,0,0,.5); stroke-width: .02; } .multifan.dim { opacity: .3; }   /* a multicore and its fan of tails */
+.cab.k-multi { stroke-width: calc(var(--cw, .14) * 2.4); } .cab.k-multi.quiet { stroke-width: calc(var(--cwq, .1) * 2.4); } .cab.k-multi.hl { stroke-width: calc(var(--cwh, .22) * 2); } .cab.k-multi.sel { stroke-width: calc(var(--cws, .3) * 1.8); } .fantail { fill: none; stroke: var(--k-multi); stroke-width: .07; stroke-linecap: round; } .fanboot { fill: var(--k-multi); stroke: rgba(255,255,255,.7); stroke-width: .04; } .fanlab { fill: var(--k-multi); font-weight: 700; paint-order: stroke; stroke: rgba(0,0,0,.6); stroke-width: .06; } .multifan.dim { opacity: .3; }   /* a multicore and its fan of tails */
 .lead-shadow { fill: none; stroke: rgba(0,0,0,.45); stroke-width: var(--cl2, .3); stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
 .light-deck .lead-shadow { stroke: rgba(0,0,0,.16); }
 .cab.k-inst { stroke-width: var(--cl, .2); opacity: 1; }   /* jack leads are the chunky ones */
@@ -2147,7 +2147,7 @@ const GEAR_GROUPS = [
   ['Lighting', ['par_led', 'wash_led', 'bar_led', 'bar_up', 'spot_mh', 'wash_mh', 'profile', 'fresnel', 'uplight', 'light_stand', 'hazer', 'light_desk', 'dmx_split', 'truss', 'light_pipe', 'foh_bar'], 'par_led'],
   ['Stage & power', ['riser', 'drum_riser', 'walkway', 'drum_shield', 'pulpit', 'music_stand', 'ipad_stand', 'distro', 'wall_outlet', 'pboard2', 'pboard4', 'pboard6'], 'distro'],
 ];
-const OVERHEAD_TYPES = ['main_spk', 'sub', 'la_main', 'la_sub'];
+const OVERHEAD_TYPES = ['main_spk', 'sub', 'la_main', 'la_sub'], MAINS = ['main_spk', 'la_main'], SUBS = ['sub', 'la_sub'];
 // Line arrays: boxes in the hang are editable; power draw scales per box unless typed in by hand.
 const LA_BOXES = { la_main: { def: 8, max: 24 }, la_sub: { def: 4, max: 16 } };
 const laBoxes = it => LA_BOXES[it.type] ? clamp(Math.round(it.boxes || LA_BOXES[it.type].def), 1, LA_BOXES[it.type].max) : 0;
@@ -3737,35 +3737,53 @@ function patchOf(it) {
   return { kind: 'box', box: other(c, it.id) };
 }
 function inputList() {
-  const srcs = plan.items.filter(i => inputsOf(i).length).sort((a, b) => rankItem(a) - rankItem(b));
-  const counters = new Map(), rows = [];
+  const srcs = plan.items.filter(i => inputsOf(i).length).sort((a, b) => rankItem(a) - rankItem(b)), rows = [];
   let ch = 0;
   for (const it of srcs) {
-    const patch = patchOf(it);
-    for (const name of inputsOf(it)) {
-      ch++;
-      let port = '—', flag = false, viaSnake = '';
-      if (patch?.kind === 'rf') { port = patch.via ? `${itemName(patch.via)} (not patched)` : 'RF receiver'; flag = !!patch.via; }
-      else if (patch?.box) {
-        let b = patch.box, snake = '';
-        if (cat(b).snake) {   // into a snake socket, then out of its tail into the box at the far end
-          const k = (counters.get(b.id) || 0) + 1; counters.set(b.id, k);
-          snake = `${itemName(b)} · in ${k}`; if (k > (Number(prop(b, 'ins')) || 0)) flag = true;
-          const end = snakeEnd(b); if (!end) { port = snake; snake = ''; flag = true; b = null; } else b = end;
-        }
-        if (b && cat(b).desk) port = `${itemName(b)} local`;
-        else if (b) {
-          const n = (counters.get(b.id) || 0) + 1; counters.set(b.id, n);
-          port = `${itemName(b)} · in ${n}`;
-          if (n > (Number(prop(b, 'ins')) || 0)) flag = true;
-        }
-        viaSnake = snake;
-      } else flag = true;
-      const person = it.personId ? personById(it.personId) : null;
-      rows.push({ inIdx: inputsOf(it).indexOf(name), ch, name, source: cat(it).name, person: person?.name || '', port, flag, unpatched: !patch, itemId: it.id, ...(viaSnake ? { snake: viaSnake } : {}) });
-    }
+    const patch = patchOf(it), person = it.personId ? personById(it.personId) : null;
+    for (const name of inputsOf(it)) rows.push({ inIdx: inputsOf(it).indexOf(name), ch: ++ch, name, source: cat(it).name, person: person?.name || '', port: '—', flag: false, unpatched: !patch, itemId: it.id, _patch: patch });
   }
-  return fixChannels(rows);
+  const out = fixChannels(rows);   // desk channels first (they stay put week to week), then the physical patch follows them
+  patchInputs(out);
+  for (const r of out) delete r._patch;
+  return out;
+}
+/* Physical patch in line with the desk. Each digital stage box carries a block of desk channels, in box order: box A
+   inputs 1–32 are channels 1–32, box B's are 33–64, and so on. An input on desk channel 7 goes into its box's input 7;
+   through an analog snake it takes the snake's next socket and that tail goes into input 7. When that input can't be
+   had (the box is full, or the input sits on another box) it takes the box's first free input and is marked "soft":
+   the desk needs that one patched by hand. Desk-local inputs are their own channel. */
+function deskBlocks(kind) {   // 'ins' or 'outsMax': where each digital box's block starts
+  const base = new Map(); let acc = 0;
+  for (const b of plan.items.filter(i => isBox(i) && !cat(i).snake).sort((a, b) => itemName(a).localeCompare(itemName(b)))) { base.set(b.id, acc); acc += Number(prop(b, kind)) || 0; }
+  return base;
+}
+function placePorts(units, kind, word) {   // units: { r, box, want }; two passes so a stray input never takes another's own port
+  const base = deskBlocks(kind), taken = new Map(), held = b => taken.get(b.id) || taken.set(b.id, new Set()).get(b.id);
+  const max = b => Number(prop(b, kind)) || 0;
+  for (const u of units) { if (u.want == null) continue; const n = u.want - (base.get(u.box.id) || 0); if (n >= 1 && n <= max(u.box) && !held(u.box).has(n)) { held(u.box).add(n); u.n = n; } }
+  for (const u of units) {
+    if (u.n == null) { let n = 1; while (held(u.box).has(n)) n++; held(u.box).add(n); u.n = n; u.r.soft = u.want != null; }
+    u.r.port = `${itemName(u.box)} · ${word} ${u.n}`; if (u.n > max(u.box)) u.r.flag = true;
+  }
+}
+function patchInputs(rows) {
+  const sock = new Map(), units = [];
+  for (const r of rows) {
+    const patch = r._patch;
+    if (!patch) { r.flag = true; continue; }
+    if (patch.kind === 'rf') { r.port = patch.via ? `${itemName(patch.via)} (not patched)` : 'RF receiver'; r.flag = !!patch.via; continue; }
+    let b = patch.box;
+    if (cat(b).snake) {   // into the snake's next socket, then down its tail to the box at the far end
+      const k = (sock.get(b.id) || 0) + 1; sock.set(b.id, k);
+      r.snake = `${itemName(b)} · in ${k}`; if (k > (Number(prop(b, 'ins')) || 0)) r.flag = true;
+      const end = snakeEnd(b); if (!end) { r.port = r.snake; delete r.snake; r.flag = true; continue; }
+      b = end;
+    }
+    if (cat(b).desk) { r.port = `${itemName(b)} local`; continue; }
+    units.push({ r, box: b, want: r.ch });
+  }
+  placePorts(units, 'ins', 'in');
 }
 /* Fixed channel numbers: each input keeps its desk channel from week to week, so saved desk scenes stay right when someone
    is away (their channel is simply spare). An input is known by its stage role and name ("Drums|Kick In", "Vocalist|Vox#2"),
@@ -3899,26 +3917,32 @@ function exportInputs(kind) {
   else offerFile(`${base}-input-list.csv`, csv(rows, [['Ch', 'ch'], ['Input', 'name'], ['Group', 'group'], ['Mic / DI', 'mic'], ['Stand', 'stand'], ['48V', r => r.p48 ? 'yes' : ''], ['Person', 'person'], ['Patch', 'port']]), 'text/csv');
 }
 function outputList() {
-  const rows = [], counters = new Map();
-  const outs = plan.items.filter(i => Number(prop(i, 'outs')) > 0).sort((a, b) => a.x - b.x);
+  const rows = [], units = [], ret = new Map(), mixOf = new Map(monitorMixes().filter(m => m.itemId).map(m => [m.itemId, m.mix]));
+  const iemMixes = monitorMixes().filter(m => m.kind === 'IEM' && cat(itemById(m.itemId) || {}).wireless).map(m => m.mix);
+  const tier = i => mixOf.has(i.id) ? 0 : i.type === 'iem_rack' ? 1 : MAINS.includes(i.type) ? 2 : SUBS.includes(i.type) ? 3 : 4;   // mixes, then the IEM rack, mains left to right, subs, the rest
+  const outs = plan.items.filter(i => Number(prop(i, 'outs')) > 0).sort((a, b) => tier(a) - tier(b) || (mixOf.get(a.id) ?? 0) - (mixOf.get(b.id) ?? 0) || a.x - b.x);
   for (const it of outs) {
     const patch = isBox(it) ? { kind: 'box', box: it } : patchOf(it);   // a rack with its own snake feeds its IEMs internally
     const n = Number(prop(it, 'outs'));
     for (let k = 1; k <= n; k++) {
-      let port = '—', flag = !patch, box = patch?.box, snake = '';
+      const mix = it.type === 'iem_rack' ? iemMixes[k - 1] : mixOf.get(it.id);
+      const r = { dest: itemName(it) + (n > 1 ? ` · ${k}` : ''), type: cat(it).name, port: '—', flag: !patch, itemId: it.id, ...(mix ? { mix } : {}) };
+      rows.push(r);
+      if (it.type === 'iem_rack' && !mix) { r.port = 'spare'; r.flag = false; continue; }   // a transmitter channel no in-ear pack uses needs no feed
+      let box = patch?.box;
       if (box && cat(box).snake && box !== it) {   // a snake return: fed from the far end's output through its tail
-        const k = (counters.get(box.id) || 0) + 1; counters.set(box.id, k);
-        snake = `${itemName(box)} · out ${k}`; if (k > (Number(prop(box, 'outsMax')) || 0)) flag = true;
-        const end = snakeEnd(box); if (!end) { port = snake; snake = ''; flag = true; box = null; } else box = end;
+        const j = (ret.get(box.id) || 0) + 1; ret.set(box.id, j);
+        r.snake = `${itemName(box)} · out ${j}`; if (j > (Number(prop(box, 'outsMax')) || 0)) r.flag = true;
+        const end = snakeEnd(box); if (!end) { r.port = r.snake; delete r.snake; r.flag = true; continue; }
+        box = end;
       }
-      if (box && !cat(box).desk) {
-        const m = (counters.get(box.id) || 0) + 1; counters.set(box.id, m);
-        port = `${itemName(box)} · out ${m}`;
-        if (m > (Number(prop(box, 'outsMax')) || 0)) flag = true;
-      } else if (box) port = `${itemName(box)} local`;
-      rows.push({ dest: itemName(it) + (n > 1 ? ` · ${k}` : ''), type: cat(it).name, port, flag, itemId: it.id, ...(snake ? { snake } : {}) });
+      if (!box) continue;
+      if (cat(box).desk) { r.port = `${itemName(box)} local`; continue; }
+      if (box === it) { r.port = `${itemName(box)} · out ${k}`; continue; }
+      units.push({ r, box, want: mix ?? null });
     }
   }
+  placePorts(units, 'outsMax', 'out');
   // ports are handed out stage right to left; the sheet reads box by box, port by port, unpatched last
   const key = r => { const m = /^(.*) · out (\d+)$/.exec(r.port); return m ? [0, m[1], Number(m[2])] : [r.port === '—' ? 2 : 1, r.port, 0]; };
   return rows.sort((a, b) => { const x = key(a), y = key(b); return x[0] - y[0] || x[1].localeCompare(y[1]) || x[2] - y[2]; });
@@ -3927,7 +3951,7 @@ function monitorMixes() {
   const rows = []; let mix = 0;
   for (const p of plan.team.slice().sort((a, b) => ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role))) {
     const mons = plan.items.filter(i => i.personId === p.id && (cat(i).iem || i.type === 'wedge'));
-    for (const m of mons) rows.push({ mix: ++mix, person: p.name, role: p.role, kind: cat(m).iem ? 'IEM' : 'Wedge' });
+    for (const m of mons) rows.push({ mix: ++mix, person: p.name, role: p.role, kind: cat(m).iem ? 'IEM' : 'Wedge', itemId: m.id });
   }
   return rows;
 }
@@ -5248,16 +5272,20 @@ function multiFan(c, seg, segs, rel) {
   const a = itemById(c.from), b = itemById(c.to), atTo = !!cat(a || {}).snake, sn = atTo ? a : b, dest = atTo ? b : a;
   if (!sn || !dest || (atTo ? seg !== segs[segs.length - 1] : seg !== segs[0])) return '';
   const end = atTo ? seg.length - 1 : 0, q = plugPoint(seg, end, dest) || seg[end], pts = atTo ? seg : seg.slice().reverse();
-  let k = pts.length - 1; while (k > 0 && Math.hypot(pts[k][0] - q[0], pts[k][1] - q[1]) < 1.2) k--;
+  let k = pts.length - 1; while (k > 0 && Math.hypot(pts[k][0] - q[0], pts[k][1] - q[1]) < 3.2) k--;
   const back = pts[k], L0 = Math.hypot(q[0] - back[0], q[1] - back[1]) || 1, ux = (q[0] - back[0]) / L0, uy = (q[1] - back[1]) / L0, nx = -uy, ny = ux;
-  const u = boxUse().get(sn.id) || { ins: 0, outs: 0 }, n = Math.max(1, Math.min(12, u.ins + u.outs)), L = Math.min(L0 * .8, Math.max(.9, 20 / scale));
-  const S = [q[0] - ux * L, q[1] - uy * L], W = Math.min(Math.max(prop(dest, 'w'), prop(dest, 'd')) * .7, n * .17), r = Math.max(.045, 2 / scale);
+  const u = boxUse().get(sn.id) || { ins: 0, outs: 0 }, n = Math.max(1, Math.min(16, u.ins + u.outs)), L = Math.min(L0 * .85, Math.max(1.8, 52 / scale));
+  const side = Math.abs(ux) > Math.abs(uy) ? prop(dest, 'd') : prop(dest, 'w');   // the face of the box the tails plug into
+  const S = [q[0] - ux * L, q[1] - uy * L], W = Math.min(side * .9, Math.max(n * .3, Math.min(n, 4) * 10 / scale)), r = Math.min(W / n * .42, Math.max(.08, 4 / scale));
+  const t0 = (q[0] - dest.x) * nx + (q[1] - dest.y) * ny, lim = Math.max(0, side / 2 - W / 2), shift = clamp(t0, -lim, lim) - t0;   // tails land on the box's face, not past its corner
   let g = `<g class="multifan${rel}">`;
   for (let i = 0; i < n; i++) {
-    const off = -W / 2 + W * (i + .5) / n, E = [q[0] + nx * off, q[1] + ny * off], C = [S[0] + ux * L * .55, S[1] + uy * L * .55];
-    g += `<path class="fantail" d="M${f3(S[0])} ${f3(S[1])}Q${f3(C[0])} ${f3(C[1])} ${f3(E[0])} ${f3(E[1])}"/><circle class="plugin xlr" cx="${f3(E[0])}" cy="${f3(E[1])}" r="${f3(r)}"/>`;
+    const off = shift - W / 2 + W * (i + .5) / n, E = [q[0] + nx * off - ux * r * 1.15, q[1] + ny * off - uy * r * 1.15],   // each XLR plug sits right at the box, outside it so it shows
+      C = [S[0] + ux * L * .55, S[1] + uy * L * .55];
+    g += `<path class="fantail" d="M${f3(S[0])} ${f3(S[1])}Q${f3(C[0])} ${f3(C[1])} ${f3(E[0])} ${f3(E[1])}" style="stroke-width:${f3(Math.max(.07, 2.4 / scale))}"/><circle class="plugin xlr" cx="${f3(E[0])}" cy="${f3(E[1])}" r="${f3(r)}"/>`;
   }
-  return g + `<circle class="fanboot" cx="${f3(S[0])}" cy="${f3(S[1])}" r="${f3(Math.max(.09, 3.5 / scale))}"/></g>`;
+  const fs = Math.max(.32, 10 / scale);   // the boot where the multicore splits, with how many tails leave it
+  return g + `<circle class="fanboot" cx="${f3(S[0])}" cy="${f3(S[1])}" r="${f3(Math.max(.18, 6.5 / scale))}"/><text class="fanlab" x="${f3(S[0] - ux * fs * 1.6)}" y="${f3(S[1] - uy * fs * 1.6 + fs * .35)}" text-anchor="middle" style="font-size:${f3(fs)}px">${u.ins + u.outs}</text></g>`;
 }
 function mainsPlug(seg, q, sock, st = '') {   // a 3-pin plug at q, turned along the last stretch of the cord outside the socket (or the cursor)
   const inside = p => { if (!sock) return false; const [hw, hd] = halfExt(sock); return Math.abs(p[0] - sock.x) < hw && Math.abs(p[1] - sock.y) < hd; };
@@ -6667,7 +6695,7 @@ function chEditHtml(ins) {
       <td><select data-chstand="${esc(r.key)}" aria-label="Stand for ${esc(r.name)}">${[...new Set([r.stand, ...STANDS])].map(v => `<option ${v === r.stand ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></td>
       <td><input type="checkbox" data-ch48="${esc(r.key)}" ${r.p48 ? 'checked' : ''} aria-label="48V phantom for ${esc(r.name)}"></td></tr>`).join('')}</tbody></table></div>
     <datalist id="micList">${['Dynamic', 'Condenser', 'Small condenser', 'Kick dynamic', 'Boundary (inside kick)', 'Ribbon', 'DI', 'Stereo DI', 'Line (DI)', 'Headset (RF)', 'Handheld (RF)'].map(v => `<option value="${v}">`).join('')}</datalist>
-    <p class="hint">Typing a number another input already has swaps the two. Mic, stand and 48V changes follow the input to every week.</p>`;
+    <p class="hint">Patch numbers follow the desk: channel 7 is in input 7 of its stage box (box B starts after box A's inputs). <b>*</b> marks one that had to go elsewhere, so patch it by hand at the desk. Typing a number another input already has swaps the two. Mic, stand and 48V changes follow the input to every week.</p>`;
 }
 // the sheet tabs: plain words in groups (the event, the audio, the day), the open one underlined; only Overview flags checks
 const DOC_GROUPS = [['overview', 'spots'], ['inputs', 'outputs', 'cables', 'power', 'lighting'], ['team'], ['all']];
@@ -6759,9 +6787,9 @@ function renderPaper() {
   const ins = inputSheet(), outs = outputList(), mixes = monitorMixes(), pull = pullList(), w = warnings(), t = totals(), dIns = inputDeltas(ins);
   const sources = plan.items.filter(isPowerSource);
   const codes = boxCodes();
-  const viaS = r => r.snake ? ` (${shortPort(r.snake, codes)})` : '';
+  const viaS = r => (r.snake ? ` (${shortPort(r.snake, codes)})` : '') + (r.soft ? ' *' : '');
   const inCols = [['Ch', 'ch'], ['Input', 'name'], ['Mic / DI', 'mic'], ['Stand', 'stand'], ['48V', r => r.p48 ? '48V' : ''], ['Group', 'group'], ['Person', 'person'], ['Patch', r => shortPort(r.port, codes) + viaS(r)]];
-  const outCols = [['Destination', 'dest'], ['Type', 'type'], ['Patch', r => shortPort(r.port, codes) + viaS(r)]];
+  const outCols = [['Destination', 'dest'], ['Mix', r => r.mix ? `Mix ${r.mix}` : ''], ['Type', 'type'], ['Patch', r => shortPort(r.port, codes) + viaS(r)]];
   const mixCols = [['Mix', 'mix'], ['Person', 'person'], ['Position', 'role'], ['Monitor', 'kind']];
   const shortBy = new Map(cableShort(pull).map(x => [`${x.type}|${x.len}`, x])), stocked = Object.keys(cableStock()).length > 0;
   for (const r of pull) { const x = !r.label && shortBy.get(`${r.type}|${r.len}`); r.short = x ? x.short : 0; }
