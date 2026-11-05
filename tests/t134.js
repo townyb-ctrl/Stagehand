@@ -20,10 +20,16 @@ const br = await p.evaluate(() => { const c = chans()[1]; return { start: c.pts[
 console.log('branch', JSON.stringify(br));
 // a cable from upstage near the branch to downstage right: it runs up the branch, along the main, out near the far end
 const r = await p.evaluate(() => { const a = addItem('gtr_amp', 13.5, 1.5), z = addItem('stagebox', 28, 14.5); const c = addCable('xlr', a.id, z.id, {}); const ri = routeInfo(c); renderAll(); return { vias: ri.vias.map(v => v.name), len: Math.round(cableLen(c) * 10) / 10, straight: ri.straight.size }; });
-console.log('route', JSON.stringify(r));
+console.log('route', JSON.stringify(r)); console.log('branch named after its channel', await p.evaluate(() => chans().map(c => c.name)));
 // a third channel crossing the main trench: still one network
 await p.evaluate(() => setMode('channel')); await click(22, 6); await click(22, 15); await p.keyboard.press('Enter'); await p.waitForTimeout(100);
 console.log('crossing joins', await p.evaluate(() => chNet('floor').links.length));
+console.log('one channel', await p.evaluate(() => { renderAll(); return [new Set(chans().map(c => c.name)).size, chans()[0].name, document.querySelectorAll('#plot .ch-label').length, new Set(chGroups().values()).size]; }));
+await p.evaluate(() => { mode = 'select'; sel = { kind: 'channel', id: chans()[2].id }; inspOpen = true; applyPanels(false); renderAll(); });
+console.log('picked as a whole', await p.evaluate(() => [document.querySelectorAll('#plot .ch-edge.sel').length, chans().length, $('inspector').querySelector('h2')?.textContent, !!$('chDelRun')]));
+await p.evaluate(() => { const i = $('chName'); i.value = 'Front trench'; i.dispatchEvent(new Event('change', { bubbles: true })); });
+console.log('rename all', await p.evaluate(() => chans().map(c => c.name).join(',')));
+await p.evaluate(() => { inspOpen = false; applyPanels(false); renderAll(); });
 // drawing that ends on a channel finishes there and joins (with an elbow so it meets square on)
 await p.evaluate(() => setMode('channel')); await click(26, 3); await click(26, 6); await click(12.3, 5.1); await p.waitForTimeout(150);
 console.log('ends on a channel', await p.evaluate(() => { const c = chans().at(-1); return [mode, c.pts.length, JSON.stringify(c.pts.at(-1)), c.joins?.b?.id === chans()[1].id]; }));
@@ -38,8 +44,11 @@ await p.evaluate(() => { sel = { kind: 'channel', id: chans()[1].id }; renderAll
 const st = await p.evaluate(() => chans()[1].pts[0]); const [ax, ay] = await scr(st[0], st[1]); await p.mouse.move(ax, ay); await p.mouse.down(); const [bx, by] = await scr(st[0] + 4, st[1]); await p.mouse.move(bx, by, { steps: 6 }); await p.mouse.up(); await p.waitForTimeout(150);
 console.log('joint slides', await p.evaluate(() => { const c = chans()[1], n = nearestOn(chans()[0].pts, c.pts[0][0], c.pts[0][1]); return [Math.round(c.pts[0][0]), n.dist < .05, !!c.joins?.a]; }));
 // delete the main trench: the branch lets go, nothing breaks; undo brings it back with the cable routed again
-await p.evaluate(() => { sel = { kind: 'channel', id: chans()[0].id }; deleteSelected(); });
-console.log('after delete', await p.evaluate(() => [chans().length, !!chans()[0].joins?.a]));
+await p.evaluate(() => { sel = { kind: 'channel', id: chans()[0].id }; inspOpen = true; applyPanels(false); renderAll(); $('chDelRun').click(); });
+console.log('remove one run', await p.evaluate(() => [chans().length, !!chans()[0].joins?.a]));
+await p.keyboard.press('Control+z'); await p.waitForTimeout(150);
+await p.evaluate(() => { sel = { kind: 'channel', id: chans()[1].id }; deleteSelected(); });
+console.log('delete the channel', await p.evaluate(() => chans().length));
 await p.keyboard.press('Control+z'); await p.waitForTimeout(150);
 console.log('undo', await p.evaluate(() => { const c = plan.cables[0]; return [chans().length, routeInfo(c).vias.map(v => v.name).join(' + '), routeInfo(c).vias.every(v => chans().includes(v))]; }));
 // seamless: every channel rim is drawn before any band
