@@ -451,7 +451,9 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .flowg.dim { opacity: .18; }
 .cab.k-inst.quiet { opacity: .9; stroke-width: var(--cl, .2); }   /* leads stay visible, they're the fun ones */
 .mainsplug rect { stroke: rgba(0,0,0,.5); stroke-width: .035; } .mainsplug path { fill: none; stroke: #d6dbe0; stroke-width: .04; stroke-linecap: round; } .mainsplug .mp-grip { stroke: rgba(0,0,0,.3); stroke-width: .03; } .mainsplug .mp-boot { stroke: rgba(0,0,0,.45); stroke-width: .03; filter: brightness(.8); } .mainsplug.dim { opacity: .35; }
-.plugin { stroke: rgba(0,0,0,.55); stroke-width: .02; } .plugin.pw { fill: var(--k-pow); } .plugin.xlr { fill: var(--k-xlr); } .plugface { fill: rgba(0,0,0,.35); stroke: none; }   /* a plug sitting in a socket */
+.plugin { stroke: rgba(0,0,0,.55); stroke-width: .02; } .plugin.xlr { fill: var(--k-xlr); } .plugin.dmx { fill: var(--k-dmx); } .plugface { fill: rgba(0,0,0,.35); stroke: none; }   /* a plug sitting in a socket */
+.plughalo { fill: #fff; stroke: #fff; stroke-linejoin: round; } .plughead { fill: var(--k-pow); stroke: var(--k-pow); stroke-linejoin: round; } .plugcord { fill: none; stroke: var(--k-pow); stroke-linecap: round; } .pluggrip { fill: none; stroke: rgba(0,0,0,.35); stroke-linecap: round; }
+.txon { fill: #4ade80; filter: drop-shadow(0 0 .04px #4ade80); } .txoff { fill: rgba(255,255,255,.12); } .stripoff { fill: rgba(8,10,14,.62); }
 .lead-shadow { fill: none; stroke: rgba(0,0,0,.45); stroke-width: var(--cl2, .3); stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
 .light-deck .lead-shadow { stroke: rgba(0,0,0,.16); }
 .cab.k-inst { stroke-width: var(--cl, .2); opacity: 1; }   /* jack leads are the chunky ones */
@@ -5001,13 +5003,33 @@ function boxUse() {
 const EXT_SOCKETS = { pboard2: [-.15, .2], pboard4: [-.45, -.15, .15, .45], pboard6: [-.7, -.42, -.14, .14, .42, .7] };
 const DISTRO_SOCKETS = [[-.55, .02], [0, .02], [.55, .02], [-.55, .43], [0, .43], [.55, .43]];
 function socketFill(it) {
-  const t = it.type, c = cat(it), plugs = (pos, n, k) => pos.slice(0, Math.max(0, n)).map(([x, y, r]) => k === 'pw'
-    ? `<circle class="plugin pw" cx="${x}" cy="${y}" r="${f3(r * .9)}"/><rect class="plugface" x="${f3(x - r * .42)}" y="${f3(y - r * .22)}" width="${f3(r * .84)}" height="${f3(r * .44)}" rx="${f3(r * .1)}"/>`
-    : `<circle class="plugin xlr" cx="${f3(x)}" cy="${f3(y)}" r="${f3(r * 1.12)}"/><circle class="plugface" cx="${f3(x)}" cy="${f3(y)}" r="${f3(r * .38)}"/>`).join('');
+  const t = it.type, c = cat(it), plugs = (pos, n, k) => pos.slice(0, Math.max(0, n)).map(([x, y, r]) => {
+    if (k !== 'pw') return `<circle class="plugin ${k}" cx="${f3(x)}" cy="${f3(y)}" r="${f3(r * 1.12)}"/><circle class="plugface" cx="${f3(x)}" cy="${f3(y)}" r="${f3(r * .38)}"/>`;
+    const z = r * 1.25, d = `M${f3(x)} ${f3(y - z * .62)}L${f3(x + z * .66)} ${f3(y + z * .46)}L${f3(x - z * .66)} ${f3(y + z * .46)}Z`;   // the plug head: a rounded triangle over the socket, its cord leaving the base
+    return `<path class="plughalo" d="${d}" style="stroke-width:${f3(z * .62)}"/><path class="plughead" d="${d}" style="stroke-width:${f3(z * .34)}"/>` +
+      `<path class="plugcord" d="M${f3(x)} ${f3(y + z * .6)}V${f3(y + z * 1.25)}" style="stroke-width:${f3(z * .26)}"/><path class="pluggrip" d="M${f3(x - z * .22)} ${f3(y + z * .18)}H${f3(x + z * .22)}" style="stroke-width:${f3(z * .07)}"/>`;
+  }).join('');
   const powerIn = () => plan.cables.filter(x => x.type === 'power' && touches(x, it.id) && !(isExt(it) && x === feedOf(it))).length;
   if (EXT_SOCKETS[t]) return plugs(EXT_SOCKETS[t].map(x => [x, 0, .11]), extUsed(it), 'pw');
   if (t === 'wall_outlet') return plugs([[0, 0, .17]], powerIn(), 'pw');
   if (t === 'distro') return plugs(DISTRO_SOCKETS.map(([x, y]) => [x, y, .17]), powerIn(), 'pw');
+  if (c.dmxOuts && t === 'dmx_split') {   // a DMX splitter: one plug per line out
+    const outs = plan.cables.filter(x => x.type === 'dmx' && x.from === it.id).length;
+    return plugs([-.5, -.17, .16, .49].map(x => [x, .05, .11]), outs, 'dmx');
+  }
+  if (t === 'iem_rack') {   // two transmitters, four mixes each: a lit light for each in-ear pack it's sending to
+    const packs = Math.min(8, plan.items.filter(x => cat(x).iem && cat(x).wireless).length), rack = plan.items.filter(x => x.type === 'iem_rack').indexOf(it);
+    const n = rack === 0 ? packs : 0;
+    let g = ''; [-.5, .38].forEach((y, tx) => { for (let k = 0; k < 4; k++) g += `<circle class="${tx * 4 + k < n ? 'txon' : 'txoff'}" cx="${f3(.4 + k * .11)}" cy="${f3(y + .15)}" r=".04"/>`; });
+    return g;
+  }
+  if (c.desk) {   // a mixing desk: one channel strip lit for each input it's receiving, the rest dimmed
+    const linked = plan.cables.some(x => (x.type === 'cat6' || x.type === 'multi') && touches(x, it.id));
+    const n = linked ? inputList().length : inputList().filter(r => r.port === `${itemName(it)} local`).length;
+    const w = c.w, d = c.d, hw = w / 2, hd = d / 2, masterW = w * .16, strips = Math.floor((w - .5 - masterW) / .26), top = -hd + d * .28, bot = hd - d * .26;
+    let g = ''; for (let i = n; i < strips; i++) g += `<rect class="stripoff" x="${f3(-hw + .32 + i * .26 - .12)}" y="${f3(top)}" width=".24" height="${f3(bot - top + .04)}" rx=".03"/>`;
+    return g;
+  }
   const u = (isBox(it) && boxUse().get(it.id)) || null; if (!u) return '';
   const share = (used, total, shown) => total > shown ? Math.ceil(used / total * shown) : used;   // a 32-in box draws 16 sockets, two inputs each: they fill in proportion, any use showing
   if (t === 'stagebox') {
