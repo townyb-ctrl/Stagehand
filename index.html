@@ -451,6 +451,7 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .flowg.dim { opacity: .18; }
 .cab.k-inst.quiet { opacity: .9; stroke-width: var(--cl, .2); }   /* leads stay visible, they're the fun ones */
 .mainsplug rect { stroke: rgba(0,0,0,.5); stroke-width: .035; } .mainsplug path { fill: none; stroke: #d6dbe0; stroke-width: .04; stroke-linecap: round; } .mainsplug .mp-grip { stroke: rgba(0,0,0,.3); stroke-width: .03; } .mainsplug .mp-boot { stroke: rgba(0,0,0,.45); stroke-width: .03; filter: brightness(.8); } .mainsplug.dim { opacity: .35; }
+.plugin { stroke: rgba(0,0,0,.55); stroke-width: .02; } .plugin.pw { fill: var(--k-pow); } .plugin.xlr { fill: var(--k-xlr); } .plugface { fill: rgba(0,0,0,.35); stroke: none; }   /* a plug sitting in a socket */
 .lead-shadow { fill: none; stroke: rgba(0,0,0,.45); stroke-width: var(--cl2, .3); stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
 .light-deck .lead-shadow { stroke: rgba(0,0,0,.16); }
 .cab.k-inst { stroke-width: var(--cl, .2); opacity: 1; }   /* jack leads are the chunky ones */
@@ -4985,6 +4986,42 @@ function fitScale() {
   if (fitMode === 'room') return Math.max(3, Math.min(aw / b.vw, ah / b.vh));
   const r = stageRegion(); return Math.max(3, Math.min(aw / r.w, ah / r.h));
 }
+/* Sockets that show what's plugged in: an extension lead, power point or distro fills one socket per plug in it; a stage box
+   or snake fills one XLR per input and output patched to it. Positions match each drawing's own sockets. */
+let portMemo = null;   // per drawing pass: how many inputs and outputs each stage box carries
+function boxUse() {
+  if (portMemo) return portMemo;
+  const m = new Map(), add = (id, k, n) => { const o = m.get(id) || { ins: 0, outs: 0 }; o[k] += n; m.set(id, o); };
+  for (const it of plan.items) {
+    const ins = inputsOf(it).length, outs = isBox(it) ? 0 : Number(prop(it, 'outs')) || 0;
+    if (ins || outs) { const pt = patchOf(it); if (pt?.box) { if (ins) add(pt.box.id, 'ins', ins); if (outs) add(pt.box.id, 'outs', outs); } }
+  }
+  return (portMemo = m);
+}
+const EXT_SOCKETS = { pboard2: [-.15, .2], pboard4: [-.45, -.15, .15, .45], pboard6: [-.7, -.42, -.14, .14, .42, .7] };
+const DISTRO_SOCKETS = [[-.55, .02], [0, .02], [.55, .02], [-.55, .43], [0, .43], [.55, .43]];
+function socketFill(it) {
+  const t = it.type, c = cat(it), plugs = (pos, n, k) => pos.slice(0, Math.max(0, n)).map(([x, y, r]) => k === 'pw'
+    ? `<circle class="plugin pw" cx="${x}" cy="${y}" r="${f3(r * .9)}"/><rect class="plugface" x="${f3(x - r * .42)}" y="${f3(y - r * .22)}" width="${f3(r * .84)}" height="${f3(r * .44)}" rx="${f3(r * .1)}"/>`
+    : `<circle class="plugin xlr" cx="${f3(x)}" cy="${f3(y)}" r="${f3(r * 1.12)}"/><circle class="plugface" cx="${f3(x)}" cy="${f3(y)}" r="${f3(r * .38)}"/>`).join('');
+  const powerIn = () => plan.cables.filter(x => x.type === 'power' && touches(x, it.id) && !(isExt(it) && x === feedOf(it))).length;
+  if (EXT_SOCKETS[t]) return plugs(EXT_SOCKETS[t].map(x => [x, 0, .11]), extUsed(it), 'pw');
+  if (t === 'wall_outlet') return plugs([[0, 0, .17]], powerIn(), 'pw');
+  if (t === 'distro') return plugs(DISTRO_SOCKETS.map(([x, y]) => [x, y, .17]), powerIn(), 'pw');
+  const u = (isBox(it) && boxUse().get(it.id)) || null; if (!u) return '';
+  const share = (used, total, shown) => total > shown ? Math.ceil(used / total * shown) : used;   // a 32-in box draws 16 sockets, two inputs each: they fill in proportion, any use showing
+  if (t === 'stagebox') {
+    const ins = [], outs = []; for (let j = 0; j < 2; j++) for (let i = 0; i < 8; i++) ins.push([-.72 + i * .205, -.36 + j * .24, .075]); for (let i = 0; i < 8; i++) outs.push([-.72 + i * .205, .2, .055]);
+    return plugs(ins, share(u.ins, Number(prop(it, 'ins')) || 32, 16), 'xlr') + plugs(outs, share(u.outs, Number(prop(it, 'outsMax')) || 16, 8), 'xlr');
+  }
+  if (c.snake) {
+    const w = c.w, hw = w / 2, ni = c.ins, no = c.outsMax, cols = Math.ceil(ni / 2), dx = (w - .3) / cols;
+    const ins = Array.from({ length: ni }, (_, k) => [-hw + .15 + dx * (k % cols + .5), k < cols ? -.22 : 0, Math.min(.07, dx * .35)]);
+    const outs = Array.from({ length: no }, (_, k) => [-hw + .15 + (w - .3) / no * (k + .5), .27, Math.min(.06, (w - .3) / no * .3)]);
+    return plugs(ins, u.ins, 'xlr') + plugs(outs, u.outs, 'xlr');
+  }
+  return '';
+}
 function shapeSvg(it, w, d) {
   const c = cat(it), hw = w / 2, hd = d / 2, cls = `body c-${c.cat}`;
   if (c.walk) return `<rect class="hit" x="${-hw}" y="${-hd}" width="${w}" height="${d}"/><rect class="s-walk" x="${-hw}" y="${-hd}" width="${w}" height="${d}" rx=".15"/><rect class="s-walk-edge" x="${f3(-hw + .12)}" y="${f3(-hd + .12)}" width="${f3(w - .24)}" height="${f3(d - .24)}" rx=".1"/>`;
@@ -5023,7 +5060,7 @@ function shapeSvg(it, w, d) {
   if (SYM[it.type]) {
     const sx = w / c.w, sy = d / c.d, sc = Math.abs(sx - 1) > .001 || Math.abs(sy - 1) > .001;
     const art = LA_BOXES[it.type] ? SYM[it.type].replace(/×\d+/, '×' + laBoxes(it)) : SYM[it.type];
-    return `<rect class="hit" x="${-hw}" y="${-hd}" width="${w}" height="${d}"/><g class="sym"${sc ? ` transform="scale(${f3(sx)} ${f3(sy)})"` : ''}>${art}</g>`;
+    return `<rect class="hit" x="${-hw}" y="${-hd}" width="${w}" height="${d}"/><g class="sym"${sc ? ` transform="scale(${f3(sx)} ${f3(sy)})"` : ''}>${art}${it.id ? socketFill(it) : ''}</g>`;
   }
   switch (c.shape) {
     case 'person': {   // a soft disc in the role's colour: shadow below, light from above, a small notch facing the audience
@@ -5438,6 +5475,7 @@ const layerOf = it => cat(it).shape === 'platform' || cat(it).mount ? 0 : MIC_MO
   (Math.min(prop(it, 'w'), prop(it, 'd')) >= 1.6 ? 1 : 2);
 
 function renderPlot() {
+  portMemo = null;
   if (view !== 'plot') return;
   const b = bounds();
   scale = zoom || fitScale();
