@@ -8906,7 +8906,7 @@ function renderChannels(selId) {
     const m = midpoint(ch.pts), lab = scale >= 11 ? `<text class="ch-label${k.level ? ' over' : ''}" x="${f3(m[0])}" y="${f3(m[1] - w / 2 - .25)}" text-anchor="middle">${esc(ch.name || k.name)}${nIn ? ` · ${nIn} cable${nIn === 1 ? '' : 's'}` : ''}${nGear ? ` · ${nGear} item${nGear === 1 ? '' : 's'}` : ''}</text>` : '';
     if (cableView.hideInCh && !isSel) {   // hidden with their contents: just a faint outline
       if (k.level === 'ceiling') over += `<polyline class="ch-ghost over" points="${ps}" style="stroke-width:${f3(Math.max(.03, 1 / scale))}"/>`;
-      else s += `<polyline class="ch-ghost" points="${ps}" style="stroke-width:${f3(w + .1)}"/><polyline class="ch-ghost-in" points="${ps}" style="stroke-width:${f3(Math.max(.02, w + .1 - 2.4 / scale))}"/>`;
+      else { rims += `<polyline class="ch-ghost" points="${pd}" style="stroke-width:${f3(w + .1)}"/>`; bands += `<polyline class="ch-ghost-in" points="${pd}" style="stroke-width:${f3(Math.max(.02, w + .1 - 2.4 / scale))}"/>`; }   // outlines first, insides after: joined channels read as one
       if (lab) s += lab.replace('class="ch-label', 'class="ch-label faint');
     }
     else if (k.level === 'ceiling') over += `<polyline class="ch-over${isSel ? ' sel' : ''}" points="${ps}" style="stroke-width:${f3(w)}"/>` + lab;   // overhead: drawn above the gear
