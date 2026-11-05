@@ -26,7 +26,8 @@ Open `index.html` in a modern browser. No install, no account, no server.
 - **Cable channels** (Advanced, `T`): floor trenches, trays and ramps, plus overhead paths. Start a channel on another one to branch off, end on one to join it. Channels that join or cross become one channel (one name, one label, picked and edited together); cables run through all of it, and branches stay attached when it is reshaped.
 - **Stage boxes**: a digital stage box on Cat6, or an analog snake (8, 12, 16, 24 or 32 inputs) on a multicore. Inputs and outputs patch to the nearest one with room, and the checks say when a snake is full.
 - **Wireless and in-ears**: wireless mics go through rack receivers or single receivers on stage (each with its own XLR to the stage box); in-ear packs can be wireless (transmitter) or wired (a stage box output).
-- **Power**: an extension lead plugs in with its own cord and 3-pin plug (drawn as a loose lead that follows the board), which doesn't use one of its sockets. Placing one plugs it into the nearest power point or distro, or asks you to click one.
+- **Power**: an extension lead plugs in with its own cord and 3-pin plug (drawn as a loose lead that follows the board), which doesn't use one of its sockets. Placing one asks you to click the power point or distro it plugs into.
+- **Placing gear never adds cables.** Run them with the cable tool (`C`), or press **Re-run cabling** (Room tab → Cable maths) to patch and power everything at once.
 - **Undo** everything with `Ctrl/Cmd+Z` (redo: add Shift, or `Ctrl+K` → Redo); version history is in the ⋯ menu.
 - **Light and dark** themes follow your device, or pick one in Preferences. Text size, feet-and-inches and whether building the stage adds everyone's gear are there too.
 

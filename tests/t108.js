@@ -6,7 +6,7 @@ const { chromium } = require(require('./app.js').pw);
   const pw = await p.evaluate(() => { const w = plan.stage.w, d = plan.stage.d;
     addGear('light_desk', w / 2, d + 12); addGear('truss', w / 2, 2);
     for (const x of [.38, .44, .5, .56, .62]) addGear('par_led', w * x, 2);
-    addGear('bar_up', 3, .8); addGear('bar_up', w - 3, .8); addGear('profile', 4, d - 2);
+    addGear('bar_up', 3, .8); addGear('bar_up', w - 3, .8); addGear('profile', 4, d - 2); autoCable();   // Re-run cabling: placed gear isn't cabled on its own
     for (const it of plan.items.filter(i => i.type === 'par_led')) it.rot = 180;
     const pars = plan.items.filter(i => i.type === 'par_led'), head = pars.find(i => !linkFeed(i) && linkKids(i).length);
     const src = other(plan.cables.find(c => c.type === 'power' && touches(c, head.id) && !c.link), head.id);
