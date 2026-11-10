@@ -329,6 +329,7 @@ details.paste > div { display: grid; gap: 8px; margin-top: 8px; }
 .geartabs button { display: flex; align-items: center; gap: 6px; min-height: 40px; min-width: 0; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r-md); padding: 4px 6px 4px 4px; cursor: pointer; font-size: 13px; letter-spacing: -.01em; font-weight: 600; color: var(--ink-2); text-align: left; transition: border-color .12s, background .12s; }
 .geartabs button .gtname { flex: 1; min-width: 0; line-height: 1.15; }
 .geartabs .tabglyph { width: 26px; height: 26px; flex: none; border-radius: var(--r-sm); padding: 2px; }
+.geartabs .tabicon { width: 28px; height: 28px; flex: none; display: grid; place-items: center; border-radius: var(--r-sm); background: var(--surface-2); color: var(--ink-2); } .geartabs .tabicon .ic { width: 17px; height: 17px; } .geartabs [aria-selected="true"] .tabicon { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); color: var(--accent); }
 .geartabs button:hover { border-color: var(--line-2); color: var(--ink); background: var(--surface-2); }
 .geartabs button[aria-selected="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent); }
 /* the library is a palette of tiles: picture first, name under it, what it plugs into in small type */
@@ -556,7 +557,10 @@ svg text { font-family: var(--f-ui); }
 .house-dots { fill: url(#dots); }
 .dotp { fill: var(--house-dot); }
 .deck { fill: var(--deck); stroke: var(--deck-rim, rgba(255,255,255,.07)); stroke-width: .06; }
-.deck-shadow { fill: var(--deck-edge); opacity: .45; filter: url(#deckblur); }
+.deck-shadow { fill: var(--deck-edge); opacity: .16; filter: url(#deckblur); }   /* on the light house a dark stage sits softly; the dark theme keeps a deeper shadow */
+.lip-shade { opacity: .45; } .deck { stroke: rgba(255,255,255,.14); }
+:root[data-theme="dark"] .deck-shadow { opacity: .45; } :root[data-theme="dark"] .lip-shade { opacity: 1; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .deck-shadow { opacity: .45; } :root:not([data-theme="light"]) .lip-shade { opacity: 1; } }
 .g-minor { stroke: var(--deck-grid); stroke-width: var(--hair, .03px); opacity: .45; shape-rendering: crispEdges; }
 .g-major { stroke: var(--deck-grid-major); stroke-width: var(--hair, .03px); opacity: .7; shape-rendering: crispEdges; }
 .edge { stroke: var(--tape); stroke-width: .16; stroke-dasharray: .7 .35; }
@@ -1717,7 +1721,7 @@ html, body { height: auto !important; overflow: visible !important; display: blo
 
 :root[data-theme="dark"] .doc-head { box-shadow: inset 0 0 0 1px rgba(255,255,255,.07); background: linear-gradient(160deg, #2a2e39, var(--deck)); }
 
-:root[data-theme="dark"] .seats rect { opacity: .08; } :root[data-theme="dark"] .itag.out rect { fill: var(--surface-3); }
+:root[data-theme="dark"] .seats rect { opacity: .17; } @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .seats rect { opacity: .17; } } :root[data-theme="dark"] .itag.out rect { fill: var(--surface-3); }
 /* people wear one colour everywhere */
 .avatar.hued { --av-bg: color-mix(in srgb, var(--hue) 34%, #fff); --av-fg: color-mix(in srgb, var(--hue) 45%, #000); }
 :root[data-theme="dark"] .avatar.hued { --av-bg: color-mix(in srgb, var(--hue) 30%, #121419); --av-fg: color-mix(in srgb, var(--hue) 70%, #fff); }
@@ -1765,7 +1769,7 @@ html, body { height: auto !important; overflow: visible !important; display: blo
 .light-deck .itag:not(.sel) rect { fill: rgba(255,255,255,.9); stroke: rgba(0,0,0,.14); } .light-deck .itag:not(.sel) .ilabel { fill: #1b1e26; }
 .deck-lip { fill: var(--deck); } .deck-sheen { pointer-events: none; }
 .s-riser-shadow { fill: #000; opacity: .32; } .s-riser-lip { fill: #000; opacity: .18; } .s-riser-hi { stroke: #fff; stroke-opacity: .16; stroke-width: .06; }
-.seats rect { fill: var(--house-ink); opacity: .055; } .seats { pointer-events: none; }
+.seats rect { fill: var(--house-ink); opacity: .13; }   /* seats and aisles read at a glance in the whole-room view */ .seats { pointer-events: none; }
 #plot .item:hover { filter: drop-shadow(0 .12px .2px rgba(0,0,0,.55)) brightness(1.06); }
 #plot.cabling .item:hover, #plot .item.locked:hover { filter: none; }
 .emptyart { width: 220px; height: 110px; margin: 0 auto 4px; display: block; }
@@ -2160,6 +2164,7 @@ const CAT = {
 };
 /* CAT:END */
 // grouped the way a band thinks about its gear; each type lives in exactly one group. The third entry is the group's icon.
+const GROUP_ICON = { Instruments: 'rGuitar', 'Amps & FX': 'amp', 'Mics & DI': 'mic', 'Monitors & PA': 'speaker', 'Desks & tech': 'rDesk', Lighting: 'rLight', 'Stage & power': 'zap' };   // simple drawn icons for the category buttons
 const GEAR_GROUPS = [
   ['Instruments', ['drum_kit', 'edrums', 'cajon', 'keys', 'midi_keys', 'up_piano', 'grand_piano', 'ac_guitar', 'el_guitar', 'bass_guitar', 'trumpet'], 'keys'],
   ['Amps & FX', ['gtr_amp', 'bass_amp', 'pedalboard', 'bass_pedal', 'multifx', 'ac_preamp', 'midi_fs'], 'gtr_amp'],
@@ -4394,6 +4399,8 @@ const ICONS = {
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   wand: '<path d="M4 20L15 9"/><path d="M15 3.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9zM19.5 11l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>',
   zap: '<path d="M13 2.5L4.5 13.5H11L10 21.5l8.5-11H12z"/>',
+  amp: '<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18"/><circle cx="7" cy="7.5" r=".6"/><circle cx="10" cy="7.5" r=".6"/><circle cx="13" cy="7.5" r=".6"/><path d="M7 13.5h10M7 16.5h10"/>',
+  speaker: '<rect x="5" y="2.5" width="14" height="19" rx="2"/><circle cx="12" cy="15" r="3.5"/><circle cx="12" cy="7" r="1.6"/>',
   clip: '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V2.5h6V4M9 10h6M9 14h6"/>',
   person: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',
   // role marks for the team list: one outline per kind of position
@@ -5154,6 +5161,15 @@ function socketFill(it) {
   }
   return '';
 }
+/* Tiny gear (in-ear packs, DI boxes, clip mics) gets a minimum drawn size when zoomed out, so it stays legible.
+   Only the picture grows: the click area (the leading .hit shape) keeps its true size, and so does the footprint. */
+const MIN_PX = 16;
+function minSized(svgs, w, d) {
+  const px = Math.max(w, d) * scale; if (layersBypass || capturing || px >= MIN_PX || px <= 0) return svgs;
+  const k = Math.min(2.2, MIN_PX / px), m = svgs.match(/^<(rect|circle|ellipse|path)[^>]*class="hit[^"]*"[^>]*\/>/);
+  const hit = m ? m[0] : '', art = m ? svgs.slice(hit.length) : svgs;
+  return `${hit}<g class="minsz" transform="scale(${f3(k)})">${art}</g>`;
+}
 function shapeSvg(it, w, d) {
   const c = cat(it), hw = w / 2, hd = d / 2, cls = `body c-${c.cat}`;
   if (c.walk) return `<rect class="hit" x="${-hw}" y="${-hd}" width="${w}" height="${d}"/><rect class="s-walk" x="${-hw}" y="${-hd}" width="${w}" height="${d}" rx=".15"/><rect class="s-walk-edge" x="${f3(-hw + .12)}" y="${f3(-hd + .12)}" width="${f3(w - .24)}" height="${f3(d - .24)}" rx=".1"/>`;
@@ -5228,6 +5244,7 @@ const GLYPH_BOX = {};
 const GLYPH_TILT = { el_guitar: 38, bass_guitar: 38, ac_guitar: 38 };   // long instruments lean across their tile, as guitar icons do
 // …and are framed on the body, with the neck running off the corner, so the body reads at tile size: [centre x, centre y, side]
 const GLYPH_FRAME = { truss: [0, 0, 3.2], light_pipe: [0, 0, 2.6], foh_bar: [0, 0, 2.6], drum_kit: [0, -.2, 5.4], edrums: [-.1, -.35, 4.3], el_guitar: [-.46, .6, 2.32], bass_guitar: [-.72, .95, 2.7], ac_guitar: [-.52, .66, 2.8] };
+const TILE_ART = {"truss": '<rect x="2" y="8" width="20" height="7" rx=".6" fill="none" stroke="#c3cad0" stroke-width="1"/><path d="M2 8L5.3 15L8.6 8L12 15L15.4 8L18.7 15L22 8" fill="none" stroke="#c3cad0" stroke-width=".6" stroke-linejoin="round"/><rect x="5.4" y="15.6" width="2.2" height="2.6" rx=".5" fill="#2b2f35" stroke="#0b0d10" stroke-width=".35"/><rect x="5.7" y="18" width="1.6" height=".7" rx=".3" fill="#ffd66e"/><rect x="16.4" y="15.6" width="2.2" height="2.6" rx=".5" fill="#2b2f35" stroke="#0b0d10" stroke-width=".35"/><rect x="16.7" y="18" width="1.6" height=".7" rx=".3" fill="#ffd66e"/>', "light_pipe": '<rect x="2" y="12" width="20" height="2" rx="1" fill="#aab2b9" stroke="#3a3f45" stroke-width=".4"/><rect x="4.9" y="14.6" width="2.2" height="2.6" rx=".5" fill="#2b2f35" stroke="#0b0d10" stroke-width=".35"/><rect x="5.2" y="17" width="1.6" height=".7" rx=".3" fill="#ffd66e"/><rect x="10.9" y="14.6" width="2.2" height="2.6" rx=".5" fill="#2b2f35" stroke="#0b0d10" stroke-width=".35"/><rect x="11.2" y="17" width="1.6" height=".7" rx=".3" fill="#ffd66e"/><rect x="16.9" y="14.6" width="2.2" height="2.6" rx=".5" fill="#2b2f35" stroke="#0b0d10" stroke-width=".35"/><rect x="17.2" y="17" width="1.6" height=".7" rx=".3" fill="#ffd66e"/>', "foh_bar": '<rect x="2" y="12" width="20" height="2" rx="1" fill="#aab2b9" stroke="#3a3f45" stroke-width=".4"/><rect x="3.4" y="14.6" width="2.2" height="2.6" rx=".5" fill="#2b2f35" stroke="#0b0d10" stroke-width=".35"/><rect x="3.7" y="17" width="1.6" height=".7" rx=".3" fill="#ffd66e"/><rect x="8.4" y="14.6" width="2.2" height="2.6" rx=".5" fill="#2b2f35" stroke="#0b0d10" stroke-width=".35"/><rect x="8.7" y="17" width="1.6" height=".7" rx=".3" fill="#ffd66e"/><rect x="13.4" y="14.6" width="2.2" height="2.6" rx=".5" fill="#2b2f35" stroke="#0b0d10" stroke-width=".35"/><rect x="13.7" y="17" width="1.6" height=".7" rx=".3" fill="#ffd66e"/><rect x="18.4" y="14.6" width="2.2" height="2.6" rx=".5" fill="#2b2f35" stroke="#0b0d10" stroke-width=".35"/><rect x="18.7" y="17" width="1.6" height=".7" rx=".3" fill="#ffd66e"/><path d="M12 20.3v2.2M10.6 21.3l1.4 1.4 1.4-1.4" fill="none" stroke="#8b919c" stroke-width=".6" stroke-linecap="round" stroke-linejoin="round"/>'};
 function glyphBox(type) {
   if (GLYPH_BOX[type]) return GLYPH_BOX[type];
   if (GLYPH_FRAME[type]) { const [cx, cy, sd] = GLYPH_FRAME[type]; return (GLYPH_BOX[type] = [cx - sd / 2, cy - sd / 2, sd]); }
@@ -5245,6 +5262,7 @@ function glyphBox(type) {
   return (GLYPH_BOX[type] = [r.x + r.width / 2 - side / 2, r.y + r.height / 2 - side / 2, side]);
 }
 function glyph(type, extraCls = '', item = null) {
+  if (TILE_ART[type]) return `<svg class="glyph ${extraCls}" viewBox="0 0 24 24" aria-hidden="true">${TILE_ART[type]}</svg>`;   // overhead rigging is long and thin: a drawn section reads better than a sliver
   const c = CAT[type], [x, y, sd] = glyphBox(type);
   return `<svg class="glyph ${extraCls}" viewBox="${f3(x)} ${f3(y)} ${f3(sd)} ${f3(sd)}" aria-hidden="true"><g${GLYPH_TILT[type] ? ` transform="rotate(${GLYPH_TILT[type]})"` : ''}>${shapeSvg({ ...(item || {}), type, rot: 0 }, c.w, c.d)}</g>${type === 'drum_riser' && SYM.drum_kit ? `<g opacity=".6" transform="scale(.7)">${SYM.drum_kit}</g>` : ''}</svg>`;   // the drum riser icon shows a kit, so it isn't mistaken for a plain riser
 }
@@ -5714,7 +5732,7 @@ function renderPlot() {
   s = s.replace('</defs>', `<clipPath id="deckclip"><path d="${deckD}"/></clipPath><clipPath id="houseclip"><path clip-rule="evenodd" d="M${f3(v.x0)} ${f3(v.y0)}h${f3(v.vw)}v${f3(v.vh)}h${f3(-v.vw)}Z${deckD}"/></clipPath></defs>`);
   s = s.replace('</defs>', '<filter id="deckblur" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation=".22"/></filter><linearGradient id="lipShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient><linearGradient id="deckSheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".06"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".08"/></linearGradient></defs>');
   s += `<path class="deck-shadow" transform="translate(.06 .22)" d="${deckD}"/>`;
-  for (const [a, c] of frontEdges(poly)) { const lip = fromM(.16), q = `${a[0]},${a[1]} ${c[0]},${c[1]} ${c[0]},${f3(c[1] + lip)} ${a[0]},${f3(a[1] + lip)}`; s += `<polygon class="deck-lip" points="${q}"/><polygon points="${q}" fill="url(#lipShade)"/>`; }   // the deck's front face, seen from above
+  for (const [a, c] of frontEdges(poly)) { const lip = fromM(.16), q = `${a[0]},${a[1]} ${c[0]},${c[1]} ${c[0]},${f3(c[1] + lip)} ${a[0]},${f3(a[1] + lip)}`; s += `<polygon class="deck-lip" points="${q}"/><polygon points="${q}" class="lip-shade" fill="url(#lipShade)"/>`; }   // the deck's front face, seen from above
   s += `<path class="deck" d="${deckD}"/><path class="deck-sheen" d="${deckD}" fill="url(#deckSheen)"/>`;
   const tex = plan.stage.texture;
   if (tex === 'boards') s += `<path class="deck-tex" d="${deckD}" fill="url(#spTexBoards)"/>`;
@@ -5778,16 +5796,16 @@ function renderPlot() {
   const labCands = [...zoneCands], obstacles = [], risers = [];
   for (const it of sorted) {
     const C = cat(it), iw = Number(prop(it, 'w')), id = Number(prop(it, 'd')), L = layerOf(it);
-    const g = `<g class="item${C.shape === 'person' ? ' is-person' : C.shape === 'platform' ? ' is-floor' : C.cat === 'inst' ? ' is-inst' : ''}${selSet.has(it.id) ? ' picked' : ''}${it.chan ? ' inchan' : ''}${frozen(it) ? ' locked' : ''}${tr?.items.has(it.id) ? ' intrace' : ''}${fset?.has(it.id) ? ' infocus' : ''}${lifted?.has(it.id) && C.shape !== 'platform' ? ' lifting' : settling.has(it.id) ? ' settle' : ''}" data-id="${it.id}" transform="translate(${it.x} ${it.y}) rotate(${it.rot || 0})" role="img" aria-label="${esc(itemName(it))}${it.note ? ' — ' + esc(it.note) : ''}"><g class="liftg">${shapeSvg(it, iw, id)}</g></g>`;
+    const g = `<g class="item${C.shape === 'person' ? ' is-person' : C.shape === 'platform' ? ' is-floor' : C.cat === 'inst' ? ' is-inst' : ''}${selSet.has(it.id) ? ' picked' : ''}${it.chan ? ' inchan' : ''}${frozen(it) ? ' locked' : ''}${tr?.items.has(it.id) ? ' intrace' : ''}${fset?.has(it.id) ? ' infocus' : ''}${lifted?.has(it.id) && C.shape !== 'platform' ? ' lifting' : settling.has(it.id) ? ' settle' : ''}" data-id="${it.id}" transform="translate(${it.x} ${it.y}) rotate(${it.rot || 0})" role="img" aria-label="${esc(itemName(it))}${it.note ? ' — ' + esc(it.note) : ''}"><g class="liftg">${minSized(shapeSvg(it, iw, id), iw, id)}</g></g>`;
     if (L < 1) s += g; else top += g;
-    if (C.wireless && !layersBypass) { const [rw, rh] = halfExt(it), k = 1 / scale; top += `<g class="rfmark" transform="translate(${f3(it.x + rw * .7)} ${f3(it.y - rh * .7)}) scale(${f3(k)})" aria-hidden="true"><circle r="5.5"/><path d="M-2.6 -.6a3.7 3.7 0 0 1 5.2 0M-1.3 .9a1.85 1.85 0 0 1 2.6 0"/><circle class="rfdot" cy="2.2" r=".9"/></g>`; }   // wireless: a little signal mark instead of a plug
+    if (C.wireless && !layersBypass) { const [rw, rh] = halfExt(it), k = 1 / scale; top += `<g class="rfmark" transform="translate(${f3(it.x + rw * .7)} ${f3(it.y - rh * .7)}) scale(${f3(k * 1.25)})" aria-hidden="true"><circle r="5.5"/><path d="M-2.6 -.6a3.7 3.7 0 0 1 5.2 0M-1.3 .9a1.85 1.85 0 0 1 2.6 0"/><circle class="rfdot" cy="2.2" r=".9"/></g>`; }   // wireless: a little signal mark instead of a plug
     if (it.fault && (isFixture(it) || isDmx(it))) { const m = Math.max(iw, id) / 2 * .72; top += faultTri(it.x - m, it.y - m, .9, it); }   // a light with a problem
     if (it.note && !layerOff('labels')) { const m = Math.max(iw, id) / 2 * .72; top += `<g class="notebadge" data-id="${it.id}" transform="translate(${f3(it.x + m)} ${f3(it.y - m)})"><title>${esc(it.note)}</title><circle r=".45"/><path d="M-.2 -.14h.4M-.2 0h.4M-.2 .14h.26"/></g>`; }   // a note pinned to the gear   // cables run under the gear, so plugs disappear beneath it instead of crossing it
     if (C.shape === 'platform') { const r = (it.rot || 0) % 180 === 90, hw = (r ? id : iw) / 2, hd = (r ? iw : id) / 2; risers.push([it.x - hw, it.y - hd, it.x + hw, it.y + hd]); }
     if (C.shape !== 'platform') { const r = (it.rot || 0) % 180 === 90, hw = (r ? id : iw) / 2, hd = (r ? iw : id) / 2; obstacles.push([it.x - hw, it.y - hd, it.x + hw, it.y + hd]); }
     const isSel = selSet.has(it.id), big = Math.min(iw, id) >= 1.6 && C.shape !== 'person';
     const person = C.shape === 'person';
-    const visible = isSel || (!layerOff('labels') && (person ? showBig : big ? showBig : showSmall));
+    const visible = isSel || (!layerOff('labels') && (C.desk || (person ? showBig : big ? showBig : showSmall)));   // the desks keep their name at any zoom, so the whole-room view says where the mix is
     if (visible && C.shape !== 'platform') {
       const owner = it.personId && personById(it.personId), fn = owner && firstName(owner.name);
       const text = person ? firstName(owner?.name || it.label) : (fn && itemName(it).startsWith(fn + ' ') ? itemName(it).slice(fn.length + 1) : itemName(it));
@@ -5798,7 +5816,7 @@ function renderPlot() {
       const above = big ? [] : [it.y - ehd - (isSel ? .3 + 24 / scale : gap) - fs * .38];   // a selected name clears the ring and the rotate knob
       const tw = pillSvg(0, 0, esc(text), '', { fs, mono: false }).w;   // the shared name pill: reads on any deck colour
       const sx = ehw + tw / 2 + gap, side = big ? [] : [[it.x + sx, it.y + fs * .35], [it.x - sx, it.y + fs * .35]];   // last resort: beside the item, right then left
-      labCands.push({ x: it.x, y: ly, alt: above, side, own: C.shape !== 'platform' ? obstacles.length - 1 : -1, w: tw, h: fs * 1.1, pri: isSel ? 0 : person ? 1 : big ? 2 : 3,
+      labCands.push({ x: it.x, y: ly, alt: above, side, own: C.shape !== 'platform' ? obstacles.length - 1 : -1, w: tw, h: fs * 1.1, pri: isSel ? 0 : person || C.desk ? 1 : big ? 2 : 3,
         mk: (y, x = it.x) => pillSvg(x, y, esc(text), `itag${!big && !onDeck ? ' out' : ''}${person ? ' pname' : ' gname'}${isSel ? ' sel' : ''}${x !== it.x ? ' aside' : ''}${fset && !fset.has(it.id) ? ' fdim' : ''}`, { fs, mono: false, textCls: `ilabel${person ? ' pname' : ''}` }).svg });
     } else if (C.shape === 'platform' && showBig && !layerOff('labels')) {
       const own = it.personId && personById(it.personId), fnr = own && firstName(own.name), nm = fnr && itemName(it).startsWith(fnr + ' ') ? itemName(it).slice(fnr.length + 1) : itemName(it);
@@ -6216,7 +6234,7 @@ function renderRail() {
     const groups = GEAR_GROUPS.filter(([g]) => q || g === gearTab).map(([g, types]) => [g, types.filter(t => (q || !gearHidden(t)) && (!q || gearMatch(t, q)) && (!q || !seen.has(t)) && seen.add(t))]).filter(([, t]) => t.length);
     const hits = groups.reduce((n, [, t]) => n + t.length, 0);
     pane.innerHTML = `<div class="search">${ic('search', 'sm')}<input id="gearSearch" type="search" placeholder="Search all gear" value="${esc(gearQuery)}" aria-label="Search gear"></div>
-      ${q ? `<p class="hint gearhits">${hits ? `${plural(hits, 'match', 'matches')} across all gear` : ''}</p>` : `<div class="geartabs" role="tablist" aria-label="Gear categories">${GEAR_GROUPS.map(([g, types, icon]) => `<button role="tab" data-geartab="${esc(g)}" aria-selected="${g === gearTab}">${glyph(icon, 'tabglyph')}<span class="gtname">${esc(g)}</span></button>`).join('')}</div>`}
+      ${q ? `<p class="hint gearhits">${hits ? `${plural(hits, 'match', 'matches')} across all gear` : ''}</p>` : `<div class="geartabs" role="tablist" aria-label="Gear categories">${GEAR_GROUPS.map(([g, types, icon]) => `<button role="tab" data-geartab="${esc(g)}" aria-selected="${g === gearTab}">${GROUP_ICON[g] ? `<span class="tabicon">${ic(GROUP_ICON[g])}</span>` : glyph(icon, 'tabglyph')}<span class="gtname">${esc(g)}</span></button>`).join('')}</div>`}
       ${!q && recentGear.length ? `<div class="recent"><h2 class="eyebrow">Recently added</h2><div class="recentrow">${recentGear.slice(0, 6).map(t => `<button class="recentchip" data-add="${t}" draggable="true" aria-pressed="${placing === t}" aria-label="Add ${esc(CAT[t].name)}" title="${esc(CAT[t].name)}">${glyph(t)}<span>${esc(tileName(t))}</span></button>`).join('')}</div></div>` : ''}` +
       (groups.map(([g, types]) => `<div class="gearcat"><div class="gearcathead"><h2 class="eyebrow">${esc(g)}</h2></div><div class="gearlist">
         ${types.map(t => { const own = db.gear?.owned?.[t], used = plan.items.filter(i => i.type === t).length, size = uDim(CAT[t].w, CAT[t].d), meta = gearMeta(t);
