@@ -857,7 +857,7 @@ svg text { font-family: var(--f-ui); }
 .insp { display: grid; gap: 0; grid-template-columns: minmax(0, 1fr); }
 .insp-head { position: sticky; top: 0; z-index: 4; background: var(--surface); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto; column-gap: 12px; row-gap: 0; align-items: center; padding: 12px 10px 12px 16px; border-bottom: 1px solid var(--line); }
 .insp-head > :first-child { grid-row: 1 / 3; align-self: center; } .insp-head > div:nth-child(2) { display: contents; }
-.insp-head > div:nth-child(2) > .eyebrow { grid-column: 2; grid-row: 1; align-self: end; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.insp-head > div:nth-child(2) > .eyebrow { grid-column: 2; grid-row: 1; align-self: end; min-width: 0; line-height: 1.25; text-wrap: balance; }
 .insp-head > div:nth-child(2) > :not(.eyebrow) { grid-column: 2 / 4; grid-row: 2; min-width: 0; padding-right: 4px; }
 .insp-head > .row:last-child { grid-column: 3; grid-row: 1; align-self: start; margin-top: -4px; }
 .insp-head .glyph { width: 44px; height: 44px; border-radius: var(--r-md); }
@@ -1150,6 +1150,7 @@ details.more > .isec:first-of-type { border-top: 1px solid var(--line); }
 .hnav[aria-current="page"] { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line), var(--shadow-1); }
 .hnav[aria-current="page"] .ic { color: var(--accent); }
 .homebody { display: grid; gap: 16px; min-width: 0; }
+.homebody[data-tab="prefs"], .homebody[data-tab="gear"], .homebody[data-tab="venues"], .homebody[data-tab="setups"] { max-width: 1000px; }   /* forms and lists stay a comfortable width; the library uses the whole screen */
 .hpage h2 { margin: 0; font-size: var(--t-page); letter-spacing: -.01em; } .hpage p { margin: 2px 0 0; color: var(--muted); }
 .librow.editing { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 8px; }
 .librow.editing input[type=text] { flex: 1 1 180px; min-width: 0; }
@@ -1436,7 +1437,7 @@ tr.flag .ch { background: var(--bad-soft); color: var(--bad); }
 /* the canvas, not the window, decides when the tool dock drops its labels (iPad portrait, panels open) */
 .canvas { position: relative; min-width: 0; min-height: 0; background: var(--house); container-type: inline-size; }
 @container (max-width: 780px) { .tool .tl, .zoomval { display: none; } .f-dock .panel { gap: 2px; } }
-.f-dock.tight .tool .tl, .f-dock.tight .zoomval { display: none; } .f-dock.tight .panel { gap: 2px; }   /* Advanced adds tools: drop labels whenever the dock would overflow */
+.f-dock.tight .tool .tl, .f-dock.tight .zoomval { display: none; } @media (min-width: 761px) { .f-dock.tight .tool[data-mode][aria-pressed="true"] .tl { display: inline; } }   /* the tool in hand keeps its name */ .f-dock.tight .panel { gap: 2px; }   /* Advanced adds tools: drop labels whenever the dock would overflow */
 
 
 .grptag { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; } .grptag::before { content: ''; width: 9px; height: 9px; border-radius: var(--r-xs); background: var(--g); }
@@ -1569,10 +1570,10 @@ td.spare { color: var(--muted); font-style: italic; }
 
 /* logo, library status edge */
 .logoprev { height: 40px; max-width: 120px; object-fit: contain; border-radius: var(--r-sm); background: var(--surface-2); padding: 3px; }
-.titleblock { display: grid; grid-template-columns: 1.6fr 1.6fr 1.2fr 1fr .7fr 1.3fr 1fr; margin-top: 10px; border: 1px solid var(--ink-2); border-radius: var(--r-xs); overflow: hidden; background: var(--surface); }
+.titleblock { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.5fr) max-content max-content max-content minmax(0, 1fr) max-content; margin-top: 10px; border: 1px solid var(--ink-2); border-radius: var(--r-xs); overflow: hidden; background: var(--surface); }
 .tb-cell { display: grid; gap: 2px; padding: 6px 8px 6px; border-left: 1px solid var(--line-2); min-width: 0; }
 .tb-cell:first-child { border-left: 0; }
-.tb-cell span { font: 600 10px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.tb-cell span { white-space: nowrap; font: 600 10px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .tb-cell b { font: 600 13px/1.25 var(--f-ui); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tb-cell b i { color: var(--muted); font-style: normal; font-weight: 400; }
 .tb-cell:nth-child(5) b, .tb-cell:nth-child(4) b { font-family: var(--f-mono); font-weight: 500; }
@@ -1589,7 +1590,15 @@ td.spare { color: var(--muted); font-style: italic; }
   .rail-collapsed .tabs { flex-direction: row; }
   .rail-collapsed .tabs .tlabel { display: inline; }
   .tabs .collapse, #railToggle { display: none; }
-  .f-tr { display: none; }
+  .f-tr { top: auto; bottom: 74px; left: 10px; right: 10px; width: auto; }   /* phones: what's picked, in a strip above the tools */
+  .f-tr .quick { flex-direction: row; align-items: center; padding: 8px 10px; width: 100%; }
+  .f-tr .quick .qh { flex: 1; min-width: 0; } .f-tr .quick .qh h3 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .f-tr .quick .qh .eyebrow, .f-tr .quick > .row { display: none; }
+  .f-tr .quick .qa { flex: none; } .f-tr .quick .qa .btn { min-width: 44px; min-height: 44px; flex: none; }
+  .f-foh, .f-foh-up, .f-foh-left { top: 12px; bottom: auto; right: 10px; left: auto; }   /* clear of the strip and the tools */
+  .insp-collapsed .inspector { display: block; visibility: visible; }   /* no side panel to tuck away: details sit under the plot */
+  .top .iconbtn, .top .searchbtn, .top .brand, .top .seg button { min-height: 44px; min-width: 44px; }
+  .f-dock .tool { min-height: 44px; min-width: 44px; justify-content: center; }
+  .tabs [role=tab] { min-height: 44px; }
   .canvas { order: -1; height: 62vh; min-height: 380px; }
   .work.has-sel .inspector { order: 0; } .work.has-sel .rail { order: 1; }
   .rail { max-height: none; min-height: 0; border-right: 0; border-top: 1px solid var(--line); }
@@ -2249,6 +2258,7 @@ function toast(msg, withUndo) {
   t.innerHTML = `<span class="ticon">${ic(icon, 'sm')}</span><span>${esc(msg)}</span>${withUndo ? `<button type="button">${esc(act ? act.label : 'Undo')}</button><i class="tbar" style="animation-duration:${life}ms"></i>` : ''}`;
   if (withUndo) t.querySelector('button').onclick = () => { t.remove(); act ? act.fn() : undo(); };
   { const r = view === 'plot' ? document.querySelector('.rail')?.getBoundingClientRect() : null; document.documentElement.style.setProperty('--toast-l', `${Math.round((r && r.width > 40 && innerWidth > 700 ? r.right : 0) + 16)}px`); document.documentElement.style.setProperty('--toast-b', view === 'plot' ? '84px' : '18px'); }   // beside the team panel, not over it
+  t.addEventListener('click', e => { if (!e.target.closest('button')) t.remove(); });   // tap the message to clear it
   document.body.appendChild(t);
   let left = life, start = performance.now(), timer = setTimeout(() => t.remove(), left);
   t.addEventListener('mouseenter', () => { clearTimeout(timer); left -= performance.now() - start; t.classList.add('held'); });   // pointing at it holds it, so there's time to press Undo
@@ -4987,7 +4997,7 @@ function smartSnap(it, px, py, moving, nx, ny) {
 /* the FOH desk often sits out in the house, past the edge of the screen: a small pointer says where and how far, and takes you there */
 function placeFohPointer() {
   const el = $('ffoh'); if (!el) return;
-  const foh = view === 'plot' && !presenting && ui.adv && plan.items.find(i => i.type === 'foh'), m = foh && plotCTM();
+  const foh = view === 'plot' && !presenting && plan.items.find(i => i.type === 'foh'), m = foh && plotCTM();
   if (!foh || !m) { el.hidden = true; return; }
   const r = scroller.getBoundingClientRect(), { x, y } = scrPt(m, foh.x, foh.y), pad = 24;
   const dir = y > r.bottom - pad ? 'down' : y < r.top + pad ? 'up' : x > r.right - pad ? 'right' : x < r.left + pad ? 'left' : '';
@@ -5303,15 +5313,20 @@ function patchPanelHtml(it) {
     ${P.outs.length ? `<h3 style="margin-top:12px">${ohead} <span>${used(P.outs)}/${P.outs.length}</span></h3><div class="patchgrid">${P.outs.map(t => tile(t, P.outWord)).join('')}</div>` : ''}
     <p class="hint">Point at a socket to find what's in it on the plot; click to pick it. While this is picked, the plot tags everything plugged into it with its number.</p></section>`;
 }
-function patchTagsSvg() {   // with a box, snake or desk picked: each thing plugged into it carries its socket number
-  const it = sel?.kind === 'item' && itemById(sel.id); if (!it || !(isBox(it) || cat(it).desk) || layersBypass || capturing) return '';
+const numRuns = ns => { const v = [...new Set(ns.map(Number))].sort((a, b) => a - b), out = []; for (let i = 0; i < v.length; i++) { let k = i; while (k + 1 < v.length && v[k + 1] === v[k] + 1) k++; out.push(k > i ? `${v[i]}–${v[k]}` : `${v[i]}`); i = k; } return out.join(', '); };   // 1, 2, 3, 5 reads as 1–3, 5
+const patchHubSel = () => { const it = sel?.kind === 'item' && itemById(sel.id); return it && (isBox(it) || cat(it).desk) && !layersBypass && !capturing ? it : null; };
+function patchTagCands() {   // with a box, snake or desk picked: each thing plugged into it carries its socket numbers. Placed with the other plot labels, so tags step aside instead of piling up
+  const it = patchHubSel(); if (!it) return [];
   const P = patchOf_(it), by = new Map();
   for (const t of [...P.ins.map(t => ({ ...t, w: P.inWord })), ...P.outs.map(t => ({ ...t, w: P.outWord }))]) if (t.item) (by.get(t.item) || by.set(t.item, []).get(t.item)).push(t);
-  const fs = Math.max(.34, 10.5 / scale); let out = '';
+  const fs = Math.max(.3, 10 / scale), out = [];
   for (const [id, list] of by) {
     const src = itemById(id); if (!src || src.id === it.id) continue;
-    const [hw, hd] = halfExt(src), txt = `${list[0].w} ${list.map(t => t.n).join(', ')}`, tw = txt.length * fs * .58 + fs * .9, x = src.x + hw * .6, y = src.y - hd - fs * .4;
-    out += `<g class="socktag${list.some(t => t.flag) ? ' bad' : ''}" data-ptsrc="${id}"><rect x="${f3(x - tw / 2)}" y="${f3(y - fs * .95)}" width="${f3(tw)}" height="${f3(fs * 1.3)}" rx="${f3(fs * .65)}"/><text x="${f3(x)}" y="${f3(y)}" text-anchor="middle" style="font-size:${f3(fs)}px">${esc(txt)}</text></g>`;
+    const words = [...new Set(list.map(t => t.w))], txt = words.map(w => `${w} ${numRuns(list.filter(t => t.w === w).map(t => t.n))}`).join(' · ');
+    const [hw, hd] = halfExt(src), tw = txt.length * fs * .6 + fs * .9, cls = `socktag${list.some(t => t.flag) ? ' bad' : ''}`;
+    out.push({ pri: .5, must: true, x: src.x, y: src.y - hd - fs * .45, w: tw, h: fs * 1.05, alt: [src.y + hd + fs * 1.25],
+      side: [[src.x + hw + tw / 2 + fs * .3, src.y + fs * .35], [src.x - hw - tw / 2 - fs * .3, src.y + fs * .35]],
+      mk: (y, x) => `<g class="${cls}" data-ptsrc="${id}"><rect x="${f3(x - tw / 2)}" y="${f3(y - fs * .95)}" width="${f3(tw)}" height="${f3(fs * 1.3)}" rx="${f3(fs * .65)}"/><text x="${f3(x)}" y="${f3(y)}" text-anchor="middle" style="font-size:${f3(fs)}px">${esc(txt)}</text></g>` });
   }
   return out;
 }
@@ -5600,6 +5615,7 @@ function placeLabels(cands, obstacles = [], risers = []) {
       let spot = [[l.x, l.y], ...(l.alt || []).map(v => [l.x, v]), ...(l.side || [])].find(([x, y]) => clear(at(y, x), true));
       if (!spot && l.pri === 0) spot = [l.x, l.y];   // the selection always keeps its name
       if (!spot && l.pri <= 1 && clear(at(l.y), false)) spot = [l.x, l.y];   // people keep their name even when gear crowds them
+      if (!spot && l.must) for (let k = 1; k <= 10 && !spot; k++) for (const y of [l.y - k * l.h * 1.35, (l.alt?.[0] ?? l.y) + k * l.h * 1.35]) if (!spot && clear(at(y), false)) spot = [l.x, y];   // a socket tag is never dropped: it stacks clear of the others
       if (!spot) continue;
       placed.push(at(spot[1], spot[0])); out.push(l.mk(spot[1], spot[0])); continue;
     }
@@ -5837,7 +5853,7 @@ function renderPlot() {
       const m = midpoint(o);
       const lt = `${fmtLen(cableLen(c))}${cableQty(c) > 1 ? ` ×${cableQty(c)}` : ''}`, lf = 10.5 / scale;
       labCands.push({ x: m[0], y: m[1] - .3, w: lt.length * lf * .62 + lf * .4, h: lf * 1.05, pri: isSel ? 0 : 4, svg: `<text class="cablen" x="${m[0]}" y="${m[1] - .3}" text-anchor="middle">${lt}</text>` });
-      const pr = portRange(c);
+      const pr = !patchHubSel() && portRange(c);   // a picked box tags every source with its socket, so the port badges on its cables would say it twice
       if (pr) {   // port badge just outside the stage box, IN and OUT styled differently
         const hubAtEnd = pr.hub.id === c.to, L = runLen(o), d = Math.min(L / 2, Math.max(prop(pr.hub, 'w'), prop(pr.hub, 'd')) / 2 + 16 / scale);
         const [x, y] = pointAt(o, hubAtEnd ? L - d : d), fs = 10 / scale, wv = (pr.text.length * .62 + 1.2) * fs, hv = fs * 1.7;
@@ -5852,7 +5868,7 @@ function renderPlot() {
   }
   s = s.replace('<!--HITS-->', chv.hits + hits);
   // ceiling runs pass over the gear when you're looking at cables; while they're quiet they tuck under it, so names and symbols stay clean
-  s += (quiet ? ceil + top : top + ceil) + chv.over + houseOffSvg(selSet) + labels + selb + placeLabels([...labCands, ...bundleCands], obstacles, risers) + lens + wps + chv.handles;
+  s += (quiet ? ceil + top : top + ceil) + chv.over + houseOffSvg(selSet) + labels + selb + placeLabels([...patchTagCands(), ...labCands, ...bundleCands], obstacles, risers) + lens + wps + chv.handles;
   if (drag?.kind === 'box') {
     const x = Math.min(drag.x0, drag.x1), y = Math.min(drag.y0, drag.y1);
     s += `<rect class="marquee" x="${f3(x)}" y="${f3(y)}" width="${f3(Math.abs(drag.x1 - drag.x0))}" height="${f3(Math.abs(drag.y1 - drag.y0))}" rx=".1"/>`;
@@ -5905,7 +5921,6 @@ function renderPlot() {
   if (compare && !capturing && db.plans[compare]) s += beforeSvg(b);
   if (compare) s += compareSvg();
   s += measureSvg();
-  s += patchTagsSvg();
   svg.innerHTML = R ? `<g id="rotg" transform="rotate(${R} ${f3(rcx)} ${f3(rcy)})">${s}</g>` : s;
   for (const r of [90, 180, 270]) svg.classList.toggle(`rot${r}`, R === r);
   if (capturing) return;
@@ -6355,10 +6370,17 @@ function renderInspector() {
     if (Number(prop(it, 'outs')) > 0 && it.type !== 'stagebox' && it.type !== 'rack') adv.push(`<section class="isec"><h3>Outputs</h3>${field('iOutsUse', 'Outputs it uses', prop(it, 'outs'), 'number', 'min="0" max="64"')}</section>`);
     const pOpts = `<option value="">Nobody</option>` + plan.team.map(p => `<option value="${p.id}" ${p.id === it.personId ? 'selected' : ''}>${esc(p.name)}</option>`).join('');
     // owner up front for people and owned gear; shared gear (stage boxes, distros, speakers) keeps it under More settings
-    const ownerUp = C.shape === 'person' || !!it.personId, ownerField = `<div class="field"><label for="iPerson">Belongs to</label><select id="iPerson">${pOpts}</select></div>`;
+    const ownerUp = C.shape === 'person' || !!it.personId, ownerField = `<div class="field"><label for="iPerson">${C.shape === 'person' ? 'Who stands here' : 'Belongs to'}</label><select id="iPerson">${pOpts}</select></div>`;
     if (!ownerUp && plan.team.length) adv.unshift(`<section class="isec">${ownerField}</section>`);
     const moreWhat = [C.ldesk ? 'DMX lines' : isDmx(it) ? 'DMX' : '', isFixture(it) ? 'aim and beam' : '', !ownerUp && plan.team.length ? 'owner' : '', 'position', isRiser ? '' : 'size', C.wireless || isPowerSource(it) || isRiser ? '' : 'power draw', ins.length || C.inputs ? 'input names' : '', isExt(it) || isPowerSource(it) ? 'ratings' : '', it.type === 'stagebox' ? 'ports' : ''].filter(Boolean).join(', ');
     const conns = plan.cables.filter(x => touches(x, it.id));
+    let onDesk = '';   // a person: their channels and monitor mix, the two things the sound desk needs to know about them
+    if (C.shape === 'person' && it.personId) {
+      const codes = boxCodes(), chs = inputSheet().filter(r => itemById(r.itemId)?.personId === it.personId), mixes = monitorMixes().filter(m => itemById(m.itemId)?.personId === it.personId);
+      const tile = (n, title, sub, id) => `<button class="ptile on" data-ptsrc="${id}" title="${esc(`${title} · ${sub}`)}"><b>${n}</b><span>${esc(title)}</span><small>${esc(sub)}</small></button>`;
+      if (chs.length || mixes.length) onDesk = `<section class="isec patchpanel">${chs.length ? `<h3>Channels <span>${chs.length}</span></h3><div class="patchgrid">${chs.map(r => tile(r.ch, r.name, r.port && r.port !== '—' ? shortPort(r.port, codes) : r.unpatched ? 'not plugged in' : 'wireless', r.itemId)).join('')}</div>` : ''}
+        ${mixes.length ? `<h3${chs.length ? ' style="margin-top:12px"' : ''}>Monitor mix</h3><div class="patchgrid">${mixes.map(m => tile(m.mix, m.kind === 'IEM' ? 'In-ears' : 'Wedge', `Mix ${m.mix}`, m.itemId)).join('')}</div>` : ''}</section>`;
+    }
     el.innerHTML = `<div class="insp">
       <div class="insp-head">${C.shape === 'person' ? `<span class="avatar tone-${roleTone(owner?.role)}${owner ? ` hued" style="--hue:${personColour(owner.id)};width:44px;height:44px` : '" style="width:44px;height:44px'}">${esc(initials(owner?.name || it.label))}</span>` : itemPreview(it, 'ipv ipv-lg')}
         <div style="min-width:0"><div class="eyebrow" title="${esc(C.name)}">${esc(C.name.replace(/\s*\([^)]*\)\s*$/, ''))}</div><textarea id="iLabel" class="titlein${itemName(it).length > 16 ? ' long' : ''}" rows="1" placeholder="${esc(itemName({ ...it, label: '' }))}" aria-label="Name" title="Click to rename">${esc(it.label || '')}</textarea></div>
@@ -6367,7 +6389,7 @@ function renderInspector() {
         ${ownerUp ? ownerField : ''}
         ${it.chan ? `<div class="flowline" style="display:flex;justify-content:space-between;align-items:center;gap:8px">Sits inside ${esc(chans().find(c => c.id === it.chan.id)?.name || 'a channel')}<button class="btn" id="iOutCh" style="padding:4px 10px">Take out</button></div>` : ''}
       </section>` : ''}
-      ${basic}
+      ${basic}${onDesk}
       <section class="isec"><div class="field"><label for="iNote">Note</label><textarea id="iNote" rows="2" placeholder="${C.shape === 'person' ? 'e.g. Bring a 9V battery, uses the left IEM pack' : 'e.g. Borrowed from youth room, needs fresh strings'}">${esc(it.note || '')}</textarea></div></section>
       ${ui.adv && plan.cables.some(x => touches(x, it.id) && ['inst', 'xlr', 'usb', 'cat6', 'multi'].includes(x.type)) ? `<section class="isec"><button class="btn block" id="iTrace" aria-pressed="${tracing === it.id}" title="Follow this signal from the stage to the desk and back to the monitors">${ic('zap', 'sm')}${tracing === it.id ? 'Stop tracing' : 'Trace the signal'}</button></section>` : ''}
       <section class="isec"><div class="actions actions4"><button class="btn" id="iRotate" title="Rotate 90° (R)">${ic('rotate', 'sm')}Rotate</button><button class="btn" id="iLock" aria-pressed="${!!it.locked}" title="${it.locked ? 'Locked: can’t be moved by accident (L)' : 'Lock in place (L)'}">${ic(it.locked ? 'lock' : 'unlock', 'sm')}${it.locked ? 'Locked' : 'Lock'}</button><button class="btn" id="iDup" title="Duplicate (D)">${ic('copy', 'sm')}Duplicate</button><button class="btn danger" id="iDel" title="Delete (Del)">${ic('trash', 'sm')}Delete</button></div>
@@ -6429,15 +6451,16 @@ function renderInspector() {
     const people = plan.items.filter(i => cat(i).shape === 'person').length;
     const gearN = plan.items.filter(i => !['person', 'platform'].includes(cat(i).shape)).length;
     const powN = plan.cables.filter(c => c.type === 'power').length;
+    const HOUSE = ['stagebox', 'distro', 'iem_rack', 'main_spk', 'sub', 'foh', 'wall_outlet'], bandN = plan.items.filter(i => !['person', 'platform'].includes(cat(i).shape) && !HOUSE.includes(i.type)).length;   // the house rig alone isn't a stage yet: the later steps tick once the band's gear is on it
     const st = plan.stage, stageSet = !!(st.set || st.poly || plan.items.length);
     const btn = (go, icon, label, primary) => `<button class="btn${primary ? ' primary' : ''}" data-go="${go}">${ic(icon, 'sm')}${label}</button>`;
     // every tick comes from the plan itself, never from which screens you've opened
     const steps = [
       { k: 'room', done: stageSet, t: 'Stage', sub: `${uDim(st.w, st.d)}${st.poly ? ' · custom shape' : ''}`, act: btn('shape', 'pen', 'Draw my stage', true) },
       { k: 'team', done: plan.team.length > 0 || people > 0, t: 'Team', sub: plan.team.length ? plural(plan.team.length, 'person', 'people') : 'From Planning Center or by hand', act: btn('team', 'users', 'Add the team', true) },
-      { k: 'gear', done: gearN > 0, t: 'Gear', sub: gearN ? `${plural(gearN, 'item')} on stage` : plan.team.length ? 'Build it from the team, or add by hand' : 'Pick from the library', act: plan.team.length ? btn('build', 'wand', 'Build stage from team', true) + btn('gear', 'box', 'Add gear') : btn('gear', 'box', 'Add gear', true) },
-      { k: 'audio', done: gearN > 0 && !patchIssues, t: 'Audio', sub: patchIssues ? `${plural(patchIssues, 'thing')} not patched` : t.ins ? `${plural(t.ins, 'input')} patched${t.rf ? ` · ${t.rf} RF` : ''}` : 'Mics, DIs and stage boxes', act: btn('cable', 'wand', 'Patch it for me', true) + btn('runcable', 'cable', 'Run a cable') },
-      { k: 'power', done: gearN > 0 && !powerIssues, t: 'Power', sub: powerIssues ? `${plural(powerIssues, 'thing')} to sort` : powN ? `${(t.watts / 1000).toFixed(1)} kW on ${plural(powN, 'run')}` : gearN ? 'Nothing needs power yet' : 'Power points, distros and leads', act: btn('cable', 'zap', 'Power it for me', true) + btn('powersheet', 'sheet', 'Power sheet') },
+      { k: 'gear', done: bandN > 0, t: 'Gear', sub: bandN ? `${plural(gearN, 'item')} on stage` : gearN ? 'House gear is in. Now the band’s' : plan.team.length ? 'Build it from the team, or add by hand' : 'Pick from the library', act: plan.team.length ? btn('build', 'wand', 'Build stage from team', true) + btn('gear', 'box', 'Add gear') : btn('gear', 'box', 'Add gear', true) },
+      { k: 'audio', done: bandN > 0 && !patchIssues, t: 'Audio', sub: patchIssues ? `${plural(patchIssues, 'thing')} not patched` : t.ins ? `${plural(t.ins, 'input')} patched${t.rf ? ` · ${t.rf} RF` : ''}` : 'Mics, DIs and stage boxes', act: btn('cable', 'wand', 'Patch it for me', true) + btn('runcable', 'cable', 'Run a cable') },
+      { k: 'power', done: bandN > 0 && !powerIssues, t: 'Power', sub: powerIssues ? `${plural(powerIssues, 'thing')} to sort` : powN ? `${(t.watts / 1000).toFixed(1)} kW on ${plural(powN, 'run')}` : gearN ? 'Nothing needs power yet' : 'Power points, distros and leads', act: btn('cable', 'zap', 'Power it for me', true) + btn('powersheet', 'sheet', 'Power sheet') },
       { k: 'review', done: false, t: 'Review & share', sub: w.length ? `${plural(w.length, 'check')} to look at` : 'Plot, input list, power and pull sheets', act: w.length ? btn('checks', 'alert', 'See the checks', true) : btn('paper', 'sheet', 'Open the paperwork', true) },
     ];
     steps[5].done = steps.slice(0, 5).every(x => x.done) && !w.length;
@@ -6539,7 +6562,7 @@ const fmtTime = hm => { if (!hm) return ''; const [h, m] = hm.split(':').map(Num
 const timesLine = () => TIME_KINDS.filter(([k]) => plan.times?.[k]).map(([k, l]) => `${l} ${fmtTime(plan.times[k])}`).join(' · ');
 const timesHtml = () => TIME_KINDS.filter(([k]) => plan.times?.[k]).map(([k, l]) => `<span><small>${l}</small><b>${esc(fmtTime(plan.times[k]))}</b></span>`).join('');
 const cropToStage = svgHtml => { const D = plan.stage.d, near = plan.items.filter(i => i.y < D + fromM(2.5)), xs = near.map(i => i.x);
-  const x0 = Math.min(-fromM(.8), ...xs.map(x => x - 2)), x1 = Math.max(plan.stage.w + fromM(.8), ...xs.map(x => x + 2)), y0 = -fromM(.9), y1 = D + fromM(1.4);
+  const x0 = Math.min(-fromM(.8), ...xs.map(x => x - 2)), x1 = Math.max(plan.stage.w + fromM(.8), ...xs.map(x => x + 2)), y0 = Math.min(-fromM(.9), ...near.map(i => i.y - halfExt(i)[1] - fromM(.7))), y1 = Math.max(D + fromM(1.4), ...near.map(i => i.y + halfExt(i)[1] + fromM(1)));   // gear just off the deck (mains, subs) and its name stay in the picture
   return svgHtml.replace(/viewBox="[^"]*"/, `viewBox="${f3(x0)} ${f3(y0)} ${f3(x1 - x0)} ${f3(y1 - y0)}"`); };
 function spotData(p) {
   const me = plan.items.find(i => cat(i).shape === 'person' && i.personId === p.id), W = plan.stage.w, D = plan.stage.d, fn = firstName(p.name);
@@ -7763,6 +7786,7 @@ document.addEventListener('keydown', e => {
 
 /* header */
 $('vPlot').onclick = () => { view = 'plot'; needFit = !zoom; renderAll(); };
+for (const id of ['vHome', 'vPlot', 'vPaper']) $(id).addEventListener('click', () => document.querySelector('.toast')?.remove(), true);   // a message about one screen doesn't follow you to the next
 $('vHome').onclick = () => goHome();
 $('brandHome').onclick = () => goHome();
 $('vPaper').onclick = () => openPaper();
@@ -7873,7 +7897,7 @@ $('weekPop').addEventListener('click', e => {
 /* rail */
 for (const [id, t] of [['tTeam', 'team'], ['tGear', 'gear'], ['tStage', 'stage']]) $(id).onclick = () => { railTab = t; renderRail(); };
 function matchRole(s) { for (const [re, r] of ROLE_MATCH) if (re.test(s)) return r; return ''; }
-function buildNow() { mutate(() => { plan.team = plan.team.filter(p => p.name.trim() || p.role); buildFromTeam(); autoCable(); }); }   // blank rows from Add person aren't people
+function buildNow() { const again = plan.items.some(i => i.gen); mutate(() => { plan.team = plan.team.filter(p => p.name.trim() || p.role); buildFromTeam(); autoCable(); }, again ? 'Stage rebuilt from the team' : 'Stage built from the team'); }   // says what happened and offers Undo; blank rows from Add person aren't people
 $('railFoot').addEventListener('click', e => { if (e.target.closest('#buildBtn')) buildNow(); });
 $('railPane').addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
@@ -9503,7 +9527,7 @@ $('railCollapse').onclick = () => togglePanel('rail');
 $('inspector').addEventListener('click', e => { if (e.target.closest('[data-insp-hide]')) togglePanel('insp', false); });
 $('fquick').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.inspShow !== undefined) togglePanel('insp', true);
+  if (b.dataset.inspShow !== undefined) { if (matchMedia('(max-width: 760px)').matches) $('inspector').scrollIntoView({ behavior: 'smooth', block: 'start' }); else togglePanel('insp', true); }
   else if (b.dataset.q === 'rotate') rotateSelected(90);
   else if (b.dataset.q === 'dup') duplicateSelected();
   else if (b.dataset.q === 'del') deleteSelected();
@@ -9615,7 +9639,7 @@ function restoreBeforeReset() {
 }
 $('homeView').addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
-  if (t.hasAttribute('data-addlogo')) { goHome('stage'); $('hd-logo')?.click(); return; }   // straight to the file picker
+  if (t.hasAttribute('data-addlogo')) { goHome('prefs'); $('hd-logo')?.click(); return; }   // straight to the file picker
   if (t.dataset.libopen) { view = 'plot'; switchWeek(t.dataset.libopen); return; }
   if (t.dataset.svcunlink) { const [vid, tid] = t.dataset.svcunlink.split('|'), V = venues()[vid]; if (V) { V.svc = (V.svc || []).filter(x => x.id !== tid); save(); renderHome(); } return; }
   if (t.hasAttribute('data-svcload')) { pcoLoadTypes(); return; }
@@ -9703,7 +9727,7 @@ function renderHome() {
   if (HOME_ALIAS[homeTab]) homeTab = HOME_ALIAS[homeTab];
   $('homeNav').innerHTML = `<div class="homehello">${db.defaults?.logo ? `<img class="hellologo" src="${db.defaults.logo}" alt="${esc(defaultsOf().org || 'Your logo')}">` : `<button class="addlogo" data-addlogo>${ic('plus', 'sm')}Add your church logo</button>`}<div class="eyebrow">${esc(defaultsOf().org || 'Stagehand')}</div><h1>Home</h1></div>` +
     HOME_TABS.map(([k, icon, label, sub]) => `<button class="hnav" data-home="${k}" aria-current="${k === homeTab ? 'page' : 'false'}">${ic(icon, 'sm')}<span><b>${label}</b><small>${sub}</small></span></button>`).join('');
-  const body = { library: homeLibrary, venues: () => homeVenues() + homeStage(), setups: homeSetups, gear: homeGear, prefs: () => homePrefs() + `<div id="hpPco">${homePco()}</div>` + homeData() }[homeTab]();
+  const body = { library: homeLibrary, venues: () => homeVenues() + homeStage(), setups: homeSetups, gear: homeGear, prefs: () => homePrefs() + homeChurch() + `<div id="hpPco">${homePco()}</div>` + homeData() }[homeTab]();
   const keep = document.activeElement?.id, pos = document.activeElement?.selectionStart;
   const [, , title, sub] = HOME_TABS.find(([k]) => k === homeTab);
   $('homeBody').dataset.tab = homeTab;
@@ -9859,13 +9883,17 @@ function defaultsOf() {
     settings: { slack: 10, ends: fromM(1), ...(d.settings || {}) } };
 }
 const setDefault = (path, v) => { const d = (db.defaults ||= {}); const [a, b] = path.split('.'); if (b) (d[a] ||= {})[b] = v; else d[a] = v; save(); };
-function homeStage() {
-  const D = defaultsOf(), s = D.stage, se = D.settings, su = Object.entries(setups());
+function homeChurch() {   // who you are: printed on the paperwork, so it sits with the other preferences rather than with the stages
+  const D = defaultsOf();
   return hsec('Your church', 'Shown at the top of the paperwork.',
       `<div class="field logofield"><span>Church logo <small class="hint" style="font-weight:400">on the paperwork, the rider and My spot cards</small></span><div class="row u-g8">${db.defaults?.logo ? `<img class="logoprev" src="${db.defaults.logo}" alt="Your logo">` : ''}<label class="btn">${ic('plus', 'sm')}${db.defaults?.logo ? 'Change' : 'Upload a logo'}<input type="file" id="hd-logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden></label>${db.defaults?.logo ? '<button class="btn quiet" type="button" id="hd-logo-del">Remove</button>' : ''}</div></div>
       <div class="grid2"><div class="field"><label for="hd-org">Church or venue</label><input id="hd-org" type="text" data-deftext="org" value="${esc(D.org)}" placeholder="e.g. Grace Church, Main campus"></div>
-       <div class="field"><label for="hd-name">Usual service name</label><input id="hd-name" type="text" data-deftext="name" value="${esc(D.name)}" placeholder="Sunday service"></div>
-       <div class="field"><label for="hd-contact">Drawn by <small class="hint" style="font-weight:400">name and number, for the title block</small></label><input id="hd-contact" type="text" data-deftext="contact" value="${esc(D.contact)}" placeholder="e.g. Sam Lee · 0412 345 678"></div>
+       <div class="field"><label for="hd-contact">Drawn by <small class="hint" style="font-weight:400">name and number, for the title block</small></label><input id="hd-contact" type="text" data-deftext="contact" value="${esc(D.contact)}" placeholder="e.g. Sam Lee · 0412 345 678"></div></div>`);
+}
+function homeStage() {
+  const D = defaultsOf(), s = D.stage, se = D.settings, su = Object.entries(setups());
+  return hsec('New weeks', 'What a new week is called, which day it falls on and what it starts with.',
+      `<div class="grid2"><div class="field"><label for="hd-name">Usual service name</label><input id="hd-name" type="text" data-deftext="name" value="${esc(D.name)}" placeholder="Sunday service"></div>
        <div class="field"><label for="hd-day">Usual day</label><select id="hd-day" data-defsel="day">${DAYS.map((n, i) => `<option value="${i}" ${i === D.day ? 'selected' : ''}>${n}</option>`).join('')}</select></div>
        <div class="field"><label for="hd-setup">Start new weeks from</label><select id="hd-setup" data-defsel="setupId"><option value="">A blank stage</option>${su.map(([id, x]) => `<option value="${id}" ${id === D.setupId ? 'selected' : ''}>Setup: ${esc(x.name)}</option>`).join('')}</select></div></div>`) +
     hsec('Stage', 'Size and colour of the stage for new weeks.',
@@ -9914,8 +9942,7 @@ function homeGear() {
         <div class="row" style="justify-content:flex-end;gap:6px;grid-column:1/-1"><button class="btn quiet" id="gf-cancel2">Cancel</button><button class="btn primary" id="gf-add" ${gearForm.name.trim() ? '' : 'disabled'}>${ic('plus', 'sm')}Add to your library</button></div>
       </div>
     </div>`;
-  return hsec('Building from the team', '', hcheck('hd-teamgear', 'Add each person’s instruments and gear', ui.teamGear, 'Off: people are placed on stage and you add their gear yourself')) +
-    hsec('Your gear', `${plural(GEAR_GROUPS.flatMap(([, ts]) => ts).length - removed.length, 'type')} in your library. Remove what you never use to keep Add gear short; enter how many you own and the checks warn when a week needs more.`,
+  return hsec('Your gear', `${plural(GEAR_GROUPS.flatMap(([, ts]) => ts).length - removed.length, 'type')} in your library. Remove what you never use to keep Add gear short; enter how many you own and the checks warn when a week needs more.`,
       `${gearForm.open ? form : ''}<div class="hgear-tools row u-g6"><button class="btn quiet" id="homeGearUnused">Keep only what’s on this week</button><button class="btn quiet" id="homeOwnClear">Clear owned counts</button></div>${groups}`, gearForm.open ? '' : `<button class="btn primary" id="gf-open">${ic('plus', 'sm')}Add gear</button>`) +
     (!gearWhereOn && !showWhere ? `<div class="row" style="margin:-4px 0 8px"><button class="tlink" id="gearWhereOn">Note where each kind of gear is kept</button></div>` : '') +
     hsec('Cables you own', `How many of each length you have. The cable pull list then shows what you own and warns when a week needs more; a longer spare covers a shorter run. Lengths in ${imperial() ? 'feet' : 'metres'}.`,

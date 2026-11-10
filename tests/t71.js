@@ -3,7 +3,7 @@
 const { chromium } = require(require('./app.js').pw);
 (async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } }); const errs = []; await p.clock.setFixedTime(new Date('2026-10-28T10:00:00')); p.on('pageerror', e => errs.push(e.message));
 await p.goto(require('./app.js').url); await p.waitForTimeout(500); await p.click('#welcomeExample'); await p.waitForTimeout(300);
-await p.evaluate(() => { view = 'home'; homeTab = 'stage'; renderAll(); });
+await p.evaluate(() => { view = 'home'; homeTab = 'prefs'; renderAll(); });
 await p.fill('#hd-contact', 'Sam Lee'); await p.dispatchEvent('#hd-contact', 'change'); await p.waitForTimeout(100);
 console.log('contact saved', await p.evaluate(() => db.defaults.contact));
 await p.evaluate(() => { view = 'paper'; paperTab = 'overview'; renderAll(); });

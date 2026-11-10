@@ -4,7 +4,7 @@ const { chromium } = require(require('./app.js').pw);
 await p.goto(require('./app.js').url); await p.waitForTimeout(500); await p.click('#welcomeExample'); await p.waitForTimeout(300);
 await p.evaluate(() => document.querySelector('.toast')?.remove());
 await p.click('#vHome'); console.log('home view', await p.evaluate(() => view), 'plot hidden', await p.evaluate(() => $('plotView').hidden));
-await p.click('[data-home="venues"]'); await p.fill('#hd-stage\\.w', '14'); await p.press('#hd-stage\\.w', 'Tab'); await p.fill('#hd-org', 'Grace Church'); await p.press('#hd-org', 'Tab');
+await p.click('[data-home="venues"]'); await p.fill('#hd-stage\\.w', '14'); await p.press('#hd-stage\\.w', 'Tab'); await p.click('[data-home="prefs"]'); await p.fill('#hd-org', 'Grace Church'); await p.press('#hd-org', 'Tab'); await p.click('[data-home="venues"]');
 await p.selectOption('#hd-day', '6'); await p.click('[data-defcolor="#8a6a48"]');
 console.log('defaults', await p.evaluate(() => JSON.stringify(db.defaults)));
 await p.click('[data-home="library"]'); const n0 = await p.evaluate(() => Object.keys(db.plans).length);
