@@ -10,7 +10,9 @@ console.log('concrete', await p.evaluate(() => !!document.querySelector('#plot .
 console.log('tiles', await p.evaluate(() => { railTab = 'room'; renderAll(); return document.querySelectorAll('.textile').length; }));
 // a crowded name: put gear right under a person, their name must not land on it
 const r = await p.evaluate(() => { const pr = plan.items.find(i => cat(i).shape === 'person'); const g = plan.items.find(i => cat(i).shape !== 'person' && cat(i).shape !== 'platform' && i.id !== pr.id && Math.max(prop(i, 'w'), prop(i, 'd')) < 1.6);
-  mutate(() => { g.x = pr.x; g.y = pr.y + 1.6; const g2 = plan.items.find(i => i !== g && i !== pr && cat(i).shape !== 'person' && cat(i).shape !== 'platform' && Math.max(prop(i, 'w'), prop(i, 'd')) < 1.6); g2.x = pr.x; g2.y = pr.y - 1.6; }); zoom = 40; renderAll();
-  return document.querySelectorAll('#plot .itag.aside').length; });
-console.log('aside', r > 0);
+  let g2; mutate(() => { g.x = pr.x; g.y = pr.y + 1.6; g2 = plan.items.find(i => i !== g && i !== pr && cat(i).shape !== 'person' && cat(i).shape !== 'platform' && Math.max(prop(i, 'w'), prop(i, 'd')) < 1.6); g2.x = pr.x; g2.y = pr.y - 1.6; }); zoom = 40; renderAll();
+  const nm = [...document.querySelectorAll('#plot .itag.pname')].find(t => t.textContent === firstName(personById(pr.personId).name)).querySelector('rect').getBoundingClientRect();
+  const hits = [g, g2].filter(x => { const b = document.querySelector(`#plot .item[data-id="${x.id}"] .hit, #plot .item[data-id="${x.id}"]`).getBoundingClientRect(); return nm.left < b.right && nm.right > b.left && nm.top < b.bottom && nm.bottom > b.top; }).length;
+  return hits; });
+console.log('crowded name clear of gear', r === 0);
 console.log('errors', errs); await b.close(); })();
