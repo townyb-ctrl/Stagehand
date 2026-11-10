@@ -835,7 +835,7 @@ svg text { font-family: var(--f-ui); }
 .grpchips .ic { width: 12px; height: 12px; }
 .cab { fill: none; stroke-width: var(--cw, .14); stroke-linejoin: round; stroke-linecap: round; opacity: .88; pointer-events: none; transition: opacity .12s; }
 .cab.dim { opacity: .18; }
-.cab.quiet { stroke-width: var(--cwq, .1); opacity: .6; }
+.cab.quiet { stroke-width: var(--cwq, .1); opacity: .82; }   /* resting: thin but readable */
 .cab.quiet.ceil { opacity: .36; stroke-width: var(--cwq, .08); }
 .cab.hl { stroke-width: var(--cwh, .22); opacity: 1; }
 .cab.sel { stroke-width: var(--cws, .3); opacity: 1; }
@@ -1764,7 +1764,7 @@ html, body { height: auto !important; overflow: visible !important; display: blo
 .itag.out rect { fill: var(--surface); stroke: var(--line-2, rgba(0,0,0,.18)); } .itag.out .ilabel { fill: var(--ink); }
 .light-deck .itag:not(.sel) rect { fill: rgba(255,255,255,.9); stroke: rgba(0,0,0,.14); } .light-deck .itag:not(.sel) .ilabel { fill: #1b1e26; }
 .deck-lip { fill: var(--deck); } .deck-sheen { pointer-events: none; }
-.s-riser-shadow { fill: #000; opacity: .32; } .s-riser-lip { fill: #000; opacity: .28; } .s-riser-hi { stroke: #fff; stroke-opacity: .16; stroke-width: .06; }
+.s-riser-shadow { fill: #000; opacity: .32; } .s-riser-lip { fill: #000; opacity: .18; } .s-riser-hi { stroke: #fff; stroke-opacity: .16; stroke-width: .06; }
 .seats rect { fill: var(--house-ink); opacity: .055; } .seats { pointer-events: none; }
 #plot .item:hover { filter: drop-shadow(0 .12px .2px rgba(0,0,0,.55)) brightness(1.06); }
 #plot.cabling .item:hover, #plot .item.locked:hover { filter: none; }
@@ -4506,7 +4506,7 @@ const SYM_CSS = `
 .s-bpbody{fill:#1f6b5c}.s-bptop{fill:#2a8a76}.s-bpdiv{fill:none;stroke:rgba(0,0,0,.35);stroke-width:.015}
 .s-bpknob{fill:#14181c;stroke:#c9d0d5;stroke-width:.012}.s-bpmark{fill:none;stroke:#fff;stroke-width:.014;stroke-linecap:round}
 .s-bpsw{fill:#aab2b9;stroke:#6b747b;stroke-width:.01}.s-bplabel{fill:rgba(255,255,255,.7)}
-.s-rug{fill:rgba(0,0,0,.24);stroke:rgba(255,255,255,.1);stroke-width:.04}.s-rugline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.05}
+.s-rug{fill:rgba(0,0,0,.24);stroke:rgba(255,255,255,.1);stroke-width:.04}.s-rugline{display:none}
 .light-deck .s-rug{fill:rgba(0,0,0,.07);stroke:rgba(0,0,0,.14)}.light-deck .s-rugline{stroke:rgba(0,0,0,.08)}
 .s-kshell{fill:#7a1e2c;stroke:rgba(0,0,0,.45);stroke-width:.025}.s-khoop{fill:none;stroke:#c3cad0;stroke-width:.045}.s-khoopw{fill:#5a1420;stroke:rgba(0,0,0,.35);stroke-width:.015}
 .s-lug{fill:#b9c1c8;stroke:#5d666d;stroke-width:.012}.s-kwear{fill:rgba(120,100,70,.12)}.s-kheadline{fill:none;stroke:rgba(0,0,0,.18);stroke-width:.012}
@@ -4591,7 +4591,7 @@ const SYM_CSS = `
 .s-acrylic{fill:rgba(170,215,255,.16);stroke:rgba(190,225,255,.75);stroke-width:.05}
 .s-beam{fill:rgba(255,214,110,.09)}.s-desk{fill:url(#spCabG)}.s-desktop{fill:#2b323b;stroke:rgba(255,255,255,.08);stroke-width:.02}.s-armrest{fill:#121417;stroke:rgba(255,255,255,.08);stroke-width:.02}.s-armhi{stroke:rgba(255,255,255,.18);stroke-width:.03}.s-screen{fill:url(#spScreen);stroke:rgba(140,190,255,.45);stroke-width:.025}.s-scrbar{fill:#5eead4;opacity:.85}.s-scr1{fill:#f87171}.s-scr2{fill:#60a5fa}.s-scr3{fill:#fbbf24}.s-scr4{fill:#4ade80}.s-scr5{fill:#c084fc}.s-knob2{fill:#3a434d;stroke:rgba(255,255,255,.35);stroke-width:.015}.s-ledg{fill:#4ade80}.s-ledr{fill:#f87171}.s-ledb{fill:#60a5fa}.s-slot{stroke:#0c0e10;stroke-width:.05;stroke-linecap:round}.s-cap{fill:#e7e9ec;stroke:#5b6168;stroke-width:.012}.s-capr{fill:#ef4444;stroke:#7f1d1d;stroke-width:.012}.s-master{fill:#232930;stroke:rgba(255,255,255,.1);stroke-width:.015}.s-ear{fill:#8a939b;stroke:#4b5259;stroke-width:.015}.s-lbl{fill:rgba(255,255,255,.55)}.s-xlr{fill:#0f1215;stroke:#9aa3ab;stroke-width:.02}.s-xlrpin{fill:#5b6370}.s-xlrout{fill:#0f1215;stroke:#f5a524;stroke-width:.02}.s-rj{fill:#0f1215;stroke:#c084fc;stroke-width:.02}.s-pstripe{fill:#f97316}.s-breaker{fill:#14181c;stroke:rgba(255,255,255,.2);stroke-width:.012}.s-btip{fill:#fb923c}.s-cov{fill:url(#spCov)}.s-covup{fill:url(#spCovUp)}.s-lbeam{fill:url(#spLBeam)}.s-cab2{fill:url(#spCabG)}.s-cabtop2{fill:#3d4956}.s-wring{fill:#171c21;stroke:rgba(255,255,255,.22);stroke-width:.03}.s-wcone{fill:url(#spWoof)}.s-wcap{fill:#252a33;stroke:rgba(255,255,255,.3);stroke-width:.02}.s-horn{fill:#12161a;stroke:rgba(255,255,255,.3);stroke-width:.02}.s-can{fill:url(#spCabG);stroke:#0c0e10;stroke-width:.03}.s-lens{fill:#fff1bd;stroke:#d6b04a;stroke-width:.025}.s-yoke{fill:none;stroke:#aab2b9;stroke-width:.07;stroke-linecap:round}.s-fin{fill:none;stroke:rgba(255,255,255,.18);stroke-width:.03}
 .s-ped1{fill:#3fb6a8}.s-ped2{fill:#e2833a}.s-ped3{fill:#d8d24a}.s-ped4{fill:#8a73d6}
-.s-deck{fill:rgba(255,255,255,.05);stroke:rgba(255,255,255,.45);stroke-width:.07;stroke-dasharray:.3 .2}
+.s-deck{fill:rgba(255,255,255,.06);stroke:rgba(255,255,255,.4);stroke-width:.06}
 .s-spruce{fill:#d8ad6c}.s-burst{fill:#3b1d10}.s-burstin{fill:#cf7a2b}.s-navy{fill:#33507c}.s-maple{fill:#e3c389}.s-rose{fill:#2b1c13}.s-varnish{fill:#a24f25}.s-pg{fill:#f4f1e8}.s-cream{fill:#efe6d2}.s-chrome{fill:#cfd5da}
 .s-str{fill:none;stroke:rgba(255,255,255,.45);stroke-width:.006}.s-bind{fill:none;stroke:#2a1a10;stroke-width:.018}.s-fret{fill:none;stroke:rgba(255,255,255,.35);stroke-width:.008}
 .s-cab{fill:#2b3640}.s-cabtop{fill:#36434f}.s-mesh{fill:#14181c}.s-cone{fill:#5d6a77}.s-dot{fill:rgba(255,255,255,.2)}.s-txt{fill:rgba(255,255,255,.55);font:700 .3px Archivo,Arial,sans-serif;letter-spacing:.02px}
@@ -5159,11 +5159,10 @@ function shapeSvg(it, w, d) {
   if (c.walk) return `<rect class="hit" x="${-hw}" y="${-hd}" width="${w}" height="${d}"/><rect class="s-walk" x="${-hw}" y="${-hd}" width="${w}" height="${d}" rx=".15"/><rect class="s-walk-edge" x="${f3(-hw + .12)}" y="${f3(-hd + .12)}" width="${f3(w - .24)}" height="${f3(d - .24)}" rx=".1"/>`;
   if (c.shape === 'platform') {   // drawn at its real size: 2 × 1 m deck panels and legs
     const long = w >= d, px = fromM(long ? 2 : 1), py = fromM(long ? 1 : 2);
-    let g = `<rect class="hit" x="${-hw}" y="${-hd}" width="${w}" height="${d}"/><rect class="s-riser-shadow" x="${f3(-hw + .12)}" y="${f3(-hd + .22)}" width="${w}" height="${d}" rx=".14"/><rect class="s-deck" x="${-hw}" y="${-hd}" width="${w}" height="${d}" rx=".1"/>`;
-    for (let x = -hw + px; x < hw - .05; x += px) g += `<line class="s-thin" x1="${f3(x)}" x2="${f3(x)}" y1="${-hd}" y2="${hd}"/>`;
-    for (let y = -hd + py; y < hd - .05; y += py) g += `<line class="s-thin" x1="${-hw}" x2="${hw}" y1="${f3(y)}" y2="${f3(y)}"/>`;
-    for (const [x, y] of [[-hw + .2, -hd + .2], [hw - .2, -hd + .2], [-hw + .2, hd - .2], [hw - .2, hd - .2]]) g += `<circle class="s-thin" cx="${f3(x)}" cy="${f3(y)}" r=".12"/>`;
-    g += `<rect class="s-riser-lip" x="${-hw}" y="${f3(hd - .24)}" width="${w}" height=".24" rx=".08"/><line class="s-riser-hi" x1="${f3(-hw + .12)}" y1="${f3(-hd + .05)}" x2="${f3(hw - .12)}" y2="${f3(-hd + .05)}"/>`;
+    // one fill, one solid outline and a subtle front edge: no seams, legs or shadow, so the gear on it reads first
+    let g = `<rect class="hit" x="${-hw}" y="${-hd}" width="${w}" height="${d}"/><rect class="s-deck" x="${-hw}" y="${-hd}" width="${w}" height="${d}" rx=".1"/>`;
+    g += `<rect class="s-riser-lip" x="${-hw}" y="${f3(hd - .2)}" width="${w}" height=".2" rx=".08"/>`;
+    void px; void py;
     return g;
   }
   if (c.shape === 'truss' || c.shape === 'pipe') {   // overhead, so drawn as an outline that gear underneath shows through
@@ -5477,7 +5476,7 @@ function roundPath(pts, r = fromM(.12)) {
 }
 function flowMarks(c, o, cls, animOnly = false) {
   if (cableView.noFlow || (animOnly && !cableView.anim)) return '';
-  const f = flowOf(c), L = runLen(o), sz = Math.min(.2, Math.max(.1, 4 / scale)), step = Math.max(fromM(1.2), 80 / scale);
+  const f = flowOf(c), L = runLen(o), sz = Math.min(.15, Math.max(.07, 2.8 / scale)), step = Math.max(fromM(3), 200 / scale);   // small and sparse: a hint of direction, not a pattern
   if (L < sz * 6) return '';
   const col = `var(${KVAR[c.type]})`;
   let s = '';
@@ -5550,7 +5549,7 @@ function aimLinks(selSet) {
 }
 let hoverCid = null, lastCheckKey = '';
 // while nothing is picked, runs keep their colour but lean towards grey, so the stage isn't a rainbow; picking or pointing brings the colour back
-document.head.insertAdjacentHTML('beforeend', `<style id="calmcables">${Object.entries(KVAR).map(([k, v]) => `#plot.style-calm .cab.quiet.k-${k} { stroke: color-mix(in srgb, var(${v}) 58%, #8b909a); } #plot.style-calm .plug.quiet[style*="${v}"] { fill: color-mix(in srgb, var(${v}) 58%, #8b909a) !important; }`).join('')}</style>`);
+document.head.insertAdjacentHTML('beforeend', `<style id="calmcables">${Object.entries(KVAR).map(([k, v]) => `#plot.style-calm .cab.quiet.k-${k} { stroke: color-mix(in srgb, var(${v}) 78%, #8b909a); } #plot.style-calm .plug.quiet[style*="${v}"] { fill: color-mix(in srgb, var(${v}) 58%, #8b909a) !important; }`).join('')}</style>`);
 /* Cables side by side: the click zones overlap, so the cable nearest the pointer wins (not the one drawn last), and
    clicking again on the same spot steps to the next cable there. */
 const cabTol = () => Math.max(.2, 9 / scale);
@@ -5613,7 +5612,7 @@ function laneGeoms(list) {
     for (let i = 0; i < o.length - 1; i++) {
       const p = o[i], q = o[i + 1], h = Math.abs(p[1] - q[1]) < 1e-3 && Math.abs(p[0] - q[0]) > 1e-3, v = Math.abs(p[0] - q[0]) < 1e-3 && Math.abs(p[1] - q[1]) > 1e-3;
       if (!h && !v) { ks.push(null); continue; }
-      const k = (c.level === 'ceiling' ? 'c' : 'f') + (h ? 'h' + Math.round(p[1] * 8) : 'v' + Math.round(p[0] * 8)), ax = h ? 0 : 1;
+      const k = 'r' + (h ? 'h' + Math.round(p[1] * 8) : 'v' + Math.round(p[0] * 8)), ax = h ? 0 : 1;   // floor and overhead runs on the same line share it too: seen from above they'd sit on top of each other
       ks.push(k);
       (lines.get(k) || lines.set(k, []).get(k)).push({ id: c.id, i, a: Math.min(p[ax], q[ax]), b: Math.max(p[ax], q[ax]), rank: (LANE_ORDER[c.type] ?? 9) * 1e4 + (c.from > c.to ? 1 : 0), at: h ? p[1] : p[0], hz: h, ceil: c.level === 'ceiling' });
     }
@@ -5627,7 +5626,7 @@ function laneGeoms(list) {
     const flush = () => {
       const ids = [...new Set(cluster.slice().sort((x, y) => x.rank - y.rank || (x.id < y.id ? -1 : 1)).map(r => r.id))];
       if (ids.length > 1) {
-        const gap = Math.min(.2, 1.4 / (ids.length - 1));
+        const gap = Math.min(Math.max(.2, 5 / scale), 1.4 / (ids.length - 1));   // at least a few pixels apart at any zoom, so neighbours never merge into one line
         for (const r of cluster) off.set(r.id + '|' + r.i, (ids.indexOf(r.id) - (ids.length - 1) / 2) * gap);
         if (ids.length >= 3 && !cluster[0].ceil) {   // three or more runs side by side for a good stretch: drawn as one soft band with a count
           const lo = Math.max(...ids.map(id => Math.min(...cluster.filter(r => r.id === id).map(r => r.a)))), hi = Math.min(...ids.map(id => Math.max(...cluster.filter(r => r.id === id).map(r => r.b))));
@@ -5703,7 +5702,7 @@ function renderPlot() {
   applyDeckColor(svg);
   // cable weights are set in screen pixels, so runs stay fine and crisp at any zoom; the caps keep them inside their lanes when zoomed out
   const W = (px, cap) => `${f3(Math.min(px / scale, cap))}px`;
-  for (const [k, px, cap] of [['cw', 1.8, .12], ['cwq', 1.3, .09], ['cwh', 2.5, .17], ['cws', 3.1, .22], ['cc', 4.6, .26], ['ccq', 3.4, .18], ['cch', 5.6, .32], ['ccs', 6.6, .4], ['csh', .7, .04], ['cshs', .9, .055], ['cg', 11, .8], ['cwa', 2.4, .16], ['cl', 3.2, .2], ['cls', 4, .26], ['cl2', 5.6, .34], ['hair', 1, .08], ['hair2', 1.5, .1]]) svg.style.setProperty('--' + k, W(px, cap));
+  for (const [k, px, cap] of [['cw', 1.8, .12], ['cwq', 1.7, .1], ['cwh', 2.5, .17], ['cws', 3.8, .26], ['cc', 4.6, .26], ['ccq', 3.4, .18], ['cch', 5.6, .32], ['ccs', 7.4, .44], ['csh', .7, .04], ['cshs', .9, .055], ['cg', 11, .8], ['cwa', 2.4, .16], ['cl', 3.2, .2], ['cls', 4, .26], ['cl2', 5.6, .34], ['hair', 1, .08], ['hair2', 1.5, .1]]) svg.style.setProperty('--' + k, W(px, cap));
   svg.style.setProperty('--cd', `${f3(Math.min(7 / scale, .55))} ${f3(Math.min(4.5 / scale, .3))}`);
   let s = `<defs><marker id="cmpHead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="cmp-head" d="M0 0L10 5L0 10z"/></marker><pattern id="dots" width="${fromM(.5)}" height="${fromM(.5)}" patternUnits="userSpaceOnUse"><circle class="dotp" cx=".1" cy=".1" r=".06"/></pattern></defs>`;
   s += `<rect class="house-fill" x="${f3(v.x0)}" y="${f3(v.y0)}" width="${f3(v.vw)}" height="${f3(v.vh)}"/>${layerOff('grid') ? '' : `<rect class="house-dots" x="${f3(v.x0)}" y="${f3(v.y0)}" width="${f3(v.vw)}" height="${f3(v.vh)}"/>`}`;
@@ -5893,7 +5892,7 @@ function renderPlot() {
         if (q && end && extCord(c)) out += mainsPlug(seg, q, itemById(id), st);   // the cord ends in a 3-pin plug, turned the way the cord comes in
         else if (q) out += `<circle class="plug${st}" cx="${f3(q[0])}" cy="${f3(q[1])}" r="${f3(Math.max(.08, 2.4 / scale))}" style="fill:var(${KVAR[c.type]})"/>`;
       }
-      out += flowMarks(c, seg, isSel ? '' : rel, rel === ' quiet' || (rel === ' dim' && cableView.quiet !== false));   // quiet cables keep the animation, not the arrows
+      out += flowMarks(c, seg, isSel ? '' : rel, !isSel && rel !== ' hl' && rel !== '');   // arrows on the run you picked, the runs touching what you picked, and every run when cables are set to full strength   // quiet cables keep the animation, not the arrows
       if (c.type === 'multi') out += multiFan(c, seg, segs, rel);
       hits += `<polyline class="cabhit" data-cid="${c.id}" points="${sp}"><title>${esc(CABLES[c.type].name)} · ${fmtLen(cableLen(c))}</title></polyline>`;
     }
