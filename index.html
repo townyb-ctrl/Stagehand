@@ -4509,7 +4509,8 @@ function gearMeta(type) {
 const SYM_CSS = `
 .s-bg{opacity:.5}
 .s-kglint,.s-cymglint,.s-cymglint2,.s-mglint,.s-mshine,.s-gloss,.s-gloss2,.s-hbgloss,.s-diglint,.s-roundlight,.s-shine,.s-guardbevel{display:none}.s-kshade{fill:rgba(0,0,0,.18)}
-.s-gbody,.s-gpart{stroke:rgba(0,0,0,.55);stroke-width:.03;stroke-linejoin:round}.s-gdark{fill:#16181c}.s-gmetal{fill:#b9c1c8}.s-gring{fill:none;stroke:#6b4429;stroke-width:.04}.s-gline{fill:none;stroke:#16181c;stroke-width:.035;stroke-linecap:round}
+.s-gbody,.s-gpart{stroke:rgba(0,0,0,.55);stroke-width:.028;stroke-linejoin:round}.s-gdark{fill:#16181c}.s-gmetal{fill:#b9c1c8;stroke:rgba(0,0,0,.4);stroke-width:.012}.s-gring{fill:none;stroke:#6b4429;stroke-width:.035}.s-gline{fill:none;stroke:#16181c;stroke-width:.045;stroke-linecap:round}
+.s-gstr{fill:none;stroke:rgba(235,238,242,.75);stroke-width:.012}.s-gfret{fill:none;stroke:rgba(255,255,255,.28);stroke-width:.01}.s-gnut{fill:none;stroke:#f1ead8;stroke-width:.025}.s-gknob{fill:#b9c1c8;stroke:rgba(0,0,0,.45);stroke-width:.015}.s-gtuner{fill:#c3cad0;stroke:rgba(0,0,0,.4);stroke-width:.012}.s-gsaddle{fill:none;stroke:#f1ead8;stroke-width:.018}
 .s-bpbody{fill:#1f6b5c}.s-bptop{fill:#2a8a76}.s-bpdiv{fill:none;stroke:rgba(0,0,0,.35);stroke-width:.015}
 .s-bpknob{fill:#14181c;stroke:#c9d0d5;stroke-width:.012}.s-bpmark{fill:none;stroke:#fff;stroke-width:.014;stroke-linecap:round}
 .s-bpsw{fill:#aab2b9;stroke:#6b747b;stroke-width:.01}.s-bplabel{fill:rgba(255,255,255,.7)}
@@ -4660,42 +4661,42 @@ const SYM = (() => {
   const mixHex = (a, b, t) => '#' + [0, 2, 4].map(k => Math.round(parseInt(a.substr(1 + k, 2), 16) * (1 - t) + parseInt(b.substr(1 + k, 2), 16) * t).toString(16).padStart(2, '0')).join('');   // blend two hex colours
   /* Guitars, flat and top-down like the rest of the gear: headstock up, body down, two or three tones, one outline weight.
      Each fills its footprint (w across, d long) so sizes match the catalogue. */
-  const smooth = pts => { const n = pts.length, q = k => pts[(k + n) % n]; let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;   // a closed curve through the points (Catmull-Rom)
-    for (let k = 0; k < n; k++) { const [a, b, c, e] = [q(k - 1), q(k), q(k + 1), q(k + 2)];
-      d += `C${f(b[0] + (c[0] - a[0]) / 6)} ${f(b[1] + (c[1] - a[1]) / 6)} ${f(c[0] - (e[0] - b[0]) / 6)} ${f(c[1] - (e[1] - b[1]) / 6)} ${f(c[0])} ${f(c[1])}`; }
-    return d + 'Z'; };
-  const mirror = half => [...half, ...half.slice(0, -1).reverse().map(([x, y]) => [-x, y])];   // the last point sits on the centre line
-  // body outlines, x from -1 to 1 across, y from 0 (where the neck joins) to 1 (strap end); horns go above 0
-  const GBODY = {
-    offset: [[.12, .12], [.36, .04], [.56, -.13], [.72, .02], [.78, .28], [.64, .47], [.9, .7], [.84, .92], [.46, 1.01], [0, 1.03], [-.46, 1.01], [-.86, .92], [-.92, .7], [-.68, .48], [-.8, .26], [-.74, .02], [-.58, -.05], [-.36, .05], [-.12, .12]],
-    single: [[.12, .2], [.4, .16], [.62, .03], [.76, .2], [.7, .42], [.9, .7], [.82, .94], [.42, 1.02], [0, 1.03], [-.42, 1.02], [-.82, .94], [-.9, .7], [-.72, .44], [-.8, .2], [-.56, .03], [-.28, .02], [-.12, .08]],
-    hollow: mirror([[.12, .1], [.42, .06], [.64, -.05], [.84, .06], [.86, .3], [.74, .5], [.94, .74], [.84, .95], [.42, 1.02], [0, 1.03]]),
-    bass: [[.12, .14], [.32, .04], [.5, -.24], [.68, -.04], [.72, .3], [.6, .5], [.88, .74], [.82, .94], [.45, 1.02], [0, 1.03], [-.45, 1.02], [-.86, .94], [-.9, .72], [-.66, .5], [-.76, .26], [-.7, -.04], [-.54, -.12], [-.34, .04], [-.12, .14]],
-    acoustic: mirror([[.16, 0], [.52, .02], [.72, .18], [.6, .42], [.92, .64], [.9, .88], [.58, 1], [0, 1.03]]),
+  /* Guitar bodies drawn as explicit curves in a 100-unit box: x runs -50..50 across the widest bout, y runs 0 (the neck joint)
+     to 100 (the strap end); horns reach above 0. Hand-drawn outlines, so the shapes read as real instruments, not blobs. */
+  const GSHAPE = {
+    offset: 'M-8 6C-11 14 -18 12 -22 3C-24 -3 -26 -8 -28 -11C-33 -15 -39 -9 -40 1C-41 10 -40 19 -35 25C-32 29 -31 32 -32 36C-42 45 -48 57 -46 70C-44 88 -26 100 0 100C25 100 44 88 46 68C48 55 42 44 34 35C33 31 33 28 35 25C40 19 41 10 40 2C39 -5 35 -9 30 -6C26 -3 22 1 19 6C14 12 10 13 8 6Z',
+    single: 'M-8 2C-20 -2 -34 0 -40 10C-45 20 -45 30 -41 40C-46 52 -48 66 -44 78C-40 92 -24 100 0 100C22 100 42 92 45 76C48 60 44 46 38 36C42 28 44 16 42 6C40 -4 33 -8 27 -6C19 -4 11 -2 8 2Z',
+    hollow: 'M-8 6C-10 13 -16 13 -20 7C-22 3 -24 -1 -27 -3C-33 -8 -39 -3 -39 5C-39 12 -36 18 -29 22C-41 28 -48 40 -48 56C-48 79 -28 100 0 100C28 100 48 79 48 56C48 40 41 28 29 22C36 18 39 12 39 5C39 -3 33 -8 27 -3C24 -1 22 3 20 7C16 13 10 13 8 6Z',
+    bass: 'M-8 8C-11 16 -17 15 -21 6C-23 -1 -25 -9 -27 -14C-30 -21 -37 -18 -38 -8C-39 2 -38 13 -32 20C-42 30 -48 46 -46 64C-44 85 -27 100 0 100C24 100 43 88 45 70C47 55 42 42 33 32C34 26 36 18 36 10C36 1 32 -4 27 -2C23 0 20 4 17 8C13 14 10 14 8 8Z',
+    acoustic: 'M-16 0C-30 0 -38 6 -39 16C-40 26 -35 33 -30 37C-40 43 -46 54 -46 67C-46 86 -28 100 0 100C28 100 46 86 46 67C46 54 40 43 30 37C35 33 40 26 39 16C38 6 30 0 16 0Z',
   };
-  const GGUARD = mirror([[.14, .14], [.42, .14], [.52, .38], [.56, .7], [.3, .86], [0, .87]]);
-  /* Guitars, flat and top-down like the rest of the gear: headstock up, body down, two or three tones, one outline weight.
-     Each fills its footprint (w across, d long) so sizes match the catalogue. */
   const flatGuitar = (w, d, o) => {
-    const top = -d / 2, bot = d / 2, bh = d * o.bh, y0 = bot - bh * 1.03, hw = w / 2 * .98, nw = o.nw || .075, P = (x, y) => `${f(x)} ${f(y)}`;
-    const at = pts => pts.map(([x, y]) => [x * hw, y0 + y * bh]);
-    let g = `<path class="s-gbody" d="${smooth(at(GBODY[o.kind]))}" style="fill:${o.body}"/>`;
-    if (o.guard) g += `<path class="s-gpart" d="${smooth(at(GGUARD))}" style="fill:${o.guard}"/>`;
-    if (o.kind === 'acoustic') g += `<circle class="s-gring" cx="0" cy="${f(y0 + bh * .4)}" r="${f(hw * .36)}"/><circle class="s-gdark" cx="0" cy="${f(y0 + bh * .4)}" r="${f(hw * .29)}"/>`;
-    if (o.fholes) g += [-1, 1].map(k => `<path class="s-gline" d="M${P(k * hw * .5, y0 + bh * .34)}C${P(k * hw * .62, y0 + bh * .48)} ${P(k * hw * .38, y0 + bh * .62)} ${P(k * hw * .5, y0 + bh * .76)}"/>`).join('');
-    const hs = o.head || .5, neckTop = top + hs, nb = y0 + bh * (o.kind === 'acoustic' ? .22 : .5);
-    g += `<path class="s-gpart" d="M${P(-nw, nb)}L${P(-nw * .82, neckTop)}L${P(nw * .82, neckTop)}L${P(nw, nb)}Z" style="fill:${o.neck}"/>`;   // neck
-    g += `<path class="s-gpart" d="M${P(-nw * .82, neckTop)}L${P(-nw * 1.5, top + hs * .12)}Q${P(-nw * 1.5, top)} ${P(0, top)}Q${P(nw * 1.5, top)} ${P(nw * 1.5, top + hs * .12)}L${P(nw * .82, neckTop)}Z" style="fill:${o.headc || o.neck}"/>`;   // headstock
-    for (const py of o.pickups || []) g += `<rect class="s-gdark" x="${f(-hw * (o.wide ? .3 : .22))}" y="${f(y0 + bh * py)}" width="${f(hw * (o.wide ? .6 : .44))}" height="${f(bh * .065)}" rx="${f(bh * .02)}"/>`;
-    g += o.kind === 'acoustic' ? `<rect class="s-gdark" x="${f(-hw * .3)}" y="${f(y0 + bh * .74)}" width="${f(hw * .6)}" height="${f(bh * .06)}" rx="${f(bh * .02)}"/>`
-      : `<rect class="s-gmetal" x="${f(-hw * .22)}" y="${f(y0 + bh * .76)}" width="${f(hw * .44)}" height="${f(bh * .07)}" rx="${f(bh * .02)}"/>`;
+    const top = -d / 2, bot = d / 2, bh = d * o.bh, y0 = bot - bh, hw = w / 2 * .98, nw = o.nw || .075, P = (x, y) => `${f(x)} ${f(y)}`;
+    const T = ds => ds.replace(/-?[\d.]+ -?[\d.]+/g, m => { const [x, y] = m.split(' ').map(Number); return P(x / 50 * hw, y0 + y / 100 * bh); });
+    const hs = o.head || .5, neckTop = top + hs, nb = y0 + bh * .14, acou = o.kind === 'acoustic';
+    const bridgeY = y0 + bh * (acou ? .72 : o.kind === 'hollow' ? .76 : .78);
+    let g = `<path class="s-gbody" d="${T(GSHAPE[o.kind])}" style="fill:${o.body}"/>`;
+    if (acou) g += `<circle class="s-gring" cx="0" cy="${f(y0 + bh * .4)}" r="${f(hw * .34)}"/><circle class="s-gdark" cx="0" cy="${f(y0 + bh * .4)}" r="${f(hw * .27)}"/>`;
+    if (o.kind === 'hollow') g += [-1, 1].map(k => `<path class="s-gline" d="M${P(k * hw * .56, y0 + bh * .34)}C${P(k * hw * .68, y0 + bh * .46)} ${P(k * hw * .44, y0 + bh * .58)} ${P(k * hw * .56, y0 + bh * .72)}"/>`).join('');
+    // neck with a light nut and frets that tighten toward the body, then the headstock with its tuners
+    g += `<path class="s-gpart" d="M${P(-nw, nb)}L${P(-nw * .8, neckTop)}L${P(nw * .8, neckTop)}L${P(nw, nb)}Z" style="fill:${o.neck}"/>`;
+    g += `<path class="s-gnut" d="M${P(-nw * .8, neckTop)}L${P(nw * .8, neckTop)}"/>`;
+    for (const k of [.16, .31, .45, .58, .7, .81]) { const y = neckTop + (nb - neckTop) * k, x = nw * (.8 + .2 * k); g += `<path class="s-gfret" d="M${P(-x, y)}L${P(x, y)}"/>`; }
+    g += `<path class="s-gpart" d="M${P(-nw * .78, neckTop)}L${P(-nw * 1.3, top + hs * .22)}Q${P(-nw * 1.34, top + hs * .04)} ${P(-nw * .9, top + hs * .02)}Q${P(0, top - hs * .04)} ${P(nw * .9, top + hs * .02)}Q${P(nw * 1.34, top + hs * .04)} ${P(nw * 1.3, top + hs * .22)}L${P(nw * .78, neckTop)}Z" style="fill:${o.headc || o.neck}"/>`;
+    for (const k of [0, 1, 2]) { const y = top + hs * (.18 + k * .24); g += `<circle class="s-gtuner" cx="${f(-nw * 1.18 + nw * .09 * k)}" cy="${f(y)}" r="${f(nw * .17)}"/><circle class="s-gtuner" cx="${f(nw * 1.18 - nw * .09 * k)}" cy="${f(y)}" r="${f(nw * .17)}"/>`; }
+    const pw = o.kind === 'hollow' ? .32 : .22;
+    for (const py of o.pickups || []) g += `<rect class="s-gpick" x="${f(-hw * pw)}" y="${f(y0 + bh * py)}" width="${f(hw * pw * 2)}" height="${f(bh * .065)}" rx="${f(bh * .025)}" style="fill:${o.pick || '#16181c'}"/>`;
+    g += acou ? `<rect class="s-gdark" x="${f(-hw * .3)}" y="${f(bridgeY - bh * .01)}" width="${f(hw * .6)}" height="${f(bh * .07)}" rx="${f(bh * .025)}"/><path class="s-gsaddle" d="M${P(-hw * .2, bridgeY + bh * .022)}L${P(hw * .2, bridgeY + bh * .022)}"/>`
+      : `<rect class="s-gmetal" x="${f(-hw * .24)}" y="${f(bridgeY)}" width="${f(hw * .48)}" height="${f(bh * .06)}" rx="${f(bh * .02)}"/>`;
+    for (const [x, y] of acou ? [] : o.kind === 'bass' ? [[.3, .88]] : [[.27, .87], [.38, .78]]) g += `<circle class="s-gknob" cx="${f(hw * x)}" cy="${f(y0 + bh * y)}" r="${f(bh * .032)}"/>`;
+    for (const x of [-.52, 0, .52]) g += `<path class="s-gstr" d="M${P(nw * x * .9, bridgeY)}L${P(nw * x * .75, neckTop)}"/>`;
     return g;
   };
   const GUITAR_LOOK = {
-    s_black: { kind: 'offset', bh: .42, body: '#22252b', guard: '#ebe8df', neck: '#d9b578', pickups: [.3, .44, .58] },
-    t_black: { kind: 'single', bh: .45, body: '#22252b', guard: '#3b3f46', neck: '#d9b578', pickups: [.3, .6] },
-    t_white: { kind: 'single', bh: .45, body: '#ebe8df', guard: '#22252b', neck: '#d9b578', pickups: [.3, .6] },
-    hollow_white: { kind: 'hollow', bh: .5, body: '#ebe8df', neck: '#5a3a22', headc: '#22252b', fholes: true, pickups: [.32, .58], wide: true },
+    s_black: { kind: 'offset', bh: .45, body: '#22252b', neck: '#d9b578', pick: '#e7e2d4', pickups: [.3, .44, .58] },
+    t_black: { kind: 'single', bh: .45, body: '#2c2f36', neck: '#d9b578', pick: '#e7e2d4', pickups: [.3, .6] },
+    t_white: { kind: 'single', bh: .45, body: '#ebe8df', neck: '#d9b578', pickups: [.3, .6] },
+    hollow_white: { kind: 'hollow', bh: .5, body: '#ebe8df', neck: '#5a3a22', headc: '#22252b', pickups: [.34, .58] },
   };
   MODEL_ART.el_guitar = {};
   for (const [k, m] of Object.entries(GUITAR_MODELS)) MODEL_ART.el_guitar[k] = { art: flatGuitar(m.w, m.d, GUITAR_LOOK[k] || GUITAR_LOOK.s_black), box: [m.w, -m.d / 2, m.d / 2] };
@@ -4885,7 +4886,7 @@ const SYM = (() => {
       rect(.58, -.08, .4, .52, 's-dark', .05) + rect(.62, -.04, .32, .44, 's-grille', .04) + rect(.66, .02, .24, .06, 's-line', .02),
     ac_guitar: flatGuitar(CAT.ac_guitar.w, CAT.ac_guitar.d, { kind: 'acoustic', bh: .55, body: '#d8ad6c', neck: '#6b4429', nw: .085 }),
     el_guitar: strat2(),
-    bass_guitar: flatGuitar(CAT.bass_guitar.w, CAT.bass_guitar.d, { kind: 'bass', bh: .36, body: '#a5582a', guard: '#2a1d16', neck: '#d9b578', nw: .08, head: .55, pickups: [.32, .5] }),
+    bass_guitar: flatGuitar(CAT.bass_guitar.w, CAT.bass_guitar.d, { kind: 'bass', bh: .4, body: '#a5582a', neck: '#d9b578', pick: '#e7e2d4', nw: .08, head: .55, pickups: [.45] }),
     // from above: mouthpiece, the tubing loop, three valve caps and the bell
     trumpet: '<rect class="s-brassline" x="-.28" y="-.5" width=".56" height=".72" rx=".24"/>' + '<path class="s-brassline" d="M0 -.78V.25"/>' + grid(-.14, -.16, 3, 1, .14, 0, .075, 's-valve') +
       '<path class="s-brass" d="M-.1 .2L.1 .2L.3 .5Q.36 .58 .36 .62L-.36 .62Q-.36 .58 -.3 .5Z"/>' + circ(0, .55, .3, 's-brass') + circ(0, .55, .2, 's-blk') + circ(0, -.8, .06, 's-chrome'),
